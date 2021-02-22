@@ -31,8 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         body:
         Center(
-            child: Column(
-                children: <Widget>[
+            child:
                   Column (
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,9 +51,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             minWidth: 180,
                             buttonColor: Colors.black87,
 
-                            child: new Container(
-                                margin: const EdgeInsets.fromLTRB(5, 15, 5, 15),
+                            child: SizedBox(
+                                height: 80,
+                                width: 220,
                                 child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(22.0)),
                               padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                               color: Colors.amberAccent,
                               onPressed: () {
@@ -92,22 +94,30 @@ class _MyHomePageState extends State<MyHomePage> {
 //                              ),
 //                            )
 //                        ),
-
+                  SizedBox(height: 20),
                         ButtonTheme(
                             minWidth: 150,
-                            buttonColor: Colors.black87,
-                            child: RaisedButton(
+                            buttonColor: Colors.amberAccent,
+                                child: SizedBox(
+                                  height: 80,
+                                    width: 220,
+                                    child: RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20.0)
+                                      ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                               onPressed: () {},
                               child: Text(
                                 'התחברות',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black87,
+                                  fontSize: 30
                                 ),
                               ),
                             )
-                        ),
+                            )
+                            )
                       ]),
-                ])
         )
     );
   }
