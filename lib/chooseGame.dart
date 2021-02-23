@@ -1,32 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'loginUser.dart';
-import 'registerationUser.dart';
+import 'getInRoom.dart';
 
 
-void main() => runApp(EngliApp());
 
-class EngliApp extends StatelessWidget {
+class ChooseGame extends StatefulWidget{
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title:'Engli - לימוד אנגלית',
-      home: MyHomePage(),
-    );
-  }
+  _ChooseGameState createState() => _ChooseGameState();
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-class _MyHomePageState extends State<MyHomePage> {
+class _ChooseGameState extends State<ChooseGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightGreen,
-          title: Text('engLI - לימוד אנגלית'),
+          title: Text('בחירת משחק'),
           centerTitle: true,
           shadowColor: Colors.black87,
         ),
@@ -48,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Padding (
                                 padding: EdgeInsets.all(100),
                                 child: Text(
-                                  '!ברוכים הבאים',
+                                  '!שלום שלמה',
                                   style: TextStyle(
                                     fontFamily: 'Abraham-h',
                                     fontSize: 40,
@@ -62,10 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           //crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                           ButtonTheme(
+                          padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
                             buttonColor: Colors.black87,
                             child: SizedBox(
-                                height: 80,
-                                width: 220,
+                                height: 140,
+                                width: 330,
                                 child: RaisedButton(
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(22.0)),
@@ -73,61 +63,42 @@ class _MyHomePageState extends State<MyHomePage> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => Registertion()),
+                                  MaterialPageRoute(builder: (context) => GetInRoom()),
                                 );
                               },
                               child: Text(
-                                  'הרשמה',
+                                  'רביעיות',
                                   style: TextStyle(
                                       fontFamily: 'Comix-h',
                                     color: Colors.black87,
-                                    fontSize: 30
+                                    fontSize: 50
                                   )
                               ),
                             )
                         )
                         ),
-
-//                        ButtonTheme(
-//                            minWidth: 150,
-//                            buttonColor: Colors.black87,
-//                            child: RaisedButton(
-//                              onPressed: () {
-//                                Navigator.push(
-//                                  context,
-//                                  MaterialPageRoute(builder: (context) => registertionStore()),
-//                                );
-//                              },
-//                              child: Text(
-//                                  'Create Store Account',
-//                                  style: TextStyle(
-//                                    color: Colors.white,
-//                                  )
-//                              ),
-//                            )
-//                        ),
                           SizedBox(height: 20),
                         ButtonTheme(
                             buttonColor: Colors.amberAccent,
                                 child: SizedBox(
-                                  height: 80,
-                                    width: 220,
+                                  height: 140,
+                                    width: 330,
                                     child: RaisedButton(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(20.0)
                                       ),
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Login()),
-                                );
+//                                Navigator.push(
+//                                  context,
+//                                  MaterialPageRoute(builder: (context) => Login()),
+//                                );
                               },
                               child: Text(
-                                'התחברות',
+                                'זיכרון',
                                 style: TextStyle(
                                     fontFamily: 'Comix-h',
                                   color: Colors.black87,
-                                  fontSize: 30
+                                  fontSize: 50
                                 ),
                               ),
                             )
@@ -144,10 +115,35 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Align (
             alignment: Alignment.bottomCenter,
                 child:
-                  Image(
-                    image: AssetImage('images/kids-read.jpg'),
-                  ),
+                Padding(
+                  padding: EdgeInsets.all(40),
+                  child: ButtonTheme(
+                    padding: EdgeInsets.all(20),
+                    buttonColor: Colors.pink,
+                    child: SizedBox(
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)
+                          ),
+                          onPressed: () {
+//                            Navigator.push(
+//                              context,
+//                              MaterialPageRoute(builder: (context) => Login()),
+//                            );
+                          },
+                          child: Text(
+                            'עריכת אוצר מילים',
+                            style: TextStyle(
+                                fontFamily: 'Comix-h',
+                                color: Colors.black87,
+                                fontSize: 20
+                            ),
+                          ),
+                        )
+                    )
+                ),
           ),
+              ),
           )
         ])
         ),

@@ -1,3 +1,4 @@
+import 'package:engli_app/chooseGame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -64,10 +65,10 @@ class _LoginState extends State<Login> {
                                       padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                                       color: Colors.amberAccent,
                                       onPressed: () {
-//                                        Navigator.push(
-//                                          context,
-//                                          MaterialPageRoute(builder: (context) => Registertion()),
-//                                        );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => ChooseGame()),
+                                        );
                                       },
                                       child: Text(
                                           'התחבר',
