@@ -12,47 +12,98 @@ class _RegistarationState extends State<Registertion> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.black87,
+          backgroundColor: Colors.lightGreen,
           title: Text('הרשמה'),
         ),
-        body: SingleChildScrollView(
-            child: Center(
+        body:
+            Center(
                 child: Column (
                     children: <Widget>[
-                      Row(
-                        children: <Widget> [
-                          Text('First Name: '),
-                          new Flexible( child: TextField())
-                        ],
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Padding (
+                              padding: EdgeInsets.all(100),
+                              child: Text(
+                                'הרשמה',
+                                style: TextStyle(
+                                  fontFamily: 'Abraham-h',
+                                  fontSize: 40,
+                                ),
+                              ),
+                            ),
+                          ]
                       ),
-                      Row(
-                        children: <Widget> [
-                          Text('Last Name: '),
-                          new Flexible( child: TextField())
-                        ],
+                      Column(
+//                        mainAxisAlignment: MainAxisAlignment.center,
+//                        crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            SingleChildScrollView(
+                              child: Column(
+                                children: <Widget> [
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: <Widget> [
+                                        new Flexible( child: TextField()),
+                                        Text(':כתובת מייל '),
+                                      ],
+                                  ),
+                                  Row(
+                                    children: <Widget> [
+                                      new Flexible( child: TextField()),
+                                      Text(':שם '),
+                                    ],
+                                  ),
+                                  SizedBox(height: 60),
+                                  ButtonTheme(
+                                      padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                                      minWidth: 100,
+                                      buttonColor: Colors.black87,
+                                      child: SizedBox(
+                                          height: 50,
+                                          width: 100,
+                                          child: RaisedButton(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(22.0)),
+                                            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                                            color: Colors.amberAccent,
+                                            onPressed: () {
+//                                        Navigator.push(
+//                                          context,
+//                                          MaterialPageRoute(builder: (context) => Registertion()),
+//                                        );
+                                            },
+                                            child: Text(
+                                                'הירשם',
+                                                style: TextStyle(
+                                                    fontFamily: 'Comix-h',
+                                                    color: Colors.black87,
+                                                    fontSize: 20
+                                                )
+                                            ),
+                                          )
+                                      )
+                                  ),
+                                ]),
+                            ),
+
+
+                          ]
                       ),
-                      Row(
-                        children: <Widget> [
-                          Text('Mail Address:'),
-                          new Flexible( child: TextField())
-                        ],
+                      Expanded(
+                        child: Align (
+                          alignment: Alignment.bottomCenter,
+                          child:
+                          Image(
+                            image: AssetImage('images/kids-read.jpg'),
+                          ),
+                        ),
                       ),
-                      Row(
-                        children: <Widget> [
-                          Text('Username: '),
-                          new Flexible( child: TextField())
-                        ],
-                      ),
-                      Row(
-                        children: <Widget> [
-                          Text('Password:'),
-                          new Flexible( child: TextField())
-                        ],
-                      ),
-                    ])
-            )
-        )
-    );
+
+                    ]),
+                )
+            );
   }
 }
 
