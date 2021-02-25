@@ -1,3 +1,4 @@
+import 'package:engli_app/quartetsRoom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -51,10 +52,10 @@ class _openRoomState extends State<OpenRoom> {
                               borderRadius: BorderRadius.circular(20.0)
                           ),
                           onPressed: () {
-//                            Navigator.push(
-//                              context,
-//                              MaterialPageRoute(builder: (context) => Login()),
-//                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => QuartetsRoom()),
+                            );
                           },
                           child: Text(
                             '!התחל משחק',

@@ -17,7 +17,6 @@ class _ChooseGameState extends State<ChooseGame> {
           backgroundColor: Colors.lightGreen,
           title: Text('בחירת משחק'),
           centerTitle: true,
-          shadowColor: Colors.black87,
         ),
         body:
 

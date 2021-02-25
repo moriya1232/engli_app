@@ -67,22 +67,22 @@ flutter:
     - family: Comix-h
       fonts:
         - asset: fonts/comixno2clm_bold-webfont.ttf
-    - family: dorian-h
+    - family: Dorian-h
       fonts:
         - asset: fonts/dorianclm-book-webfont.ttf
-#    - family: gan-h
-#      fonts:
-#        - asset: fonts/ganclm_bold-webfont.ttf
-#    - family: miri-h
-#      fonts:
-#        - asset: fonts/miriwin-webfont.ttf
-#    - family: nehama-h
-#      fonts:
-#        - asset: fonts/nehama-webfont.ttf
-#    - family: trashim-h
+    - family: Gan-h
+      fonts:
+        - asset: fonts/ganclm_bold-webfont.ttf
+    - family: Miri-h
+      fonts:
+        - asset: fonts/miriwin-webfont.ttf
+    - family: Nehama-h
+      fonts:
+        - asset: fonts/nehama-webfont.ttf
+    - family: Trashim-h
 #      fonts:
 #        - asset: fonts/trashim-bold-webfont.ttf
-#    - family: yehuda-h
+#    - family: Yehuda-h
 #      fonts:
 #        - asset: fonts/yehudaclm-bold-webfont.ttf
 
