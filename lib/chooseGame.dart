@@ -1,3 +1,4 @@
+import 'package:engli_app/MemoryRoom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'getInRoom.dart';
@@ -87,10 +88,10 @@ class _ChooseGameState extends State<ChooseGame> {
                                         borderRadius: BorderRadius.circular(20.0)
                                       ),
                               onPressed: () {
-//                                Navigator.push(
-//                                  context,
-//                                  MaterialPageRoute(builder: (context) => Login()),
-//                                );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => MemoryRoom()),
+                                );
                               },
                               child: Text(
                                 'זיכרון',

@@ -4,7 +4,9 @@ import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class CardGame extends StatelessWidget {
+import 'CardGame.dart';
+
+class CardQuartets extends CardGame {
   var english = "";
   var hebrew = "";
   var subject = "";
@@ -16,10 +18,8 @@ class CardGame extends StatelessWidget {
   bool small = true;
 
 
-  CardGame(var english, var hebrew, Image image, var subject, var wo1, var wo2,
-      var wo3, bool myCard) {
-    this.english = english;
-    this.hebrew = hebrew;
+  CardQuartets(var english, var hebrew, Image image, var subject, var wo1, var wo2,
+      var wo3, bool myCard) : super(english,hebrew){
     this.image = image;
     this.subject = subject;
     this.word1 = wo1;
@@ -29,7 +29,7 @@ class CardGame extends StatelessWidget {
   }
 
 //
-//  CardGameNoImage(var english, var hebrew, var subject) {
+//  CardQuartetsNoImage(var english, var hebrew, var subject) {
 //    this.english = english;
 //    this.hebrew = hebrew;
 //    this.image = null;
@@ -62,7 +62,6 @@ class CardGame extends StatelessWidget {
   }
 
   Widget getOpenCard(BuildContext context) {
-    if (small) {
       return new Container(
         height: 100,
         width: 70,
@@ -70,8 +69,7 @@ class CardGame extends StatelessWidget {
           child: InkWell(
             splashColor: Colors.blue.withAlpha(30),
             onTap: () {
-              small = !small;
-              print(small);
+
             },
             child: Column(
                 children: [
@@ -93,44 +91,7 @@ class CardGame extends StatelessWidget {
           ),
         ),
       );
-    } else {
-      return new Container(
-        height: 200,
-        width: 140,
-        child: Card(
-          child: InkWell(
-            splashColor: Colors.blue.withAlpha(30),
-            onTap: () {
-              small = !small;
-              print(small);
-            },
-            child: Column(
-                children: [
-                  Text(
-                    subject,
-                    style: TextStyle(
-                      fontFamily: "Gan-h",
-                      fontSize: 25,
-                    ),
-                  ),
-                  Text(
-                    english,
-                    style: TextStyle(
-                      fontSize: 15
-                    ),
-                  ),
-                  Text(
-                    hebrew,
-                    style: TextStyle(
-                        fontSize: 15
-                    ),
-                  ),
-                ]
-            ),
-          ),
-        ),
-      );
-    }
+
   }
 
   Widget getCloseCard(BuildContext context) {

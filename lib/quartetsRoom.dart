@@ -1,4 +1,4 @@
-import 'package:engli_app/cardGame.dart';
+import 'package:engli_app/CardQuartets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'player.dart';
@@ -11,12 +11,18 @@ class QuartetsRoom extends StatefulWidget{
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
+  List<Player> players = new List<Player>();
+
   @override
   Widget build(BuildContext context) {
-    var me = createPlayer(true);
-    var player1 = createPlayer(false);
-    var player2 = createPlayer(false);
-    var player3 = createPlayer(false);
+    Me me = createPlayer(true);
+    Other player1 = createPlayer(false);
+    Other player2 = createPlayer(false);
+    Other player3 = createPlayer(false);
+    players.add(me);
+    players.add(player1);
+    players.add(player2);
+    players.add(player3);
         return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -43,7 +49,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 children: player2.cards,
               ),
               ),
-              CardGame("english", "hebrew", null, "subject", "word1", "word2", "word3", false),
+              CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", false),
               RotatedBox(
                 quarterTurns: 3,
                 child:Row(
@@ -52,7 +58,20 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               ),
             ],
           ),
+        Row(
+          children: [
+            Center(
+              child: Listener(
 
+                  child: Container(
+                    height: 140,
+                    width: 100,
+                    child: null,
+                  ),
+              ),
+            )
+          ],
+        ),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -71,13 +90,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
 
   Player createPlayer(bool isMe) {
-    List<CardGame> cards= [
-      CardGame("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
-      CardGame("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
-      CardGame("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
-      CardGame("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
-      CardGame("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe)];
-    return Player(cards, isMe);
+    List<CardQuartets> cards= [
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe)];
+    if (isMe) {
+      return Me(cards);
+    } else {
+      return Other(cards);
+    }
   }
 }
 

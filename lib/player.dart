@@ -1,11 +1,19 @@
-import 'package:engli_app/cardGame.dart';
+
+
+import 'CardGame.dart';
 
 class Player {
   List<CardGame> cards;
-  bool isMe;
 
-  Player(List<CardGame> cards, bool isMe) {
+  Player(List<CardGame> cards) {
     this.cards = cards;
-    this.isMe = isMe;
   }
+}
+
+class Me extends Player {
+  Me(List<CardGame> cards) : super(cards);
+}
+
+class Other extends Player {
+  Other(List<CardGame> cards) : super(cards);
 }
