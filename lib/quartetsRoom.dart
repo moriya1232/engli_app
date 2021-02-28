@@ -1,11 +1,12 @@
-import 'package:engli_app/CardQuartets.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:flutter/material.dart';
-import 'player.dart';
+import 'players/player.dart';
 
 // לטפל במקרה של יותר מדי קלפים, שיעמדו אחד על השני
 
-class QuartetsRoom extends StatefulWidget{
+class QuartetsRoom extends StatefulWidget {
+  int chosenCard = -1;
+
   @override
   _QuartetsRoomState createState() => _QuartetsRoomState();
 }
@@ -23,79 +24,80 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     players.add(player1);
     players.add(player2);
     players.add(player3);
-        return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
         title: Text('משחק רביעיות'),
         centerTitle: true,
         shadowColor: Colors.black87,
       ),
-      body:
-      Center (
-      child: Container (
-    child:Column (
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: player1.cards
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Center(
+        child: Container(
+          child: Column(
             children: [
-              RotatedBox(
-                quarterTurns: 1,
-                child:Row(
-                children: player2.cards,
+              Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: player1.cards),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RotatedBox(
+                    quarterTurns: 1,
+                    child: Row(
+                      children: player2.cards,
+                    ),
+                  ),
+                  CardQuartets("english", "hebrew", null, "subject", "word1",
+                      "word2", "word3", false),
+                  RotatedBox(
+                    quarterTurns: 3,
+                    child: Row(
+                      children: player3.cards,
+                    ),
+                  ),
+                ],
               ),
+              Row(
+                children: [
+                  Center(
+                    child: Listener(
+                      child: Container(
+                        height: 140,
+                        width: 100,
+                        child: null,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", false),
-              RotatedBox(
-                quarterTurns: 3,
-                child:Row(
-                  children: player3.cards,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: me.cards,
                 ),
-              ),
+              )
             ],
           ),
-        Row(
-          children: [
-            Center(
-              child: Listener(
-
-                  child: Container(
-                    height: 140,
-                    width: 100,
-                    child: null,
-                  ),
-              ),
-            )
-          ],
         ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: me.cards,
-          ),
-        )
-        ],
       ),
-
-      ),
-      ),
-
     );
   }
 
-
   Player createPlayer(bool isMe) {
-    List<CardQuartets> cards= [
-      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
-      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
-      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
-      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe),
-      CardQuartets("english", "hebrew", null, "subject", "word1", "word2", "word3", isMe)];
+    List<CardQuartets> cards = [
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2",
+          "word3", isMe),
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2",
+          "word3", isMe),
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2",
+          "word3", isMe),
+      CardQuartets("english", "hebrew", null, "subject", "word1", "word2",
+          "word3", isMe),
+      CardQuartets(
+          "english", "hebrew", null, "subject", "word1", "word2", "word3", isMe)
+    ];
     if (isMe) {
       return Me(cards);
     } else {
@@ -103,7 +105,3 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
   }
 }
-
-
-
-

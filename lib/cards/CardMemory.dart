@@ -1,9 +1,6 @@
-
 import 'dart:core';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'CardGame.dart';
 
 class CardMemory extends CardGame {
@@ -18,8 +15,8 @@ class CardMemory extends CardGame {
     this.isClose = true;
   }
 }
-class _CardMemoryState extends State<CardMemory> {
 
+class _CardMemoryState extends State<CardMemory> {
   @override
   Widget build(BuildContext context) {
     if (widget.isClose) {
@@ -31,7 +28,7 @@ class _CardMemoryState extends State<CardMemory> {
           });
         },
       );
-    } else{
+    } else {
       return GestureDetector(
         child: getOpenCard(context),
         onTap: () {
@@ -52,8 +49,8 @@ class _CardMemoryState extends State<CardMemory> {
           child: FittedBox(
             fit: BoxFit.contain,
             child: Text(
-            widget.english,
-          ),
+              widget.english,
+            ),
           ),
         ),
       );
@@ -82,6 +79,4 @@ class _CardMemoryState extends State<CardMemory> {
       ),
     );
   }
-
-
 }

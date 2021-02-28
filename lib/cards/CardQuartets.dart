@@ -1,9 +1,6 @@
-
 import 'dart:core';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'CardGame.dart';
 
 class CardQuartets extends CardGame {
@@ -17,9 +14,9 @@ class CardQuartets extends CardGame {
   bool myCard = true;
   bool small = true;
 
-
-  CardQuartets(var english, var hebrew, Image image, var subject, var wo1, var wo2,
-      var wo3, bool myCard) : super(english,hebrew){
+  CardQuartets(var english, var hebrew, Image image, var subject, var wo1,
+      var wo2, var wo3, bool myCard)
+      : super(english, hebrew) {
     this.image = image;
     this.subject = subject;
     this.word1 = wo1;
@@ -62,36 +59,31 @@ class CardQuartets extends CardGame {
   }
 
   Widget getOpenCard(BuildContext context) {
-      return new Container(
-        height: 100,
-        width: 70,
-        child: Card(
-          child: InkWell(
-            splashColor: Colors.blue.withAlpha(30),
-            onTap: () {
-
-            },
-            child: Column(
-                children: [
-                  Text(
-                    subject,
-                    style: TextStyle(
-                      fontFamily: "Gan-h",
-                      fontSize: 15,
-                    ),
-                  ),
-                  Text(
-                    english,
-                  ),
-                  Text(
-                    hebrew,
-                  ),
-                ]
+    return new Container(
+      height: 100,
+      width: 70,
+      child: Card(
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () {},
+          child: Column(children: [
+            Text(
+              subject,
+              style: TextStyle(
+                fontFamily: "Gan-h",
+                fontSize: 15,
+              ),
             ),
-          ),
+            Text(
+              english,
+            ),
+            Text(
+              hebrew,
+            ),
+          ]),
         ),
-      );
-
+      ),
+    );
   }
 
   Widget getCloseCard(BuildContext context) {
@@ -109,5 +101,4 @@ class CardQuartets extends CardGame {
     // TODO: implement createState
     throw UnimplementedError();
   }
-
 }

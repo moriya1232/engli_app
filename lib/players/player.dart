@@ -1,6 +1,4 @@
-
-
-import 'CardGame.dart';
+import '../cards/CardGame.dart';
 
 class Player {
   List<CardGame> cards;
