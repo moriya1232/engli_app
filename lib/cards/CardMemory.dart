@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'CardGame.dart';
 
 class CardMemory extends CardGame {
-  @override
-  _CardMemoryState createState() => _CardMemoryState();
   bool isEnglishCard;
   bool isClose;
 
@@ -14,6 +12,9 @@ class CardMemory extends CardGame {
     this.isEnglishCard = isEnglish;
     this.isClose = true;
   }
+
+  @override
+  _CardMemoryState createState() => _CardMemoryState();
 }
 
 class _CardMemoryState extends State<CardMemory> {

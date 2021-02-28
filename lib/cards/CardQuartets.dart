@@ -25,6 +25,9 @@ class CardQuartets extends CardGame {
     this.myCard = myCard;
   }
 
+  @override
+  _CardQuartetsState createState() => _CardQuartetsState();
+
 //
 //  CardQuartetsNoImage(var english, var hebrew, var subject) {
 //    this.english = english;
@@ -48,37 +51,55 @@ class CardQuartets extends CardGame {
   getSubject() {
     return subject;
   }
+}
+class _CardQuartetsState extends State<CardQuartets> {
 
   @override
   Widget build(BuildContext context) {
-    if (myCard) {
+    if (widget.myCard) {
       return getOpenCard(context);
     } else {
       return getCloseCard(context);
     }
   }
 
+  double smallHeight = 100;
+  double smallWidth = 70;
+  double bigHeight = 200;
+  double bigWidth = 140;
+
   Widget getOpenCard(BuildContext context) {
+    double height=smallHeight;
+    double width = smallWidth;
+    if (!widget.small) {
+      height=bigHeight;
+      width = bigWidth;
+    }
+
     return new Container(
-      height: 100,
-      width: 70,
+      height: height,
+      width: width,
       child: Card(
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              widget.small = !widget.small;
+            });
+          },
           child: Column(children: [
             Text(
-              subject,
+              widget.subject,
               style: TextStyle(
                 fontFamily: "Gan-h",
                 fontSize: 15,
               ),
             ),
             Text(
-              english,
+              widget.english,
             ),
             Text(
-              hebrew,
+              widget.hebrew,
             ),
           ]),
         ),
@@ -95,10 +116,5 @@ class CardQuartets extends CardGame {
       ),
     );
   }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
-  }
 }
+

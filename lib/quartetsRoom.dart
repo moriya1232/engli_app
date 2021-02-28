@@ -12,7 +12,7 @@ class QuartetsRoom extends StatefulWidget {
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
-  List<Player> players = new List<Player>();
+  List<Player> players = [];
 
   @override
   Widget build(BuildContext context) {
@@ -58,26 +58,20 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Center(
-                    child: Listener(
-                      child: Container(
-                        height: 140,
-                        width: 100,
-                        child: null,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+              //TODO: הקלפים נמתחים בהתאם לליסט וויו. לבדוק
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: me.cards,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: 200, minHeight: 100),
+                    child: ListView(
+                      shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    children: me.cards,
+                  ),
+                  ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -99,6 +93,19 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           "english", "hebrew", null, "subject", "word1", "word2", "word3", isMe)
     ];
     if (isMe) {
+      cards.add(CardQuartets("english", "hebrew", null, "subject", "word1",
+          "word2", "word3", isMe));
+      cards.add(CardQuartets("english", "hebrew", null, "subject", "word1",
+          "word2", "word3", isMe));
+      cards.add(CardQuartets("english", "hebrew", null, "subject", "word1",
+          "word2", "word3", isMe));
+      cards.add(CardQuartets("english", "hebrew", null, "subject", "word1",
+          "word2", "word3", isMe));
+      cards.add(CardQuartets("english", "hebrew", null, "subject", "word1",
+          "word2", "word3", isMe));
+      cards.add(CardQuartets("english", "hebrew", null, "subject", "word1",
+          "word2", "word3", isMe));
+
       return Me(cards);
     } else {
       return Other(cards);
