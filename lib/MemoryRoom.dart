@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'CardMemory.dart';
 import 'player.dart';
@@ -113,7 +111,11 @@ class _MemoryRoomState extends State<MemoryRoom> {
     List<CardMemory> cards= [];
 
     for (int i=0; i<36; i++) {
-      cards.add(CardMemory("english", "hebrew"));
+      if (i%2==0) {
+        cards.add(CardMemory("english", "hebrew", true));
+      } else {
+        cards.add(CardMemory("english", "hebrew", false));
+      }
     }
     return cards;
   }

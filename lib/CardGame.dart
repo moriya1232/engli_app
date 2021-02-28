@@ -4,7 +4,7 @@ import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-abstract class CardGame extends StatelessWidget{
+abstract class CardGame extends StatefulWidget{
   String english = "";
   String hebrew = "";
 

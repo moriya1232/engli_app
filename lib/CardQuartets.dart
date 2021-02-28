@@ -103,4 +103,11 @@ class CardQuartets extends CardGame {
       ),
     );
   }
+
+  @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    throw UnimplementedError();
+  }
+
 }

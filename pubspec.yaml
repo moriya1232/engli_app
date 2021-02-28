@@ -80,8 +80,8 @@ flutter:
       fonts:
         - asset: fonts/nehama-webfont.ttf
     - family: Trashim-h
-#      fonts:
-#        - asset: fonts/trashim-bold-webfont.ttf
+      fonts:
+        - asset: fonts/trashimclm-bold-webfont.ttf
 #    - family: Yehuda-h
 #      fonts:
 #        - asset: fonts/yehudaclm-bold-webfont.ttf
