@@ -51,6 +51,9 @@ class _CardMemoryState extends State<CardMemory> {
             fit: BoxFit.contain,
             child: Text(
               widget.english,
+              style: TextStyle(
+                fontFamily: "Carter-e"
+              ),
             ),
           ),
         ),
@@ -64,6 +67,9 @@ class _CardMemoryState extends State<CardMemory> {
             fit: BoxFit.contain,
             child: Text(
               widget.hebrew,
+              style: TextStyle(
+                fontFamily: "Dorian-h"
+              ),
             ),
           ),
         ),
