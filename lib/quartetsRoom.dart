@@ -2,7 +2,7 @@ import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:flutter/material.dart';
 import 'players/player.dart';
 
-// לטפל במקרה של יותר מדי קלפים, שיעמדו אחד על השני
+// TODO: diffrenet size of screen
 
 class QuartetsRoom extends StatefulWidget {
   int chosenCard = -1;
@@ -33,7 +33,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       ),
       body: Center(
         child: Container(
-          child: Column(children: [
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
             Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -57,18 +59,22 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 ),
               ],
             ),
-            //TODO: הקלפים נמתחים בהתאם לליסט וויו. לבדוק
             Expanded(
               child: Row(),
             ),
             Container(
-              height: 200,
+              height: 230,
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 children: me.cards,
               ),
             ),
+            Container(
+              height: 60,
+              color: Colors.black12,
+              child: Row(),
+            ), // TODO: for chat? microphone?
           ]),
         ),
       ),
@@ -77,28 +83,96 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   Player createPlayer(bool isMe) {
     List<CardQuartets> cards = [
-      CardQuartets("table", "שולחן", Image(image: AssetImage('images/table.jpg'),), "furniture", "chair", "cupboard",
-          "bed", isMe),
-      CardQuartets("english", "עברית02", null, "subject", "word1", "word2",
-          "word3", isMe),
-      CardQuartets("english", "עברית03", null, "subject", "word1", "word2",
-          "word3", isMe),
-      CardQuartets("english", "עברית04", null, "subject", "word1", "word2",
-          "word3", isMe),
+      CardQuartets(
+          "table",
+          "שולחן",
+          Image(
+            image: AssetImage('images/table.jpg'),
+          ),
+          "Furniture",
+          "chair",
+          "cupboard",
+          "bed",
+          isMe),
+      CardQuartets(
+          "chair",
+          "כסא",
+          Image(
+            image: AssetImage('images/chair.jpg'),
+          ),
+          "Furniture",
+          "table",
+          "cupboard",
+          "bed",
+          isMe),
+      CardQuartets(
+          "bed",
+          "מיטה",
+          Image(
+            image: AssetImage('images/bed.jpg'),
+          ),
+          "Furniture",
+          "chair",
+          "cupboard",
+          "table",
+          isMe),
+      CardQuartets(
+          "cupboard",
+          "ארון",
+          Image(
+            image: AssetImage('images/cupboard.jpg'),
+          ),
+          "Furniture",
+          "chair",
+          "table",
+          "bed",
+          isMe),
     ];
     if (isMe) {
-      cards.add(CardQuartets("english", "עברית1", null, "subject", "word1",
-          "word2", "word3", isMe));
-      cards.add(CardQuartets("english", "עברית2", null, "subject", "word1",
-          "word2", "word3", isMe));
-      cards.add(CardQuartets("english", "עברית3", null, "subject", "word1",
-          "word2", "word3", isMe));
-      cards.add(CardQuartets("english", "עברית4", null, "subject", "word1",
-          "word2", "word3", isMe));
-      cards.add(CardQuartets("english", "עברית5", null, "subject", "word1",
-          "word2", "word3", isMe));
-      cards.add(CardQuartets("english", "hebrew", null, "subject", "word1",
-          "word2", "word3", isMe));
+      cards.add(CardQuartets(
+          "cat",
+          "חתול",
+          Image(
+            image: AssetImage('images/cat.jpg'),
+          ),
+          "Pets",
+          "dog",
+          "fish",
+          "hamster",
+          isMe),);
+      cards.add(CardQuartets(
+          "dog",
+          "כלב",
+          Image(
+            image: AssetImage('images/dog.jpg'),
+          ),
+          "Pets",
+          "cat",
+          "fish",
+          "hamster",
+          isMe),);
+      cards.add(CardQuartets(
+          "hamster",
+          "אוגר",
+          Image(
+            image: AssetImage('images/hamster.jpg'),
+          ),
+          "Pets",
+          "dog",
+          "fish",
+          "cat",
+          isMe),);
+      cards.add(CardQuartets(
+          "fish",
+          "דג",
+          Image(
+            image: AssetImage('images/cat.jpg'),
+          ),
+          "Pets",
+          "dog",
+          "cat",
+          "hamster",
+          isMe),);
 
       return Me(cards);
     } else {

@@ -77,7 +77,7 @@ class _CardQuartetsState extends State<CardQuartets> {
 //      height=bigHeight;
 //      width = bigWidth;
 //    }
-    double height = 200;
+    double height = 220;
     double width = 130;
     return new Container(
       height: height,
@@ -115,21 +115,50 @@ class _CardQuartetsState extends State<CardQuartets> {
                 ),
               )),
             ),
-            Center(
-              child: Text(
-                widget.english,
-                style: TextStyle(
-                  fontFamily: "RocknRoll-e",
-                  fontSize: 20
-                ),
-              ),
-            ),
+
             Center(
               child: Container(
                 width: 100,
-                  height: 100,
+                  height: 80,
                   child: widget.image)
-            )
+            ),
+                Center(
+                  child: Text(
+                    widget.english,
+                    style: TextStyle(
+                        fontFamily: "Carter-e",
+                        fontSize: 15,
+                        color: Colors.lightGreen
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    widget.word1,
+                    style: TextStyle(
+                        fontFamily: "Carter-e",
+                        fontSize: 15
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    widget.word2,
+                    style: TextStyle(
+                        fontFamily: "Carter-e",
+                        fontSize: 15
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    widget.word3,
+                    style: TextStyle(
+                        fontFamily: "Carter-e",
+                        fontSize: 15
+                    ),
+                  ),
+                ),
           ]),
         ),
       ),
