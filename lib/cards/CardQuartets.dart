@@ -12,6 +12,7 @@ class CardQuartets extends CardGame {
   var word2 = "";
   var word3 = "";
   bool myCard = true;
+
   //bool small = true;
   bool chosen = false;
 
@@ -53,8 +54,8 @@ class CardQuartets extends CardGame {
     return subject;
   }
 }
-class _CardQuartetsState extends State<CardQuartets> {
 
+class _CardQuartetsState extends State<CardQuartets> {
   @override
   Widget build(BuildContext context) {
     if (widget.myCard) {
@@ -84,11 +85,11 @@ class _CardQuartetsState extends State<CardQuartets> {
       child: Card(
         shape: widget.chosen
             ? new RoundedRectangleBorder(
-            side: new BorderSide(color: Colors.red, width: 2.0),
-            borderRadius: BorderRadius.circular(4.0))
+                side: new BorderSide(color: Colors.red, width: 2.0),
+                borderRadius: BorderRadius.circular(4.0))
             : new RoundedRectangleBorder(
-            side: new BorderSide(color: Colors.black87, width: 1.0),
-            borderRadius: BorderRadius.circular(4.0)),
+                side: new BorderSide(color: Colors.black87, width: 1.0),
+                borderRadius: BorderRadius.circular(4.0)),
         //color: getColor(widget.chosen),
         borderOnForeground: true,
         child: InkWell(
@@ -99,20 +100,36 @@ class _CardQuartetsState extends State<CardQuartets> {
               //widget.small = !widget.small;
             });
           },
-          child: Column(children: [
-            Text(
-              widget.subject,
-              style: TextStyle(
-                fontFamily: "Gan-h",
-                fontSize: 15,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Container(
+              decoration: new BoxDecoration(
+                  color: Colors.tealAccent,
+                  border: Border.all(color: Colors.white70)),
+              child: Center(
+                  child: Text(
+                widget.subject,
+                style: TextStyle(
+                  fontFamily: "AkayaK-e",
+                  fontSize: 25,
+                ),
+              )),
+            ),
+            Center(
+              child: Text(
+                widget.english,
+                style: TextStyle(
+                  fontFamily: "RocknRoll-e",
+                  fontSize: 20
+                ),
               ),
             ),
-            Text(
-              widget.english,
-            ),
-            Text(
-              widget.hebrew,
-            ),
+            Center(
+              child: Container(
+                width: 100,
+                  height: 100,
+                  child: widget.image)
+            )
           ]),
         ),
       ),
@@ -137,4 +154,3 @@ class _CardQuartetsState extends State<CardQuartets> {
     );
   }
 }
-

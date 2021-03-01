@@ -77,16 +77,14 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   Player createPlayer(bool isMe) {
     List<CardQuartets> cards = [
-      CardQuartets("english", "עברית01", null, "subject", "word1", "word2",
-          "word3", isMe),
+      CardQuartets("table", "שולחן", Image(image: AssetImage('images/table.jpg'),), "furniture", "chair", "cupboard",
+          "bed", isMe),
       CardQuartets("english", "עברית02", null, "subject", "word1", "word2",
           "word3", isMe),
       CardQuartets("english", "עברית03", null, "subject", "word1", "word2",
           "word3", isMe),
       CardQuartets("english", "עברית04", null, "subject", "word1", "word2",
           "word3", isMe),
-      CardQuartets(
-          "english", "עברית04", null, "subject", "word1", "word2", "word3", isMe)
     ];
     if (isMe) {
       cards.add(CardQuartets("english", "עברית1", null, "subject", "word1",
