@@ -12,7 +12,8 @@ class CardQuartets extends CardGame {
   var word2 = "";
   var word3 = "";
   bool myCard = true;
-  bool small = true;
+  //bool small = true;
+  bool chosen = false;
 
   CardQuartets(var english, var hebrew, Image image, var subject, var wo1,
       var wo2, var wo3, bool myCard)
@@ -63,28 +64,39 @@ class _CardQuartetsState extends State<CardQuartets> {
     }
   }
 
-  double smallHeight = 100;
-  double smallWidth = 70;
-  double bigHeight = 200;
-  double bigWidth = 140;
+//  double smallHeight = 100;
+//  double smallWidth = 140;
+//  double bigHeight = 200;
+//  double bigWidth = 140;
 
   Widget getOpenCard(BuildContext context) {
-    double height=smallHeight;
-    double width = smallWidth;
-    if (!widget.small) {
-      height=bigHeight;
-      width = bigWidth;
-    }
-
+//    double height=smallHeight;
+//    double width = smallWidth;
+//    if (!widget.small) {
+//      height=bigHeight;
+//      width = bigWidth;
+//    }
+    double height = 200;
+    double width = 130;
     return new Container(
       height: height,
       width: width,
       child: Card(
+        shape: widget.chosen
+            ? new RoundedRectangleBorder(
+            side: new BorderSide(color: Colors.red, width: 2.0),
+            borderRadius: BorderRadius.circular(4.0))
+            : new RoundedRectangleBorder(
+            side: new BorderSide(color: Colors.black87, width: 1.0),
+            borderRadius: BorderRadius.circular(4.0)),
+        //color: getColor(widget.chosen),
+        borderOnForeground: true,
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
           onTap: () {
             setState(() {
-              widget.small = !widget.small;
+              widget.chosen = !widget.chosen;
+              //widget.small = !widget.small;
             });
           },
           child: Column(children: [
@@ -105,6 +117,14 @@ class _CardQuartetsState extends State<CardQuartets> {
         ),
       ),
     );
+  }
+
+  Color getColor(bool chosen) {
+    if (chosen) {
+      return Colors.red;
+    } else {
+      return Colors.white70;
+    }
   }
 
   Widget getCloseCard(BuildContext context) {
