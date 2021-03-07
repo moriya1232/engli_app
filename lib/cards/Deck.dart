@@ -2,11 +2,12 @@ import 'dart:math';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/players/player.dart';
+import 'package:engli_app/QuartetsGame/Constants.dart';
 
-class Pile {
+class Deck {
   List<CardQuartets> cards = [];
 
-  Pile(List<Subject> subs) {
+  Deck(List<Subject> subs) {
     // until here is the fake subs.
     for (Subject sub in subs) {
       this.cards.addAll(sub.getCards());
@@ -41,10 +42,9 @@ class Pile {
     }
   }
 
-  void dividePile(List<Player> players) {
+  void handoutDeck(List<Player> players) {
     shuffle();
-    int maxGameRound = 4;
-    for (int round = 0; round < maxGameRound; round++) {
+    for (int round = 0; round < howMuchCardsToDivide; round++) {
       for (Player player in players) {
         giveCardToPlayer(player);
       }

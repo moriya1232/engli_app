@@ -1,10 +1,17 @@
 import 'package:engli_app/chooseGame.dart';
 import 'package:flutter/material.dart';
+//import 'shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+
+//import 'Data.dart';
 
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
+
+//TODO: dispose nameController in the end
+final nameController = TextEditingController();
 
 class _LoginState extends State<Login> {
   @override
@@ -41,7 +48,22 @@ class _LoginState extends State<Login> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      new Flexible(child: TextField()),
+                      Expanded(
+                        child:
+                      new Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: TextFormField(
+                            textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+//                          border: OutlineInputBorder(
+//                            borderRadius: const BorderRadius.all(const Radius.circular(20))
+//                          ),
+//                        hintText: "הכנס כתובת מייל",
+                        ),
+                            controller: nameController,
+                      )
+                      ),
+                      ),
                       Text(':כתובת מייל '),
                     ],
                   ),
@@ -59,6 +81,7 @@ class _LoginState extends State<Login> {
                             padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                             color: Colors.amberAccent,
                             onPressed: () {
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -84,3 +107,11 @@ class _LoginState extends State<Login> {
         ])));
   }
 }
+//
+//_save() async {
+//  //final prefs = await SharedPreference.getInstance();
+//  final key = 'my_int_key';
+//  final value = 42;
+//  //prefs.setInt(key, value);
+//  print('saved $value');
+//}

@@ -40,13 +40,33 @@ class _RegistrationState extends State<Registration> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          new Flexible(child: TextField()),
+                          Expanded(child:
+                          new Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  //hintText: "הכנס כתובת מייל",
+                                ),
+                              )
+                          ),
+                          ),
                           Text(':כתובת מייל '),
                         ],
                       ),
                       Row(
                         children: <Widget>[
-                          new Flexible(child: TextField()),
+                          Expanded(child:
+                          new Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  //hintText: "הכנס שם",
+                                ),
+                              )
+                          ),
+                          ),
                           Text(':שם '),
                         ],
                       ),

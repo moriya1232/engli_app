@@ -1,5 +1,5 @@
 
-import 'package:engli_app/cards/Pile.dart';
+import 'package:engli_app/cards/Deck.dart';
 import 'package:flutter/material.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/cards/Triple.dart';
@@ -7,7 +7,7 @@ import 'package:engli_app/cards/Subject.dart';
 
 class QuartetsGame {
   List<Player> players = [];
-  Pile pile;
+  Deck deck;
   int turn;
 
   QuartetsGame() {
@@ -15,13 +15,13 @@ class QuartetsGame {
     Other player1 = createPlayer(false);
     Other player2 = createPlayer(false);
     Other player3 = createPlayer(false);
-    Pile pile = createPile();
+    Deck deck = createDeck();
     players.add(me);
     players.add(player1);
     players.add(player2);
     players.add(player3);
-    pile.dividePile(this.players);
-    this.pile = pile;
+    deck.handoutDeck(this.players);
+    this.deck = deck;
     this.turn = 0;
   }
 
@@ -54,7 +54,7 @@ class QuartetsGame {
     return this.players.elementAt(0);
   }
 
-  Pile createPile(){
+  Deck createDeck(){
     Subject furnitures = Subject(
         "Furnitures",
         Triple(
@@ -126,8 +126,8 @@ class QuartetsGame {
         Triple("meat", "בשר", null),
         Triple("soap", "מרק", null));
     List<Subject> subs = [furnitures, pets, days, family, food];
-    Pile pile = new Pile(subs);
-    return pile;
+    Deck deck = new Deck(subs);
+    return deck;
   }
 
   Player createPlayer(bool isMe) {
@@ -234,6 +234,4 @@ class QuartetsGame {
 //      return Other(cards);
 //    }
   }
-
-
 }

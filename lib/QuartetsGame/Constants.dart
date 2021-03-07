@@ -1,0 +1,1 @@
+const int howMuchCardsToDivide = 4;

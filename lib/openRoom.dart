@@ -29,31 +29,57 @@ class _openRoomState extends State<OpenRoom> {
             ])),
         Expanded(
           child: Align(
+
             alignment: Alignment.bottomCenter,
+
             child: Padding(
+
               padding: EdgeInsets.all(40),
+
               child: ButtonTheme(
+
                   padding: EdgeInsets.all(20),
+
                   buttonColor: Colors.pink,
+
                   child: SizedBox(
+
                       child: RaisedButton(
+
                     shape: RoundedRectangleBorder(
+
                         borderRadius: BorderRadius.circular(20.0)),
+
                     onPressed: () {
+
                       Navigator.push(
+
                         context,
+
                         MaterialPageRoute(builder: (context) => QuartetsRoom()),
+
                       );
+
                     },
+
                     child: Text(
+
                       '!התחל משחק',
+
                       style: TextStyle(
+
                           fontFamily: 'Comix-h',
+
                           color: Colors.black87,
+
                           fontSize: 20),
+
                     ),
+
                   ))),
+
             ),
+
           ),
         )
       ])),
