@@ -6,6 +6,10 @@ class Player {
   Player(List<CardGame> cards) {
     this.cards = cards;
   }
+
+  void getCard(CardGame card) {
+    this.cards.add(card);
+  }
 }
 
 class Me extends Player {

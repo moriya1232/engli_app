@@ -30,6 +30,15 @@ class CardQuartets extends CardGame {
   @override
   _CardQuartetsState createState() => _CardQuartetsState();
 
+  CardQuartets changeToMine(){
+    this.myCard = true;
+    return this;
+  }
+
+  CardQuartets changeToNotMine() {
+    this.myCard = false;
+    return this;
+  }
 //
 //  CardQuartetsNoImage(var english, var hebrew, var subject) {
 //    this.english = english;
