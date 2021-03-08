@@ -1,4 +1,5 @@
 import 'package:engli_app/MemoryRoom.dart';
+import 'package:engli_app/editingVocabulary.dart';
 import 'package:flutter/material.dart';
 import 'Data.dart';
 import 'getInRoom.dart';
@@ -104,10 +105,10 @@ class _ChooseGameState extends State<ChooseGame> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0)),
                     onPressed: () {
-//                            Navigator.push(
-//                              context,
-//                              MaterialPageRoute(builder: (context) => Login()),
-//                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => new EditingVocabulaty()),
+                            );
                     },
                     child: Text(
                       'עריכת אוצר מילים',
