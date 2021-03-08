@@ -1,5 +1,6 @@
 import 'package:engli_app/MemoryRoom.dart';
 import 'package:flutter/material.dart';
+import 'Data.dart';
 import 'getInRoom.dart';
 
 class ChooseGame extends StatefulWidget {
@@ -29,7 +30,7 @@ class _ChooseGameState extends State<ChooseGame> {
                     Padding(
                       padding: EdgeInsets.all(100),
                       child: Text(
-                        '!שלום שלמה',
+                        '!שלום ${Data().getName()}',
                         style: TextStyle(
                           fontFamily: 'Abraham-h',
                           fontSize: 40,

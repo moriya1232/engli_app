@@ -1,18 +1,27 @@
-import 'package:flutter/cupertino.dart';
+class Data {
+  String name="";
+  String mail="";
+  static final Data _singleton = Data._internal();
 
-class Data extends ChangeNotifier{
-  String name;
+  factory Data() {
+    return _singleton;
+  }
 
-  void changeName(String na) {
-    this.name = na;
-    notifyListeners();
+  Data._internal();
+
+  void setName(String n) {
+    this.name = n;
   }
 
   String getName() {
     return this.name;
   }
 
+  String getMail() {
+    return this.mail;
+  }
 
-
-
+  void setMail(String m) {
+    this.mail = m;
+  }
 }

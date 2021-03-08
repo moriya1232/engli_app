@@ -1,5 +1,8 @@
+import 'package:engli_app/Constants.dart';
 import 'package:engli_app/chooseGame.dart';
 import 'package:flutter/material.dart';
+
+import 'Data.dart';
 //import 'shared_preferences/shared_preferences.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
@@ -81,7 +84,9 @@ class _LoginState extends State<Login> {
                             padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                             color: Colors.amberAccent,
                             onPressed: () {
-
+                              Data().setMail(nameController.text);
+                              //TODO: get the appropriate name by mail.
+                              Data().setName(name);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
