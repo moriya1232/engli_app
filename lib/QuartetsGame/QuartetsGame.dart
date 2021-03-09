@@ -1,4 +1,5 @@
 
+import 'package:engli_app/Constants.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:flutter/material.dart';
 import 'package:engli_app/players/player.dart';
@@ -11,10 +12,10 @@ class QuartetsGame {
   int turn;
 
   QuartetsGame() {
-    Me me = createPlayer(true);
-    Other player1 = createPlayer(false);
-    Other player2 = createPlayer(false);
-    Other player3 = createPlayer(false);
+    Me me = createPlayer(true, quartetsMe);
+    Other player1 = createPlayer(false, qu1);
+    Other player2 = createPlayer(false, qu2);
+    Other player3 = createPlayer(false, qu3);
     Deck deck = createDeck();
     players.add(me);
     players.add(player1);
@@ -105,37 +106,61 @@ class QuartetsGame {
             "fish",
             "דג",
             Image(
-              image: AssetImage('images/cat.jpg'),
+              image: AssetImage('images/fish.jpg'),
             )));
     Subject days = Subject(
         "Days",
-        Triple("sunday", "יום ראשון", null),
-        Triple("monday", "יום שני", null),
-        Triple("saturday", "יום שבת", null),
-        Triple("friday", "יום שישי", null));
+        Triple("sunday", "יום ראשון", Image(
+          image: AssetImage('images/sunday.png'),
+        )),
+        Triple("monday", "יום שני", Image(
+          image: AssetImage('images/monday.png'),
+        )),
+        Triple("saturday", "יום שבת", Image(
+          image: AssetImage('images/saturday.png'),
+        )),
+        Triple("friday", "יום שישי", Image(
+          image: AssetImage('images/friday.png'),
+        )));
     Subject family = Subject(
         "Family",
-        Triple("father", "אבא", null),
-        Triple("mother", "אמא", null),
-        Triple("sister", "אחות", null),
-        Triple("brother", "אח", null));
+        Triple("father", "אבא", Image(
+          image: AssetImage('images/father.png'),
+        )),
+        Triple("mother", "אמא", Image(
+          image: AssetImage('images/mother.jpg'),
+        )),
+        Triple("sister", "אחות", Image(
+          image: AssetImage('images/sister.jpg'),
+        )),
+        Triple("brother", "אח", Image(
+          image: AssetImage('images/brother.jpg'),
+        )));
     Subject food = Subject(
         "Food",
-        Triple("pizza", "פיצה", null),
-        Triple("rise", "אורז", null),
-        Triple("meat", "בשר", null),
-        Triple("soap", "מרק", null));
+        Triple("pizza", "פיצה", Image(
+          image: AssetImage('images/pizza.jpg'),
+        )),
+        Triple("rice", "אורז", Image(
+          image: AssetImage('images/rice.jpg'),
+        )),
+        Triple("meat", "בשר", Image(
+          image: AssetImage('images/meat.jpg'),
+        )),
+        Triple("soup", "מרק", Image(
+          image: AssetImage('images/soup.png'),
+        )));
     List<Subject> subs = [furnitures, pets, days, family, food];
     Deck deck = new Deck(subs);
     return deck;
   }
 
-  Player createPlayer(bool isMe) {
+  Player createPlayer(bool isMe, String name) {
     if (isMe) {
-      return Me([]);
+      return Me([], name);
     }
     else {
-      return Other([]);
+      return Other([], name);
     }
 //    List<CardQuartets> cards = [
 //      CardQuartets(

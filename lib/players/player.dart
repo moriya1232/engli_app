@@ -2,9 +2,11 @@ import '../cards/CardGame.dart';
 
 class Player {
   List<CardGame> cards;
+  String name;
 
-  Player(List<CardGame> cards) {
+  Player(List<CardGame> cards, String name) {
     this.cards = cards;
+    this.name = name;
   }
 
   void getCard(CardGame card) {
@@ -13,9 +15,9 @@ class Player {
 }
 
 class Me extends Player {
-  Me(List<CardGame> cards) : super(cards);
+  Me(List<CardGame> cards, String name) : super(cards, name);
 }
 
 class Other extends Player {
-  Other(List<CardGame> cards) : super(cards);
+  Other(List<CardGame> cards, String name) : super(cards, name);
 }

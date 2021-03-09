@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
 import 'players/player.dart';
+import 'Constants.dart';
 
 const int maxCards = 36;
 
@@ -15,8 +16,8 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   @override
   Widget build(BuildContext context) {
-    Me me = createPlayer(true);
-    Other enemy = createPlayer(false);
+    Me me = createPlayer(true, memoryMe);
+    Other enemy = createPlayer(false, memoryEnemy);
     players.add(me);
     players.add(enemy);
     return Scaffold(
@@ -89,12 +90,12 @@ class _MemoryRoomState extends State<MemoryRoom> {
     return Row(children: colsWidget);
   }
 
-  Player createPlayer(bool isMe) {
+  Player createPlayer(bool isMe, String name) {
     List<CardMemory> cards = [];
     if (isMe) {
-      return Me(cards);
+      return Me(cards, name);
     } else {
-      return Other(cards);
+      return Other(cards, name);
     }
   }
 

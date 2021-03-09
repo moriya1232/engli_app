@@ -64,6 +64,18 @@ flutter:
     - images/logo.jpg
     - icons/pencil.jpg
     - icons/microphone.png
+    - images/brother.jpg
+    - images/father.png
+    - images/friday.png
+    - images/meat.jpg
+    - images/monday.png
+    - images/mother.jpg
+    - images/pizza.jpg
+    - images/rice.jpg
+    - images/saturday.png
+    - images/sister.jpg
+    - images/soup.png
+    - images/sunday.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
