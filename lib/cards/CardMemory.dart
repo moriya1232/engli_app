@@ -6,12 +6,14 @@ import 'CardGame.dart';
 class CardMemory extends CardGame {
   bool isEnglishCard;
   bool isClose;
+//  MemoryGame game;
 
   CardMemory(String english, String hebrew, bool isEnglish)
       : super(english, hebrew) {
     this.isEnglishCard = isEnglish;
     this.isClose = true;
   }
+
 
   @override
   _CardMemoryState createState() => _CardMemoryState();
@@ -26,6 +28,7 @@ class _CardMemoryState extends State<CardMemory> {
         onTap: () {
           setState(() {
             widget.isClose = false;
+            //CardChanged().dispatch(context);
           });
         },
       );
@@ -35,6 +38,7 @@ class _CardMemoryState extends State<CardMemory> {
         onTap: () {
           setState(() {
             widget.isClose = true;
+            //CardChanged().dispatch(context);
           });
         },
       );

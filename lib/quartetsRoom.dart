@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'players/player.dart';
 
 // TODO: diffrenet size of screen
+//TODO: ask another player 
 
 class QuartetsRoom extends StatefulWidget {
   int chosenCard = -1;
@@ -17,7 +18,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: for 3 or 2 players.
     QuartetsGame game = new QuartetsGame();
     return Scaffold(
       appBar: AppBar(
