@@ -1,3 +1,4 @@
+import 'package:engli_app/QuartetsGame/Constants.dart';
 import 'package:engli_app/QuartetsGame/QuartetsGame.dart';
 import 'package:flutter/material.dart';
 import 'players/player.dart';
@@ -30,35 +31,60 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 Center(child: Text('${game.getFirstPlayer().cards.length}'),),
-            Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+      Container(
+        alignment: Alignment.center,
+        height: 100,
+          child: ListView(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
                 children: game.getFirstPlayer().cards),
+      ),
                 Center(child: Text('${game.getFirstPlayer().name}',
                     style: TextStyle(
                       fontFamily: 'Comix-h',
                       fontSize: 20,
                     ),
                 ),),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                RotatedBox(quarterTurns: 1,
-                  child :Text('${game.getSecondPlayer().cards.length}'),),
-                RotatedBox(
-                  quarterTurns: 1,
-                  child: Row(
-                    children: game.getSecondPlayer().cards,
+                if (howMuchPlayers > 2)
+                Row(
+                      children: [RotatedBox(quarterTurns: 1,
+                    child: Text('${game
+                        .getSecondPlayer()
+                        .cards
+                        .length}'),),
+                //if (howMuchPlayers > 2)
+                  RotatedBox(
+                    quarterTurns: 1,
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 100,
+                      width: 270,
+                      child: ListView(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        children: game
+                            .getSecondPlayer()
+                            .cards,
+                      ),
+                    ),
                   ),
-                ),
-                RotatedBox(
-                  quarterTurns: 1,
-                  child: Text('${game.getSecondPlayer().name}',
-                    style: TextStyle(
-                      fontFamily: 'Comix-h',
-                      fontSize: 20,
-                    ),),
-                ),
+                //if (howMuchPlayers > 2)
+                  RotatedBox(
+                    quarterTurns: 1,
+                    child: Text('${game
+                        .getSecondPlayer()
+                        .name
+                    }',
+                      style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        fontSize: 20,
+                      ),),
+                  ),]),
+
                 Stack(children: [
                   Padding( 
                     padding: EdgeInsets.all(20),
@@ -68,8 +94,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     color: Colors.amberAccent,
                     
                   ),),
-//                  CardQuartets("english", "hebrew", null, "subject", "word1",
-//                      "word2", "word3", false),
                   Positioned.fill(
                     child:
                     Align(
@@ -101,7 +125,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     ),
                   )
                 ]),
-                RotatedBox(
+                if (howMuchPlayers > 3)
+                  Row(
+                    children: [
+                      RotatedBox(
                   quarterTurns: 3,
                   child: Text('${game.getThirdPlayer().name}',
                     style: TextStyle(
@@ -109,16 +136,28 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                       fontSize: 20,
                     ),),
                 ),
-                RotatedBox(
+                  RotatedBox(
                   quarterTurns: 3,
-                  child: Row(
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 100,
+                    width: 270,
+                    child: ListView(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
                     children: game.getThirdPlayer().cards,
+                    ),
                   ),
                 ),
-                RotatedBox(
+                  RotatedBox(
                   quarterTurns: 3,
                   child: Text('${game.getThirdPlayer().cards.length}'),
                 ),
+                    ]),
+                if (howMuchPlayers==3)
+                  Container(
+                    width: MediaQuery.of(context).size.width/3,
+                  )
 
               ],
             ),

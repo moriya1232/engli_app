@@ -150,7 +150,133 @@ class QuartetsGame {
         Triple("soup", "מרק", Image(
           image: AssetImage('images/soup.png'),
         )));
-    List<Subject> subs = [furnitures, pets, days, family, food];
+    Subject days1 = Subject(
+        "Days",
+        Triple("sunday", "יום ראשון", Image(
+          image: AssetImage('images/sunday.png'),
+        )),
+        Triple("monday", "יום שני", Image(
+          image: AssetImage('images/monday.png'),
+        )),
+        Triple("saturday", "יום שבת", Image(
+          image: AssetImage('images/saturday.png'),
+        )),
+        Triple("friday", "יום שישי", Image(
+          image: AssetImage('images/friday.png'),
+        )));
+    Subject family1 = Subject(
+        "Family",
+        Triple("father", "אבא", Image(
+          image: AssetImage('images/father.png'),
+        )),
+        Triple("mother", "אמא", Image(
+          image: AssetImage('images/mother.jpg'),
+        )),
+        Triple("sister", "אחות", Image(
+          image: AssetImage('images/sister.jpg'),
+        )),
+        Triple("brother", "אח", Image(
+          image: AssetImage('images/brother.jpg'),
+        )));
+    Subject food1 = Subject(
+        "Food",
+        Triple("pizza", "פיצה", Image(
+          image: AssetImage('images/pizza.jpg'),
+        )),
+        Triple("rice", "אורז", Image(
+          image: AssetImage('images/rice.jpg'),
+        )),
+        Triple("meat", "בשר", Image(
+          image: AssetImage('images/meat.jpg'),
+        )),
+        Triple("soup", "מרק", Image(
+          image: AssetImage('images/soup.png'),
+        )));
+    Subject days2 = Subject(
+        "Days",
+        Triple("sunday", "יום ראשון", Image(
+          image: AssetImage('images/sunday.png'),
+        )),
+        Triple("monday", "יום שני", Image(
+          image: AssetImage('images/monday.png'),
+        )),
+        Triple("saturday", "יום שבת", Image(
+          image: AssetImage('images/saturday.png'),
+        )),
+        Triple("friday", "יום שישי", Image(
+          image: AssetImage('images/friday.png'),
+        )));
+    Subject family2 = Subject(
+        "Family",
+        Triple("father", "אבא", Image(
+          image: AssetImage('images/father.png'),
+        )),
+        Triple("mother", "אמא", Image(
+          image: AssetImage('images/mother.jpg'),
+        )),
+        Triple("sister", "אחות", Image(
+          image: AssetImage('images/sister.jpg'),
+        )),
+        Triple("brother", "אח", Image(
+          image: AssetImage('images/brother.jpg'),
+        )));
+    Subject food2 = Subject(
+        "Food",
+        Triple("pizza", "פיצה", Image(
+          image: AssetImage('images/pizza.jpg'),
+        )),
+        Triple("rice", "אורז", Image(
+          image: AssetImage('images/rice.jpg'),
+        )),
+        Triple("meat", "בשר", Image(
+          image: AssetImage('images/meat.jpg'),
+        )),
+        Triple("soup", "מרק", Image(
+          image: AssetImage('images/soup.png'),
+        )));
+    Subject days3 = Subject(
+        "Days",
+        Triple("sunday", "יום ראשון", Image(
+          image: AssetImage('images/sunday.png'),
+        )),
+        Triple("monday", "יום שני", Image(
+          image: AssetImage('images/monday.png'),
+        )),
+        Triple("saturday", "יום שבת", Image(
+          image: AssetImage('images/saturday.png'),
+        )),
+        Triple("friday", "יום שישי", Image(
+          image: AssetImage('images/friday.png'),
+        )));
+    Subject family3 = Subject(
+        "Family",
+        Triple("father", "אבא", Image(
+          image: AssetImage('images/father.png'),
+        )),
+        Triple("mother", "אמא", Image(
+          image: AssetImage('images/mother.jpg'),
+        )),
+        Triple("sister", "אחות", Image(
+          image: AssetImage('images/sister.jpg'),
+        )),
+        Triple("brother", "אח", Image(
+          image: AssetImage('images/brother.jpg'),
+        )));
+    Subject food3 = Subject(
+        "Food",
+        Triple("pizza", "פיצה", Image(
+          image: AssetImage('images/pizza.jpg'),
+        )),
+        Triple("rice", "אורז", Image(
+          image: AssetImage('images/rice.jpg'),
+        )),
+        Triple("meat", "בשר", Image(
+          image: AssetImage('images/meat.jpg'),
+        )),
+        Triple("soup", "מרק", Image(
+          image: AssetImage('images/soup.png'),
+        )));
+    List<Subject> subs = [furnitures, pets, days, family, food,days1, family1, food1,days2, family2, food2,days3, family3, food3];
     Deck deck = new Deck(subs);
     return deck;
   }

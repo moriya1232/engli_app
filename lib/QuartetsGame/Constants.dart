@@ -1,1 +1,2 @@
-const int howMuchCardsToDivide = 4;
+const int howMuchCardsToDivide = 8;
+int howMuchPlayers = 3;
