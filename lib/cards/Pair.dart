@@ -10,9 +10,8 @@ class Pair{
   }
 
   List<CardMemory> getCards() {
-    List<CardMemory> li = [];
-    li.add(this.c1);
-    li.add(this.c2);
+    List<CardMemory> li = [c1,c2];
+    print(li);
     return li;
   }
 }

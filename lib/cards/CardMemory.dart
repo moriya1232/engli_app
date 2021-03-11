@@ -1,17 +1,24 @@
 import 'dart:core';
+//import 'package:engli_app/MemoryGame/MemoryGame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../MemoryRoom.dart';
 import 'CardGame.dart';
 
 class CardMemory extends CardGame {
   bool isEnglishCard;
   bool isClose;
-//  MemoryGame game;
+  MemoryGame game;
 
   CardMemory(String english, String hebrew, bool isEnglish)
       : super(english, hebrew) {
     this.isEnglishCard = isEnglish;
     this.isClose = true;
+    this.game=null;
+  }
+
+  void setGame(MemoryGame mg) {
+    this.game = mg;
   }
 
 
@@ -28,7 +35,7 @@ class _CardMemoryState extends State<CardMemory> {
         onTap: () {
           setState(() {
             widget.isClose = false;
-            //CardChanged().dispatch(context);
+            widget.game.cardClicked();
           });
         },
       );
@@ -38,7 +45,7 @@ class _CardMemoryState extends State<CardMemory> {
         onTap: () {
           setState(() {
             widget.isClose = true;
-            //CardChanged().dispatch(context);
+            widget.game.cardClicked();
           });
         },
       );
