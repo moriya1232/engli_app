@@ -3,6 +3,7 @@
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Triple.dart';
 
+
 class Subject {
   String name_subject;
   List<CardQuartets> cards;
@@ -53,5 +54,40 @@ class Subject {
 
   String getSubject() {
     return this.name_subject;
+  }
+
+  List<CardQuartets> getRestCards(CardQuartets card) {
+    List<CardQuartets> cardsRest = [];
+    for (CardQuartets cardQuartets in this.cards) {
+      if (!(card == cardQuartets)) {
+        cardsRest.add(cardQuartets);
+      }
+    }
+    return cardsRest;
+  }
+
+  List<String> getNamesRestCards(CardQuartets card) {
+    List<String> names = [];
+    for (CardQuartets c in getRestCards(card)){
+      names.add(c.english);
+    }
+    return names;
+  }
+
+  List<String> getNamesCards() {
+    List<String> names = [];
+    for (CardQuartets card in this.cards){
+      names.add(card.english);
+    }
+    return names;
+  }
+
+  CardQuartets getCardByString(String val) {
+    for (CardQuartets c in this.cards) {
+      if (val == c.english) {
+        return c;
+      }
+    }
+    return null;
   }
 }

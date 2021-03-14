@@ -6,8 +6,10 @@ import 'package:engli_app/QuartetsGame/Constants.dart';
 
 class Deck {
   List<CardQuartets> cards = [];
+  List<Subject> subjects = [];
 
   Deck(List<Subject> subs) {
+    this.subjects = subs;
     // until here is the fake subs.
     for (Subject sub in subs) {
       this.cards.addAll(sub.getCards());
@@ -35,9 +37,9 @@ class Deck {
       throw Exception("no more cards in the pile");
     } else {
       if (player is Me) {
-        player.getCard(cards.removeLast().changeToMine());
+        player.addCard(cards.removeLast().changeToMine());
       } else {
-        player.getCard(cards.removeLast().changeToNotMine());
+        player.addCard(cards.removeLast().changeToNotMine());
       }
     }
   }

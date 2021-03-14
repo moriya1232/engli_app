@@ -1,5 +1,5 @@
 
-import 'package:engli_app/Constants.dart';
+import 'package:engli_app/QuartetsGame/Constants.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:flutter/material.dart';
 import 'package:engli_app/players/player.dart';
@@ -10,20 +10,38 @@ class QuartetsGame {
   List<Player> players = [];
   Deck deck;
   int turn;
+  //List<Subject> subjects;
 
   QuartetsGame() {
-    Me me = createPlayer(true, quartetsMe);
-    Other player1 = createPlayer(false, qu1);
-    Other player2 = createPlayer(false, qu2);
-    Other player3 = createPlayer(false, qu3);
+    for (int i=0; i<playersNames.length+1; i++) {
+      if (i==0) {
+        createPlayer(true, quartetsMe);
+        continue;
+      }
+      createPlayer(false, playersNames[i-1]);
+    }
     Deck deck = createDeck();
-    players.add(me);
-    players.add(player1);
-    players.add(player2);
-    players.add(player3);
     deck.handoutDeck(this.players);
     this.deck = deck;
     this.turn = 0;
+  }
+
+  Player getPlayerByName(String name) {
+    //TODO: if there are some players?
+    for(Player player in this.players) {
+      if (name == player.name){
+        return player;
+      }
+    }
+    return null;
+  }
+
+  List<String> getNamesPlayers(){
+    List<String> names = [];
+    for(Player player in this.players){
+      names.add(player.name);
+    }
+    return names;
   }
 
   void doneTurn() {
@@ -282,12 +300,15 @@ class QuartetsGame {
   }
 
   Player createPlayer(bool isMe, String name) {
+    Player player;
     if (isMe) {
-      return Me([], name);
+      player = Me([], name);
     }
     else {
-      return Other([], name);
+      player = Other([], name);
     }
+    this.players.add(player);
+    return player;
 //    List<CardQuartets> cards = [
 //      CardQuartets(
 //          "table",
@@ -384,5 +405,14 @@ class QuartetsGame {
 //    } else {
 //      return Other(cards);
 //    }
+  }
+
+  Subject getSubjectByString(String sub) {
+    for (Subject s in this.deck.subjects){
+      if (s.name_subject == sub) {
+        return s;
+      }
+    }
+    return null;
   }
 }

@@ -16,7 +16,3 @@ const r10 = "Body";
 const memoryMe = "הלה";
 const memoryEnemy = "עדן";
 
-const quartetsMe = "יהודית";
-const qu1 = "עדן";
-const qu2 = "הלל";
-const qu3 = "הלה";

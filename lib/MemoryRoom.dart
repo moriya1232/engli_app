@@ -11,11 +11,10 @@ const int maxCards = 36;
 
 class MemoryRoom extends StatefulWidget {
   MemoryGame game;
-  MemoryRoom() {
+
+  MemoryRoom(){
     reStart();
   }
-  @override
-  _MemoryRoomState createState() => _MemoryRoomState();
 
   void reStart() {
     List<Player> players = [];
@@ -28,8 +27,6 @@ class MemoryRoom extends StatefulWidget {
     setGameToPairs(pairs, this.game);
     //this.game.setRoom(this);
   }
-
-
 
   void setGameToPairs(List<Pair> list, MemoryGame mg) {
     List<CardMemory> cards = getCards(list);
@@ -57,12 +54,15 @@ class MemoryRoom extends StatefulWidget {
     pairs.add(createPair("father", "אבא"));
     pairs.add(createPair("mother", "אמא"));
     pairs.add(createPair("brother", "אח"));
-    pairs.add(createPair("sister", "אחות"));
     pairs.add(createPair("Eden", "עדן"));
     pairs.add(createPair("Hila", "הלה"));
     pairs.add(createPair("Moriya", "מוריה"));
     pairs.add(createPair("Judith", "יהודית"));
     pairs.add(createPair("Hadas", "הדס"));
+    pairs.add(createPair("Ora", "אורה"));
+    pairs.add(createPair("Dvir", "דביר"));
+    pairs.add(createPair("Shilo", "שילה"));
+
 
     pairs.shuffle();
     return pairs;
@@ -79,10 +79,17 @@ class MemoryRoom extends StatefulWidget {
     }
     return cards;
   }
+
+
+  @override
+  _MemoryRoomState createState() => _MemoryRoomState();
+
+
+
+
 }
 
 class _MemoryRoomState extends State<MemoryRoom> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +136,6 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   }
 
-
   Widget createBoard(List<Pair> pairs) {
     List<List<CardMemory>> columns = [];
     List<CardMemory> column = [];
@@ -166,7 +172,6 @@ class MemoryGame{
   List<Player> players;
   List<Pair> pairs;
   int turn;
-  //_MemoryRoomState room;
 
   MemoryGame(List<Player> p, List<Pair> pa) {
     this.players=p;
@@ -177,12 +182,10 @@ class MemoryGame{
 //  void setRoom(MemoryRoom mr) {
 //    this.room = mr.createState();
 //  }
-//  void updateScreen(){
-//    this.room.setState(() {
-//
-//    });
-//    print("update");
-//  }
+  void updateScreen(){
+    //TODO: update!!!
+    print("update");
+  }
   List<CardMemory> getCards() {
     List<CardMemory> list =[];
     for (Pair pair in this.pairs){
@@ -233,7 +236,7 @@ class MemoryGame{
     for(Pair pair in this.pairs){
       for (CardMemory card in pair.getCards()){
         if (card.isClose == false) {
-          //card.isClose = true;
+          card.isClose = true;
           print("close card");
         }
       }
@@ -258,6 +261,7 @@ class MemoryGame{
         closeAllCards();
       }
     }
-    //updateScreen();
+    updateScreen();
   }
 }
+

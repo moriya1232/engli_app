@@ -6,7 +6,7 @@ import 'CardGame.dart';
 class CardQuartets extends CardGame {
   var english = "";
   var hebrew = "";
-  var subject = "";
+  String subject;
   Image image;
   var word1 = "";
   var word2 = "";
@@ -16,7 +16,7 @@ class CardQuartets extends CardGame {
   //bool small = true;
   bool chosen = false;
 
-  CardQuartets(var english, var hebrew, Image image, var subject, var wo1,
+  CardQuartets(var english, var hebrew, Image image, String subject, var wo1,
       var wo2, var wo3, bool myCard)
       : super(english, hebrew) {
     this.image = image;

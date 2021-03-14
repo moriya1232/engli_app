@@ -1,3 +1,7 @@
+import 'package:engli_app/MemoryRoom.dart';
+import 'package:engli_app/cards/CardQuartets.dart';
+
+
 import '../cards/CardGame.dart';
 
 class Player {
@@ -11,8 +15,23 @@ class Player {
     this.score = 0;
   }
 
-  void getCard(CardGame card) {
+  void addCard(CardGame card) {
     this.cards.add(card);
+  }
+
+  List<String> getSubjects() {
+    for (CardGame card in this.cards) {
+      if (card is MemoryGame){
+        throw Exception("no subjects in memory cards.");
+      }
+    }
+    List<String> subjects=[];
+    for (CardQuartets card in this.cards){
+      if(!subjects.contains(card.subject)) {
+        subjects.add(card.subject);
+      }
+    }
+    return subjects;
   }
 }
 
