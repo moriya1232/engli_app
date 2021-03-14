@@ -31,6 +31,26 @@ class _turnState extends State<Turn> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        Container(
+          alignment: Alignment.center,
+          child: ButtonTheme(
+              buttonColor: Colors.pink,
+              child: SizedBox(
+                  child: RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0)),
+                onPressed: () {
+//TODO
+                },
+                child: Text(
+                  '!שאל',
+                  style: TextStyle(
+                      fontFamily: 'Comix-h',
+                      color: Colors.black87,
+                      fontSize: 15),
+                ),
+              ))),
+        ),
         Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -42,7 +62,7 @@ class _turnState extends State<Turn> {
                 ),
               ),
               DropdownButton<String>(
-                value: widget.subjectToAsk.getNamesCards()[0],
+                value: widget.cardToAsk.english,
                 style: TextStyle(color: Colors.black87),
                 underline: Container(
                   height: 2,
@@ -51,16 +71,18 @@ class _turnState extends State<Turn> {
                 ),
                 onChanged: (String newValue) {
                   setState(() {
-                    widget.cardToAsk = widget.subjectToAsk.getCardByString(newValue);
+                    widget.cardToAsk =
+                        widget.subjectToAsk.getCardByString(newValue);
                   });
                 },
-                items: widget.subjectToAsk.getNamesCards()
+                items: widget.subjectToAsk
+                    .getNamesCards()
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(fontSize: 25, fontFamily: 'Courgette-e'),
+                      style: TextStyle(fontSize: 18, fontFamily: 'Courgette-e'),
                     ),
                   );
                 }).toList(),
@@ -86,7 +108,9 @@ class _turnState extends State<Turn> {
                 ),
                 onChanged: (String newValue) {
                   setState(() {
-                    widget.subjectToAsk = widget.game.getSubjectByString(newValue);
+                    widget.subjectToAsk =
+                        widget.game.getSubjectByString(newValue);
+                    widget.cardToAsk = widget.subjectToAsk.getCards()[0];
                   });
                 },
                 items: widget.game
@@ -97,7 +121,7 @@ class _turnState extends State<Turn> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(fontSize: 25, fontFamily: 'Courgette-e'),
+                      style: TextStyle(fontSize: 18, fontFamily: 'Courgette-e'),
                     ),
                   );
                 }).toList(),
@@ -133,7 +157,7 @@ class _turnState extends State<Turn> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(fontSize: 20, fontFamily: 'Miri-h'),
+                      style: TextStyle(fontSize: 15, fontFamily: 'Miri-h'),
                     ),
                   );
                 }).toList(),
@@ -141,5 +165,13 @@ class _turnState extends State<Turn> {
             ]),
       ],
     );
+  }
+
+  String getValueForCardString() {
+//    if (widget.cardToAsk == null) {
+//      return widget.subjectToAsk.getNamesCards()[0];
+//    } else {
+      return widget.cardToAsk.english;
+    //}
   }
 }

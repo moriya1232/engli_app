@@ -1,4 +1,4 @@
-const int howMuchCardsToDivide = 8;
+const int howMuchCardsToDivide = 4;
 
 
 const quartetsMe = "יהודית";
