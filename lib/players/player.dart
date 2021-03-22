@@ -1,4 +1,5 @@
-import 'package:engli_app/MemoryRoom.dart';
+//import 'package:engli_app/MemoryRoom.dart';
+import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 
 
@@ -21,7 +22,7 @@ class Player {
 
   List<String> getSubjects() {
     for (CardGame card in this.cards) {
-      if (card is MemoryGame){
+      if (card is CardMemory){
         throw Exception("no subjects in memory cards.");
       }
     }

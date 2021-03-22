@@ -1,8 +1,8 @@
 import 'dart:core';
-//import 'package:engli_app/MemoryGame/MemoryGame.dart';
+import 'package:engli_app/MemoryGame/MemoryGame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../MemoryRoom.dart';
+//import '../MemoryRoom.dart';
 import 'CardGame.dart';
 
 class CardMemory extends CardGame {
