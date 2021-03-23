@@ -11,7 +11,6 @@ class Pair{
 
   List<CardMemory> getCards() {
     List<CardMemory> li = [c1,c2];
-    //print(li);
     return li;
   }
 }

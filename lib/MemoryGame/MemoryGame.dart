@@ -1,17 +1,13 @@
-
-
 import 'dart:io';
-
-//import 'package:engli_app/MemoryRoom.dart';
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/Pair.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:flutter/foundation.dart';
-//import 'package:flutter/cupertino.dart';
+
 
 
 class MemoryGame extends ValueListenable{
-  List<dynamic> observers;
+  List<Function> observers;
   List<Player> players;
   List<Pair> pairs;
   int turn;
@@ -20,6 +16,7 @@ class MemoryGame extends ValueListenable{
     this.players=p;
     this.pairs = pa;
     this.turn = 0;
+    this.observers = new List<Function>();
   }
 
   void updateObservers() {
@@ -30,24 +27,13 @@ class MemoryGame extends ValueListenable{
 
   void addPair(Pair pair) {
     this.pairs.add(pair);
-    //TODO: insert it
-    //updateObservers();
-
+    updateObservers();
   }
 
   void removePair(Pair pair) {
     this.pairs.remove(pair);
-    //TODO: insert it
-    //updateObservers();
   }
 
-//  void setRoom(MemoryRoom mr) {
-//    this.room = mr.createState();
-//  }
-  void updateScreen(){
-    //TODO: update!!!
-    print("update");
-  }
   List<CardMemory> getCards() {
     List<CardMemory> list =[];
     for (Pair pair in this.pairs){
@@ -65,6 +51,7 @@ class MemoryGame extends ValueListenable{
       sleep(new Duration(seconds: 1));
     }
   }
+
   void makeMove(Player player) {
 
   }
@@ -95,15 +82,20 @@ class MemoryGame extends ValueListenable{
   }
 
   void closeAllCards() {
-    for(Pair pair in this.pairs){
-      for (CardMemory card in pair.getCards()){
-        if (card.isClose == false) {
-          card.isClose = true;
-          print("close card");
-        }
+    for (CardMemory card in getCards()){
+      if(!card.isClose) {
+        card.isClose = true;
+        card.updateObservers();
       }
     }
+    print("close cards");
   }
+
+  void sleepTime() {
+    sleep(new Duration(seconds: 1));
+    print("sleep 1 second");
+  }
+
 
   void cardClicked(){
     List<CardMemory> chosens = [];
@@ -113,17 +105,21 @@ class MemoryGame extends ValueListenable{
       }
     }
     if (chosens.length == 2) {
-      //sleep(new Duration(seconds: 2));
+      sleepTime();
       Pair pairChosen = isPair(chosens[0], chosens[1]);
       if (pairChosen != null) {
         removePair(pairChosen);
-        //print(this.pairs);
       }
       else {
+        sleepTime();
         closeAllCards();
       }
     }
-    updateScreen();
+    if (chosens.length > 2) {
+      closeAllCards();
+    }
+    print("how much chosens: " + chosens.length.toString());
+    updateObservers();
   }
 
   @override

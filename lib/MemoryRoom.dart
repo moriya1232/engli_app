@@ -80,23 +80,21 @@ class MemoryRoom extends StatefulWidget {
     return cards;
   }
 
-
   @override
   _MemoryRoomState createState() => _MemoryRoomState();
-
-
-
-
 }
 
 class _MemoryRoomState extends State<MemoryRoom> {
+
+  List<List<CardMemory>> columns = [];
+  int howMuchCardsInColumn = 0;
+
 
   @override
   Widget build(BuildContext context) {
     return getDesign(context);
   }
   void _listener() {
-    print("_listener");
     setState(() {
 
     });
@@ -104,13 +102,11 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   @override
   void initState() {
-    print("initstate");
     super.initState();
-//TODO: add this
-    //widget.game.addListener(_listener);
-    _listener();
+    widget.game.addListener(_listener);
+    this.howMuchCardsInColumn = sqrt(widget.getCards(widget.game.pairs).length).round();
+    initializeBoard();
   }
-
 
   @override
   void dispose() {
@@ -141,7 +137,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  createBoard(widget.game.pairs),
+                  drawBoard(),
                 ],
               ),
               Center(
@@ -158,12 +154,12 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   }
 
-  Widget createBoard(List<Pair> pairs) {
-    List<List<CardMemory>> columns = [];
+  void initializeBoard(){
     List<CardMemory> column = [];
-    int howMuchCardsInColumn = sqrt(widget.getCards(pairs).length).round();
     int i = 0;
-    for (CardMemory card in widget.getCards(pairs)) {
+    List<CardMemory> cards = widget.getCards(widget.game.pairs);
+    cards.shuffle();
+    for (CardMemory card in cards) {
       if (i < howMuchCardsInColumn - 1) {
         column.add(card);
         i++;
@@ -177,6 +173,9 @@ class _MemoryRoomState extends State<MemoryRoom> {
     if (column.isNotEmpty) {
       columns.add(column);
     }
+  }
+
+  Widget drawBoard() {
     List<Widget> colsWidget = columns
         .map((col) => Column(
             children: col

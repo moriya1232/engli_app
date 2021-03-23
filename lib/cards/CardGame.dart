@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 abstract class CardGame extends StatefulWidget {
   String english = "";
   String hebrew = "";
+  List<Function> observers;
 
   CardGame(String english, String hebrew) {
     this.english = english;
     this.hebrew = hebrew;
+    this.observers = [];
   }
 
   getEnglish() {
@@ -18,5 +20,19 @@ abstract class CardGame extends StatefulWidget {
 
   getHebrew() {
     return hebrew;
+  }
+
+  void addListener(listener) {
+    this.observers.add(listener);
+  }
+
+  void removeListener(listener) {
+    this.observers.remove(listener);
+  }
+
+  void updateObservers() {
+    for(Function f in this.observers) {
+      f();
+    }
   }
 }

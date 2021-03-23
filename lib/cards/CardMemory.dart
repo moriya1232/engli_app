@@ -1,4 +1,5 @@
 import 'dart:core';
+//import 'dart:io';
 import 'package:engli_app/MemoryGame/MemoryGame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,10 @@ class CardMemory extends CardGame {
     this.game = mg;
   }
 
-
   @override
   _CardMemoryState createState() => _CardMemoryState();
+
+
 }
 
 class _CardMemoryState extends State<CardMemory> {
@@ -33,23 +35,43 @@ class _CardMemoryState extends State<CardMemory> {
       return GestureDetector(
         child: getCloseCard(context),
         onTap: () {
-          setState(() {
-            widget.isClose = false;
-            widget.game.cardClicked();
-          });
+          changeStatusCard(false);
+
+          //TODO: lock it!
+          widget.game.cardClicked();
         },
       );
     } else {
       return GestureDetector(
         child: getOpenCard(context),
-        onTap: () {
-          setState(() {
-            widget.isClose = true;
-            widget.game.cardClicked();
-          });
+        onTap: (){
+          changeStatusCard(true);
+
+          //TODO: lock it!
+          widget.game.cardClicked();
         },
       );
     }
+  }
+
+  void _listener() {
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.addListener(_listener);
+  }
+
+
+  Future changeStatusCard(bool isClose) {
+    //await new Future.delayed(const Duration(seconds: 0));
+    setState(() {
+      widget.isClose = isClose;
+    });
   }
 
   Widget getOpenCard(BuildContext context) {
