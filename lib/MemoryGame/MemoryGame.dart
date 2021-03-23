@@ -13,6 +13,7 @@ class MemoryGame extends ValueListenable{
   List<Pair> pairs;
   int turn;
 
+
   MemoryGame(List<Player> p, List<Pair> pa) {
     this.players=p;
     this.pairs = pa;
@@ -118,6 +119,8 @@ class MemoryGame extends ValueListenable{
     if (chosens.length > 2) {
       closeAllCards();
     }
+
+
     updateObservers();
   }
 

@@ -9,6 +9,10 @@ import 'Constants.dart';
 
 const int maxCards = 36;
 
+//TODO: need to fix bug that you can open 3 cards or more.
+//TODO: computer players.
+//TODO: play against other virtual players.
+
 class MemoryRoom extends StatefulWidget {
   MemoryGame game;
 
@@ -90,7 +94,50 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   @override
   Widget build(BuildContext context) {
-    return getDesign(context);
+    if (widget.game.pairs.isNotEmpty) {
+      return getDesign(context);
+    } else {
+      return winnerScreen();
+    }
+//  return getDesign(context);
+  }
+
+  Widget winnerScreen() {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.lightGreen,
+        title: Text('משחק זיכרון'),
+        centerTitle: true,
+        shadowColor: Colors.black87,
+      ),
+      body: Center(
+        child: Container(
+          child: Text(
+            winnerName(),
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String winnerName() {
+    Player winner;
+    if (widget.game.getMe().score > widget.game.getEnemy().score) {
+      winner = widget.game.getMe();
+    } else if (widget.game.getEnemy().score > widget.game.getMe().score) {
+      winner = widget.game.getEnemy();
+    } else {
+      winner = null;
+    }
+    if(winner == null) {
+      return '!שיוויון';
+    }
+    else {
+      return ' המנצח הוא  ${winner.name}';
+    }
   }
 
   void _listener() {
