@@ -91,11 +91,6 @@ class MemoryGame extends ValueListenable{
     print("close cards");
   }
 
-  void sleepTime() {
-    sleep(new Duration(seconds: 1));
-    print("sleep 1 second");
-  }
-
 
   void cardClicked(){
     List<CardMemory> chosens = [];
@@ -105,13 +100,11 @@ class MemoryGame extends ValueListenable{
       }
     }
     if (chosens.length == 2) {
-      sleepTime();
       Pair pairChosen = isPair(chosens[0], chosens[1]);
       if (pairChosen != null) {
         removePair(pairChosen);
       }
       else {
-        sleepTime();
         closeAllCards();
       }
     }

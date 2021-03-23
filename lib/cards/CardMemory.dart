@@ -34,20 +34,16 @@ class _CardMemoryState extends State<CardMemory> {
     if (widget.isClose) {
       return GestureDetector(
         child: getCloseCard(context),
-        onTap: () {
-          changeStatusCard(false);
-
-          //TODO: lock it!
+        onTap: () async {
+          await changeStatusCard(false);
           widget.game.cardClicked();
         },
       );
     } else {
       return GestureDetector(
         child: getOpenCard(context),
-        onTap: (){
-          changeStatusCard(true);
-
-          //TODO: lock it!
+        onTap: () async {
+          await changeStatusCard(true);
           widget.game.cardClicked();
         },
       );
@@ -67,11 +63,11 @@ class _CardMemoryState extends State<CardMemory> {
   }
 
 
-  Future changeStatusCard(bool isClose) {
-    //await new Future.delayed(const Duration(seconds: 0));
+  Future changeStatusCard(bool isClose) async {
     setState(() {
       widget.isClose = isClose;
     });
+    await new Future.delayed(const Duration(seconds: 2));
   }
 
   Widget getOpenCard(BuildContext context) {
