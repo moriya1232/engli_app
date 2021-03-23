@@ -1,4 +1,4 @@
-import 'dart:io';
+//import 'dart:io';
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/Pair.dart';
 import 'package:engli_app/players/player.dart';
@@ -41,20 +41,20 @@ class MemoryGame extends ValueListenable{
     }
     return list;
   }
-
-  void play() {
-    while(this.pairs.length>0) {
-      makeMove(this.players[this.turn]);
-
-      //switch turn
-      this.turn = (this.turn+1)%this.players.length;
-      sleep(new Duration(seconds: 1));
-    }
-  }
-
-  void makeMove(Player player) {
-
-  }
+//
+//  void play() {
+//    while(this.pairs.length>0) {
+//      makeMove(this.players[this.turn]);
+//
+//      //switch turn
+//      this.turn = (this.turn+1)%this.players.length;
+//      sleep(new Duration(seconds: 1));
+//    }
+//  }
+//
+//  void makeMove(Player player) {
+//
+//  }
 
   Pair isPair(CardMemory c1, CardMemory c2) {
     for (Pair pair in this.pairs) {
@@ -107,6 +107,7 @@ class MemoryGame extends ValueListenable{
       else {
         closeAllCards();
       }
+      this.turn = (this.turn+1)%this.players.length;
     }
     if (chosens.length > 2) {
       closeAllCards();

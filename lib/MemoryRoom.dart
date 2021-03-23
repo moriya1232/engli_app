@@ -12,7 +12,7 @@ const int maxCards = 36;
 class MemoryRoom extends StatefulWidget {
   MemoryGame game;
 
-  MemoryRoom(){
+  MemoryRoom() {
     reStart();
   }
 
@@ -63,13 +63,13 @@ class MemoryRoom extends StatefulWidget {
     pairs.add(createPair("Dvir", "דביר"));
     pairs.add(createPair("Shilo", "שילה"));
 
-
     pairs.shuffle();
     return pairs;
   }
 
   Pair createPair(String english, String hebrew) {
-    return new Pair(CardMemory(english, hebrew, true), CardMemory(english, hebrew, false));
+    return new Pair(
+        CardMemory(english, hebrew, true), CardMemory(english, hebrew, false));
   }
 
   List<CardMemory> getCards(List<Pair> pairs) {
@@ -85,26 +85,24 @@ class MemoryRoom extends StatefulWidget {
 }
 
 class _MemoryRoomState extends State<MemoryRoom> {
-
   List<List<CardMemory>> columns = [];
   int howMuchCardsInColumn = 0;
-
 
   @override
   Widget build(BuildContext context) {
     return getDesign(context);
   }
-  void _listener() {
-    setState(() {
 
-    });
+  void _listener() {
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
     widget.game.addListener(_listener);
-    this.howMuchCardsInColumn = sqrt(widget.getCards(widget.game.pairs).length).round();
+    this.howMuchCardsInColumn =
+        sqrt(widget.getCards(widget.game.pairs).length).round();
     initializeBoard();
   }
 
@@ -127,10 +125,28 @@ class _MemoryRoomState extends State<MemoryRoom> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Center(
+                  child: Text(
+                    ' ${widget.game.getEnemy().name}',
+                    style: TextStyle(
+                        color: Colors.lightGreen,
+                        fontSize: 30,
+                        fontFamily: 'Gan-h'),
+                  ),
+                ),
+              ),
               Center(
                 child: Container(
                   height: 70,
-                  child: Text('${widget.game.getEnemy().score} נקודות '),
+                  child: Text(
+                    ' נקודות: ${widget.game.getEnemy().score}',
+                    style: TextStyle(
+                        color: Colors.lightGreen,
+                        fontSize: 30,
+                        fontFamily: 'Abraham-h'),
+                  ),
                 ),
               ),
               Row(
@@ -140,21 +156,50 @@ class _MemoryRoomState extends State<MemoryRoom> {
                   drawBoard(),
                 ],
               ),
-              Center(
-                child: Container(
-                  height: 70,
-                  child: Text(':נקודות ${widget.game.getMe().score}'),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Center(
+                  child: Text(
+                    ' ${widget.game.getMe().name}',
+                    style: TextStyle(
+                        color: Colors.lightGreen,
+                        fontSize: 30,
+                        fontFamily: 'Gan-h'),
+                  ),
                 ),
-              )
+              ),
+              Center(
+                child: Text(
+                  ' נקודות: ${widget.game.getMe().score}',
+                  style: TextStyle(
+                      color: Colors.lightGreen,
+                      fontSize: 30,
+                      fontFamily: 'Abraham-h'),
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: EdgeInsets.all(5),
+                    child: Text(
+                      ' תור: ${widget.game.players[widget.game.turn].name}',
+                      style: TextStyle(
+                          color: Colors.pink,
+                          fontSize: 30,
+                          fontFamily: 'Abraham-h'),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
-
   }
 
-  void initializeBoard(){
+  void initializeBoard() {
     List<CardMemory> column = [];
     int i = 0;
     List<CardMemory> cards = widget.getCards(widget.game.pairs);
@@ -188,4 +233,3 @@ class _MemoryRoomState extends State<MemoryRoom> {
     return Row(children: colsWidget);
   }
 }
-
