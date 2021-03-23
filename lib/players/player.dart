@@ -9,11 +9,32 @@ class Player {
   List<CardGame> cards;
   String name;
   int score;
+  List<Function> observers;
 
   Player(List<CardGame> cards, String name) {
     this.cards = cards;
     this.name = name;
     this.score = 0;
+    this.observers = [];
+  }
+
+  void raiseScore(int howMuch) {
+    this.score+=howMuch;
+    updateObservers();
+  }
+
+  void addListener(listener) {
+    this.observers.add(listener);
+  }
+
+  void removeListener(listener) {
+    this.observers.remove(listener);
+  }
+
+  void updateObservers() {
+    for(Function f in this.observers) {
+      f();
+    }
   }
 
   void addCard(CardGame card) {

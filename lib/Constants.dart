@@ -15,4 +15,5 @@ const r10 = "Body";
 
 const memoryMe = "הלה";
 const memoryEnemy = "עדן";
+const howMuchScoreForSuccess = 10;
 

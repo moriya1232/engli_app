@@ -1,4 +1,5 @@
 //import 'dart:io';
+import 'package:engli_app/Constants.dart';
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/Pair.dart';
 import 'package:engli_app/players/player.dart';
@@ -81,6 +82,10 @@ class MemoryGame extends ValueListenable{
     }
   }
 
+  void changeTurn(){
+    this.turn = (this.turn+1)%this.players.length;
+  }
+
   void closeAllCards() {
     for (CardMemory card in getCards()){
       if(!card.isClose) {
@@ -103,16 +108,16 @@ class MemoryGame extends ValueListenable{
       Pair pairChosen = isPair(chosens[0], chosens[1]);
       if (pairChosen != null) {
         removePair(pairChosen);
+        this.players[this.turn].raiseScore(howMuchScoreForSuccess);
       }
       else {
         closeAllCards();
       }
-      this.turn = (this.turn+1)%this.players.length;
+      changeTurn();
     }
     if (chosens.length > 2) {
       closeAllCards();
     }
-    print("how much chosens: " + chosens.length.toString());
     updateObservers();
   }
 

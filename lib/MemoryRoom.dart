@@ -101,6 +101,9 @@ class _MemoryRoomState extends State<MemoryRoom> {
   void initState() {
     super.initState();
     widget.game.addListener(_listener);
+    for (Player player in widget.game.players) {
+      player.addListener(_listener);
+    }
     this.howMuchCardsInColumn =
         sqrt(widget.getCards(widget.game.pairs).length).round();
     initializeBoard();
