@@ -6,9 +6,12 @@ import 'dart:io';
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/Pair.dart';
 import 'package:engli_app/players/player.dart';
+import 'package:flutter/foundation.dart';
 //import 'package:flutter/cupertino.dart';
 
-class MemoryGame{
+
+class MemoryGame extends ValueListenable{
+  List<dynamic> observers;
   List<Player> players;
   List<Pair> pairs;
   int turn;
@@ -17,6 +20,25 @@ class MemoryGame{
     this.players=p;
     this.pairs = pa;
     this.turn = 0;
+  }
+
+  void updateObservers() {
+    for(Function f in this.observers) {
+      f();
+    }
+  }
+
+  void addPair(Pair pair) {
+    this.pairs.add(pair);
+    //TODO: insert it
+    //updateObservers();
+
+  }
+
+  void removePair(Pair pair) {
+    this.pairs.remove(pair);
+    //TODO: insert it
+    //updateObservers();
   }
 
 //  void setRoom(MemoryRoom mr) {
@@ -94,7 +116,7 @@ class MemoryGame{
       //sleep(new Duration(seconds: 2));
       Pair pairChosen = isPair(chosens[0], chosens[1]);
       if (pairChosen != null) {
-        this.pairs.remove(pairChosen);
+        removePair(pairChosen);
         //print(this.pairs);
       }
       else {
@@ -103,4 +125,18 @@ class MemoryGame{
     }
     updateScreen();
   }
+
+  @override
+  void addListener(listener) {
+   this.observers.add(listener);
+  }
+
+  @override
+  void removeListener(listener) {
+    this.observers.remove(listener);
+  }
+
+  @override
+  // TODO: implement value
+  get value { return this.pairs;}
 }

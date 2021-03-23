@@ -95,6 +95,28 @@ class _MemoryRoomState extends State<MemoryRoom> {
   Widget build(BuildContext context) {
     return getDesign(context);
   }
+  void _listener() {
+    print("_listener");
+    setState(() {
+
+    });
+  }
+
+  @override
+  void initState() {
+    print("initstate");
+    super.initState();
+//TODO: add this
+    //widget.game.addListener(_listener);
+    _listener();
+  }
+
+
+  @override
+  void dispose() {
+    widget.game.removeListener(_listener);
+    super.dispose();
+  }
 
   Widget getDesign(BuildContext context) {
     return Scaffold(
