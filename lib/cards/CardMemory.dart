@@ -1,9 +1,7 @@
 import 'dart:core';
-//import 'dart:io';
-import 'package:engli_app/MemoryGame/MemoryGame.dart';
+import 'package:engli_app/games/MemoryGame.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-//import '../MemoryRoom.dart';
 import 'CardGame.dart';
 
 class CardMemory extends CardGame {
@@ -35,16 +33,20 @@ class _CardMemoryState extends State<CardMemory> {
       return GestureDetector(
         child: getCloseCard(context),
         onTap: () async {
-          await changeStatusCard(false);
-          widget.game.cardClicked();
+          if (widget.game.allowSwapCards()) {
+            await changeStatusCard(false);
+            widget.game.cardClicked();
+          }
         },
       );
     } else {
       return GestureDetector(
         child: getOpenCard(context),
         onTap: () async {
-          await changeStatusCard(true);
-          widget.game.cardClicked();
+          if (widget.game.allowSwapCards()) {
+            await changeStatusCard(true);
+            widget.game.cardClicked();
+          }
         },
       );
     }
@@ -67,7 +69,7 @@ class _CardMemoryState extends State<CardMemory> {
     setState(() {
       widget.isClose = isClose;
     });
-    await new Future.delayed(const Duration(seconds: 2));
+    return new Future.delayed(const Duration(seconds: 2));
   }
 
   Widget getOpenCard(BuildContext context) {

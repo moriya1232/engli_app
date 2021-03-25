@@ -1,4 +1,4 @@
-import 'package:engli_app/QuartetsGame/QuartetsGame.dart';
+import 'file:///C:/Users/ASUS/AndroidStudioProjects/engli_app/lib/games/QuartetsGame.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/players/player.dart';

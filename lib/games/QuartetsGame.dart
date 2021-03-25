@@ -305,7 +305,7 @@ class QuartetsGame {
       player = Me([], name);
     }
     else {
-      player = Other([], name);
+      player = VirtualPlayer([], name);
     }
     this.players.add(player);
     return player;

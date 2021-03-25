@@ -1,5 +1,5 @@
 
-import 'package:engli_app/QuartetsGame/QuartetsGame.dart';
+import 'file:///C:/Users/ASUS/AndroidStudioProjects/engli_app/lib/games/QuartetsGame.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
 

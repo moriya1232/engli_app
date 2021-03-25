@@ -1,29 +1,26 @@
-//import 'dart:io';
 import 'dart:math';
-import 'package:engli_app/MemoryGame/MemoryGame.dart';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
 import 'cards/Pair.dart';
+import 'games/MemoryGame.dart';
 import 'players/player.dart';
 import 'Constants.dart';
 
 const int maxCards = 36;
 
-//TODO: need to fix bug that you can open 3 cards or more.
-//TODO: computer players.
 //TODO: play against other virtual players.
 
 class MemoryRoom extends StatefulWidget {
   MemoryGame game;
 
-  MemoryRoom() {
-    reStart();
+  MemoryRoom(bool computerEnemy) {
+    reStart(computerEnemy);
   }
 
-  void reStart() {
+  void reStart(bool computerEnemy) {
     List<Player> players = [];
-    Me me = createPlayer(true, memoryMe);
-    Other enemy = createPlayer(false, memoryEnemy);
+    Me me = createPlayer(true, memoryMe, true);
+    Other enemy = createPlayer(false, memoryEnemy, computerEnemy);
     players.add(me);
     players.add(enemy);
     List<Pair> pairs = createPairs();
@@ -39,12 +36,16 @@ class MemoryRoom extends StatefulWidget {
     }
   }
 
-  Player createPlayer(bool isMe, String name) {
+  Player createPlayer(bool isMe, String name, bool computerEnemy) {
     List<CardMemory> cards = [];
     if (isMe) {
       return Me(cards, name);
     } else {
-      return Other(cards, name);
+      if (computerEnemy) {
+        return ComputerPlayer(cards, name);
+      } else {
+        return VirtualPlayer(cards, name);
+      }
     }
   }
 
@@ -99,7 +100,6 @@ class _MemoryRoomState extends State<MemoryRoom> {
     } else {
       return winnerScreen();
     }
-//  return getDesign(context);
   }
 
   Widget winnerScreen() {

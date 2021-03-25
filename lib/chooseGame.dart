@@ -1,4 +1,4 @@
-import 'package:engli_app/MemoryRoom.dart';
+import 'package:engli_app/chooseEnemy.dart';
 import 'package:engli_app/editingVocabulary.dart';
 import 'package:flutter/material.dart';
 import 'Data.dart';
@@ -79,7 +79,7 @@ class _ChooseGameState extends State<ChooseGame> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => MemoryRoom()),
+                                      builder: (context) => ChooseEnemy()),
                                 );
                               },
                               child: Text(
