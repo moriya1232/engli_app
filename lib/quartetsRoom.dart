@@ -1,5 +1,5 @@
 
-import 'file:///C:/Users/ASUS/AndroidStudioProjects/engli_app/lib/games/QuartetsGame.dart';
+import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
 
@@ -8,8 +8,11 @@ import 'QuartetsGame/Turn.dart';
 
 class QuartetsRoom extends StatefulWidget {
   int chosenCard = -1;
-//  Player playerChosenToAsk;
-//  String subjectToAsk;
+  QuartetsGame game;
+
+  QuartetsRoom(){
+    this.game = new QuartetsGame();
+  }
 
   @override
   _QuartetsRoomState createState() => _QuartetsRoomState();
@@ -20,7 +23,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   Widget build(BuildContext context) {
-    QuartetsGame game = new QuartetsGame();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -33,7 +35,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           child:
           Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Center(
-              child: Text('${game
+              child: Text('${widget.game
                   .getFirstPlayer()
                   .cards
                   .length}'),
@@ -44,13 +46,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               child: ListView(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  children: game
+                  children: widget.game
                       .getFirstPlayer()
                       .cards),
             ),
             Center(
               child: Text(
-                '${game
+                '${widget.game
                     .getFirstPlayer()
                     .name}',
                 style: TextStyle(
@@ -62,11 +64,11 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (game.players.length > 2)
+                if (widget.game.players.length > 2)
                   Row(children: [
                     RotatedBox(
                       quarterTurns: 1,
-                      child: Text('${game
+                      child: Text('${widget.game
                           .getSecondPlayer()
                           .cards
                           .length}'),
@@ -80,7 +82,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         child: ListView(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          children: game
+                          children: widget.game
                               .getSecondPlayer()
                               .cards,
                         ),
@@ -89,7 +91,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     RotatedBox(
                       quarterTurns: 1,
                       child: Text(
-                        '${game
+                        '${widget.game
                             .getSecondPlayer()
                             .name}',
                         style: TextStyle(
@@ -122,14 +124,14 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                                 style: TextStyle(fontFamily: 'Abraham-h'),
                               ),
                               Text(
-                                '${game.deck.cards.length}',
+                                '${widget.game.deck.cards.length}',
                                 style: TextStyle(fontFamily: 'Abraham-h'),
                               ),
                               SizedBox(
                                 height: 30,
                               ),
                               Text(
-                                ' תור ${game.players[game.turn].name}',
+                                ' תור ${widget.game.players[widget.game.turn].name}',
                                 style: TextStyle(
                                     color: Colors.red,
                                     fontSize: 20,
@@ -140,12 +142,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     ),
                   )
                 ]),
-                if (game.players.length > 3)
+                if (widget.game.players.length > 3)
                   Row(children: [
                     RotatedBox(
                       quarterTurns: 3,
                       child: Text(
-                        '${game
+                        '${widget.game
                             .getThirdPlayer()
                             .name}',
                         style: TextStyle(
@@ -163,7 +165,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         child: ListView(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          children: game
+                          children: widget.game
                               .getThirdPlayer()
                               .cards,
                         ),
@@ -171,13 +173,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     ),
                     RotatedBox(
                       quarterTurns: 3,
-                      child: Text('${game
+                      child: Text('${widget.game
                           .getThirdPlayer()
                           .cards
                           .length}'),
                     ),
                   ]),
-                if (game.players.length == 3)
+                if (widget.game.players.length == 3)
                   Container(
                     width: MediaQuery
                         .of(context)
@@ -187,92 +189,14 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               ],
             ),
             Expanded(
-              child: Turn(game),
-//              child: Row(
-//                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                crossAxisAlignment: CrossAxisAlignment.center,
-//                children: [
-//                  SizedBox(
-//                    width: 100,
-//                    child: ListView(shrinkWrap: true, children: [
-//                      for (Player player in game.players)
-//                        if (player is Other)
-//                          ListTile(
-//                              title: Text(
-//                                //card in quertet
-//                                "",
-//                                style: TextStyle(
-//                                  fontSize: 15,
-//                                  fontFamily: 'Nehama-h',
-//                                ),
-//                              ),
-////                              leading: Radio(
-////                                onChanged: (value) {
-////                                  this.subjectToAsk = value;
-////                                },
-////                              ),
-//                          ),
-//                    ]),
-//                  ),
-//                  SizedBox(
-//                    width: 100,
-//                    child: ListView(shrinkWrap: true, children: [
-//                      for (String subject in game.getMyPlayer().getSubjects())
-//                        Card(
-//                          child: Center(
-//                            child: Text(
-//                              //card in quertet
-//                              subject,
-//                              style: TextStyle(
-//                                fontSize: 15,
-//                                fontFamily: 'Nehama-h',
-//                              ),
-//                            ),
-//                          ),
-//                        ),
-//                    ]),
-//                  ),
-//                  SizedBox(
-//                    width: 100,
-//                    child: ListView(shrinkWrap: true, children: [
-//                      DropdownButton<String>(
-//                        value: widget.playerChosenToAsk.name,
-//                        //hint: new Text("בחר כמות משתתפים"),
-//                        icon: Icon(Icons.arrow_downward),
-//                        iconSize: 10,
-//                        elevation: 16,
-//                        style: TextStyle(color: Colors.black87),
-//                        underline: Container(
-//                          height: 2,
-//                          width: 10,
-//                          color: Colors.amberAccent,
-//                        ),
-//                        onChanged: (String newValue) {
-//                          setState(() {
-//                            widget.playerChosenToAsk = game.getPlayerByName(newValue);
-//                          });
-//                        },
-//                        items: names.map<DropdownMenuItem<String>>((String value) {
-//                          return DropdownMenuItem<String>(
-//                            value: value,
-//                            child: Text(
-//                              value,
-//                              style: TextStyle(fontSize: 25),
-//                            ),
-//                          );
-//                        }).toList(),
-//                      ),
-//                    ]),
-//                  ),
-//                ],
-//              ),
+              child: Turn(widget.game),
             ),
             Container(
               height: 230,
               child: ListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                children: game
+                children: widget.game
                     .getMyPlayer()
                     .cards,
               ),

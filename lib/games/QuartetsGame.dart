@@ -6,13 +6,15 @@ import 'package:engli_app/players/player.dart';
 import 'package:engli_app/cards/Triple.dart';
 import 'package:engli_app/cards/Subject.dart';
 
-class QuartetsGame {
-  List<Player> players = [];
+import 'Game.dart';
+
+class QuartetsGame extends Game{
+  List<Function> observers;
   Deck deck;
-  int turn;
   //List<Subject> subjects;
 
   QuartetsGame() {
+    this.players = [];
     for (int i=0; i<playersNames.length+1; i++) {
       if (i==0) {
         createPlayer(true, quartetsMe);
@@ -24,6 +26,21 @@ class QuartetsGame {
     deck.handoutDeck(this.players);
     this.deck = deck;
     this.turn = 0;
+    this.observers = new List<Function>();
+  }
+
+  void updateObservers() {
+    for (Function f in this.observers) {
+      f();
+    }
+  }
+
+  void addListener(listener) {
+    this.observers.add(listener);
+  }
+
+  void removeListener(listener) {
+    this.observers.remove(listener);
   }
 
   Player getPlayerByName(String name) {
@@ -51,7 +68,6 @@ class QuartetsGame {
   Player getPlayerNeedTurn() {
     return this.players.elementAt(this.turn);
   }
-
 
   int getNumPlayers() {
     return this.players.length;

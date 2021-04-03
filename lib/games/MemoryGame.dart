@@ -7,15 +7,81 @@ import 'Game.dart';
 
 class MemoryGame extends Game {
   List<Function> observers;
-  List<Player> players;
   List<Pair> pairs;
-  int turn;
 
-  MemoryGame(List<Player> p, List<Pair> pa) {
-    this.players = p;
-    this.pairs = pa;
+
+  MemoryGame(bool computerEnemy) {
+    this.players = [];
+    this.pairs = [];
     this.turn = 0;
+    reStart(computerEnemy);
     this.observers = new List<Function>();
+  }
+
+  void reStart(bool computerEnemy) {
+    Me me = createPlayer(true, memoryMe, true);
+    Other enemy = createPlayer(false, memoryEnemy, computerEnemy);
+    players.add(me);
+    players.add(enemy);
+    this.pairs = createPairs();
+    setGameToPairs(pairs, this);
+    this.turn = 0;
+  }
+
+  void setGameToPairs(List<Pair> list, MemoryGame mg) {
+    List<CardMemory> cards = getCardsFromPairs(list);
+    for (CardMemory card in cards) {
+      card.setGame(mg);
+    }
+  }
+
+  Player createPlayer(bool isMe, String name, bool computerEnemy) {
+    List<CardMemory> cards = [];
+    if (isMe) {
+      return Me(cards, name);
+    } else {
+      if (computerEnemy) {
+        return ComputerPlayer(cards, name);
+      } else {
+        return VirtualPlayer(cards, name);
+      }
+    }
+  }
+
+  List<Pair> createPairs() {
+    // TODO: insert here the cards that we get from the user.
+    List<Pair> pairs = [];
+    pairs.add(createPair("dog", "כלב"));
+    pairs.add(createPair("cat", "חתול"));
+    pairs.add(createPair("fish", "דג"));
+    pairs.add(createPair("elephant", "פיל"));
+    pairs.add(createPair("father", "אבא"));
+    pairs.add(createPair("mother", "אמא"));
+    pairs.add(createPair("brother", "אח"));
+    pairs.add(createPair("Eden", "עדן"));
+    pairs.add(createPair("Hila", "הלה"));
+    pairs.add(createPair("Moriya", "מוריה"));
+    pairs.add(createPair("Judith", "יהודית"));
+    pairs.add(createPair("Hadas", "הדס"));
+    pairs.add(createPair("Ora", "אורה"));
+    pairs.add(createPair("Dvir", "דביר"));
+    pairs.add(createPair("Shilo", "שילה"));
+
+    pairs.shuffle();
+    return pairs;
+  }
+
+  Pair createPair(String english, String hebrew) {
+    return new Pair(
+        CardMemory(english, hebrew, true), CardMemory(english, hebrew, false));
+  }
+
+  List<CardMemory> getCardsFromPairs(List<Pair> pairs) {
+    List<CardMemory> cards = [];
+    for (Pair pair in pairs) {
+      cards.addAll(pair.getCards());
+    }
+    return cards;
   }
 
   void updateObservers() {

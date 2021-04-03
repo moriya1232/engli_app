@@ -1,10 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
-import 'cards/Pair.dart';
 import 'games/MemoryGame.dart';
 import 'players/player.dart';
-import 'Constants.dart';
 
 const int maxCards = 36;
 
@@ -14,76 +12,11 @@ class MemoryRoom extends StatefulWidget {
   MemoryGame game;
 
   MemoryRoom(bool computerEnemy) {
-    reStart(computerEnemy);
+    this.game = new MemoryGame(computerEnemy);
   }
 
-  void reStart(bool computerEnemy) {
-    List<Player> players = [];
-    Me me = createPlayer(true, memoryMe, true);
-    Other enemy = createPlayer(false, memoryEnemy, computerEnemy);
-    players.add(me);
-    players.add(enemy);
-    List<Pair> pairs = createPairs();
-    this.game = MemoryGame(players, pairs);
-    setGameToPairs(pairs, this.game);
-    //this.game.setRoom(this);
-  }
 
-  void setGameToPairs(List<Pair> list, MemoryGame mg) {
-    List<CardMemory> cards = getCards(list);
-    for (CardMemory card in cards) {
-      card.setGame(mg);
-    }
-  }
 
-  Player createPlayer(bool isMe, String name, bool computerEnemy) {
-    List<CardMemory> cards = [];
-    if (isMe) {
-      return Me(cards, name);
-    } else {
-      if (computerEnemy) {
-        return ComputerPlayer(cards, name);
-      } else {
-        return VirtualPlayer(cards, name);
-      }
-    }
-  }
-
-  List<Pair> createPairs() {
-    // TODO: insert here the cards that we get from the user.
-    List<Pair> pairs = [];
-    pairs.add(createPair("dog", "כלב"));
-    pairs.add(createPair("cat", "חתול"));
-    pairs.add(createPair("fish", "דג"));
-    pairs.add(createPair("elephant", "פיל"));
-    pairs.add(createPair("father", "אבא"));
-    pairs.add(createPair("mother", "אמא"));
-    pairs.add(createPair("brother", "אח"));
-    pairs.add(createPair("Eden", "עדן"));
-    pairs.add(createPair("Hila", "הלה"));
-    pairs.add(createPair("Moriya", "מוריה"));
-    pairs.add(createPair("Judith", "יהודית"));
-    pairs.add(createPair("Hadas", "הדס"));
-    pairs.add(createPair("Ora", "אורה"));
-    pairs.add(createPair("Dvir", "דביר"));
-    pairs.add(createPair("Shilo", "שילה"));
-
-    pairs.shuffle();
-    return pairs;
-  }
-
-  Pair createPair(String english, String hebrew) {
-    return new Pair(
-        CardMemory(english, hebrew, true), CardMemory(english, hebrew, false));
-  }
-
-  List<CardMemory> getCards(List<Pair> pairs) {
-    List<CardMemory> cards = [];
-    for (Pair pair in pairs) {
-      cards.addAll(pair.getCards());
-    }
-    return cards;
-  }
 
   @override
   _MemoryRoomState createState() => _MemoryRoomState();
@@ -152,7 +85,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
       player.addListener(_listener);
     }
     this.howMuchCardsInColumn =
-        sqrt(widget.getCards(widget.game.pairs).length).round();
+        sqrt(widget.game.getCards().length).round();
     initializeBoard();
   }
 
@@ -252,7 +185,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
   void initializeBoard() {
     List<CardMemory> column = [];
     int i = 0;
-    List<CardMemory> cards = widget.getCards(widget.game.pairs);
+    List<CardMemory> cards = widget.game.getCards();
     cards.shuffle();
     for (CardMemory card in cards) {
       if (i < howMuchCardsInColumn - 1) {
