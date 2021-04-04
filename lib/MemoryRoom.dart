@@ -15,9 +15,6 @@ class MemoryRoom extends StatefulWidget {
     this.game = new MemoryGame(computerEnemy);
   }
 
-
-
-
   @override
   _MemoryRoomState createState() => _MemoryRoomState();
 }
@@ -73,10 +70,10 @@ class _MemoryRoomState extends State<MemoryRoom> {
     }
   }
 
+
   void _listener() {
     setState(() {});
   }
-
   @override
   void initState() {
     super.initState();

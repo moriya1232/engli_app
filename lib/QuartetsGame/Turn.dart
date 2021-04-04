@@ -1,11 +1,9 @@
-
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 class Turn extends StatefulWidget {
   QuartetsGame game;
@@ -42,7 +40,15 @@ class _turnState extends State<Turn> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0)),
                 onPressed: () {
-//TODO
+                  if(widget.game.askPlayerSpecCard(
+                      widget.playerChosenToAsk, widget.subjectToAsk, widget.cardToAsk) != null){
+                    print("need to take the card!!");
+                      //widget.game.askPlayerSpecCard(widget.playerChosenToAsk, widget.subjectToAsk, widget.cardToAsk);
+                  } else {
+                    widget.game.deck.giveCardToPlayer(widget.game.getPlayerNeedTurn());
+                  }
+                  widget.game.doneTurn();
+                  widget.game.checkComputerPlayerTurn();
                 },
                 child: Text(
                   '!שאל',
@@ -53,43 +59,43 @@ class _turnState extends State<Turn> {
                 ),
               ))),
         ),
-//        Column(
-//            crossAxisAlignment: CrossAxisAlignment.center,
-//            mainAxisAlignment: MainAxisAlignment.center,
-//            children: [
-//              Text(
-//                'בחר קלף',
-//                style: TextStyle(
-//                  fontFamily: 'Abraham-h',
-//                ),
-//              ),
-//              DropdownButton<String>(
-//                value: widget.cardToAsk.english,
-//                style: TextStyle(color: Colors.black87),
-//                underline: Container(
-//                  height: 2,
-//                  width: 10,
-//                  color: Colors.amberAccent,
-//                ),
-//                onChanged: (String newValue) {
-//                  setState(() {
-//                    widget.cardToAsk =
-//                        widget.subjectToAsk.getCardByString(newValue);
-//                  });
-//                },
-//                items: widget.subjectToAsk
-//                    .getNamesCards()
-//                    .map<DropdownMenuItem<String>>((String value) {
-//                  return DropdownMenuItem<String>(
-//                    value: value,
-//                    child: Text(
-//                      value,
-//                      style: TextStyle(fontSize: 18, fontFamily: 'Courgette-e'),
-//                    ),
-//                  );
-//                }).toList(),
-//              ),
-//            ]),
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'בחר קלף',
+                style: TextStyle(
+                  fontFamily: 'Abraham-h',
+                ),
+              ),
+              DropdownButton<String>(
+                value: widget.cardToAsk.english,
+                style: TextStyle(color: Colors.black87),
+                underline: Container(
+                  height: 2,
+                  width: 10,
+                  color: Colors.amberAccent,
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    widget.cardToAsk =
+                        widget.subjectToAsk.getCardByString(newValue);
+                  });
+                },
+                items: widget.subjectToAsk
+                    .getNamesCards()
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(fontSize: 18, fontFamily: 'Courgette-e'),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ]),
         Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -173,7 +179,7 @@ class _turnState extends State<Turn> {
 //    if (widget.cardToAsk == null) {
 //      return widget.subjectToAsk.getNamesCards()[0];
 //    } else {
-      return widget.cardToAsk.english;
+    return widget.cardToAsk.english;
     //}
   }
 }

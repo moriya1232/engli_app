@@ -1,5 +1,6 @@
 
 import 'package:engli_app/games/QuartetsGame.dart';
+import 'package:engli_app/players/player.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
 
@@ -10,6 +11,8 @@ class QuartetsRoom extends StatefulWidget {
   int chosenCard = -1;
   QuartetsGame game;
 
+
+
   QuartetsRoom(){
     this.game = new QuartetsGame();
   }
@@ -19,7 +22,6 @@ class QuartetsRoom extends StatefulWidget {
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +45,19 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             Container(
               alignment: Alignment.center,
               height: 100,
-              child: ListView(
+              child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  children: widget.game
-                      .getFirstPlayer()
-                      .cards),
+                  itemCount: widget.game.getFirstPlayer().cards.length, // number of items in your list
+
+                  //here the implementation of itemBuilder. take a look at flutter docs to see details
+                  itemBuilder: (BuildContext context, int Itemindex){
+                    return widget.game.getFirstPlayer().cards[Itemindex]; // return your widget
+                  }
+//                  children: widget.game
+//                      .getFirstPlayer()
+//                      .cards
+                      ),
             ),
             Center(
               child: Text(
@@ -79,12 +88,18 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         alignment: Alignment.center,
                         height: 100,
                         width: 270,
-                        child: ListView(
+                        child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          children: widget.game
-                              .getSecondPlayer()
-                              .cards,
+                            itemCount: widget.game.getSecondPlayer().cards.length, // number of items in your list
+
+                            //here the implementation of itemBuilder. take a look at flutter docs to see details
+                            itemBuilder: (BuildContext context, int Itemindex){
+                              return widget.game.getSecondPlayer().cards[Itemindex]; // return your widget
+                            }
+//                          children: widget.game
+//                              .getSecondPlayer()
+//                              .cards,
                         ),
                       ),
                     ),
@@ -162,12 +177,18 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         alignment: Alignment.center,
                         height: 100,
                         width: 270,
-                        child: ListView(
+                        child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          children: widget.game
-                              .getThirdPlayer()
-                              .cards,
+                            itemCount: widget.game.getThirdPlayer().cards.length, // number of items in your list
+
+                            //here the implementation of itemBuilder. take a look at flutter docs to see details
+                            itemBuilder: (BuildContext context, int Itemindex){
+                              return widget.game.getThirdPlayer().cards[Itemindex]; // return your widget
+                            }
+//                          children: widget.game
+//                              .getThirdPlayer()
+//                              .cards,
                         ),
                       ),
                     ),
@@ -189,16 +210,19 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               ],
             ),
             Expanded(
-              child: Turn(widget.game),
+              child: getAppropriateWidget(),
             ),
             Container(
               height: 230,
-              child: ListView(
+              child: ListView.builder(
                 shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: widget.game
-                    .getMyPlayer()
-                    .cards,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.game.getMyPlayer().cards.length, // number of items in your list
+
+                  //here the implementation of itemBuilder. take a look at flutter docs to see details
+                  itemBuilder: (BuildContext context, int Itemindex){
+                    return widget.game.getMyPlayer().cards[Itemindex]; // return your widget
+                  }
               ),
             ),
             Container(
@@ -218,5 +242,48 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         ),
       ),
     );
+  }
+
+  Widget getAppropriateWidget(){
+    if(widget.game.getPlayerNeedTurn() is Me) {
+      return Turn(widget.game);
+    } else {
+      return new Container(
+        child: getAskedText()
+      );
+    }
+  }
+
+  Widget getAskedText() {
+    if (widget.game.cardAsked != null && widget.game.nameAsked != null && widget.game.subjectAsked != null) {
+      return Text(
+        '${widget.game.getPlayerNeedTurn().name} asked ${widget.game.nameAsked} about the card: "${widget.game.cardAsked}" in subject: "${widget.game.subjectAsked}"',
+      );
+    } else if (widget.game.cardAsked == null && widget.game.nameAsked != null && widget.game.subjectAsked != null) {
+      return Text(
+        '${widget.game.getPlayerNeedTurn().name} asked ${widget.game.nameAsked} about subject: "${widget.game.subjectAsked}", and he does not have this subject',
+      );
+    } else {
+      return new Container();
+    }
+  }
+
+  void _listener() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.game.addListener(_listener);
+    for (Player player in widget.game.players) {
+      player.addListener(_listener);
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.game.removeListener(_listener);
+    super.dispose();
   }
 }

@@ -1,9 +1,11 @@
 import 'dart:math';
-import 'file:///C:/Users/ASUS/AndroidStudioProjects/engli_app/lib/games/QuartetsGame.dart';
+
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
+import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/Game.dart';
 import 'package:engli_app/games/MemoryGame.dart';
+import 'package:engli_app/games/QuartetsGame.dart';
 import '../cards/CardGame.dart';
 
 abstract class Player {
@@ -40,6 +42,7 @@ abstract class Player {
 
   void addCard(CardGame card) {
     this.cards.add(card);
+    updateObservers();
   }
 
   List<String> getSubjects() {
@@ -55,6 +58,17 @@ abstract class Player {
       }
     }
     return subjects;
+  }
+
+  CardQuartets getCardThatNotHave(Subject subject) {
+    Random random = new Random();
+    List<CardQuartets> cardsThatNotHave = [];
+    for (CardQuartets card in subject.getCards()) {
+      if (!this.cards.contains(card)) {
+        cardsThatNotHave.add(card);
+      }
+    }
+    return cardsThatNotHave[random.nextInt(cardsThatNotHave.length)];
   }
 }
 
@@ -87,7 +101,21 @@ class ComputerPlayer extends Other {
       print("done computer turn");
 
     } else if (game is QuartetsGame) {
+      print("computer player turn");
+      var random = Random();
+      List<CardQuartets> cards = game.getPlayerNeedTurn().cards.cast<CardQuartets>();
+      Subject randSub = game.getSubjectByString(cards[random.nextInt(cards.length)].subject);
+      int randNumPlayer = random.nextInt(game.players.length-1);
+      if (randNumPlayer >= game.turn) randNumPlayer +=1;
+      Player randPlayer = game.players[randNumPlayer];
+      CardQuartets randCard = getCardThatNotHave(randSub);
 
+      await game.askByComputer(randPlayer, randSub, randCard);
+
+
+      game.doneTurn();
+      game.checkComputerPlayerTurn();
+      print("done computer turn");
     }
   }
 }
