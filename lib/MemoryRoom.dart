@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:engli_app/winnerRoom.dart';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
 import 'games/MemoryGame.dart';
@@ -10,8 +11,10 @@ const int maxCards = 36;
 
 class MemoryRoom extends StatefulWidget {
   MemoryGame game;
+  bool computerEnemy;
 
   MemoryRoom(bool computerEnemy) {
+    this.computerEnemy = computerEnemy;
     this.game = new MemoryGame(computerEnemy);
   }
 
@@ -28,47 +31,53 @@ class _MemoryRoomState extends State<MemoryRoom> {
     if (widget.game.pairs.isNotEmpty) {
       return getDesign(context);
     } else {
-      return winnerScreen();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WinnerRoom(widget.game)),
+      );
+      widget.game = new MemoryGame(widget.computerEnemy);
+      return getDesign(context);
     }
   }
 
-  Widget winnerScreen() {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
-        title: Text('משחק זיכרון'),
-        centerTitle: true,
-        shadowColor: Colors.black87,
-      ),
-      body: Center(
-        child: Container(
-          child: Text(
-            winnerName(),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
-          ),
-        ),
-      ),
-    );
-  }
+//  Widget winnerScreen() {
+//    return Scaffold(
+//      appBar: AppBar(
+//        backgroundColor: Colors.lightGreen,
+//        title: Text('משחק זיכרון'),
+//        centerTitle: true,
+//        shadowColor: Colors.black87,
+//      ),
+//      body: Center(
+//        child: Container(
+//          child: Text(
+//            winnerName(),
+//            textAlign: TextAlign.center,
+//            style: TextStyle(
+//                color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
+//          ),
+//        ),
+//      ),
+//    );
+//  }
 
-  String winnerName() {
-    Player winner;
-    if (widget.game.getMe().score > widget.game.getEnemy().score) {
-      winner = widget.game.getMe();
-    } else if (widget.game.getEnemy().score > widget.game.getMe().score) {
-      winner = widget.game.getEnemy();
-    } else {
-      winner = null;
-    }
-    if(winner == null) {
-      return '!שיוויון';
-    }
-    else {
-      return ' המנצח הוא  ${winner.name}';
-    }
-  }
+//  String winnerName() {
+//    Player winner;
+//    if (widget.game.getMe().score > widget.game.getEnemy().score) {
+//      winner = widget.game.getMe();
+//    } else if (widget.game.getEnemy().score > widget.game.getMe().score) {
+//      winner = widget.game.getEnemy();
+//    } else {
+//      winner = null;
+//    }
+//    if(winner == null) {
+//      return '!שיוויון';
+//    }
+//    else {
+//      return ' המנצח הוא  ${winner.name}';
+//    }
+//  }
 
 
   void _listener() {

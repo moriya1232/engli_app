@@ -279,12 +279,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   Widget getAskedText() {
     String asked = widget.game.getPlayerNeedTurn().name;
     String wasAsked = widget.game.nameAsked;
-    String cardAsked = widget.game.cardAsked;
     String subjectAsked = widget.game.subjectAsked;
+    String cardAsked = widget.game.cardAsked;
     if (cardAsked != null && wasAsked != null && subjectAsked != null) {
-//      return Text(
-//        '$asked asked $wasAsked about the card: "$cardAsked" in subject: "$subjectAsked"',
-//      );
     return RichText(
       textAlign: TextAlign.center,
       text: new TextSpan(
@@ -306,9 +303,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       ),
     );
     } else if (cardAsked == null && wasAsked != null && subjectAsked != null) {
-//      return Text(
-//        '$asked asked $wasAsked about subject: "$subjectAsked", and he does not have this subject',
-//      );
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(

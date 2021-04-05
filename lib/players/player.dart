@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
@@ -7,6 +6,16 @@ import 'package:engli_app/games/Game.dart';
 import 'package:engli_app/games/MemoryGame.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import '../cards/CardGame.dart';
+
+
+//TODO: computer not find spec card but find subject- text not right!
+//todo: remove series inside same turn.
+//todo: check just series before ask about spec card in my turn.
+//todo: winner screen
+//todo: computer ask subject but i have and its say that i don't have.
+// todo: computer ask me for exapmle:  _Days_ subject and _Cat_ card. the problem with the card and not in subject
+//todo: somtimes in text for computer - dont switch the fields like it needs.
+// todo problem with score when i success quretet i think maybe if its card that come from another player.
 
 abstract class Player {
   List<CardGame> cards;
@@ -120,23 +129,55 @@ class ComputerPlayer extends Other {
 
     } else if (game is QuartetsGame) {
       print("computer player turn");
+
       var random = Random();
       List<CardQuartets> cards = game.getPlayerNeedTurn().cards.cast<CardQuartets>();
+      // no cards! so take card from the deck.
+      if (cards.length == 0) {
+        await game.deck.giveCardToPlayer(this);
+        if (game.doneTurn()) {
+          return;
+        }
+        updateObservers();
+        return;
+      }
+      //random subject.
       Subject randSub = game.getSubjectByString(cards[random.nextInt(cards.length)].subject);
-      int randNumPlayer = random.nextInt(game.players.length-1);
-      if (randNumPlayer >= game.turn) randNumPlayer +=1;
-      Player randPlayer = game.players[randNumPlayer];
-      CardQuartets randCard = getCardThatNotHave(randSub);
 
+      //random player
+      List<Player> playersWithCards = game.getPlayersWithCardWithoutMe(this);
+      if (playersWithCards.length == 0) {
+        print("no one to ask :(");
+        if (game.doneTurn()) {
+          return;
+        }
+        return;
+      }
+      int randNumPlayer = random.nextInt(playersWithCards.length);
+      Player randPlayer = game.players[randNumPlayer];
+
+      //random card.
+      CardQuartets randCard = getCardThatNotHave(randSub);
+      print("random subject: ${randSub.name_subject}");
+      print("random card: ${randCard.english}");
+
+      //ask by chooses. if succeed take card, play again!
       if (await game.askByComputer(randPlayer, randSub, randCard)){
+        game.removeAllSeriesDone(this);
+        if(game.checkIfGameDone()) {
+          return;
+        }
         makeMove(game);
       } else {
-        game.doneTurn();
-        game.checkComputerPlayerTurn();
+        if (game.doneTurn()) {
+          return;
+        }
         print("done computer turn");
       }
     }
   }
+
+
 }
 
 class VirtualPlayer extends Other {

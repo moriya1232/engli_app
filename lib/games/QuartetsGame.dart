@@ -125,11 +125,37 @@ class QuartetsGame extends Game {
     return names;
   }
 
-  void doneTurn() {
+  bool doneTurn() {
     Player player = getPlayerNeedTurn();
     player.raiseScore(removeAllSeriesDone(player));
+    if(checkIfGameDone()) {
+      reStart();
+      return true;
+    }
     this.turn = (this.turn + 1) % this.players.length;
     updateObservers();
+    checkComputerPlayerTurn();
+    if(checkIfGameDone()) {
+      reStart();
+      return true;
+    }
+    return false;
+  }
+
+  bool checkIfGameDone(){
+    if (this.deck.cards.length == 0 && !isPlayersHasCards()) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isPlayersHasCards(){
+    for(Player player in this.players) {
+      if(player.cards.length > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   Player getPlayerNeedTurn() {
@@ -609,5 +635,15 @@ class QuartetsGame extends Game {
       throw new Exception("error in take card");
     }
     return new Future.delayed(const Duration(seconds: 2));
+  }
+
+  List<Player> getPlayersWithCardWithoutMe(Player me) {
+    List<Player> players = [];
+    for (Player player in this.players) {
+      if (player != me && player.cards.length>0) {
+        players.add(player);
+      }
+    }
+    return players;
   }
 }
