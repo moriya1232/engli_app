@@ -49,7 +49,7 @@ class QuartetsGame extends Game {
     return false;
   }
 
-  Future askByComputer(
+  Future<bool> askByComputer(
       Player player, Subject subject, CardQuartets card) async {
     if (card.subject != subject.name_subject) {
       throw Exception("not appropriate card and subject!");
@@ -63,14 +63,17 @@ class QuartetsGame extends Game {
         this.cardAsked = card.english;
       }
       await takeCardFromPlayer(card, player);
+      updateObservers();
+      return new Future.delayed(const Duration(seconds: 5), ()=>true);
     } else {
       // didn't success take card from another player
       this.nameAsked = player.name;
       this.subjectAsked = subject.name_subject;
       await this.deck.giveCardToPlayer(getPlayerNeedTurn());
+      updateObservers();
+      return new Future.delayed(const Duration(seconds: 5), ()=>false);
     }
-    updateObservers();
-    return new Future.delayed(const Duration(seconds: 5));
+
   }
 
   CardQuartets askPlayerSpecCard(

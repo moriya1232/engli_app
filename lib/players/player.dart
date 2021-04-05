@@ -128,12 +128,13 @@ class ComputerPlayer extends Other {
       Player randPlayer = game.players[randNumPlayer];
       CardQuartets randCard = getCardThatNotHave(randSub);
 
-      await game.askByComputer(randPlayer, randSub, randCard);
-
-
-      game.doneTurn();
-      game.checkComputerPlayerTurn();
-      print("done computer turn");
+      if (await game.askByComputer(randPlayer, randSub, randCard)){
+        makeMove(game);
+      } else {
+        game.doneTurn();
+        game.checkComputerPlayerTurn();
+        print("done computer turn");
+      }
     }
   }
 }
