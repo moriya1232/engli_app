@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/cards/Triple.dart';
 import 'package:engli_app/cards/Subject.dart';
-
 import 'Game.dart';
 
 class QuartetsGame extends Game {
@@ -64,16 +63,15 @@ class QuartetsGame extends Game {
       }
       await takeCardFromPlayer(card, player);
       updateObservers();
-      return new Future.delayed(const Duration(seconds: 5), ()=>true);
+      return new Future.delayed(const Duration(seconds: 5), () => true);
     } else {
       // didn't success take card from another player
       this.nameAsked = player.name;
       this.subjectAsked = subject.name_subject;
-      await this.deck.giveCardToPlayer(getPlayerNeedTurn());
+      await takeCardFromDeck();
       updateObservers();
-      return new Future.delayed(const Duration(seconds: 5), ()=>false);
+      return new Future.delayed(const Duration(seconds: 5), () => false);
     }
-
   }
 
   CardQuartets askPlayerSpecCard(
@@ -127,31 +125,31 @@ class QuartetsGame extends Game {
 
   bool doneTurn() {
     Player player = getPlayerNeedTurn();
-    player.raiseScore(removeAllSeriesDone(player));
-    if(checkIfGameDone()) {
+    removeAllSeriesDone(player);
+    if (checkIfGameDone()) {
       reStart();
       return true;
     }
     this.turn = (this.turn + 1) % this.players.length;
     updateObservers();
     checkComputerPlayerTurn();
-    if(checkIfGameDone()) {
+    if (checkIfGameDone()) {
       reStart();
       return true;
     }
     return false;
   }
 
-  bool checkIfGameDone(){
+  bool checkIfGameDone() {
     if (this.deck.cards.length == 0 && !isPlayersHasCards()) {
       return true;
     }
     return false;
   }
 
-  bool isPlayersHasCards(){
-    for(Player player in this.players) {
-      if(player.cards.length > 0) {
+  bool isPlayersHasCards() {
+    for (Player player in this.players) {
+      if (player.cards.length > 0) {
         return true;
       }
     }
@@ -577,10 +575,9 @@ class QuartetsGame extends Game {
     return null;
   }
 
-  void takeCardFromDeck() {
-    this.deck.giveCardToPlayer(getPlayerNeedTurn());
+  void takeCardFromDeck() async{
+    await this.deck.giveCardToPlayer(getPlayerNeedTurn());
     this.updateObservers();
-    print(getPlayerNeedTurn().cards.length);
   }
 
   List<Subject> getSubjectsOfPlayer(Player player) {
@@ -626,6 +623,7 @@ class QuartetsGame extends Game {
           throw new Exception("remove card that not in player's cards.");
         }
       }
+      player.raiseScore(10);
     }
     return series.length;
   }
@@ -640,7 +638,7 @@ class QuartetsGame extends Game {
   List<Player> getPlayersWithCardWithoutMe(Player me) {
     List<Player> players = [];
     for (Player player in this.players) {
-      if (player != me && player.cards.length>0) {
+      if (player != me && player.cards.length > 0) {
         players.add(player);
       }
     }

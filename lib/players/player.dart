@@ -9,13 +9,12 @@ import '../cards/CardGame.dart';
 
 
 //TODO: computer not find spec card but find subject- text not right!
-//todo: remove series inside same turn.
-//todo: check just series before ask about spec card in my turn.
-//todo: winner screen
 //todo: computer ask subject but i have and its say that i don't have.
 // todo: computer ask me for exapmle:  _Days_ subject and _Cat_ card. the problem with the card and not in subject
-//todo: somtimes in text for computer - dont switch the fields like it needs.
-// todo problem with score when i success quretet i think maybe if its card that come from another player.
+//todo: sometimes in text for computer - dont switch the fields when it needs.
+// todo when there is winner , there is exception in dropdown of choose player.
+//todo: when other players dont have card- to take card automatically. (no needing to ask).
+
 
 abstract class Player {
   List<CardGame> cards;
@@ -123,7 +122,9 @@ class ComputerPlayer extends Other {
       if (n2 >= n1) n2 += 1;
       await game.changeCardState(cards[n1], false); //open card n1
       await game.changeCardState(cards[n2], false); // open card n2
-      game.checkOpenCards();
+      if (!game.checkOpenCards()) {
+        makeMove(game);
+      }
 
       print("done computer turn");
 
@@ -134,7 +135,7 @@ class ComputerPlayer extends Other {
       List<CardQuartets> cards = game.getPlayerNeedTurn().cards.cast<CardQuartets>();
       // no cards! so take card from the deck.
       if (cards.length == 0) {
-        await game.deck.giveCardToPlayer(this);
+        game.takeCardFromDeck();
         if (game.doneTurn()) {
           return;
         }

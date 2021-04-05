@@ -31,6 +31,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
     if (widget.game.pairs.isNotEmpty) {
       return getDesign(context);
     } else {
+      //TODO: i dont know why but there is exception here when winner! i think because its called from build.
       Navigator.push(
         context,
         MaterialPageRoute(

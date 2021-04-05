@@ -34,13 +34,6 @@ class _winnerRoomState extends State<WinnerRoom> {
   String winnerName() {
     //todo: if there some winners. (example: 2 players with best score from 4)
     Player winner = widget.game.players[0];
-//    if (widget.game.getMe().score > widget.game.getEnemy().score) {
-//      winner = widget.game.getMe();
-//    } else if (widget.game.getEnemy().score > widget.game.getMe().score) {
-//      winner = widget.game.getEnemy();
-//    } else {
-//      winner = null;
-//    }
     for (Player player in widget.game.players) {
       if(player.score > winner.score) {
         winner = player;
@@ -49,6 +42,7 @@ class _winnerRoomState extends State<WinnerRoom> {
     for (Player player in widget.game.players) {
       if (player.score == winner.score && player != winner) {
         winner = null;
+        break;
       }
     }
     if(winner == null) {

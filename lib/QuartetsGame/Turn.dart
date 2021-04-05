@@ -55,9 +55,15 @@ class _turnState extends State<Turn> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15.0)),
                         onPressed: () async {
-                          setState(() {
-                            this.chosenPlayerAndCategoryToAsk = true;
-                          });
+                          if (widget.playerChosenToAsk.getSubjects().contains(widget.subjectToAsk.name_subject)) {
+                            setState(() {
+                              this.chosenPlayerAndCategoryToAsk = true;
+                            });
+                          } else{
+                            widget.game.takeCardFromDeck();
+                            doneTurn();
+                            print("${widget.playerChosenToAsk} don't have subject: ${widget.subjectToAsk}, so player dont ask about spec card.");
+                          }
                         },
                         child: Text(
                           '!שאל',
@@ -267,8 +273,7 @@ class _turnState extends State<Turn> {
           widget.cardToAsk, widget.playerChosenToAsk);
       return true;
     } else {
-      await widget.game.deck
-          .giveCardToPlayer(widget.game.getPlayerNeedTurn());
+      widget.game.takeCardFromDeck();
       return false;
     }
   }
