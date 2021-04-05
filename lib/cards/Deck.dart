@@ -32,7 +32,7 @@ class Deck {
     return this.cards;
   }
 
-  void giveCardToPlayer(Player player) {
+  Future giveCardToPlayer(Player player){
     if (this.cards.isEmpty) {
       throw Exception("no more cards in the pile");
     } else {
@@ -42,6 +42,7 @@ class Deck {
         player.addCard(cards.removeLast().changeToNotMine());
       }
     }
+    return new Future.delayed(const Duration(seconds: 1));
   }
 
   void handoutDeck(List<Player> players) {
@@ -51,6 +52,5 @@ class Deck {
         giveCardToPlayer(player);
       }
     }
-
   }
 }

@@ -39,13 +39,13 @@ class _turnState extends State<Turn> {
                   child: RaisedButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0)),
-                onPressed: () {
+                onPressed: () async {
                   if(widget.game.askPlayerSpecCard(
                       widget.playerChosenToAsk, widget.subjectToAsk, widget.cardToAsk) != null){
                     print("need to take the card!!");
-                      //widget.game.askPlayerSpecCard(widget.playerChosenToAsk, widget.subjectToAsk, widget.cardToAsk);
+                      await widget.game.takeCardFromPlayer(widget.cardToAsk, widget.playerChosenToAsk);
                   } else {
-                    widget.game.deck.giveCardToPlayer(widget.game.getPlayerNeedTurn());
+                    await widget.game.deck.giveCardToPlayer(widget.game.getPlayerNeedTurn());
                   }
                   widget.game.doneTurn();
                   widget.game.checkComputerPlayerTurn();

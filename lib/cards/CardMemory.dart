@@ -23,6 +23,12 @@ class CardMemory extends CardGame {
   @override
   _CardMemoryState createState() => _CardMemoryState();
 
+  @override
+  Future changeStatusCard(bool b) {
+    this.isClose = b;
+    return new Future.delayed(const Duration(seconds: 1));
+  }
+
 
 }
 

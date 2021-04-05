@@ -1,4 +1,3 @@
-
 import 'package:engli_app/QuartetsGame/Constants.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
@@ -9,13 +8,13 @@ import 'package:engli_app/cards/Subject.dart';
 
 import 'Game.dart';
 
-class QuartetsGame extends Game{
-
+class QuartetsGame extends Game {
   List<Function> observers;
   Deck deck;
   String nameAsked;
   String subjectAsked;
   String cardAsked;
+
   //List<Subject> subjects;
 
   QuartetsGame() {
@@ -28,12 +27,12 @@ class QuartetsGame extends Game{
   }
 
   void reStart() {
-    for (int i=0; i<playersNames.length+1; i++) {
-      if (i==0) {
+    for (int i = 0; i < playersNames.length + 1; i++) {
+      if (i == 0) {
         createPlayer(true, quartetsMe);
         continue;
       }
-      createPlayer(false, playersNames[i-1]);
+      createPlayer(false, playersNames[i - 1]);
     }
     Deck deck = createDeck();
     deck.handoutDeck(this.players);
@@ -43,49 +42,48 @@ class QuartetsGame extends Game{
 
   bool askPlayer(Player player, Subject subject) {
     for (CardQuartets card in player.cards) {
-      if(card.subject == subject.name_subject) {
+      if (card.subject == subject.name_subject) {
         return true;
       }
     }
     return false;
   }
 
-  Future askByComputer(Player player, Subject subject, CardQuartets card) {
-      if (card.subject != subject.name_subject) {
-        throw Exception("not appropriate card and subject!");
+  Future askByComputer(
+      Player player, Subject subject, CardQuartets card) async {
+    if (card.subject != subject.name_subject) {
+      throw Exception("not appropriate card and subject!");
+    }
+
+    if (askPlayerSpecCard(player, subject, card) != null) {
+      //success take card from another player.
+      this.nameAsked = player.name;
+      this.subjectAsked = subject.name_subject;
+      if (askPlayer(player, subject)) {
+        this.cardAsked = card.english;
       }
-
-      if (askPlayerSpecCard(player, subject, card) != null) {
-        this.nameAsked = player.name;
-        this.subjectAsked = subject.name_subject;
-        if (askPlayer(player, subject)) {
-          this.cardAsked = card.english;
-        }
-
-        //TODO: take card from player
-        this.deck.giveCardToPlayer(getPlayerNeedTurn());
-      } else {
-        this.nameAsked = player.name;
-        this.subjectAsked = subject.name_subject;
-        this.deck.giveCardToPlayer(getPlayerNeedTurn());
-      }
-      updateObservers();
-      return new Future.delayed(const Duration(seconds: 5));
-
+      await takeCardFromPlayer(card, player);
+    } else {
+      // didn't success take card from another player
+      this.nameAsked = player.name;
+      this.subjectAsked = subject.name_subject;
+      await this.deck.giveCardToPlayer(getPlayerNeedTurn());
+    }
+    updateObservers();
+    return new Future.delayed(const Duration(seconds: 5));
   }
 
-  CardQuartets askPlayerSpecCard(Player player, Subject subject, CardQuartets cardQuartets) {
+  CardQuartets askPlayerSpecCard(
+      Player player, Subject subject, CardQuartets cardQuartets) {
     for (CardQuartets card in player.cards) {
-      if(card.subject == subject.name_subject && cardQuartets == card) {
+      if (card.subject == subject.name_subject && cardQuartets == card) {
         return card;
       }
     }
     return null;
-
   }
 
-
-  void checkComputerPlayerTurn(){
+  void checkComputerPlayerTurn() {
     Player player = this.getPlayerNeedTurn();
     if (player is ComputerPlayer) {
       player.makeMove(this);
@@ -108,23 +106,25 @@ class QuartetsGame extends Game{
 
   Player getPlayerByName(String name) {
     //TODO: if there are some players?
-    for(Player player in this.players) {
-      if (name == player.name){
+    for (Player player in this.players) {
+      if (name == player.name) {
         return player;
       }
     }
     return null;
   }
 
-  List<String> getNamesPlayers(){
+  List<String> getNamesPlayers() {
     List<String> names = [];
-    for(Player player in this.players){
+    for (Player player in this.players) {
       names.add(player.name);
     }
     return names;
   }
 
   void doneTurn() {
+    Player player = getPlayerNeedTurn();
+    player.raiseScore(removeAllSeriesDone(player));
     this.turn = (this.turn + 1) % this.players.length;
     updateObservers();
   }
@@ -138,22 +138,38 @@ class QuartetsGame extends Game{
   }
 
   Player getFirstPlayer() {
-    return this.players.elementAt(1);
+    try {
+      return this.players.elementAt(1);
+    } catch (e) {
+      throw new Exception("no player 1");
+    }
   }
 
   Player getSecondPlayer() {
-    return this.players.elementAt(2);
+    try {
+      return this.players.elementAt(2);
+    } catch (e) {
+      throw new Exception("no player 2");
+    }
   }
 
   Player getThirdPlayer() {
-    return this.players.elementAt(3);
+    try {
+      return this.players.elementAt(3);
+    } catch (e) {
+      throw new Exception("no player 3");
+    }
   }
 
   Player getMyPlayer() {
-    return this.players.elementAt(0);
+    try {
+      return this.players.elementAt(0);
+    } catch (e) {
+      throw new Exception("no player me at players[0]");
+    }
   }
 
-  Deck createDeck(){
+  Deck createDeck() {
     Subject furnitures = Subject(
         "Furnitures",
         Triple(
@@ -208,46 +224,82 @@ class QuartetsGame extends Game{
             )));
     Subject days = Subject(
         "Days",
-        Triple("sunday", "יום ראשון", Image(
-          image: AssetImage('images/sunday.png'),
-        )),
-        Triple("monday", "יום שני", Image(
-          image: AssetImage('images/monday.png'),
-        )),
-        Triple("saturday", "יום שבת", Image(
-          image: AssetImage('images/saturday.png'),
-        )),
-        Triple("friday", "יום שישי", Image(
-          image: AssetImage('images/friday.png'),
-        )));
+        Triple(
+            "sunday",
+            "יום ראשון",
+            Image(
+              image: AssetImage('images/sunday.png'),
+            )),
+        Triple(
+            "monday",
+            "יום שני",
+            Image(
+              image: AssetImage('images/monday.png'),
+            )),
+        Triple(
+            "saturday",
+            "יום שבת",
+            Image(
+              image: AssetImage('images/saturday.png'),
+            )),
+        Triple(
+            "friday",
+            "יום שישי",
+            Image(
+              image: AssetImage('images/friday.png'),
+            )));
     Subject family = Subject(
         "Family",
-        Triple("father", "אבא", Image(
-          image: AssetImage('images/father.png'),
-        )),
-        Triple("mother", "אמא", Image(
-          image: AssetImage('images/mother.jpg'),
-        )),
-        Triple("sister", "אחות", Image(
-          image: AssetImage('images/sister.jpg'),
-        )),
-        Triple("brother", "אח", Image(
-          image: AssetImage('images/brother.jpg'),
-        )));
+        Triple(
+            "father",
+            "אבא",
+            Image(
+              image: AssetImage('images/father.png'),
+            )),
+        Triple(
+            "mother",
+            "אמא",
+            Image(
+              image: AssetImage('images/mother.jpg'),
+            )),
+        Triple(
+            "sister",
+            "אחות",
+            Image(
+              image: AssetImage('images/sister.jpg'),
+            )),
+        Triple(
+            "brother",
+            "אח",
+            Image(
+              image: AssetImage('images/brother.jpg'),
+            )));
     Subject food = Subject(
         "Food",
-        Triple("pizza", "פיצה", Image(
-          image: AssetImage('images/pizza.jpg'),
-        )),
-        Triple("rice", "אורז", Image(
-          image: AssetImage('images/rice.jpg'),
-        )),
-        Triple("meat", "בשר", Image(
-          image: AssetImage('images/meat.jpg'),
-        )),
-        Triple("soup", "מרק", Image(
-          image: AssetImage('images/soup.png'),
-        )));
+        Triple(
+            "pizza",
+            "פיצה",
+            Image(
+              image: AssetImage('images/pizza.jpg'),
+            )),
+        Triple(
+            "rice",
+            "אורז",
+            Image(
+              image: AssetImage('images/rice.jpg'),
+            )),
+        Triple(
+            "meat",
+            "בשר",
+            Image(
+              image: AssetImage('images/meat.jpg'),
+            )),
+        Triple(
+            "soup",
+            "מרק",
+            Image(
+              image: AssetImage('images/soup.png'),
+            )));
 //    Subject days1 = Subject(
 //        "Days",
 //        Triple("sunday", "יום ראשון", Image(
@@ -384,8 +436,7 @@ class QuartetsGame extends Game{
     Player player;
     if (isMe) {
       player = Me([], name);
-    }
-    else {
+    } else {
       player = ComputerPlayer([], name);
     }
     this.players.add(player);
@@ -489,7 +540,7 @@ class QuartetsGame extends Game{
   }
 
   Subject getSubjectByString(String sub) {
-    for (Subject s in this.deck.subjects){
+    for (Subject s in this.deck.subjects) {
       if (s.name_subject == sub) {
         return s;
       }
@@ -497,9 +548,63 @@ class QuartetsGame extends Game{
     return null;
   }
 
-  void takeCardFromDeck(){
+  void takeCardFromDeck() {
     this.deck.giveCardToPlayer(getPlayerNeedTurn());
     this.updateObservers();
     print(getPlayerNeedTurn().cards.length);
+  }
+
+  List<Subject> getSubjectsOfPlayer(Player player) {
+    List<Subject> subjects = [];
+    for (CardQuartets card in player.cards) {
+      Subject subject = getSubjectByString(card.subject);
+      if (!subjects.contains(subject)) {
+        subjects.add(subject);
+      }
+    }
+    return subjects;
+  }
+
+  bool isSubjectDone(Player player, Subject subject) {
+    List<CardQuartets> cardsInSubject = subject.getCards();
+    bool isDone = true;
+    for (CardQuartets card in cardsInSubject) {
+      if (!player.cards.contains(card)) {
+        isDone = false;
+        break;
+      }
+    }
+    return isDone;
+  }
+
+  List<Subject> seriesDone(Player player) {
+    List<Subject> series = [];
+    for (Subject subject in getSubjectsOfPlayer(player)) {
+      if (isSubjectDone(player, subject)) {
+        series.add(subject);
+      }
+    }
+    return series;
+  }
+
+  int removeAllSeriesDone(Player player) {
+    List<Subject> series = seriesDone(player);
+    for (Subject subject in series) {
+      for (CardQuartets card in subject.getCards()) {
+        try {
+          player.cards.remove(card);
+        } catch (e) {
+          throw new Exception("remove card that not in player's cards.");
+        }
+      }
+    }
+    return series.length;
+  }
+
+  Future takeCardFromPlayer(CardQuartets card, Player tokenFrom) {
+    if (!getPlayerNeedTurn().takeCardFromPlayer(card, tokenFrom)) {
+      throw new Exception("error in take card");
+    }
+    return new Future.delayed(const Duration(seconds: 2));
   }
 }

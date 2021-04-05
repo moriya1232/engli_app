@@ -1,6 +1,6 @@
-
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
 
@@ -11,9 +11,7 @@ class QuartetsRoom extends StatefulWidget {
   int chosenCard = -1;
   QuartetsGame game;
 
-
-
-  QuartetsRoom(){
+  QuartetsRoom() {
     this.game = new QuartetsGame();
   }
 
@@ -22,7 +20,6 @@ class QuartetsRoom extends StatefulWidget {
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,12 +32,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       body: Center(
         child: Container(
           child:
-          Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Center(
-              child: Text('${widget.game
-                  .getFirstPlayer()
-                  .cards
-                  .length}'),
+              child: Text('${widget.game.getFirstPlayer().cards.length}'),
             ),
             Container(
               alignment: Alignment.center,
@@ -48,22 +42,23 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.game.getFirstPlayer().cards.length, // number of items in your list
+                  itemCount: widget.game.getFirstPlayer().cards.length,
+                  // number of items in your list
 
                   //here the implementation of itemBuilder. take a look at flutter docs to see details
-                  itemBuilder: (BuildContext context, int Itemindex){
-                    return widget.game.getFirstPlayer().cards[Itemindex]; // return your widget
+                  itemBuilder: (BuildContext context, int Itemindex) {
+                    return widget.game
+                        .getFirstPlayer()
+                        .cards[Itemindex]; // return your widget
                   }
 //                  children: widget.game
 //                      .getFirstPlayer()
 //                      .cards
-                      ),
+                  ),
             ),
             Center(
               child: Text(
-                '${widget.game
-                    .getFirstPlayer()
-                    .name}',
+                '${widget.game.getFirstPlayer().name}: ${widget.game.getFirstPlayer().score}',
                 style: TextStyle(
                   fontFamily: 'Comix-h',
                   fontSize: 20,
@@ -77,10 +72,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   Row(children: [
                     RotatedBox(
                       quarterTurns: 1,
-                      child: Text('${widget.game
-                          .getSecondPlayer()
-                          .cards
-                          .length}'),
+                      child:
+                          Text('${widget.game.getSecondPlayer().cards.length}'),
                     ),
                     RotatedBox(
                       quarterTurns: 1,
@@ -89,26 +82,28 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         height: 100,
                         width: 270,
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                            itemCount: widget.game.getSecondPlayer().cards.length, // number of items in your list
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                widget.game.getSecondPlayer().cards.length,
+                            // number of items in your list
 
                             //here the implementation of itemBuilder. take a look at flutter docs to see details
-                            itemBuilder: (BuildContext context, int Itemindex){
-                              return widget.game.getSecondPlayer().cards[Itemindex]; // return your widget
+                            itemBuilder: (BuildContext context, int Itemindex) {
+                              return widget.game
+                                  .getSecondPlayer()
+                                  .cards[Itemindex]; // return your widget
                             }
 //                          children: widget.game
 //                              .getSecondPlayer()
 //                              .cards,
-                        ),
+                            ),
                       ),
                     ),
                     RotatedBox(
                       quarterTurns: 1,
                       child: Text(
-                        '${widget.game
-                            .getSecondPlayer()
-                            .name}',
+                        '${widget.game.getSecondPlayer().name}: ${widget.game.getSecondPlayer().score}',
                         style: TextStyle(
                           fontFamily: 'Comix-h',
                           fontSize: 20,
@@ -129,7 +124,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     child: Align(
                       child: Padding(
                         padding:
-                        EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                            EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                         child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,9 +157,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     RotatedBox(
                       quarterTurns: 3,
                       child: Text(
-                        '${widget.game
-                            .getThirdPlayer()
-                            .name}',
+                        '${widget.game.getThirdPlayer().name}: ${widget.game.getThirdPlayer().score}',
                         style: TextStyle(
                           fontFamily: 'Comix-h',
                           fontSize: 20,
@@ -178,34 +171,33 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         height: 100,
                         width: 270,
                         child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                            itemCount: widget.game.getThirdPlayer().cards.length, // number of items in your list
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                widget.game.getThirdPlayer().cards.length,
+                            // number of items in your list
 
                             //here the implementation of itemBuilder. take a look at flutter docs to see details
-                            itemBuilder: (BuildContext context, int Itemindex){
-                              return widget.game.getThirdPlayer().cards[Itemindex]; // return your widget
+                            itemBuilder: (BuildContext context, int Itemindex) {
+                              return widget.game
+                                  .getThirdPlayer()
+                                  .cards[Itemindex]; // return your widget
                             }
 //                          children: widget.game
 //                              .getThirdPlayer()
 //                              .cards,
-                        ),
+                            ),
                       ),
                     ),
                     RotatedBox(
                       quarterTurns: 3,
-                      child: Text('${widget.game
-                          .getThirdPlayer()
-                          .cards
-                          .length}'),
+                      child:
+                          Text('${widget.game.getThirdPlayer().cards.length}'),
                     ),
                   ]),
                 if (widget.game.players.length == 3)
                   Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 3,
+                    width: MediaQuery.of(context).size.width / 3,
                   )
               ],
             ),
@@ -215,26 +207,56 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             Container(
               height: 230,
               child: ListView.builder(
-                shrinkWrap: true,
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.game.getMyPlayer().cards.length, // number of items in your list
+                  itemCount: widget.game.getMyPlayer().cards.length,
+                  // number of items in your list
 
                   //here the implementation of itemBuilder. take a look at flutter docs to see details
-                  itemBuilder: (BuildContext context, int Itemindex){
-                    return widget.game.getMyPlayer().cards[Itemindex]; // return your widget
-                  }
-              ),
+                  itemBuilder: (BuildContext context, int Itemindex) {
+                    return widget.game
+                        .getMyPlayer()
+                        .cards[Itemindex]; // return your widget
+                  }),
             ),
             Container(
-              height: 50,
               color: Colors.black12,
+              height: 50,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.mic,
-                    size: 35,
-                  )
+                  Container(
+
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child:
+              Text(
+                    '${widget.game.getMyPlayer().name}: ${widget.game.getMyPlayer().score}',
+                    style: TextStyle(
+                      fontFamily: 'Comix-h',
+                      fontSize: 20,
+                    ),
+                  ),
+                  ),
+//                  Expanded(
+//                    child:
+                  Container(
+                    width: 100,
+                    child: RawMaterialButton(
+                      padding: EdgeInsets.all(10.0),
+                      onPressed: (){
+                        //TODO: microphone!
+                      },
+                      hoverColor: Colors.black87,
+                      highlightColor: Colors.lightGreen,
+                      shape: CircleBorder(),
+                      fillColor: Colors.white,
+                      child: Icon(
+                        Icons.mic,
+                        size: 35,
+                      ),
+                    ),
+                  ),
+//                  ),
                 ],
               ),
             ),
@@ -244,24 +266,67 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     );
   }
 
-  Widget getAppropriateWidget(){
-    if(widget.game.getPlayerNeedTurn() is Me) {
+  Widget getAppropriateWidget() {
+    if (widget.game.getPlayerNeedTurn() is Me) {
       return Turn(widget.game);
     } else {
       return new Container(
-        child: getAskedText()
-      );
+          alignment: Alignment.center,
+          child: getAskedText());
     }
   }
 
   Widget getAskedText() {
-    if (widget.game.cardAsked != null && widget.game.nameAsked != null && widget.game.subjectAsked != null) {
-      return Text(
-        '${widget.game.getPlayerNeedTurn().name} asked ${widget.game.nameAsked} about the card: "${widget.game.cardAsked}" in subject: "${widget.game.subjectAsked}"',
-      );
-    } else if (widget.game.cardAsked == null && widget.game.nameAsked != null && widget.game.subjectAsked != null) {
-      return Text(
-        '${widget.game.getPlayerNeedTurn().name} asked ${widget.game.nameAsked} about subject: "${widget.game.subjectAsked}", and he does not have this subject',
+    String asked = widget.game.getPlayerNeedTurn().name;
+    String wasAsked = widget.game.nameAsked;
+    String cardAsked = widget.game.cardAsked;
+    String subjectAsked = widget.game.subjectAsked;
+    if (cardAsked != null && wasAsked != null && subjectAsked != null) {
+//      return Text(
+//        '$asked asked $wasAsked about the card: "$cardAsked" in subject: "$subjectAsked"',
+//      );
+    return RichText(
+      textAlign: TextAlign.center,
+      text: new TextSpan(
+        style: new TextStyle(
+          wordSpacing: 10,
+          fontSize: 20,
+          fontFamily: 'Carter-e',
+            color: Colors.black87
+        ),
+        children:[
+          new TextSpan(text: '$asked', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+          new TextSpan(text: 'asked '),
+          new TextSpan(text: '$wasAsked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+          new TextSpan(text: 'about the card: '),
+          new TextSpan(text: '$cardAsked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+          new TextSpan(text: 'in subject: '),
+          new TextSpan(text: '$subjectAsked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+        ],
+      ),
+    );
+    } else if (cardAsked == null && wasAsked != null && subjectAsked != null) {
+//      return Text(
+//        '$asked asked $wasAsked about subject: "$subjectAsked", and he does not have this subject',
+//      );
+      return RichText(
+        textAlign: TextAlign.center,
+        text: new TextSpan(
+          style: new TextStyle(
+              wordSpacing: 10,
+              fontSize: 20,
+              fontFamily: 'Carter-e',
+            color: Colors.black87
+          ),
+          children:[
+            new TextSpan(text: '$asked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'asked '),
+            new TextSpan(text: '$wasAsked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'about subject: '),
+            new TextSpan(text: '$subjectAsked', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: ', and he does not have this subject'),
+          ],
+        ),
       );
     } else {
       return new Container();

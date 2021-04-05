@@ -45,6 +45,24 @@ abstract class Player {
     updateObservers();
   }
 
+  bool takeCardFromPlayer(CardGame card, Player player) {
+    //TODO: maybe add animation?
+    if (player.cards.contains(card)) {
+      this.cards.add(card);
+      player.cards.remove(card);
+      if (this is Me) {
+        print("give card to my player");
+        card.changeStatusCard(true);
+      } else {
+        print("give card to enemy player");
+        card.changeStatusCard(false);
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   List<String> getSubjects() {
     for (CardGame card in this.cards) {
       if (card is CardMemory){
