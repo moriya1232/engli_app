@@ -62,6 +62,12 @@ class CardQuartets extends CardGame {
   getSubject() {
     return subject;
   }
+
+  @override
+  Future changeStatusCard(bool b) {
+    this.myCard = b;
+    return new Future.delayed(const Duration(seconds: 1));
+  }
 }
 
 class _CardQuartetsState extends State<CardQuartets> {
@@ -101,16 +107,7 @@ class _CardQuartetsState extends State<CardQuartets> {
                 borderRadius: BorderRadius.circular(4.0)),
         //color: getColor(widget.chosen),
         borderOnForeground: true,
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            setState(() {
-              widget.chosen = !widget.chosen;
-              //widget.small = !widget.small;
-            });
-          },
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Container(
               decoration: new BoxDecoration(
                   color: Colors.tealAccent,
@@ -169,7 +166,6 @@ class _CardQuartetsState extends State<CardQuartets> {
                   ),
                 ),
           ]),
-        ),
       ),
     );
   }
@@ -180,6 +176,13 @@ class _CardQuartetsState extends State<CardQuartets> {
     } else {
       return Colors.white70;
     }
+  }
+
+  Future changeStatusCard(bool isMyCard) async {
+    setState(() {
+      widget.myCard = isMyCard;
+    });
+    return new Future.delayed(const Duration(seconds: 2));
   }
 
   Widget getCloseCard(BuildContext context) {

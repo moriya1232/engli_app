@@ -35,4 +35,6 @@ abstract class CardGame extends StatefulWidget {
       f();
     }
   }
+
+  Future changeStatusCard(bool b);
 }

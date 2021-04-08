@@ -172,6 +172,7 @@ class MemoryGame extends Game {
     }
   }
 
+  //return true if switch player turn, false - if its need to stay in his turn.
   bool checkOpenCards() {
     List<CardMemory> chosens = [];
     for (CardMemory card in getCards()) {
@@ -185,6 +186,7 @@ class MemoryGame extends Game {
       if (pairChosen != null) {
         removePair(pairChosen);
         this.players[this.turn].raiseScore(howMuchScoreForSuccess);
+        return false;
       } else {
         closeAllCards();
       }
@@ -199,13 +201,19 @@ class MemoryGame extends Game {
 
   void cardClicked() {
     if (checkOpenCards() && this.players[this.turn] is ComputerPlayer) {
-      print("computer turn");
-      ComputerPlayer player = this.players[this.turn] as ComputerPlayer;
-      print("computer need to move");
-      player.makeMove(this);
-      updateObservers();
+      computerMove();
+      return;
+    } else {
       return;
     }
+  }
+
+  void computerMove() {
+    print("computer turn");
+    ComputerPlayer player = this.players[this.turn] as ComputerPlayer;
+    print("computer need to move");
+    player.makeMove(this);
+    updateObservers();
   }
 
   void addListener(listener) {
