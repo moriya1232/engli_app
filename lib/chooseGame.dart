@@ -18,110 +18,133 @@ class _ChooseGameState extends State<ChooseGame> {
         title: Text('בחירת משחק'),
         centerTitle: true,
       ),
-      body: Container(
-          child: Column(children: <Widget>[
-        Center(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(100),
-                      child: Text(
-                        '!שלום ${Data().getName()}',
-                        style: TextStyle(
-                          fontFamily: 'Abraham-h',
-                          fontSize: 40,
-                        ),
-                      ),
-                    ),
-                  ]),
-              Column(
-                  //mainAxisAlignment: MainAxisAlignment.center,
-                  //crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    ButtonTheme(
-                        padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                        buttonColor: Colors.black87,
-                        child: SizedBox(
-                            height: 140,
-                            width: 330,
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(22.0)),
-                              color: Colors.amberAccent,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => GetInRoom()),
-                                );
-                              },
-                              child: Text('רביעיות',
-                                  style: TextStyle(
-                                      fontFamily: 'Comix-h',
-                                      color: Colors.black87,
-                                      fontSize: 50)),
-                            ))),
-                    SizedBox(height: 20),
-                    ButtonTheme(
-                        buttonColor: Colors.amberAccent,
-                        child: SizedBox(
-                            height: 140,
-                            width: 330,
-                            child: RaisedButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChooseEnemy()),
-                                );
-                              },
-                              child: Text(
-                                'זיכרון',
-                                style: TextStyle(
-                                    fontFamily: 'Comix-h',
-                                    color: Colors.black87,
-                                    fontSize: 50),
-                              ),
-                            ))),
-                  ]),
-            ])),
-        Expanded(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.all(40),
-              child: ButtonTheme(
-                  padding: EdgeInsets.all(20),
-                  buttonColor: Colors.pink,
-                  child: SizedBox(
-                      child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => new EditingVocabulaty()),
-                            );
-                    },
-                    child: Text(
-                      'עריכת אוצר מילים',
+      body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.all(15),
+                child: GestureDetector(
+//                  style: ElevatedButton.styleFrom(
+//                      shape: RoundedRectangleBorder(
+//                          borderRadius: BorderRadius.circular(22.0)),
+//                      primary: Colors.amberAccent),
+                  onTap: () {
+                    logoutClicked();
+                  },
+                  child: Text('התנתק',
                       style: TextStyle(
                           fontFamily: 'Comix-h',
-                          color: Colors.black87,
-                          fontSize: 20),
-                    ),
-                  ))),
+                          color: Colors.teal,
+                          fontSize: 20)),
+                ),
+              ),
             ),
-          ),
-        )
-      ])),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+              child: Text(
+                '!שלום ${Data().getName()}',
+                style: TextStyle(
+                  fontFamily: 'Abraham-h',
+                  fontSize: 40,
+                ),
+              ),
+            ),
+            Expanded(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                  SizedBox(
+                      height: 140,
+                      width: 330,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22.0)),
+                          primary: Colors.amberAccent,
+                        ),
+                        onPressed: () {
+                          quartetsClicked();
+                        },
+                        child: Text('רביעיות',
+                            style: TextStyle(
+                                fontFamily: 'Comix-h',
+                                color: Colors.black87,
+                                fontSize: 50)),
+                      )),
+                  SizedBox(height: 20),
+                  SizedBox(
+                    height: 140,
+                    width: 330,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 100, vertical: 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          primary: Colors.amberAccent),
+                      onPressed: () {
+                        memoryClicked();
+                      },
+                      child: Text(
+                        'זיכרון',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.black87,
+                            fontSize: 50),
+                      ),
+                    ),
+                  ),
+                ])),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      primary: Colors.pink),
+                  onPressed: () {
+                    editVocabularyClicked();
+                  },
+                  child: Text(
+                    'עריכת אוצר מילים',
+                    style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        color: Colors.black87,
+                        fontSize: 20),
+                  ),
+                ),
+              ),
+            ),
+          ]),
     );
   }
+
+  void quartetsClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => GetInRoom()),
+    );
+  }
+
+  void memoryClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChooseEnemy()),
+    );
+  }
+
+  void editVocabularyClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => new EditingVocabulaty()),
+    );
+  }
+
+  void logoutClicked() {}
 }
