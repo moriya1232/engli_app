@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "812116978127",
+    "project_id": "engliapp",
+    "storage_bucket": "engliapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812116978127:android:ed451106d7d370ccca4aba",
+        "android_client_info": {
+          "package_name": "com.example.engli_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812116978127-pffnn8f7j02k6c4n119p4k7jhkmfrepl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbxqKsAuaHeM-u5_uXTgE4ENEhr1hyk9U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812116978127-pffnn8f7j02k6c4n119p4k7jhkmfrepl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
