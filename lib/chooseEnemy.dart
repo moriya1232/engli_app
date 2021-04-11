@@ -27,16 +27,14 @@ class _ChooseEnemyState extends State<ChooseEnemy> {
                     child: SizedBox(
                         height: 140,
                         width: 330,
-                        child: RaisedButton(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(22.0)),
-                          color: Colors.amberAccent,
+                          primary: Colors.amberAccent,
+                          ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MemoryRoom(true)),
-                            );
+                            playAgainstComputerClicked();
                           },
                           child: Text('שחק נגד המחשב',
                               textAlign: TextAlign.center,
@@ -51,15 +49,13 @@ class _ChooseEnemyState extends State<ChooseEnemy> {
                     child: SizedBox(
                         height: 140,
                         width: 330,
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0)),
+                            primary: Colors.amberAccent,
+                          ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MemoryRoom(false)),
-                            );
+                            playAgainstOtherPlayerClicked();
                           },
                           child: Text(
                             'שחק נגד יריב אחר',
@@ -73,6 +69,22 @@ class _ChooseEnemyState extends State<ChooseEnemy> {
               ]),
         ),
       ),
+    );
+  }
+
+  void playAgainstComputerClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MemoryRoom(true)),
+    );
+  }
+
+  void playAgainstOtherPlayerClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MemoryRoom(false)),
     );
   }
 }

@@ -138,5 +138,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void loginGuestClicked() {}
+  void loginGuestClicked() {
+    //TODO
+
+  }
 }

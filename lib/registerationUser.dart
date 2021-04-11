@@ -78,17 +78,15 @@ class _RegistrationState extends State<Registration> {
                           child: SizedBox(
                               height: 50,
                               width: 100,
-                              child: RaisedButton(
-                                shape: RoundedRectangleBorder(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(22.0)),
                                 padding:
                                     const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                                color: Colors.amberAccent,
+                                primary: Colors.amberAccent,
+                                ),
                                 onPressed: () {
-//                                        Navigator.push(
-//                                          context,
-//                                          MaterialPageRoute(builder: (context) => Registertion()),
-//                                        );
+                                  registerClicked();
                                 },
                                 child: Text('הירשם',
                                     style: TextStyle(
@@ -109,5 +107,10 @@ class _RegistrationState extends State<Registration> {
             ),
           ]),
         ));
+  }
+
+  void registerClicked() {
+    //TODO
+
   }
 }
