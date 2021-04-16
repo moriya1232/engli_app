@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        AnimationWidget(Image.asset('images/A.jpg'), 100, 100),
+                        AnimationWidget(Image.asset('images/A.jpg'), 100, 120),
                         AnimationWidget(Image.asset('images/F.jpg'), 80, 80),
                       ],
                     )),
@@ -229,8 +229,3 @@ class _AnimationWidgetState extends State<AnimationWidget>
     );
   }
 }
-
-//AnimationWidget(Image.asset('images/A.jpg'), 100, 100),
-//AnimationWidget(Image.asset('images/R.jpg'), 70, 70),
-//AnimationWidget(Image.asset('images/F.jpg'), 50, 50),
-//AnimationWidget(Image.asset('images/W.jpg'), 80, 80),
