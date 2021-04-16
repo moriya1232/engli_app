@@ -6,6 +6,7 @@ import 'registerationUser.dart';
 class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    //print(MediaQuery.of(context).size.width / 2);
     return MaterialApp(
       title: 'Engli - לימוד אנגלית',
       home: MyHomePage(),
@@ -21,6 +22,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    //print(MediaQuery.of(context).size.width / 2);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -29,50 +31,38 @@ class _MyHomePageState extends State<MyHomePage> {
         shadowColor: Colors.black87,
       ),
       body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //TODO : animated letters.
-                  AnimationWidget(Image.asset('images/A.jpg'), 100, 100),
-                  AnimationWidget(Image.asset('images/R.jpg'), 70, 70),
-                  AnimationWidget(Image.asset('images/F.jpg'), 50, 50),
-                  AnimationWidget(Image.asset('images/W.jpg'), 80, 80),
-//                  AnimatedContainer(
-//                      child: Image.asset('images/A.jpg'),
-//                      duration: Duration(seconds: 1)),
-//                  AnimatedContainer(
-//                      child: Image.asset('images/R.jpg'),
-//                      duration: Duration(seconds: 1)),
-//                  AnimatedContainer(
-//                      child: Image.asset('images/F.jpg'),
-//                      duration: Duration(seconds: 1)),
-//                  AnimatedContainer(
-//                      child: Image.asset('images/W.jpg'),
-//                      duration: Duration(seconds: 1)),
-                ],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 30),
+            child: Text(
+              '!ברוכים הבאים',
+              style: TextStyle(
+                fontFamily: 'Abraham-h',
+                fontSize: 40,
               ),
             ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '!ברוכים הבאים',
-                    style: TextStyle(
-                      fontFamily: 'Abraham-h',
-                      fontSize: 40,
-                    ),
-                  ),
-                  Column(children: [
+          ),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 30),
+              child: Row(children: [
+                Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        AnimationWidget(Image.asset('images/A.jpg'), 100, 100),
+                        AnimationWidget(Image.asset('images/F.jpg'), 80, 80),
+                      ],
+                    )),
+
+                Container(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: Column(children: [
                     SizedBox(
                         height: 70,
-                        width: 220,
+                        width: 210,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -91,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(height: 20),
                     SizedBox(
                       height: 70,
-                      width: 220,
+                      width: 210,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -131,16 +121,27 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                   ]),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Image(
-                      image: AssetImage('images/kids-read.jpg'),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                Expanded(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    AnimationWidget(Image.asset('images/R.jpg'), 70, 70),
+                    AnimationWidget(Image.asset('images/W.jpg'), 80, 80),
+                  ],
+                )),
+              ]),
             ),
-          ]),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Image(
+              image: AssetImage('images/kids-read.jpg'),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -167,11 +168,13 @@ class AnimationWidget extends StatefulWidget {
   Image _image;
   double _height;
   double _width;
+
   AnimationWidget(Image image, double height, double width) {
     this._image = image;
     this._height = height;
     this._width = width;
   }
+
   @override
   _AnimationWidgetState createState() => _AnimationWidgetState();
 }
@@ -187,6 +190,12 @@ class _AnimationWidgetState extends State<AnimationWidget>
         duration: const Duration(milliseconds: 1000), vsync: this);
     _controller.repeat(reverse: true);
     //Tween(begin: 0.0, end: pi).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    this._controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -206,16 +215,22 @@ class _AnimationWidgetState extends State<AnimationWidget>
       animation: this._controller,
       builder: (context, child) {
         return Container(
-          height: widget._height,
+            height: widget._height,
             width: widget._width,
 //            decoration: ShapeDecoration(
 //              color: Colors.white,
 //              shape: CircleBorder(),
 //            ),
             child: Padding(
-                padding: EdgeInsets.all(widget._height/10 + this._controller.value * 10),
+                padding: EdgeInsets.all(
+                    widget._height / 10 + this._controller.value * 10),
                 child: widget._image));
       },
     );
   }
 }
+
+//AnimationWidget(Image.asset('images/A.jpg'), 100, 100),
+//AnimationWidget(Image.asset('images/R.jpg'), 70, 70),
+//AnimationWidget(Image.asset('images/F.jpg'), 50, 50),
+//AnimationWidget(Image.asset('images/W.jpg'), 80, 80),
