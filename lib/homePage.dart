@@ -30,17 +30,19 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 30),
+              padding: EdgeInsets.symmetric(vertical: 5),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //TODO : animated letters.
-                  AnimationWidget(),
-                  AnimationWidget(),
+                  AnimationWidget(Image.asset('images/A.jpg'), 100, 100),
+                  AnimationWidget(Image.asset('images/R.jpg'), 70, 70),
+                  AnimationWidget(Image.asset('images/F.jpg'), 50, 50),
+                  AnimationWidget(Image.asset('images/W.jpg'), 80, 80),
 //                  AnimatedContainer(
 //                      child: Image.asset('images/A.jpg'),
 //                      duration: Duration(seconds: 1)),
@@ -162,24 +164,58 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class AnimationWidget extends StatefulWidget {
+  Image _image;
+  double _height;
+  double _width;
+  AnimationWidget(Image image, double height, double width) {
+    this._image = image;
+    this._height = height;
+    this._width = width;
+  }
   @override
   _AnimationWidgetState createState() => _AnimationWidgetState();
 }
 
 class _AnimationWidgetState extends State<AnimationWidget>
     with SingleTickerProviderStateMixin {
-  AnimationController controller;
+  AnimationController _controller;
 
   @override
   void initState() {
-    controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
     super.initState();
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 1000), vsync: this);
+    _controller.repeat(reverse: true);
+    //Tween(begin: 0.0, end: pi).animate(_controller);
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return Image.asset('images/A.jpg');
+    // rotation letters:
+//    return AnimatedBuilder(
+//        animation: _controller.view,
+//      child: image,
+//      builder: (context, child) {
+//      return Transform.rotate(
+//        angle: _controller.value * 2.0 * pi,
+//        child: child,
+//      );
+//    },
+//    );
+    return AnimatedBuilder(
+      animation: this._controller,
+      builder: (context, child) {
+        return Container(
+          height: widget._height,
+            width: widget._width,
+//            decoration: ShapeDecoration(
+//              color: Colors.white,
+//              shape: CircleBorder(),
+//            ),
+            child: Padding(
+                padding: EdgeInsets.all(widget._height/10 + this._controller.value * 10),
+                child: widget._image));
+      },
+    );
   }
 }
