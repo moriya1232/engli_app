@@ -32,107 +32,117 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 30),
-            child: Text(
-              '!ברוכים הבאים',
-              style: TextStyle(
-                fontFamily: 'Abraham-h',
-                fontSize: 40,
-              ),
-            ),
-          ),
           Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 30),
-              child: Row(children: [
-                Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        AnimationWidget(Image.asset('images/A.jpg'), 100, 120),
-                        AnimationWidget(Image.asset('images/F.jpg'), 80, 80),
-                      ],
-                    )),
-
-                Container(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: Column(children: [
-                    SizedBox(
-                        height: 70,
-                        width: 210,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(22.0)),
-                            primary: Colors.amberAccent,
-                          ),
-                          onPressed: () {
-                            registerationClicked();
-                          },
-                          child: Text('הרשמה',
-                              style: TextStyle(
-                                  fontFamily: 'Comix-h',
-                                  color: Colors.black87,
-                                  fontSize: 30)),
-                        )),
-                    SizedBox(height: 20),
-                    SizedBox(
-                      height: 70,
-                      width: 210,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
-                            primary: Colors.amberAccent),
-                        onPressed: () {
-                          loginClicked();
-                        },
-                        child: Text(
-                          'התחברות',
-                          style: TextStyle(
-                              fontFamily: 'Comix-h',
-                              color: Colors.black87,
-                              fontSize: 30),
-                        ),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 30),
+                    child: Text(
+                      '!ברוכים הבאים',
+                      style: TextStyle(
+                        fontFamily: 'Abraham-h',
+                        fontSize: 40,
                       ),
                     ),
-                    SizedBox(height: 20),
-                    SizedBox(
-                      height: 50,
-                      width: 140,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
-                            primary: Colors.amberAccent),
-                        onPressed: () {
-                          loginGuestClicked();
-                        },
-                        child: Text(
-                          'התחבר כאורח',
-                          style: TextStyle(
-                              fontFamily: 'Comix-h',
-                              color: Colors.black87,
-                              fontSize: 15),
-                        ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 30),
+                    child: Row(children: [
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          AnimationWidget(
+                              Image.asset('images/A.jpg'), 100, 120),
+                          AnimationWidget(Image.asset('images/F.jpg'), 80, 80),
+                        ],
+                      )),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                  height: 70,
+                                  width: 210,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(22.0)),
+                                      primary: Colors.amberAccent,
+                                    ),
+                                    onPressed: () {
+                                      registerationClicked();
+                                    },
+                                    child: Text('הרשמה',
+                                        style: TextStyle(
+                                            fontFamily: 'Comix-h',
+                                            color: Colors.black87,
+                                            fontSize: 30)),
+                                  )),
+                              SizedBox(height: 20),
+                              SizedBox(
+                                height: 70,
+                                width: 210,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0)),
+                                      primary: Colors.amberAccent),
+                                  onPressed: () {
+                                    loginClicked();
+                                  },
+                                  child: Text(
+                                    'התחברות',
+                                    style: TextStyle(
+                                        fontFamily: 'Comix-h',
+                                        color: Colors.black87,
+                                        fontSize: 30),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              SizedBox(
+                                height: 50,
+                                width: 140,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0)),
+                                      primary: Colors.amberAccent),
+                                  onPressed: () {
+                                    loginGuestClicked();
+                                  },
+                                  child: Text(
+                                    'התחבר כאורח',
+                                    style: TextStyle(
+                                        fontFamily: 'Comix-h',
+                                        color: Colors.black87,
+                                        fontSize: 15),
+                                  ),
+                                ),
+                              ),
+                            ]),
                       ),
-                    ),
-                  ]),
-                ),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    AnimationWidget(Image.asset('images/R.jpg'), 70, 70),
-                    AnimationWidget(Image.asset('images/W.jpg'), 80, 80),
-                  ],
-                )),
-              ]),
-            ),
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          AnimationWidget(Image.asset('images/R.jpg'), 70, 70),
+                          AnimationWidget(Image.asset('images/W.jpg'), 80, 80),
+                        ],
+                      )),
+                    ]),
+                  ),
+                ]),
           ),
           Align(
             alignment: Alignment.bottomCenter,
