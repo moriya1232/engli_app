@@ -113,19 +113,14 @@ class _openRoomState extends State<OpenRoom> {
                   alignment: Alignment.bottomCenter,
                   child: Padding(
                     padding: EdgeInsets.all(40),
-                    child: ButtonTheme(
-                        padding: EdgeInsets.all(20),
-                        buttonColor: Colors.pink,
-                        child: SizedBox(
-                            child: RaisedButton(
-                          shape: RoundedRectangleBorder(
+                    child: SizedBox(
+                            child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0)),
+                            primary: Colors.pink,
+                          ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => QuartetsRoom()),
-                            );
+                            startGameClicked();
                           },
                           child: Text(
                             '!התחל משחק',
@@ -134,11 +129,19 @@ class _openRoomState extends State<OpenRoom> {
                                 color: Colors.black87,
                                 fontSize: 20),
                           ),
-                        ))),
+                        )),
                   ),
                 ),
               )
             ]),
+    );
+  }
+
+  void startGameClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => QuartetsRoom()),
     );
   }
 }

@@ -31,59 +31,16 @@ class _MemoryRoomState extends State<MemoryRoom> {
     if (widget.game.pairs.isNotEmpty) {
       return getDesign(context);
     } else {
-      //TODO: i dont know why but there is exception here when winner! i think because its called from build.
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => WinnerRoom(widget.game)),
-      );
+      goToWinnerScreen();
       widget.game = new MemoryGame(widget.computerEnemy);
       return getDesign(context);
     }
   }
 
-//  Widget winnerScreen() {
-//    return Scaffold(
-//      appBar: AppBar(
-//        backgroundColor: Colors.lightGreen,
-//        title: Text('משחק זיכרון'),
-//        centerTitle: true,
-//        shadowColor: Colors.black87,
-//      ),
-//      body: Center(
-//        child: Container(
-//          child: Text(
-//            winnerName(),
-//            textAlign: TextAlign.center,
-//            style: TextStyle(
-//                color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
-//          ),
-//        ),
-//      ),
-//    );
-//  }
-
-//  String winnerName() {
-//    Player winner;
-//    if (widget.game.getMe().score > widget.game.getEnemy().score) {
-//      winner = widget.game.getMe();
-//    } else if (widget.game.getEnemy().score > widget.game.getMe().score) {
-//      winner = widget.game.getEnemy();
-//    } else {
-//      winner = null;
-//    }
-//    if(winner == null) {
-//      return '!שיוויון';
-//    }
-//    else {
-//      return ' המנצח הוא  ${winner.name}';
-//    }
-//  }
-
-
   void _listener() {
     setState(() {});
   }
+
   @override
   void initState() {
     super.initState();
@@ -221,5 +178,15 @@ class _MemoryRoomState extends State<MemoryRoom> {
         .toList();
 
     return Row(children: colsWidget);
+  }
+
+  void goToWinnerScreen() {
+    //TODO: i dont know why but there is exception here when winner! i think because its called from build.
+    // TODO: check it again^^
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => WinnerRoom(widget.game)),
+    );
   }
 }

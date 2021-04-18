@@ -18,6 +18,9 @@ class _winnerRoomState extends State<WinnerRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.lightGreen,
+      ),
       body: Center(
         child: Container(
           child: Text(

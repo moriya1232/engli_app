@@ -27,15 +27,14 @@ class _getInRoomState extends State<GetInRoom> {
                 child: SizedBox(
                     height: 120,
                     width: 240,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(22.0)),
-                      color: Colors.amberAccent,
+                      primary: Colors.amberAccent,
+                      ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => OpenRoom()),
-                        );
+                        openRoomClicked();
                       },
                       child: Text('פתיחת חדר',
                           style: TextStyle(
@@ -47,7 +46,6 @@ class _getInRoomState extends State<GetInRoom> {
             new Container(
                 height: 80,
                 width: 240,
-                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextFormField(
@@ -68,37 +66,35 @@ class _getInRoomState extends State<GetInRoom> {
                 child: SizedBox(
                     height: 40,
                     width: 100,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(22.0)),
-                      color: Colors.pink,
-                      onPressed: () {},
+                      primary: Colors.pink,
+                      ),
+                        onPressed: () {
+                        getInToRoomClicked();
+                        },
                       child: Text('כנס לחדר',
                           style: TextStyle(
                               fontFamily: 'Comix-h',
                               color: Colors.black87,
                               fontSize: 15)),
                     ))),
-//            ButtonTheme(
-//                buttonColor: Colors.amberAccent,
-//                child: SizedBox(
-//                    height: 120,
-//                    width: 240,
-//                    child: RaisedButton(
-//                      shape: RoundedRectangleBorder(
-//                          borderRadius: BorderRadius.circular(20.0)),
-//                      onPressed: () {
-//
-//                      },
-//                      child: Text(
-//                        'קוד למשחק קיים',
-//                        style: TextStyle(
-//                            fontFamily: 'Comix-h',
-//                            color: Colors.black87,
-//                            fontSize: 30),
-//                      ),
-//                    ))),
           ])),
     );
+  }
+
+  void openRoomClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OpenRoom()),
+    );
+  }
+
+  void getInToRoomClicked() {
+    //TODO
+
+
   }
 }

@@ -1,12 +1,7 @@
 import 'package:engli_app/Constants.dart';
 import 'package:engli_app/chooseGame.dart';
 import 'package:flutter/material.dart';
-
 import 'Data.dart';
-//import 'shared_preferences/shared_preferences.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
-
-//import 'Data.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -20,16 +15,13 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.lightGreen,
           title: Text('התחברות'),
         ),
-        body: Center(
-            child: Column(children: <Widget>[
+        body: Column(children: <Widget>[
           SingleChildScrollView(
-              child: Column(children: <Widget>[
-            Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -43,29 +35,22 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                   ),
-                ]),
-            Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                //crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Expanded(
-                        child:
-                      new Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                          child: TextFormField(
-                            textAlign: TextAlign.center,
-                        decoration: InputDecoration(
+                        child: new Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: TextFormField(
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
 //                          border: OutlineInputBorder(
 //                            borderRadius: const BorderRadius.all(const Radius.circular(20))
 //                          ),
 //                        hintText: "הכנס כתובת מייל",
-                        ),
-                            controller: nameController,
-                      )
-                      ),
+                              ),
+                              controller: nameController,
+                            )),
                       ),
                       Text(':כתובת מייל '),
                     ],
@@ -78,20 +63,14 @@ class _LoginState extends State<Login> {
                       child: SizedBox(
                           height: 50,
                           width: 100,
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(22.0)),
-                            padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                            color: Colors.amberAccent,
+                              padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                              primary: Colors.amberAccent,
+                            ),
                             onPressed: () {
-                              Data().setMail(nameController.text);
-                              //TODO: get the appropriate name by mail.
-                              Data().setName(name);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChooseGame()),
-                              );
+                              connectClicked();
                             },
                             child: Text('התחבר',
                                 style: TextStyle(
@@ -100,7 +79,7 @@ class _LoginState extends State<Login> {
                                     fontSize: 20)),
                           ))),
                 ]),
-          ])),
+          ),
           Expanded(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -109,14 +88,17 @@ class _LoginState extends State<Login> {
               ),
             ),
           )
-        ])));
+        ]));
+  }
+
+  void connectClicked() {
+    Data().setMail(nameController.text);
+    //TODO: get the appropriate name by mail.
+    Data().setName(name);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+        builder: (context) => ChooseGame()),
+    );
   }
 }
-//
-//_save() async {
-//  //final prefs = await SharedPreference.getInstance();
-//  final key = 'my_int_key';
-//  final value = 42;
-//  //prefs.setInt(key, value);
-//  print('saved $value');
-//}

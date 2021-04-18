@@ -79,6 +79,10 @@ flutter:
     - images/sister.jpg
     - images/soup.png
     - images/sunday.png
+    - images/A.jpg
+    - images/R.jpg
+    - images/W.jpg
+    - images/F.jpg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
