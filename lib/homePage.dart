@@ -1,9 +1,17 @@
+import 'package:engli_app/srevices/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'loginUser.dart';
 import 'registerationUser.dart';
 
-class FirstScreen extends StatelessWidget {
+class FirstScreen extends StatefulWidget {
+  @override
+  _FirstScreenState createState() => _FirstScreenState();
+}
+
+class _FirstScreenState extends State<FirstScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  final AuthService _auth = AuthService();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -71,10 +80,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 220,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                        primary: Colors.amberAccent
-                    ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        primary: Colors.amberAccent),
                     onPressed: () {
                       loginClicked();
                     },
@@ -96,10 +104,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   width: 140,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20.0)),
-                        primary: Colors.amberAccent
-                    ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        primary: Colors.amberAccent),
                     onPressed: () {
                       loginGuestClicked();
                     },
@@ -138,5 +145,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void loginGuestClicked() {}
+  void loginGuestClicked() async {
+    dynamic result = await _auth.signInAnon();
+    if (result == null) {
+      print("Error in sign annon");
+    } else {
+      print("sign in annon");
+    }
+  }
 }
