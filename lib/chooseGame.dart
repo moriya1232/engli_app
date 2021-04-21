@@ -1,5 +1,6 @@
 import 'package:engli_app/chooseEnemy.dart';
 import 'package:engli_app/editingVocabulary.dart';
+import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
 import 'Data.dart';
 import 'getInRoom.dart';
@@ -10,6 +11,7 @@ class ChooseGame extends StatefulWidget {
 }
 
 class _ChooseGameState extends State<ChooseGame> {
+  AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,5 +148,7 @@ class _ChooseGameState extends State<ChooseGame> {
     );
   }
 
-  void logoutClicked() {}
+  void logoutClicked() async {
+    await _auth.signout();
+  }
 }
