@@ -58,9 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              AnimationWidget(
+                              IncDecAnimationWidget(
                                   Image.asset('images/A.jpg'), 100, 120),
-                              AnimationWidget(Image.asset('images/F.jpg'), 80, 80),
+                              IncDecAnimationWidget(Image.asset('images/F.jpg'), 80, 80),
                             ],
                           )),
                       Container(
@@ -138,8 +138,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              AnimationWidget(Image.asset('images/R.jpg'), 70, 70),
-                              AnimationWidget(Image.asset('images/W.jpg'), 80, 80),
+                              IncDecAnimationWidget(Image.asset('images/R.jpg'), 70, 70),
+                              IncDecAnimationWidget(Image.asset('images/W.jpg'), 80, 80),
                             ],
                           )),
                     ]),
@@ -180,19 +180,19 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 }
-class AnimationWidget extends StatefulWidget {
+class IncDecAnimationWidget extends StatefulWidget {
   Image _image;
   double _height;
   double _width;
-  AnimationWidget(Image image, double height, double width) {
+  IncDecAnimationWidget(Image image, double height, double width) {
     this._image = image;
     this._height = height;
     this._width = width;
   }
   @override
-  _AnimationWidgetState createState() => _AnimationWidgetState();
+  _IncDecAnimationWidgetState createState() => _IncDecAnimationWidgetState();
 }
-class _AnimationWidgetState extends State<AnimationWidget>
+class _IncDecAnimationWidgetState extends State<IncDecAnimationWidget>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
   @override
