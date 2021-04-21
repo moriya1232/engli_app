@@ -5,6 +5,11 @@ class Registration extends StatefulWidget {
   _RegistrationState createState() => _RegistrationState();
 }
 
+//TODO: dispose controllers in the end
+final nameController = TextEditingController();
+final passwordController = TextEditingController();
+final mailController = TextEditingController();
+
 class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
@@ -44,6 +49,7 @@ class _RegistrationState extends State<Registration> {
                           new Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: TextFormField(
+                                controller: mailController,
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   //hintText: "הכנס כתובת מייל",
@@ -55,11 +61,30 @@ class _RegistrationState extends State<Registration> {
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Expanded(child:
                           new Container(
                               padding: EdgeInsets.symmetric(horizontal: 20),
                               child: TextFormField(
+                                controller: passwordController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  //hintText: "הכנס כתובת מייל",
+                                ),
+                              )
+                          ),
+                          ),
+                          Text(':סיסמא '),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(child:
+                          new Container(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: TextFormField(
+                                controller: nameController,
                                 textAlign: TextAlign.center,
                                 decoration: InputDecoration(
                                   //hintText: "הכנס שם",

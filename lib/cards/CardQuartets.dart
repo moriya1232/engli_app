@@ -71,20 +71,13 @@ class CardQuartets extends CardGame {
 }
 
 class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMixin {
-  AnimationController _animationController;
-//  Animation _animation;
+//  AnimationController _animationController;
 
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
-//    _animation = Tween<Offset>(begin: Offset(0, 0), end: Offset(0, -0.4)).animate(
-//        _animationController);
-
-    _animationController.forward().whenComplete(() {
-      // put here the stuff you wanna do when animation completed!
-    });
+//    _animationController =
+//        AnimationController(vsync: this, duration: Duration(seconds: 2));
   }
   @override
   Widget build(BuildContext context) {

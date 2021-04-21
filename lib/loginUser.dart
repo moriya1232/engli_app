@@ -8,8 +8,9 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-//TODO: dispose nameController in the end
+//TODO: dispose controllers in the end
 final nameController = TextEditingController();
+final passwordController = TextEditingController();
 
 class _LoginState extends State<Login> {
   @override
@@ -53,6 +54,27 @@ class _LoginState extends State<Login> {
                             )),
                       ),
                       Text(':כתובת מייל '),
+                    ],
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: new Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: TextFormField(
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+//                          border: OutlineInputBorder(
+//                            borderRadius: const BorderRadius.all(const Radius.circular(20))
+//                          ),
+//                        hintText: "הכנס כתובת מייל",
+                              ),
+                              controller: passwordController,
+                            )),
+                      ),
+                      Text(':סיסמא '),
                     ],
                   ),
                   SizedBox(height: 60),
