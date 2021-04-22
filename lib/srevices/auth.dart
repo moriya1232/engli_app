@@ -29,7 +29,22 @@ class AuthService {
     }
   }
 
-  Future signout() async {
+  //register with email and pasword
+  Future registerWithEmailAndPassword(
+      String email, String pass, String name) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: pass);
+      User user = result.user;
+      user.updateProfile(displayName: name, photoURL: null);
+      return user;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future signOut() async {
     try {
       return await _auth.signOut();
     } catch (e) {

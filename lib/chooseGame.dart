@@ -149,6 +149,6 @@ class _ChooseGameState extends State<ChooseGame> {
   }
 
   void logoutClicked() async {
-    await _auth.signout();
+    await _auth.signOut();
   }
 }
