@@ -48,14 +48,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   //here the implementation of itemBuilder. take a look at flutter docs to see details
                   itemBuilder: (BuildContext context, int Itemindex) {
                     return
-//                      AnimatedPositioned(
-//                      duration: Duration(seconds: 2),
-//                        curve: Curves.fastOutSlowIn,
-//                        child:
+                      //PositionedTransition(
+                      //rect: ,
+                        //child:
                         widget.game
                         .getFirstPlayer()
                         .cards[Itemindex]
-//                    )
+                    //)
                     ; // return your widget
                   }
 //                  children: widget.game
