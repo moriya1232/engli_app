@@ -1,3 +1,4 @@
+import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
 
 class Registration extends StatefulWidget {
@@ -11,6 +12,7 @@ final passwordController = TextEditingController();
 final mailController = TextEditingController();
 
 class _RegistrationState extends State<Registration> {
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,17 +47,16 @@ class _RegistrationState extends State<Registration> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Expanded(child:
-                          new Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: TextFormField(
-                                controller: mailController,
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  //hintText: "הכנס כתובת מייל",
-                                ),
-                              )
-                          ),
+                          Expanded(
+                            child: new Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: TextFormField(
+                                  controller: mailController,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                      //hintText: "הכנס כתובת מייל",
+                                      ),
+                                )),
                           ),
                           Text(':כתובת מייל '),
                         ],
@@ -63,34 +64,32 @@ class _RegistrationState extends State<Registration> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Expanded(child:
-                          new Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: TextFormField(
-                                controller: passwordController,
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  //hintText: "הכנס כתובת מייל",
-                                ),
-                              )
-                          ),
+                          Expanded(
+                            child: new Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: TextFormField(
+                                  controller: passwordController,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                      //hintText: "הכנס כתובת מייל",
+                                      ),
+                                )),
                           ),
                           Text(':סיסמא '),
                         ],
                       ),
                       Row(
                         children: <Widget>[
-                          Expanded(child:
-                          new Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
-                              child: TextFormField(
-                                controller: nameController,
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  //hintText: "הכנס שם",
-                                ),
-                              )
-                          ),
+                          Expanded(
+                            child: new Container(
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                child: TextFormField(
+                                  controller: nameController,
+                                  textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                      //hintText: "הכנס שם",
+                                      ),
+                                )),
                           ),
                           Text(':שם '),
                         ],
@@ -104,11 +103,13 @@ class _RegistrationState extends State<Registration> {
                               height: 50,
                               width: 100,
                               child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(22.0)),
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                                primary: Colors.amberAccent,
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(22.0)),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                                  primary: Colors.amberAccent,
                                 ),
                                 onPressed: () {
                                   registerClicked();
@@ -136,6 +137,5 @@ class _RegistrationState extends State<Registration> {
 
   void registerClicked() {
     //TODO
-
   }
 }
