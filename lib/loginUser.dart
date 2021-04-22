@@ -1,5 +1,6 @@
 import 'package:engli_app/Constants.dart';
 import 'package:engli_app/chooseGame.dart';
+import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
 import 'Data.dart';
 
@@ -13,6 +14,7 @@ final nameController = TextEditingController();
 final passwordController = TextEditingController();
 
 class _LoginState extends State<Login> {
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +24,7 @@ class _LoginState extends State<Login> {
         ),
         body: Column(children: <Widget>[
           SingleChildScrollView(
-              child: Column(
+            child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -49,7 +51,7 @@ class _LoginState extends State<Login> {
 //                            borderRadius: const BorderRadius.all(const Radius.circular(20))
 //                          ),
 //                        hintText: "הכנס כתובת מייל",
-                              ),
+                                  ),
                               controller: nameController,
                             )),
                       ),
@@ -70,7 +72,7 @@ class _LoginState extends State<Login> {
 //                            borderRadius: const BorderRadius.all(const Radius.circular(20))
 //                          ),
 //                        hintText: "הכנס כתובת מייל",
-                              ),
+                                  ),
                               controller: passwordController,
                             )),
                       ),
@@ -86,9 +88,11 @@ class _LoginState extends State<Login> {
                           height: 50,
                           width: 100,
                           child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(22.0)),
-                              padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(22.0)),
+                              padding:
+                                  const EdgeInsets.fromLTRB(15, 10, 15, 10),
                               primary: Colors.amberAccent,
                             ),
                             onPressed: () {
@@ -118,9 +122,8 @@ class _LoginState extends State<Login> {
     //TODO: get the appropriate name by mail.
     Data().setName(name);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-        builder: (context) => ChooseGame()),
+      context,
+      MaterialPageRoute(builder: (context) => ChooseGame()),
     );
   }
 }
