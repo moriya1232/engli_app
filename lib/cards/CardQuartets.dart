@@ -13,9 +13,6 @@ class CardQuartets extends CardGame {
   var word3 = "";
   bool myCard = true;
 
-  //bool small = true;
-  bool chosen = false;
-
   CardQuartets(var english, var hebrew, Image image, String subject, var wo1,
       var wo2, var wo3, bool myCard)
       : super(english, hebrew) {
@@ -71,13 +68,20 @@ class CardQuartets extends CardGame {
 }
 
 class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMixin {
-//  AnimationController _animationController;
+  AnimationController _animationController;
+
 
   @override
   void initState() {
     super.initState();
-//    _animationController =
-//        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animationController =
+        new AnimationController(vsync: this, duration: Duration(seconds: 2));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -102,18 +106,28 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
 //    }
     double height = 220;
     double width = 130;
-    return new Container(
+    //TODO: animations.
+//    return PositionedTransition(
+//      rect: RelativeRectTween(
+//        begin:
+//        RelativeRect.fromSize(
+//            const Rect.fromLTWH(0, 0, width, height), biggest),
+//        end:
+//        RelativeRect.fromSize(
+//            Rect.fromLTWH(biggest.width - bigLogo,
+//                biggest.height - bigLogo, bigLogo, bigLogo),
+//            biggest),
+//      ).animate(CurvedAnimation(
+//        parent: _animationController,
+//        curve: Curves.elasticInOut,
+//      )),
+        return new Container(
       height: height,
       width: width,
       child: Card(
-        shape: widget.chosen
-            ? new RoundedRectangleBorder(
-                side: new BorderSide(color: Colors.red, width: 2.0),
-                borderRadius: BorderRadius.circular(4.0))
-            : new RoundedRectangleBorder(
+        shape: new RoundedRectangleBorder(
                 side: new BorderSide(color: Colors.black87, width: 1.0),
                 borderRadius: BorderRadius.circular(4.0)),
-        //color: getColor(widget.chosen),
         borderOnForeground: true,
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Container(
@@ -175,6 +189,7 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
                 ),
           ]),
       ),
+//        ),
     );
   }
 

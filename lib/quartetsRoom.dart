@@ -44,23 +44,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.game.getFirstPlayer().cards.length,
                   // number of items in your list
-
                   //here the implementation of itemBuilder. take a look at flutter docs to see details
                   itemBuilder: (BuildContext context, int Itemindex) {
-                    return
-                      //PositionedTransition(
-                      //rect: ,
-                        //child:
-                        widget.game
-                        .getFirstPlayer()
-                        .cards[Itemindex]
-                    //)
-                    ; // return your widget
-                  }
-//                  children: widget.game
-//                      .getFirstPlayer()
-//                      .cards
-                  ),
+                    return widget.game.getFirstPlayer().cards[Itemindex];
+                  }),
             ),
             Center(
               child: Text(
@@ -232,16 +219,14 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-
                     padding: EdgeInsets.symmetric(horizontal: 15),
-                    child:
-              Text(
-                    '${widget.game.getMyPlayer().name}: ${widget.game.getMyPlayer().score}',
-                    style: TextStyle(
-                      fontFamily: 'Comix-h',
-                      fontSize: 20,
+                    child: Text(
+                      '${widget.game.getMyPlayer().name}: ${widget.game.getMyPlayer().score}',
+                      style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
                   ),
 //                  Expanded(
 //                    child:
@@ -249,7 +234,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     width: 100,
                     child: RawMaterialButton(
                       padding: EdgeInsets.all(10.0),
-                      onPressed: (){
+                      onPressed: () {
                         //TODO: microphone!
                       },
                       hoverColor: Colors.black87,
@@ -276,9 +261,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     if (widget.game.getPlayerNeedTurn() is Me) {
       return Turn(widget.game);
     } else {
-      return new Container(
-          alignment: Alignment.center,
-          child: getAskedText());
+      return new Container(alignment: Alignment.center, child: getAskedText());
     }
   }
 
@@ -288,26 +271,37 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
     if (cardAsked != null && wasAsked != null && subjectAsked != null) {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: new TextSpan(
-        style: new TextStyle(
-          wordSpacing: 10,
-          fontSize: 20,
-          fontFamily: 'Carter-e',
-            color: Colors.black87
+      return RichText(
+        textAlign: TextAlign.center,
+        text: new TextSpan(
+          style: new TextStyle(
+              wordSpacing: 10,
+              fontSize: 20,
+              fontFamily: 'Carter-e',
+              color: Colors.black87),
+          children: [
+            new TextSpan(
+                text: '$asked',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'asked '),
+            new TextSpan(
+                text: '$wasAsked ',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'about the card: '),
+            new TextSpan(
+                text: '$cardAsked ',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'in subject: '),
+            new TextSpan(
+                text: '$subjectAsked ',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+          ],
         ),
-        children:[
-          new TextSpan(text: '$asked', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
-          new TextSpan(text: 'asked '),
-          new TextSpan(text: '$wasAsked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
-          new TextSpan(text: 'about the card: '),
-          new TextSpan(text: '$cardAsked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
-          new TextSpan(text: 'in subject: '),
-          new TextSpan(text: '$subjectAsked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
-        ],
-      ),
-    );
+      );
     } else if (cardAsked == null && wasAsked != null && subjectAsked != null) {
       return RichText(
         textAlign: TextAlign.center,
@@ -316,14 +310,22 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               wordSpacing: 10,
               fontSize: 20,
               fontFamily: 'Carter-e',
-            color: Colors.black87
-          ),
-          children:[
-            new TextSpan(text: '$asked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+              color: Colors.black87),
+          children: [
+            new TextSpan(
+                text: '$asked ',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'asked '),
-            new TextSpan(text: '$wasAsked ', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(
+                text: '$wasAsked ',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'about subject: '),
-            new TextSpan(text: '$subjectAsked', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(
+                text: '$subjectAsked',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: ', and he does not have this subject'),
           ],
         ),
