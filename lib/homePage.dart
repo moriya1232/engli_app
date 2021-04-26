@@ -26,13 +26,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     //print(MediaQuery.of(context).size.width / 2);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
         title: Text('engLI - לימוד אנגלית'),
         centerTitle: true,
         shadowColor: Colors.black87,
       ),
-      body: Column(
+      body: SingleChildScrollView( child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -153,6 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ],
+      ),
       ),
     );
   }

@@ -1,6 +1,9 @@
 
+import 'package:engli_app/registerationUser.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
+
+import 'Data.dart';
 
 
 
@@ -9,19 +12,21 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
+
+//TODO: SHILO: change error according to the appropriate error.
 String error = "";
-//TODO: dispose controllers in the end
-final nameController = TextEditingController();
-final passwordController = TextEditingController();
+final mailControllerLog = TextEditingController();
+final passwordControllerLog = TextEditingController();
 
 class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    passwordController.clear();
-    nameController.clear();
+    passwordControllerLog.clear();
+    mailControllerLog.clear();
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.lightGreen,
           title: Text('התחברות'),
@@ -57,7 +62,7 @@ class _LoginState extends State<Login> {
 //                          ),
 //                        hintText: "הכנס כתובת מייל",
                                   ),
-                              controller: nameController,
+                              controller: mailControllerLog,
                             )),
                       ),
                       Text(':כתובת מייל '),
@@ -79,7 +84,7 @@ class _LoginState extends State<Login> {
 //                          ),
 //                        hintText: "הכנס כתובת מייל",
                                   ),
-                              controller: passwordController,
+                              controller: passwordControllerLog,
                             )),
                       ),
                       Text(':סיסמא '),
@@ -129,13 +134,24 @@ class _LoginState extends State<Login> {
   }
 
   void connectClicked() async {
-    print(nameController.text);
-    print(passwordController.text);
+    print(mailControllerLog.text);
+    print(passwordControllerLog.text);
     dynamic res = await _auth.signInWithEmailAndPassword(
-        nameController.text, passwordController.text);
+        mailControllerLog.text, passwordControllerLog.text);
+
+    Data().setName(nameControllerReg.text); //TODO : get the name by the database
+    Data().setMail(mailControllerLog.text);
     if (res == null) {
       setState(() => error = "could not sign in");
       print(error);
     }
+  }
+
+  @override
+  void dispose() {
+    //TODO: but cant because after it it cant build again. when i login and exit and again login, the text field disposed yet.
+//    nameController.dispose();
+//    passwordController.dispose();
+    super.dispose();
   }
 }

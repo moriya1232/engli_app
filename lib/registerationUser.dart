@@ -1,3 +1,5 @@
+
+import 'package:engli_app/Data.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -8,20 +10,20 @@ class Registration extends StatefulWidget {
 
 String error = '';
 
-//TODO: dispose controllers in the end
-final nameController = TextEditingController();
-final passwordController = TextEditingController();
-final mailController = TextEditingController();
+final nameControllerReg = TextEditingController();
+final passwordControllerReg = TextEditingController();
+final mailControllerReg = TextEditingController();
 
 class _RegistrationState extends State<Registration> {
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    passwordController.clear();
-    nameController.clear();
-    mailController.clear();
+    passwordControllerReg.clear();
+    nameControllerReg.clear();
+    mailControllerReg.clear();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -48,7 +50,7 @@ class _RegistrationState extends State<Registration> {
                     child: new Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(
-                          controller: mailController,
+                          controller: mailControllerReg,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                               //hintText: "הכנס כתובת מייל",
@@ -66,7 +68,7 @@ class _RegistrationState extends State<Registration> {
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(
                           obscureText: true,
-                          controller: passwordController,
+                          controller: passwordControllerReg,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                               //hintText: "הכנס כתובת מייל",
@@ -82,7 +84,7 @@ class _RegistrationState extends State<Registration> {
                     child: new Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(
-                          controller: nameController,
+                          controller: nameControllerReg,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(
                               //hintText: "הכנס שם",
@@ -112,8 +114,8 @@ class _RegistrationState extends State<Registration> {
                           primary: Colors.amberAccent,
                         ),
                         onPressed: () {
-                          registerClicked(mailController.text,
-                              passwordController.text, nameController.text);
+                          registerClicked(mailControllerReg.text,
+                              passwordControllerReg.text, nameControllerReg.text);
                         },
                         child: Text('הירשם',
                             style: TextStyle(
@@ -134,15 +136,27 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  void registerClicked(email, pass, name) async {
-    dynamic res = _auth.registerWithEmailAndPassword(email, pass, name);
+  void registerClicked(email, pass, nameUser) async {
+    dynamic res = _auth.registerWithEmailAndPassword(email, pass, nameUser);
     if (res == null) {
       setState(() => error = 'email is invaild');
       print("error mail");
-
-      //TODO print this string to the screen
     } else {
+      //name = nameUser;
+      //mail = email;
+      Data().setName(nameUser);
+      Data().setMail(email);
       print("good mail");
     }
+  }
+
+  @override
+  void dispose() {
+
+    //TODO: but cant because after it it cant build again. when i register and exit and again register, the text field disposed yet.
+//    nameController.dispose();
+//    passwordController.dispose();
+//    mailController.dispose();
+    super.dispose();
   }
 }
