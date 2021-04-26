@@ -12,10 +12,12 @@ const int maxCards = 36;
 class MemoryRoom extends StatefulWidget {
   MemoryGame game;
   bool computerEnemy;
+  String enemyName = "";
 
-  MemoryRoom(bool computerEnemy) {
+  MemoryRoom(bool computerEnemy, String en) {
     this.computerEnemy = computerEnemy;
-    this.game = new MemoryGame(computerEnemy);
+    this.game = new MemoryGame(computerEnemy, en);
+    this.enemyName = en;
   }
 
   @override
@@ -32,7 +34,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
       return getDesign(context);
     } else {
       goToWinnerScreen();
-      widget.game = new MemoryGame(widget.computerEnemy);
+      widget.game = new MemoryGame(widget.computerEnemy, this.widget.enemyName);
       return getDesign(context);
     }
   }

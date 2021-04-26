@@ -10,17 +10,19 @@ class MemoryGame extends Game {
   List<Pair> pairs;
 
 
-  MemoryGame(bool computerEnemy) {
+  MemoryGame(bool computerEnemy, enemyName) {
+    //TODO: get my name !
+    String meName = "need to get my name!";
     this.players = [];
     this.pairs = [];
     this.turn = 0;
-    reStart(computerEnemy);
-    this.observers = new List<Function>();
+    reStart(computerEnemy, meName, enemyName);
+    this.observers = [];
   }
 
-  void reStart(bool computerEnemy) {
-    Me me = createPlayer(true, memoryMe, true);
-    Other enemy = createPlayer(false, memoryEnemy, computerEnemy);
+  void reStart(bool computerEnemy, String meName, String enemyName) {
+    Me me = createPlayer(true, meName, true);
+    Other enemy = createPlayer(false, enemyName, computerEnemy);
     players.add(me);
     players.add(enemy);
     this.pairs = createPairs();

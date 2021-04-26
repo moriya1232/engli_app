@@ -13,7 +13,5 @@ const r8 = "Colors";
 const r9 = "Food";
 const r10 = "Body";
 
-const memoryMe = "הלה";
-const memoryEnemy = "עדן";
 const howMuchScoreForSuccess = 10;
 
