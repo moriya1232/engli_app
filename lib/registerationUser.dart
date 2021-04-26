@@ -65,6 +65,7 @@ class _RegistrationState extends State<Registration> {
                     child: new Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         child: TextFormField(
+                          obscureText: true,
                           controller: passwordController,
                           textAlign: TextAlign.center,
                           decoration: InputDecoration(

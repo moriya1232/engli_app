@@ -1,9 +1,8 @@
-import 'package:engli_app/Constants.dart';
-import 'package:engli_app/chooseGame.dart';
-import 'package:engli_app/registerationUser.dart';
+
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
-import 'Data.dart';
+
+
 
 class Login extends StatefulWidget {
   @override
@@ -72,6 +71,7 @@ class _LoginState extends State<Login> {
                         child: new Container(
                             padding: EdgeInsets.symmetric(horizontal: 20),
                             child: TextFormField(
+                              obscureText: true,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
 //                          border: OutlineInputBorder(
