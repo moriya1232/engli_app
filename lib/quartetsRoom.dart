@@ -7,6 +7,8 @@ import 'QuartetsGame/Turn.dart';
 // TODO: diffrenet size of screen
 //TODO: ask another player
 
+double heightCloseCards = 0;
+
 class QuartetsRoom extends StatefulWidget {
   int chosenCard = -1;
   QuartetsGame game;
@@ -22,6 +24,7 @@ class QuartetsRoom extends StatefulWidget {
 class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   Widget build(BuildContext context) {
+    heightCloseCards = MediaQuery.of(context).size.height/9;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -30,15 +33,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         shadowColor: Colors.black87,
       ),
       body: Center(
-        child: Container(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             Center(
               child: Text('${widget.game.getFirstPlayer().cards.length}'),
             ),
             Container(
               alignment: Alignment.center,
-              height: 100,
+              height: heightCloseCards,
               child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -58,7 +59,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 ),
               ),
             ),
-            Row(
+            Container(
+              height: MediaQuery.of(context).size.height/4,
+              child:Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (widget.game.players.length > 2)
@@ -72,8 +75,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                       quarterTurns: 1,
                       child: Container(
                         alignment: Alignment.center,
-                        height: 100,
-                        width: 270,
+                        height: heightCloseCards,
+//                        width: 270,
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -108,8 +111,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: Container(
-                      height: 150,
-                      width: 100,
+                      height: MediaQuery.of(context).size.height/5,
+                      width: MediaQuery.of(context).size.width/4,
                       color: Colors.amberAccent,
                     ),
                   ),
@@ -146,7 +149,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   )
                 ]),
                 if (widget.game.players.length > 3)
-                  Row(children: [
+                  Row(
+                      children: [
                     RotatedBox(
                       quarterTurns: 3,
                       child: Text(
@@ -161,8 +165,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                       quarterTurns: 3,
                       child: Container(
                         alignment: Alignment.center,
-                        height: 100,
-                        width: 270,
+                        height: heightCloseCards,
+//                        width: 270,
                         child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
@@ -194,11 +198,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   )
               ],
             ),
+            ),
             Expanded(
               child: getAppropriateWidget(),
             ),
             Container(
-              height: 230,
+              height: MediaQuery.of(context).size.height/4,
               child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
@@ -214,7 +219,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             ),
             Container(
               color: Colors.black12,
-              height: 50,
+              height: MediaQuery.of(context).size.height/16,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -252,7 +257,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               ),
             ),
           ]),
-        ),
       ),
     );
   }

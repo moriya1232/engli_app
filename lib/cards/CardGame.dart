@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:engli_app/players/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,4 +38,9 @@ abstract class CardGame extends StatefulWidget {
   }
 
   Future changeStatusCard(bool b);
+
+
+  void passCardAnimation(Player targetPlayer) {
+    //TODO
+  }
 }

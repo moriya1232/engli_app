@@ -104,7 +104,8 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
 //      height=bigHeight;
 //      width = bigWidth;
 //    }
-    double height = 220;
+    double height = MediaQuery.of(context).size.height/4;
+    double fontSizeWords = height/13;
     double width = 130;
     //TODO: animations.
 //    return PositionedTransition(
@@ -146,8 +147,8 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
 
             Center(
               child: Container(
-                width: 100,
-                  height: 80,
+                width: width,
+                  height: height/4,
                   child: widget.image)
             ),
                 Center(
@@ -155,7 +156,7 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
                     widget.english,
                     style: TextStyle(
                         fontFamily: "Carter-e",
-                        fontSize: 15,
+                        fontSize: fontSizeWords,
                         color: Colors.lightGreen
                     ),
                   ),
@@ -165,7 +166,7 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
                     widget.word1,
                     style: TextStyle(
                         fontFamily: "Carter-e",
-                        fontSize: 15
+                        fontSize: fontSizeWords,
                     ),
                   ),
                 ),
@@ -174,7 +175,7 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
                     widget.word2,
                     style: TextStyle(
                         fontFamily: "Carter-e",
-                        fontSize: 15
+                        fontSize: fontSizeWords,
                     ),
                   ),
                 ),
@@ -183,7 +184,7 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
                     widget.word3,
                     style: TextStyle(
                         fontFamily: "Carter-e",
-                        fontSize: 15
+                        fontSize: fontSizeWords,
                     ),
                   ),
                 ),
@@ -210,8 +211,7 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
 
   Widget getCloseCard(BuildContext context) {
     return new Container(
-      height: 100,
-      width: 70,
+      width: 60,
       child: Card(
         color: Colors.amberAccent,
       ),

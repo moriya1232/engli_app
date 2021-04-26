@@ -96,10 +96,12 @@ class _CardMemoryState extends State<CardMemory> {
         ),
       );
     } else {
-      return new Container(
-        height: 100,
-        width: 70,
-        child: Card(
+      return
+//        new Container(
+//        height: 100,
+//        width: 70,
+//        child:
+        Card(
           child: FittedBox(
             fit: BoxFit.contain,
             child: Text(
@@ -109,18 +111,21 @@ class _CardMemoryState extends State<CardMemory> {
               ),
             ),
           ),
-        ),
+        //),
       );
     }
   }
 
   Widget getCloseCard(BuildContext context) {
-    return new Container(
-      height: 100,
-      width: 70,
-      child: Card(
+//    int howMuchCards = this.widget.game.pairs.length * 2;
+    return
+//      new Container(
+//      height: 100,
+//      width: 70,
+//      child:
+      Card(
         color: Colors.amberAccent,
-      ),
+//      ),
     );
   }
 }

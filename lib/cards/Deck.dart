@@ -36,10 +36,12 @@ class Deck {
     if (this.cards.isEmpty) {
       throw Exception("no more cards in the pile");
     } else {
+      CardQuartets card = cards.removeLast();
+      card.passCardAnimation(player);
       if (player is Me) {
-        player.addCard(cards.removeLast().changeToMine());
+        player.addCard(card.changeToMine());
       } else {
-        player.addCard(cards.removeLast().changeToNotMine());
+        player.addCard(card.changeToNotMine());
       }
     }
     return new Future.delayed(const Duration(seconds: 1));
