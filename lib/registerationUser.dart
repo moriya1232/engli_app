@@ -6,6 +6,9 @@ class Registration extends StatefulWidget {
   _RegistrationState createState() => _RegistrationState();
 }
 
+//error im register don't succes
+String error = '';
+
 //TODO: dispose controllers in the end
 final nameController = TextEditingController();
 final passwordController = TextEditingController();
@@ -15,6 +18,9 @@ class _RegistrationState extends State<Registration> {
   final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
+    passwordController.clear();
+    nameController.clear();
+    mailController.clear();
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -112,7 +118,10 @@ class _RegistrationState extends State<Registration> {
                                   primary: Colors.amberAccent,
                                 ),
                                 onPressed: () {
-                                  registerClicked();
+                                  registerClicked(
+                                      mailController.text,
+                                      passwordController.text,
+                                      nameController.text);
                                 },
                                 child: Text('הירשם',
                                     style: TextStyle(
@@ -135,7 +144,15 @@ class _RegistrationState extends State<Registration> {
         ));
   }
 
-  void registerClicked() {
-    //TODO
+  void registerClicked(email, pass, name) async {
+    dynamic res = _auth.registerWithEmailAndPassword(email, pass, name);
+    if (res == null) {
+      setState(() => error = 'email is invaild');
+      print("error mail");
+
+      //TODO print this string to the screen
+    } else {
+      print("good mail");
+    }
   }
 }
