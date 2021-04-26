@@ -145,6 +145,7 @@ class QuartetsGame extends Game {
 
   bool checkIfGameDone() {
     if (this.deck.cards.length == 0 && !isPlayersHasCards()) {
+      //TODO: dispose everything
       return true;
     }
     return false;
