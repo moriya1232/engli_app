@@ -8,14 +8,6 @@ import 'package:engli_app/games/QuartetsGame.dart';
 import '../cards/CardGame.dart';
 
 
-//TODO: computer not find spec card but find subject- text not right!
-//todo: computer ask subject but i have and its say that i don't have.
-// todo: computer ask me for exapmle:  _Days_ subject and _Cat_ card. the problem with the card and not in subject
-//todo: sometimes in text for computer - dont switch the fields when it needs.
-// todo when there is winner , there is exception in dropdown of choose player.
-//todo: when other players dont have card- to take card automatically. (no needing to ask).
-
-
 abstract class Player {
   List<CardGame> cards;
   String name;
@@ -133,7 +125,8 @@ class ComputerPlayer extends Other {
 
       print("done computer turn");
 
-    } else if (game is QuartetsGame) {
+    }
+    else if (game is QuartetsGame) {
       print("computer player turn");
 
       var random = Random();
@@ -154,13 +147,14 @@ class ComputerPlayer extends Other {
       List<Player> playersWithCards = game.getPlayersWithCardWithoutMe(this);
       if (playersWithCards.length == 0) {
         print("no one to ask :(");
+        game.takeCardFromDeck();
         if (game.doneTurn()) {
           return;
         }
         return;
       }
       int randNumPlayer = random.nextInt(playersWithCards.length);
-      Player randPlayer = game.players[randNumPlayer];
+      Player randPlayer = playersWithCards[randNumPlayer];
 
       //random card.
       CardQuartets randCard = getCardThatNotHave(randSub);

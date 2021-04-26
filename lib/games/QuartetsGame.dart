@@ -21,7 +21,7 @@ class QuartetsGame extends Game {
     this.subjectAsked = null;
     this.cardAsked = null;
     this.players = [];
-    this.observers = new List<Function>();
+    this.observers = [];
     reStart();
   }
 
@@ -68,7 +68,8 @@ class QuartetsGame extends Game {
       // didn't success take card from another player
       this.nameAsked = player.name;
       this.subjectAsked = subject.name_subject;
-      await takeCardFromDeck();
+      this.cardAsked = "";
+      takeCardFromDeck();
       updateObservers();
       return new Future.delayed(const Duration(seconds: 5), () => false);
     }
@@ -128,6 +129,7 @@ class QuartetsGame extends Game {
     removeAllSeriesDone(player);
     if (checkIfGameDone()) {
       reStart();
+      updateObservers();
       return true;
     }
     this.turn = (this.turn + 1) % this.players.length;
@@ -135,6 +137,7 @@ class QuartetsGame extends Game {
     checkComputerPlayerTurn();
     if (checkIfGameDone()) {
       reStart();
+      updateObservers();
       return true;
     }
     return false;
@@ -576,8 +579,10 @@ class QuartetsGame extends Game {
   }
 
   void takeCardFromDeck() async{
-    await this.deck.giveCardToPlayer(getPlayerNeedTurn());
-    this.updateObservers();
+    if(this.deck.cards.length > 0) {
+      await this.deck.giveCardToPlayer(getPlayerNeedTurn());
+      this.updateObservers();
+    }
   }
 
   List<Subject> getSubjectsOfPlayer(Player player) {
