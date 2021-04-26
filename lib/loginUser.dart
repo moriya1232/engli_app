@@ -20,7 +20,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     passwordController.clear();
-    mailController.clear();
+    nameController.clear();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightGreen,
@@ -122,8 +122,10 @@ class _LoginState extends State<Login> {
   }
 
   void connectClicked() async {
-    dynamic res = await _auth.shgnInWithEmailAndPassword(
-        mailController.text, passwordController.text);
+    print(nameController.text);
+    print(passwordController.text);
+    dynamic res = await _auth.signInWithEmailAndPassword(
+        nameController.text, passwordController.text);
     if (res == null) {
       setState(() => error = "could not sign in");
       print(error);
