@@ -56,10 +56,14 @@ class _MemoryRoomState extends State<MemoryRoom> {
   @override
   void dispose() {
     widget.game.removeListener(_listener);
+    for (Player player in widget.game.players) {
+      player.removeListener(_listener);
+    }
     super.dispose();
   }
 
   Widget getDesign(BuildContext context) {
+    double fontSize = MediaQuery.of(context).size.height/30;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -79,22 +83,19 @@ class _MemoryRoomState extends State<MemoryRoom> {
                     ' ${widget.game.getEnemy().name}',
                     style: TextStyle(
                         color: Colors.lightGreen,
-                        fontSize: 30,
+                        fontSize: fontSize,
                         fontFamily: 'Gan-h'),
                   ),
                 ),
               ),
               Center(
-                child: Container(
-                  height: 70,
-                  child: Text(
+                child: Text(
                     ' נקודות: ${widget.game.getEnemy().score}',
                     style: TextStyle(
                         color: Colors.lightGreen,
-                        fontSize: 30,
+                        fontSize: fontSize,
                         fontFamily: 'Abraham-h'),
                   ),
-                ),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,7 +111,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
                     ' ${widget.game.getMe().name}',
                     style: TextStyle(
                         color: Colors.lightGreen,
-                        fontSize: 30,
+                        fontSize: fontSize,
                         fontFamily: 'Gan-h'),
                   ),
                 ),
@@ -120,7 +121,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
                   ' נקודות: ${widget.game.getMe().score}',
                   style: TextStyle(
                       color: Colors.lightGreen,
-                      fontSize: 30,
+                      fontSize: fontSize,
                       fontFamily: 'Abraham-h'),
                 ),
               ),
@@ -133,7 +134,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
                       ' תור: ${widget.game.players[widget.game.turn].name}',
                       style: TextStyle(
                           color: Colors.pink,
-                          fontSize: 30,
+                          fontSize: fontSize,
                           fontFamily: 'Abraham-h'),
                     ),
                   ),
@@ -172,6 +173,8 @@ class _MemoryRoomState extends State<MemoryRoom> {
         .map((col) => Column(
             children: col
                 .map((card) => Container(
+              height: MediaQuery.of(context).size.height*(2/3)/howMuchCardsInColumn,
+                      width: MediaQuery.of(context).size.width/columns.length,
                       child: card,
                     ))
                 .toList()))

@@ -48,14 +48,19 @@ abstract class Player {
     }
   }
 
+  void _listener() {
+    updateObservers();
+  }
+
   void addCard(CardGame card) {
     this.cards.add(card);
+    card.addListener(_listener);
     updateObservers();
   }
 
   bool takeCardFromPlayer(CardGame card, Player player) {
-    //TODO: maybe add animation?
     if (player.cards.contains(card)) {
+      card.passCardAnimation(this);
       this.cards.add(card);
       player.cards.remove(card);
       if (this is Me) {
