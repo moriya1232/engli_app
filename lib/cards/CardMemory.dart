@@ -80,10 +80,7 @@ class _CardMemoryState extends State<CardMemory> {
 
   Widget getOpenCard(BuildContext context) {
     if (widget.isEnglishCard) {
-      return new Container(
-        height: 100,
-        width: 70,
-        child: Card(
+      return new Card(
           child: FittedBox(
             fit: BoxFit.contain,
             child: Text(
@@ -93,7 +90,6 @@ class _CardMemoryState extends State<CardMemory> {
               ),
             ),
           ),
-        ),
       );
     } else {
       return

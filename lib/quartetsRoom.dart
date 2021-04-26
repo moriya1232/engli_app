@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
 
-// TODO: diffrenet size of screen
 //TODO: ask another player
 
 double heightCloseCards = 0;
@@ -24,7 +23,8 @@ class QuartetsRoom extends StatefulWidget {
 class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   Widget build(BuildContext context) {
-    heightCloseCards = MediaQuery.of(context).size.height/9;
+    heightCloseCards = MediaQuery.of(context).size.height / 9;
+    double fontSizeNames = MediaQuery.of(context).size.height / 30;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -33,10 +33,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         shadowColor: Colors.black87,
       ),
       body: Center(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Center(
-              child: Text('${widget.game.getFirstPlayer().cards.length}'),
-            ),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Container(
+            height:MediaQuery.of(context).size.height * (4/10),
+            child: SingleChildScrollView( child: Column(children: [
+            Text('${widget.game.getFirstPlayer().cards.length}'),
             Container(
               alignment: Alignment.center,
               height: heightCloseCards,
@@ -50,18 +52,16 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     return widget.game.getFirstPlayer().cards[Itemindex];
                   }),
             ),
-            Center(
-              child: Text(
+            Text(
                 '${widget.game.getFirstPlayer().name}: ${widget.game.getFirstPlayer().score}',
                 style: TextStyle(
                   fontFamily: 'Comix-h',
-                  fontSize: 20,
+                  fontSize: fontSizeNames,
                 ),
               ),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height/4,
-              child:Row(
+          Container(
+            height: MediaQuery.of(context).size.height / 4,
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (widget.game.players.length > 2)
@@ -102,7 +102,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         '${widget.game.getSecondPlayer().name}: ${widget.game.getSecondPlayer().score}',
                         style: TextStyle(
                           fontFamily: 'Comix-h',
-                          fontSize: 20,
+                          fontSize: fontSizeNames,
                         ),
                       ),
                     ),
@@ -111,8 +111,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: Container(
-                      height: MediaQuery.of(context).size.height/5,
-                      width: MediaQuery.of(context).size.width/4,
+                      height: MediaQuery.of(context).size.height / 5,
+                      width: MediaQuery.of(context).size.width / 4,
                       color: Colors.amberAccent,
                     ),
                   ),
@@ -149,15 +149,14 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   )
                 ]),
                 if (widget.game.players.length > 3)
-                  Row(
-                      children: [
+                  Row(children: [
                     RotatedBox(
                       quarterTurns: 3,
                       child: Text(
                         '${widget.game.getThirdPlayer().name}: ${widget.game.getThirdPlayer().score}',
                         style: TextStyle(
                           fontFamily: 'Comix-h',
-                          fontSize: 20,
+                          fontSize: fontSizeNames,
                         ),
                       ),
                     ),
@@ -198,65 +197,68 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   )
               ],
             ),
+          ),
+          ]),
             ),
-            Expanded(
-              child: getAppropriateWidget(),
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height/4,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.game.getMyPlayer().cards.length,
-                  // number of items in your list
+    ),
+          Expanded(
+            child: getAppropriateWidget(),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height / 4,
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.game.getMyPlayer().cards.length,
+                // number of items in your list
 
-                  //here the implementation of itemBuilder. take a look at flutter docs to see details
-                  itemBuilder: (BuildContext context, int Itemindex) {
-                    return widget.game
-                        .getMyPlayer()
-                        .cards[Itemindex]; // return your widget
-                  }),
-            ),
-            Container(
-              color: Colors.black12,
-              height: MediaQuery.of(context).size.height/16,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(
-                      '${widget.game.getMyPlayer().name}: ${widget.game.getMyPlayer().score}',
-                      style: TextStyle(
-                        fontFamily: 'Comix-h',
-                        fontSize: 20,
-                      ),
+                //here the implementation of itemBuilder. take a look at flutter docs to see details
+                itemBuilder: (BuildContext context, int Itemindex) {
+                  return widget.game
+                      .getMyPlayer()
+                      .cards[Itemindex]; // return your widget
+                }),
+          ),
+          Container(
+            color: Colors.black12,
+            height: MediaQuery.of(context).size.height / 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    '${widget.game.getMyPlayer().name}: ${widget.game.getMyPlayer().score}',
+                    style: TextStyle(
+                      fontFamily: 'Comix-h',
+                      fontSize: fontSizeNames,
                     ),
                   ),
+                ),
 //                  Expanded(
 //                    child:
-                  Container(
-                    width: 100,
-                    child: RawMaterialButton(
-                      padding: EdgeInsets.all(10.0),
-                      onPressed: () {
-                        //TODO: microphone!
-                      },
-                      hoverColor: Colors.black87,
-                      highlightColor: Colors.lightGreen,
-                      shape: CircleBorder(),
-                      fillColor: Colors.white,
-                      child: Icon(
-                        Icons.mic,
-                        size: 35,
-                      ),
+                Container(
+                  width: 100,
+                  child: RawMaterialButton(
+                    padding: EdgeInsets.all(10.0),
+                    onPressed: () {
+                      //TODO: microphone!
+                    },
+                    hoverColor: Colors.black87,
+                    highlightColor: Colors.lightGreen,
+                    shape: CircleBorder(),
+                    fillColor: Colors.white,
+                    child: Icon(
+                      Icons.mic,
+                      size: 35,
                     ),
                   ),
+                ),
 //                  ),
-                ],
-              ),
+              ],
             ),
-          ]),
+          ),
+        ]),
       ),
     );
   }
