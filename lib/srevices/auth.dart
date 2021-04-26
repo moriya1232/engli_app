@@ -29,7 +29,7 @@ class AuthService {
     }
   }
 
-  //register with email and pasword
+  //register with email and password
   Future registerWithEmailAndPassword(
       String email, String pass, String name) async {
     try {
@@ -37,6 +37,18 @@ class AuthService {
           email: email, password: pass);
       User user = result.user;
       user.updateProfile(displayName: name, photoURL: null);
+      return user;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future shgnInWithEmailAndPassword(String email, String pass) async {
+    try {
+      UserCredential result =
+          await _auth.signInWithEmailAndPassword(email: email, password: pass);
+      User user = result.user;
       return user;
     } catch (e) {
       print(e.toString());

@@ -1,5 +1,6 @@
 import 'package:engli_app/Constants.dart';
 import 'package:engli_app/chooseGame.dart';
+import 'package:engli_app/registerationUser.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
 import 'Data.dart';
@@ -9,6 +10,7 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
+String error = "";
 //TODO: dispose controllers in the end
 final nameController = TextEditingController();
 final passwordController = TextEditingController();
@@ -17,6 +19,8 @@ class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
+    passwordController.clear();
+    mailController.clear();
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightGreen,
@@ -117,13 +121,12 @@ class _LoginState extends State<Login> {
         ]));
   }
 
-  void connectClicked() {
-    Data().setMail(nameController.text);
-    //TODO: get the appropriate name by mail.
-    Data().setName(name);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ChooseGame()),
-    );
+  void connectClicked() async {
+    dynamic res = await _auth.shgnInWithEmailAndPassword(
+        mailController.text, passwordController.text);
+    if (res == null) {
+      setState(() => error = "could not sign in");
+      print(error);
+    }
   }
 }
