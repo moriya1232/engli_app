@@ -17,6 +17,7 @@ final passwordController = TextEditingController();
 
 class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     passwordController.clear();
@@ -26,14 +27,15 @@ class _LoginState extends State<Login> {
           backgroundColor: Colors.lightGreen,
           title: Text('התחברות'),
         ),
-        body: Column(children: <Widget>[
+        body: SingleChildScrollView(
+            child: Column(children: <Widget>[
           SingleChildScrollView(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.all(100),
+                    padding: EdgeInsets.all(70),
                     child: Text(
                       'התחברות',
                       style: TextStyle(
@@ -83,7 +85,14 @@ class _LoginState extends State<Login> {
                       Text(':סיסמא '),
                     ],
                   ),
-                  SizedBox(height: 60),
+                  SizedBox(height: 30),
+                  Text(error,
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),),
+                  SizedBox(
+                    height: 30,
+                  ),
                   ButtonTheme(
                       padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
                       minWidth: 100,
@@ -110,15 +119,13 @@ class _LoginState extends State<Login> {
                           ))),
                 ]),
           ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Image(
-                image: AssetImage('images/kids-read.jpg'),
-              ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Image(
+              image: AssetImage('images/kids-read.jpg'),
             ),
           )
-        ]));
+        ])));
   }
 
   void connectClicked() async {

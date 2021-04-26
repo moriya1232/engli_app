@@ -36,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Expanded(
+          SingleChildScrollView(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

@@ -44,7 +44,7 @@ class _ChooseGameState extends State<ChooseGame> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+              padding: EdgeInsets.fromLTRB(0, 60, 0, 20),
               child: Text(
                 '!שלום ${Data().getName()}',
                 style: TextStyle(
@@ -53,7 +53,7 @@ class _ChooseGameState extends State<ChooseGame> {
                 ),
               ),
             ),
-            Expanded(
+            SingleChildScrollView(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
