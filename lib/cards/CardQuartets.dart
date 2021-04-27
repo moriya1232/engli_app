@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'CardGame.dart';
 
+double heightCloseCard = 80;
+double widthCloseCard = 60;
+
 class CardQuartets extends CardGame {
   var english = "";
   var hebrew = "";
@@ -211,7 +214,8 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
 
   Widget getCloseCard(BuildContext context) {
     return new Container(
-      width: 60,
+      height: heightCloseCard,
+      width: widthCloseCard,
       child: Card(
         color: Colors.amberAccent,
       ),

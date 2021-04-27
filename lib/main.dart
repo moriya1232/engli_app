@@ -1,9 +1,9 @@
-import 'package:engli_app/homePage.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:engli_app/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+//import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +16,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamProvider.value(
       value: AuthService().user,
+      initialData: null,
       child: MaterialApp(
         home: Wrapper(),
       ),
@@ -29,3 +30,4 @@ void main() async {
   await Firebase.initializeApp();
   runApp(Wrapper());
 }*/
+
