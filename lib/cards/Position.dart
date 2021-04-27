@@ -51,4 +51,12 @@ class Position {
     this.bottom = bottom;
   }
 
+  Position setPosition(Position p) {
+    this.right = p.getRight();
+    this.top = p.getTop();
+    this.left = p.getLeft();
+    this.bottom = p.getBottom();
+    return this;
+  }
+
 }

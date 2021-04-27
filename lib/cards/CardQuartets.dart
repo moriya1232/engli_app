@@ -1,10 +1,9 @@
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../Constants.dart';
 import 'CardGame.dart';
 
-double heightCloseCard = 80;
-double widthCloseCard = 60;
 
 class CardQuartets extends CardGame {
   var english = "";

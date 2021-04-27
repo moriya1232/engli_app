@@ -6,8 +6,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
 import 'cards/Position.dart';
+import 'Constants.dart';
 
-double heightCloseCards = 0;
+Position firstCardPos = Position(null, null, null, null);
+Position secondCardPos = Position(null, null, null, null);
+Position thirdCardPos = Position(null, null, null, null);
+Position meCardPos = Position(null, null, null, null);
+Position deckCardPos = Position(null, null, null, null);
+bool isFirstPlayerCardAnimation = true;
+bool isSecondPlayerCardAnimation = true;
+bool isThirdPlayerCardAnimation = true;
+bool isMeCardAnimation = true;
+bool isDeckCardAnimation = true;
+//    bool isFirstPlayerCardAnimation = false;
+//    bool isSecondPlayerCardAnimation = false;
+//    bool isThirdPlayerCardAnimation = false;
+//    bool isMeCardAnimation = false;
+//    bool isDeckCardAnimation = false;
 
 class QuartetsRoom extends StatefulWidget {
   QuartetsGame game;
@@ -20,10 +35,10 @@ class QuartetsRoom extends StatefulWidget {
   _QuartetsRoomState createState() => _QuartetsRoomState();
 }
 
+
+
 class _QuartetsRoomState extends State<QuartetsRoom> {
-  double fontSizeNames;
-  double rowHeight;
-  double otherPlayersHeight;
+  bool firstBuild = true;
 
   @override
   void initState() {
@@ -36,28 +51,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   Widget build(BuildContext context) {
-    rowHeight = MediaQuery.of(context).size.height / 4;
-    fontSizeNames = MediaQuery.of(context).size.height / 30;
-    otherPlayersHeight = MediaQuery.of(context).size.height * (4 / 10);
-
-//    bool isFirstPlayerCardAnimation = true;
-//    bool isSecondPlayerCardAnimation = true;
-//    bool isThirdPlayerCardAnimation = true;
-//    bool isMeCardAnimation = true;
-//    bool isDeckCardAnimation = true;
-    bool isFirstPlayerCardAnimation = false;
-    bool isSecondPlayerCardAnimation = false;
-    bool isThirdPlayerCardAnimation = false;
-    bool isMeCardAnimation = false;
-    bool isDeckCardAnimation = false;
-    Position firstPlayerPos = new Position(getFirstPlayerLeft(), getFirstPlayerTop(), null, null);
-    Position secondPlayerPos = new Position(getSecondPlayerLeft(), getSecondPlayerTop(), null, null);
-    Position thirdPlayerPos = new Position(null, getThirdPlayerTop(), getThirdPlayerRight(), null);
-    Position mePos = new Position(getMeLeft(), null, null, getMeBottom());
-    Position deckPos = new Position(getDeckLeft(), getDeckTop(), null, null);
-
-
-
+    setConstants();
+    firstBuild = false;
     // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
     if (widget.game.getPlayerNeedTurn() is Me &&
         this.widget.game.getPlayerNeedTurn().cards.length == 0) {
@@ -88,7 +83,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   Text('${widget.game.getFirstPlayer().cards.length}'),
                   Container(
                     alignment: Alignment.center,
-                    height: heightCloseCards,
+                    height: heightCloseCard,
                     child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
@@ -122,7 +117,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                               quarterTurns: 1,
                               child: Container(
                                 alignment: Alignment.center,
-                                height: heightCloseCards,
+                                height: heightCloseCard,
 //                        width: 270,
                                 child: ListView.builder(
                                     shrinkWrap: true,
@@ -218,7 +213,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                               quarterTurns: 3,
                               child: Container(
                                 alignment: Alignment.center,
-                                height: heightCloseCards,
+                                height: heightCloseCard,
 //                        width: 270,
                                 child: ListView.builder(
                                     shrinkWrap: true,
@@ -318,32 +313,27 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           isFirstPlayerCardAnimation
               ? _buildAnimatedPos(
                   CardQuartets("", "", null, "", "", "", "", false),
-                  firstPlayerPos,
-                  recalculate)
+                  firstCardPos, _recalculate)
               : SizedBox(),
           isSecondPlayerCardAnimation
               ? _buildAnimatedPos(
                   CardQuartets("", "", null, "", "", "", "", false),
-                  secondPlayerPos,
-                  recalculate)
+                  secondCardPos, _recalculate)
               : SizedBox(),
           isThirdPlayerCardAnimation
               ? _buildAnimatedPos(
                   CardQuartets("", "", null, "", "", "", "", false),
-                  thirdPlayerPos,
-                  recalculate)
+                  thirdCardPos, _recalculate)
               : SizedBox(),
           isMeCardAnimation
               ? _buildAnimatedPos(
                   CardQuartets("", "", null, "", "", "", "", false),
-                  mePos,
-                  recalculate)
+                  meCardPos,_recalculate)
               : SizedBox(),
           isDeckCardAnimation
               ? _buildAnimatedPos(
                   CardQuartets("", "", null, "", "", "", "", false),
-                  deckPos,
-                  recalculate)
+                  deckCardPos, _recalculate)
               : SizedBox(),
         ]),
       );
@@ -353,47 +343,50 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
   }
 
-  double getFirstPlayerLeft() {
-    return MediaQuery.of(context).size.width / 2 - widthCloseCard / 2;
+  void setConstants() {
+    if (firstBuild) {
+      rowHeight = MediaQuery
+          .of(context)
+          .size
+          .height / 4;
+      fontSizeNames = MediaQuery
+          .of(context)
+          .size
+          .height / 30;
+      otherPlayersHeight = MediaQuery
+          .of(context)
+          .size
+          .height * (4 / 10);
+      widthScreen = MediaQuery
+          .of(context)
+          .size
+          .width;
+      heightScreen = MediaQuery
+          .of(context)
+          .size
+          .height;
+      heightCloseCard = 80;
+      widthCloseCard = 60;
+      firstCardPos = firstPlayerPos =
+      new Position(getFirstPlayerLeft(), getFirstPlayerTop(), null, null);
+      secondCardPos = secondPlayerPos =
+      new Position(getSecondPlayerLeft(), getSecondPlayerTop(), null, null);
+      thirdCardPos = thirdPlayerPos =
+      new Position(null, getThirdPlayerTop(), getThirdPlayerRight(), null);
+      meCardPos = mePos = new Position(getMeLeft(), null, null, getMeBottom());
+      deckCardPos = deckPos =
+      new Position(getDeckLeft(), getDeckTop(), null, null);
+    }
   }
 
-  double getFirstPlayerTop() {
-    return heightCloseCards / 2;
-  }
 
-  double getSecondPlayerLeft() {
-    return heightCloseCard / 2;
-  }
 
-  double getSecondPlayerTop() {
-    return heightCloseCards + fontSizeNames + rowHeight / 2;
-  }
+  void _recalculate() {
+    setState(() {
 
-  double getThirdPlayerRight() {
-    return heightCloseCard / 2;
-  }
 
-  double getThirdPlayerTop() {
-    return heightCloseCards + fontSizeNames + rowHeight / 2;
+    });
   }
-
-  double getMeLeft() {
-    return MediaQuery.of(context).size.width / 2 - widthCloseCard / 2;
-  }
-
-  double getMeBottom() {
-    return heightCloseCards / 2;
-  }
-
-  double getDeckLeft() {
-    return MediaQuery.of(context).size.width / 2 - widthCloseCard / 2;
-  }
-
-  double getDeckTop() {
-    return otherPlayersHeight - rowHeight / 2;
-  }
-
-  void recalculate() {}
 
   Widget getAppropriateWidget() {
     if (widget.game.getPlayerNeedTurn() is Me) {
@@ -499,3 +492,4 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     super.dispose();
   }
 }
+

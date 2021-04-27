@@ -1,10 +1,13 @@
 import 'package:engli_app/QuartetsGame/Constants.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
+import 'package:engli_app/cards/Position.dart';
+import 'package:engli_app/quartetsRoom.dart';
 import 'package:flutter/material.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/cards/Triple.dart';
 import 'package:engli_app/cards/Subject.dart';
+import '../Constants.dart';
 import 'Game.dart';
 
 class QuartetsGame extends Game {
@@ -581,7 +584,16 @@ class QuartetsGame extends Game {
 
   void takeCardFromDeck() async{
     if(this.deck.cards.length > 0) {
-      await this.deck.giveCardToPlayer(getPlayerNeedTurn());
+      Player player = getPlayerNeedTurn();
+
+      await setPosToPlayer(deckCardPos, player);
+      this.updateObservers();
+
+      await setPosToDeck();
+      this.updateObservers();
+
+
+      await this.deck.giveCardToPlayer(player);
       this.updateObservers();
     }
   }
@@ -649,5 +661,28 @@ class QuartetsGame extends Game {
       }
     }
     return players;
+  }
+
+  Future setPosToPlayer(Position curr, Player player) {
+    if (getFirstPlayer() == player) {
+      curr.setPosition(firstPlayerPos);
+    } else if (getSecondPlayer() == player){
+      curr.setPosition(secondPlayerPos);
+    } else if (getThirdPlayer() == player){
+      curr.setPosition(thirdPlayerPos);
+    } else if (getMyPlayer() == player){
+      curr.setPosition(mePos);
+      print(curr.bottom);
+      print(player.name);
+
+
+    }
+    return new Future.delayed(const Duration(seconds: 2));
+  }
+
+  Future setPosToDeck() {
+//    isDeckCardAnimation = false;
+    deckCardPos.setPosition(deckPos);
+    return new Future.delayed(const Duration(seconds: 2));
   }
 }
