@@ -12,7 +12,6 @@ class QuartetsRoom extends StatefulWidget {
 
   QuartetsRoom() {
     this.game = new QuartetsGame();
-
   }
 
   @override
@@ -63,79 +62,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               height: otherPlayersHeight,
               child: SingleChildScrollView(
                 child: Column(children: [
-                  Text('${widget.game.getFirstPlayer().cards.length}'),
-                  Container(
-                    alignment: Alignment.center,
-                    height: heightCloseCard,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.game.getFirstPlayer().cards.length,
-                        // number of items in your list
-                        //here the implementation of itemBuilder. take a look at flutter docs to see details
-                        itemBuilder: (BuildContext context, int Itemindex) {
-                          return widget.game.getFirstPlayer().cards[Itemindex];
-                        }),
-                  ),
-                  Text(
-                    '${widget.game.getFirstPlayer().name}: ${widget.game.getFirstPlayer().score}',
-                    style: TextStyle(
-                      fontFamily: 'Comix-h',
-                      fontSize: fontSizeNames,
-                    ),
-                  ),
+                  getFirstPlayerView(),
                   Container(
                     height: rowHeight,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (widget.game.players.length > 2)
-                          Row(children: [
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Text(
-                                  '${widget.game.getSecondPlayer().cards.length}'),
-                            ),
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: heightCloseCard,
-//                        width: 270,
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: widget.game
-                                        .getSecondPlayer()
-                                        .cards
-                                        .length,
-                                    // number of items in your list
-
-                                    //here the implementation of itemBuilder. take a look at flutter docs to see details
-                                    itemBuilder:
-                                        (BuildContext context, int Itemindex) {
-                                      return widget.game
-                                              .getSecondPlayer()
-                                              .cards[
-                                          Itemindex]; // return your widget
-                                    }
-//                          children: widget.game
-//                              .getSecondPlayer()
-//                              .cards,
-                                    ),
-                              ),
-                            ),
-                            RotatedBox(
-                              quarterTurns: 1,
-                              child: Text(
-                                '${widget.game.getSecondPlayer().name}: ${widget.game.getSecondPlayer().score}',
-                                style: TextStyle(
-                                  fontFamily: 'Comix-h',
-                                  fontSize: fontSizeNames,
-                                ),
-                              ),
-                            ),
-                          ]),
+                          RotatedBox(
+                            quarterTurns: 1,
+                            child: getSecondPlayerView(),
+                          ),
                         Stack(children: [
                           Padding(
                             padding: EdgeInsets.all(20),
@@ -181,50 +118,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                           )
                         ]),
                         if (widget.game.players.length > 3)
-                          Row(children: [
-                            RotatedBox(
-                              quarterTurns: 3,
-                              child: Text(
-                                '${widget.game.getThirdPlayer().name}: ${widget.game.getThirdPlayer().score}',
-                                style: TextStyle(
-                                  fontFamily: 'Comix-h',
-                                  fontSize: fontSizeNames,
-                                ),
-                              ),
-                            ),
-                            RotatedBox(
-                              quarterTurns: 3,
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: heightCloseCard,
-//                        width: 270,
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: widget.game
-                                        .getThirdPlayer()
-                                        .cards
-                                        .length,
-                                    // number of items in your list
-
-                                    //here the implementation of itemBuilder. take a look at flutter docs to see details
-                                    itemBuilder:
-                                        (BuildContext context, int Itemindex) {
-                                      return widget.game.getThirdPlayer().cards[
-                                          Itemindex]; // return your widget
-                                    }
-//                          children: widget.game
-//                              .getThirdPlayer()
-//                              .cards,
-                                    ),
-                              ),
-                            ),
-                            RotatedBox(
-                              quarterTurns: 3,
-                              child: Text(
-                                  '${widget.game.getThirdPlayer().cards.length}'),
-                            ),
-                          ]),
+                          RotatedBox(
+                            quarterTurns: 3,
+                            child: getThirdPlayerView(),
+                          ),
                         if (widget.game.players.length == 3)
                           Container(
                             width: MediaQuery.of(context).size.width / 3,
@@ -294,22 +191,24 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             ),
           ]),
           widget.game.firstCard.visible
-              ? _buildAnimatedPos(
-              widget.game.firstCard, this.widget.game.firstCard.position, _recalculate)
+              ? _buildAnimatedPos(widget.game.firstCard,
+                  this.widget.game.firstCard.position, _recalculate)
               : SizedBox(),
           widget.game.secondCard.visible
-              ? _buildAnimatedPos(
-              widget.game.secondCard, this.widget.game.secondCard.position, _recalculate)
+              ? _buildAnimatedPos(widget.game.secondCard,
+                  this.widget.game.secondCard.position, _recalculate)
               : SizedBox(),
           widget.game.thirdCard.visible
-              ? _buildAnimatedPos(
-              widget.game.thirdCard, this.widget.game.thirdCard.position, _recalculate)
+              ? _buildAnimatedPos(widget.game.thirdCard,
+                  this.widget.game.thirdCard.position, _recalculate)
               : SizedBox(),
           widget.game.meCard.visible
-              ? _buildAnimatedPos(widget.game.meCard, this.widget.game.meCard.position, _recalculate)
+              ? _buildAnimatedPos(widget.game.meCard,
+                  this.widget.game.meCard.position, _recalculate)
               : SizedBox(),
           widget.game.deckCard.visible
-              ? _buildAnimatedPos(widget.game.deckCard, this.widget.game.deckCard.position, _recalculate)
+              ? _buildAnimatedPos(widget.game.deckCard,
+                  this.widget.game.deckCard.position, _recalculate)
               : SizedBox(),
         ]),
       );
@@ -321,7 +220,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   void setConstants() {
     if (firstBuild) {
-
       rowHeight = MediaQuery.of(context).size.height / 4;
       fontSizeNames = MediaQuery.of(context).size.height / 30;
       otherPlayersHeight = MediaQuery.of(context).size.height * (4 / 10);
@@ -335,10 +233,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           new Position(getSecondPlayerLeft(), getSecondPlayerTop(), null, null);
       this.widget.game.thirdCard.position = thirdPlayerPos =
           new Position(null, getThirdPlayerTop(), getThirdPlayerRight(), null);
-      this.widget.game.meCard.position = mePos = new Position(getMeLeft(), null, null, getMeBottom());
+      this.widget.game.meCard.position =
+          mePos = new Position(getMeLeft(), getMeTop(), null, null);
       this.widget.game.deckCard.position =
           deckPos = new Position(getDeckLeft(), getDeckTop(), null, null);
-
     }
   }
 
@@ -434,11 +332,105 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       left: position.getLeft(),
       right: position.getRight(),
       top: position.getTop(),
-      bottom: position.getBottom(),
+      //bottom: position.getBottom(),
       child: card,
       duration: Duration(seconds: 2),
       curve: Curves.fastOutSlowIn,
     );
+  }
+
+  Widget getFirstPlayerView() {
+    return Column(children: [
+      Text('${widget.game.getFirstPlayer().cards.length}'),
+      Container(
+        alignment: Alignment.center,
+        height: heightCloseCard,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: widget.game.getFirstPlayer().cards.length,
+            // number of items in your list
+            //here the implementation of itemBuilder. take a look at flutter docs to see details
+            itemBuilder: (BuildContext context, int Itemindex) {
+              return widget.game.getFirstPlayer().cards[Itemindex];
+            }),
+      ),
+      Text(
+        '${widget.game.getFirstPlayer().name}: ${widget.game.getFirstPlayer().score}',
+        style: TextStyle(
+          fontFamily: 'Comix-h',
+          fontSize: fontSizeNames,
+        ),
+      ),
+    ]);
+  }
+
+  Widget getSecondPlayerView() {
+    return Column(children: [
+      Text(
+        '${widget.game.getSecondPlayer().name}: ${widget.game.getSecondPlayer().score}',
+        style: TextStyle(
+          fontFamily: 'Comix-h',
+          fontSize: fontSizeNames,
+        ),
+      ),
+      Container(
+        alignment: Alignment.center,
+        height: heightCloseCard,
+//                        width: 270,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: widget.game.getSecondPlayer().cards.length,
+            // number of items in your list
+
+            //here the implementation of itemBuilder. take a look at flutter docs to see details
+            itemBuilder: (BuildContext context, int Itemindex) {
+              return widget.game
+                  .getSecondPlayer()
+                  .cards[Itemindex]; // return your widget
+            }
+//                          children: widget.game
+//                              .getSecondPlayer()
+//                              .cards,
+            ),
+      ),
+      Text('${widget.game.getSecondPlayer().cards.length}'),
+    ]);
+  }
+
+  Widget getThirdPlayerView() {
+    return Column(children: [
+      Text(
+        '${widget.game.getThirdPlayer().name}: ${widget.game.getThirdPlayer().score}',
+        style: TextStyle(
+          fontFamily: 'Comix-h',
+          fontSize: fontSizeNames,
+        ),
+      ),
+      Container(
+        alignment: Alignment.center,
+        height: heightCloseCard,
+//                        width: 270,
+        child: ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            itemCount: widget.game.getThirdPlayer().cards.length,
+            // number of items in your list
+
+            //here the implementation of itemBuilder. take a look at flutter docs to see details
+            itemBuilder: (BuildContext context, int Itemindex) {
+              return widget.game
+                  .getThirdPlayer()
+                  .cards[Itemindex]; // return your widget
+            }
+//                          children: widget.game
+//                              .getThirdPlayer()
+//                              .cards,
+            ),
+      ),
+      Text('${widget.game.getThirdPlayer().cards.length}'),
+    ]);
   }
 
   @override

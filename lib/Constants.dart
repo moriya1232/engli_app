@@ -61,8 +61,8 @@ double getMeLeft() {
   return widthScreen / 2 - widthCloseCard / 2;
 }
 
-double getMeBottom() {
-  return heightCloseCard / 2;
+double getMeTop() {
+  return heightScreen*(3/4);
 }
 
 double getDeckLeft() {

@@ -132,7 +132,7 @@ class ComputerPlayer extends Other {
       List<CardQuartets> cards = game.getPlayerNeedTurn().cards.cast<CardQuartets>();
       // no cards! so take card from the deck.
       if (cards.length == 0) {
-        game.takeCardFromDeck();
+        await game.takeCardFromDeck();
         if (game.doneTurn()) {
           return;
         }

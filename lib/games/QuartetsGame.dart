@@ -89,7 +89,7 @@ class QuartetsGame extends Game {
       this.nameAsked = player.name;
       this.subjectAsked = subject.name_subject;
       this.cardAsked = "";
-      takeCardFromDeck();
+      await takeCardFromDeck();
       updateObservers();
       return new Future.delayed(const Duration(seconds: 5), () => false);
     }
@@ -351,134 +351,134 @@ class QuartetsGame extends Game {
             Image(
               image: AssetImage('images/soup.png'),
             )));
-//    Subject days1 = Subject(
-//        "Days",
-//        Triple("sunday", "יום ראשון", Image(
-//          image: AssetImage('images/sunday.png'),
-//        )),
-//        Triple("monday", "יום שני", Image(
-//          image: AssetImage('images/monday.png'),
-//        )),
-//        Triple("saturday", "יום שבת", Image(
-//          image: AssetImage('images/saturday.png'),
-//        )),
-//        Triple("friday", "יום שישי", Image(
-//          image: AssetImage('images/friday.png'),
-//        )));
-//    Subject family1 = Subject(
-//        "Family",
-//        Triple("father", "אבא", Image(
-//          image: AssetImage('images/father.png'),
-//        )),
-//        Triple("mother", "אמא", Image(
-//          image: AssetImage('images/mother.jpg'),
-//        )),
-//        Triple("sister", "אחות", Image(
-//          image: AssetImage('images/sister.jpg'),
-//        )),
-//        Triple("brother", "אח", Image(
-//          image: AssetImage('images/brother.jpg'),
-//        )));
-//    Subject food1 = Subject(
-//        "Food",
-//        Triple("pizza", "פיצה", Image(
-//          image: AssetImage('images/pizza.jpg'),
-//        )),
-//        Triple("rice", "אורז", Image(
-//          image: AssetImage('images/rice.jpg'),
-//        )),
-//        Triple("meat", "בשר", Image(
-//          image: AssetImage('images/meat.jpg'),
-//        )),
-//        Triple("soup", "מרק", Image(
-//          image: AssetImage('images/soup.png'),
-//        )));
-//    Subject days2 = Subject(
-//        "Days",
-//        Triple("sunday", "יום ראשון", Image(
-//          image: AssetImage('images/sunday.png'),
-//        )),
-//        Triple("monday", "יום שני", Image(
-//          image: AssetImage('images/monday.png'),
-//        )),
-//        Triple("saturday", "יום שבת", Image(
-//          image: AssetImage('images/saturday.png'),
-//        )),
-//        Triple("friday", "יום שישי", Image(
-//          image: AssetImage('images/friday.png'),
-//        )));
-//    Subject family2 = Subject(
-//        "Family",
-//        Triple("father", "אבא", Image(
-//          image: AssetImage('images/father.png'),
-//        )),
-//        Triple("mother", "אמא", Image(
-//          image: AssetImage('images/mother.jpg'),
-//        )),
-//        Triple("sister", "אחות", Image(
-//          image: AssetImage('images/sister.jpg'),
-//        )),
-//        Triple("brother", "אח", Image(
-//          image: AssetImage('images/brother.jpg'),
-//        )));
-//    Subject food2 = Subject(
-//        "Food",
-//        Triple("pizza", "פיצה", Image(
-//          image: AssetImage('images/pizza.jpg'),
-//        )),
-//        Triple("rice", "אורז", Image(
-//          image: AssetImage('images/rice.jpg'),
-//        )),
-//        Triple("meat", "בשר", Image(
-//          image: AssetImage('images/meat.jpg'),
-//        )),
-//        Triple("soup", "מרק", Image(
-//          image: AssetImage('images/soup.png'),
-//        )));
-//    Subject days3 = Subject(
-//        "Days",
-//        Triple("sunday", "יום ראשון", Image(
-//          image: AssetImage('images/sunday.png'),
-//        )),
-//        Triple("monday", "יום שני", Image(
-//          image: AssetImage('images/monday.png'),
-//        )),
-//        Triple("saturday", "יום שבת", Image(
-//          image: AssetImage('images/saturday.png'),
-//        )),
-//        Triple("friday", "יום שישי", Image(
-//          image: AssetImage('images/friday.png'),
-//        )));
-//    Subject family3 = Subject(
-//        "Family",
-//        Triple("father", "אבא", Image(
-//          image: AssetImage('images/father.png'),
-//        )),
-//        Triple("mother", "אמא", Image(
-//          image: AssetImage('images/mother.jpg'),
-//        )),
-//        Triple("sister", "אחות", Image(
-//          image: AssetImage('images/sister.jpg'),
-//        )),
-//        Triple("brother", "אח", Image(
-//          image: AssetImage('images/brother.jpg'),
-//        )));
-//    Subject food3 = Subject(
-//        "Food",
-//        Triple("pizza", "פיצה", Image(
-//          image: AssetImage('images/pizza.jpg'),
-//        )),
-//        Triple("rice", "אורז", Image(
-//          image: AssetImage('images/rice.jpg'),
-//        )),
-//        Triple("meat", "בשר", Image(
-//          image: AssetImage('images/meat.jpg'),
-//        )),
-//        Triple("soup", "מרק", Image(
-//          image: AssetImage('images/soup.png'),
-//        )));
-//    List<Subject> subs = [furnitures, pets, days, family, food,days1, family1, food1,days2, family2, food2,days3, family3, food3];
-    List<Subject> subs = [furnitures, pets, days, family, food];
+    Subject days1 = Subject(
+        "Days1",
+        Triple("sunday", "יום ראשון", Image(
+          image: AssetImage('images/sunday.png'),
+        )),
+        Triple("monday", "יום שני", Image(
+          image: AssetImage('images/monday.png'),
+        )),
+        Triple("saturday", "יום שבת", Image(
+          image: AssetImage('images/saturday.png'),
+        )),
+        Triple("friday", "יום שישי", Image(
+          image: AssetImage('images/friday.png'),
+        )));
+    Subject family1 = Subject(
+        "Family1",
+        Triple("father", "אבא", Image(
+          image: AssetImage('images/father.png'),
+        )),
+        Triple("mother", "אמא", Image(
+          image: AssetImage('images/mother.jpg'),
+        )),
+        Triple("sister", "אחות", Image(
+          image: AssetImage('images/sister.jpg'),
+        )),
+        Triple("brother", "אח", Image(
+          image: AssetImage('images/brother.jpg'),
+        )));
+    Subject food1 = Subject(
+        "Food1",
+        Triple("pizza", "פיצה", Image(
+          image: AssetImage('images/pizza.jpg'),
+        )),
+        Triple("rice", "אורז", Image(
+          image: AssetImage('images/rice.jpg'),
+        )),
+        Triple("meat", "בשר", Image(
+          image: AssetImage('images/meat.jpg'),
+        )),
+        Triple("soup", "מרק", Image(
+          image: AssetImage('images/soup.png'),
+        )));
+    Subject days2 = Subject(
+        "Days2",
+        Triple("sunday", "יום ראשון", Image(
+          image: AssetImage('images/sunday.png'),
+        )),
+        Triple("monday", "יום שני", Image(
+          image: AssetImage('images/monday.png'),
+        )),
+        Triple("saturday", "יום שבת", Image(
+          image: AssetImage('images/saturday.png'),
+        )),
+        Triple("friday", "יום שישי", Image(
+          image: AssetImage('images/friday.png'),
+        )));
+    Subject family2 = Subject(
+        "Family2",
+        Triple("father", "אבא", Image(
+          image: AssetImage('images/father.png'),
+        )),
+        Triple("mother", "אמא", Image(
+          image: AssetImage('images/mother.jpg'),
+        )),
+        Triple("sister", "אחות", Image(
+          image: AssetImage('images/sister.jpg'),
+        )),
+        Triple("brother", "אח", Image(
+          image: AssetImage('images/brother.jpg'),
+        )));
+    Subject food2 = Subject(
+        "Food2",
+        Triple("pizza", "פיצה", Image(
+          image: AssetImage('images/pizza.jpg'),
+        )),
+        Triple("rice", "אורז", Image(
+          image: AssetImage('images/rice.jpg'),
+        )),
+        Triple("meat", "בשר", Image(
+          image: AssetImage('images/meat.jpg'),
+        )),
+        Triple("soup", "מרק", Image(
+          image: AssetImage('images/soup.png'),
+        )));
+    Subject days3 = Subject(
+        "Days3",
+        Triple("sunday", "יום ראשון", Image(
+          image: AssetImage('images/sunday.png'),
+        )),
+        Triple("monday", "יום שני", Image(
+          image: AssetImage('images/monday.png'),
+        )),
+        Triple("saturday", "יום שבת", Image(
+          image: AssetImage('images/saturday.png'),
+        )),
+        Triple("friday", "יום שישי", Image(
+          image: AssetImage('images/friday.png'),
+        )));
+    Subject family3 = Subject(
+        "Family3",
+        Triple("father", "אבא", Image(
+          image: AssetImage('images/father.png'),
+        )),
+        Triple("mother", "אמא", Image(
+          image: AssetImage('images/mother.jpg'),
+        )),
+        Triple("sister", "אחות", Image(
+          image: AssetImage('images/sister.jpg'),
+        )),
+        Triple("brother", "אח", Image(
+          image: AssetImage('images/brother.jpg'),
+        )));
+    Subject food3 = Subject(
+        "Food3",
+        Triple("pizza", "פיצה", Image(
+          image: AssetImage('images/pizza.jpg'),
+        )),
+        Triple("rice", "אורז", Image(
+          image: AssetImage('images/rice.jpg'),
+        )),
+        Triple("meat", "בשר", Image(
+          image: AssetImage('images/meat.jpg'),
+        )),
+        Triple("soup", "מרק", Image(
+          image: AssetImage('images/soup.png'),
+        )));
+    List<Subject> subs = [furnitures, pets, days, family, food,days1, family1, food1,days2, family2, food2,days3, family3, food3];
+//    List<Subject> subs = [furnitures, pets, days, family, food];
     Deck deck = new Deck(subs);
     return deck;
   }
@@ -599,21 +599,24 @@ class QuartetsGame extends Game {
     return null;
   }
 
-  void takeCardFromDeck() async{
+  Future takeCardFromDeck() async{
     if(this.deck.cards.length > 0) {
       Player player = getPlayerNeedTurn();
-      takeCardFromDeckAnimation(player);
+      await takeCardFromDeckAnimation(player);
+      //this.updateObservers();
       await this.deck.giveCardToPlayer(player);
       this.updateObservers();
+      return Future.delayed(const Duration(seconds: 2));
     }
   }
 
-  void takeCardFromDeckAnimation(Player player) async{
+  Future takeCardFromDeckAnimation(Player player) async{
     await setPosCardToSpecPlayer(this.deckCard, player);
-    this.updateObservers();
+//    this.updateObservers();
     await setPosToDeck();
-    this.updateObservers();
-    print("deckCardPosTop1:" + this.deckCard.position.top.toString());
+//    this.updateObservers();
+    //print("give card for: " + player.name);
+    return new Future.delayed(const Duration(seconds: 2));
   }
 
   List<Subject> getSubjectsOfPlayer(Player player) {
@@ -695,18 +698,20 @@ class QuartetsGame extends Game {
     } else {throw Exception("didnt find appropriate player");}
   }
 
-  Future setPosCardToSpecPlayer(CardQuartets card, Player player) {
+  Future setPosCardToSpecPlayer(CardQuartets card, Player player) async{
     //card.visible = true;
-    this.updateObservers();
+    //this.updateObservers();
     card.position.setPosition(getApproPosition(player));
-    return new Future.delayed(const Duration(seconds: 2));
+    this.updateObservers();
+//    await Future.delayed(Duration(seconds: 3));
+    return Future.delayed(Duration(seconds: 3));
   }
 
   Future setPosToDeck() {
     //this.deckCard.visible = false;
     this.deckCard.position.setPosition(deckPos);
-    return new Future.delayed(const Duration(seconds: 2));
-
-
+    this.updateObservers();
+//    await Future.delayed(Duration(seconds: 3));
+    return Future.delayed(Duration(seconds: 3));
   }
 }
