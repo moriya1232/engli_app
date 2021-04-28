@@ -33,13 +33,13 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         shadowColor: Colors.black87,
       ),
-      body: SingleChildScrollView( child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: ListView(
+        shrinkWrap: false,
+padding: EdgeInsets.zero,
         children: <Widget>[
-          SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+          Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 30),
@@ -146,16 +146,16 @@ class _MyHomePageState extends State<MyHomePage> {
                     ]),
                   ),
                 ]),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Image(
+//          Align(
+//            alignment: Alignment.bottomCenter,
+//            child:
+            Image(
               image: AssetImage('images/kids-read.jpg'),
-            ),
+//            ),
           ),
         ],
       ),
-      ),
+
     );
   }
   void registerationClicked() {

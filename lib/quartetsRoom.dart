@@ -1,4 +1,3 @@
-import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/winnerRoom.dart';
@@ -8,34 +7,17 @@ import 'QuartetsGame/Turn.dart';
 import 'cards/Position.dart';
 import 'Constants.dart';
 
-Position firstCardPos = Position(null, null, null, null);
-Position secondCardPos = Position(null, null, null, null);
-Position thirdCardPos = Position(null, null, null, null);
-Position meCardPos = Position(null, null, null, null);
-Position deckCardPos = Position(null, null, null, null);
-bool isFirstPlayerCardAnimation = true;
-bool isSecondPlayerCardAnimation = true;
-bool isThirdPlayerCardAnimation = true;
-bool isMeCardAnimation = true;
-bool isDeckCardAnimation = true;
-//    bool isFirstPlayerCardAnimation = false;
-//    bool isSecondPlayerCardAnimation = false;
-//    bool isThirdPlayerCardAnimation = false;
-//    bool isMeCardAnimation = false;
-//    bool isDeckCardAnimation = false;
-
 class QuartetsRoom extends StatefulWidget {
   QuartetsGame game;
 
   QuartetsRoom() {
     this.game = new QuartetsGame();
+
   }
 
   @override
   _QuartetsRoomState createState() => _QuartetsRoomState();
 }
-
-
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
   bool firstBuild = true;
@@ -43,6 +25,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   void initState() {
     super.initState();
+    firstBuild = true;
     widget.game.addListener(_listener);
     for (Player player in widget.game.players) {
       player.addListener(_listener);
@@ -310,30 +293,23 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               ),
             ),
           ]),
-          isFirstPlayerCardAnimation
+          widget.game.firstCard.visible
               ? _buildAnimatedPos(
-                  CardQuartets("", "", null, "", "", "", "", false),
-                  firstCardPos, _recalculate)
+              widget.game.firstCard, this.widget.game.firstCard.position, _recalculate)
               : SizedBox(),
-          isSecondPlayerCardAnimation
+          widget.game.secondCard.visible
               ? _buildAnimatedPos(
-                  CardQuartets("", "", null, "", "", "", "", false),
-                  secondCardPos, _recalculate)
+              widget.game.secondCard, this.widget.game.secondCard.position, _recalculate)
               : SizedBox(),
-          isThirdPlayerCardAnimation
+          widget.game.thirdCard.visible
               ? _buildAnimatedPos(
-                  CardQuartets("", "", null, "", "", "", "", false),
-                  thirdCardPos, _recalculate)
+              widget.game.thirdCard, this.widget.game.thirdCard.position, _recalculate)
               : SizedBox(),
-          isMeCardAnimation
-              ? _buildAnimatedPos(
-                  CardQuartets("", "", null, "", "", "", "", false),
-                  meCardPos,_recalculate)
+          widget.game.meCard.visible
+              ? _buildAnimatedPos(widget.game.meCard, this.widget.game.meCard.position, _recalculate)
               : SizedBox(),
-          isDeckCardAnimation
-              ? _buildAnimatedPos(
-                  CardQuartets("", "", null, "", "", "", "", false),
-                  deckCardPos, _recalculate)
+          widget.game.deckCard.visible
+              ? _buildAnimatedPos(widget.game.deckCard, this.widget.game.deckCard.position, _recalculate)
               : SizedBox(),
         ]),
       );
@@ -345,47 +321,29 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   void setConstants() {
     if (firstBuild) {
-      rowHeight = MediaQuery
-          .of(context)
-          .size
-          .height / 4;
-      fontSizeNames = MediaQuery
-          .of(context)
-          .size
-          .height / 30;
-      otherPlayersHeight = MediaQuery
-          .of(context)
-          .size
-          .height * (4 / 10);
-      widthScreen = MediaQuery
-          .of(context)
-          .size
-          .width;
-      heightScreen = MediaQuery
-          .of(context)
-          .size
-          .height;
+
+      rowHeight = MediaQuery.of(context).size.height / 4;
+      fontSizeNames = MediaQuery.of(context).size.height / 30;
+      otherPlayersHeight = MediaQuery.of(context).size.height * (4 / 10);
+      widthScreen = MediaQuery.of(context).size.width;
+      heightScreen = MediaQuery.of(context).size.height;
       heightCloseCard = 80;
       widthCloseCard = 60;
-      firstCardPos = firstPlayerPos =
-      new Position(getFirstPlayerLeft(), getFirstPlayerTop(), null, null);
-      secondCardPos = secondPlayerPos =
-      new Position(getSecondPlayerLeft(), getSecondPlayerTop(), null, null);
-      thirdCardPos = thirdPlayerPos =
-      new Position(null, getThirdPlayerTop(), getThirdPlayerRight(), null);
-      meCardPos = mePos = new Position(getMeLeft(), null, null, getMeBottom());
-      deckCardPos = deckPos =
-      new Position(getDeckLeft(), getDeckTop(), null, null);
+      this.widget.game.firstCard.position = firstPlayerPos =
+          new Position(getFirstPlayerLeft(), getFirstPlayerTop(), null, null);
+      this.widget.game.secondCard.position = secondPlayerPos =
+          new Position(getSecondPlayerLeft(), getSecondPlayerTop(), null, null);
+      this.widget.game.thirdCard.position = thirdPlayerPos =
+          new Position(null, getThirdPlayerTop(), getThirdPlayerRight(), null);
+      this.widget.game.meCard.position = mePos = new Position(getMeLeft(), null, null, getMeBottom());
+      this.widget.game.deckCard.position =
+          deckPos = new Position(getDeckLeft(), getDeckTop(), null, null);
+
     }
   }
 
-
-
   void _recalculate() {
-    setState(() {
-
-
-    });
+    setState(() {});
   }
 
   Widget getAppropriateWidget() {
@@ -492,4 +450,3 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     super.dispose();
   }
 }
-

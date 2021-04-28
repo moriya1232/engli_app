@@ -1,18 +1,22 @@
 import 'dart:core';
-
-import 'package:engli_app/players/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'Position.dart';
+
 abstract class CardGame extends StatefulWidget {
+  bool visible;
   String english = "";
   String hebrew = "";
   List<Function> observers;
+  Position position;
 
   CardGame(String english, String hebrew) {
     this.english = english;
     this.hebrew = hebrew;
     this.observers = [];
+    this.visible = true;
+    this.position = Position(null, null, null, null);
   }
 
   getEnglish() {
@@ -38,9 +42,4 @@ abstract class CardGame extends StatefulWidget {
   }
 
   Future changeStatusCard(bool b);
-
-
-  void passCardAnimation(Player targetPlayer) {
-    //TODO
-  }
 }

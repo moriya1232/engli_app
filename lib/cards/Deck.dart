@@ -37,7 +37,7 @@ class Deck {
       throw Exception("no more cards in the pile");
     } else {
       CardQuartets card = cards.removeLast();
-      card.passCardAnimation(player);
+      //TODO: here pass card animation.
       if (player is Me) {
         player.addCard(card.changeToMine());
       } else {

@@ -52,7 +52,6 @@ abstract class Player {
 
   bool takeCardFromPlayer(CardGame card, Player player) {
     if (player.cards.contains(card)) {
-      card.passCardAnimation(this);
       this.cards.add(card);
       player.cards.remove(card);
       if (this is Me) {
