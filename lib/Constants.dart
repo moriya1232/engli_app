@@ -49,8 +49,8 @@ double getSecondPlayerTop() {
   return heightCloseCard + fontSizeNames + rowHeight / 2;
 }
 
-double getThirdPlayerRight() {
-  return heightCloseCard / 2;
+double getThirdPlayerLeft() {
+  return widthScreen - heightCloseCard / 2;
 }
 
 double getThirdPlayerTop() {

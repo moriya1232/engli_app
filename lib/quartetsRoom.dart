@@ -1,17 +1,31 @@
+import 'dart:async';
+
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/winnerRoom.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
+import 'cards/CardQuartets.dart';
 import 'cards/Position.dart';
 import 'Constants.dart';
 
 class QuartetsRoom extends StatefulWidget {
   QuartetsGame game;
+  final _streamControllerFirst = StreamController<Position>.broadcast();
+  final _streamControllerSecond = StreamController<Position>.broadcast();
+  final _streamControllerThird = StreamController<Position>.broadcast();
+  final _streamControllerMe = StreamController<Position>.broadcast();
+  final _streamControllerDeck = StreamController<Position>.broadcast();
+
+
+  final _streamControllerTurn = StreamController<int>.broadcast();
+
+
 
   QuartetsRoom() {
-    this.game = new QuartetsGame();
+    this.game = new QuartetsGame(this._streamControllerFirst, this._streamControllerSecond, this._streamControllerThird, this._streamControllerMe, this._streamControllerDeck, this._streamControllerTurn);
+
   }
 
   @override
@@ -19,16 +33,28 @@ class QuartetsRoom extends StatefulWidget {
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
+  CardQuartets firstCard;
+  CardQuartets secondCard;
+  CardQuartets thirdCard;
+  CardQuartets meCard;
+  CardQuartets deckCard;
+
+  
   bool firstBuild = true;
 
   @override
   void initState() {
     super.initState();
     firstBuild = true;
-    widget.game.addListener(_listener);
+    //widget.game.addListener(_listener);
     for (Player player in widget.game.players) {
       player.addListener(_listener);
     }
+    this.firstCard = getAnimationCard();
+    this.secondCard = getAnimationCard();
+    this.thirdCard = getAnimationCard();
+    this.meCard = getAnimationCard();
+    this.deckCard = getAnimationCard();
   }
 
   @override
@@ -44,7 +70,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           .deck
           .giveCardToPlayer(this.widget.game.getPlayerNeedTurn());
       this.widget.game.doneTurn();
-      this.widget.game.updateObservers();
+      //this.widget.game.updateObservers();
     }
 
     // get view for asking other players.
@@ -190,26 +216,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               ),
             ),
           ]),
-          widget.game.firstCard.visible
-              ? _buildAnimatedPos(widget.game.firstCard,
-                  this.widget.game.firstCard.position, _recalculate)
-              : SizedBox(),
-          widget.game.secondCard.visible
-              ? _buildAnimatedPos(widget.game.secondCard,
-                  this.widget.game.secondCard.position, _recalculate)
-              : SizedBox(),
-          widget.game.thirdCard.visible
-              ? _buildAnimatedPos(widget.game.thirdCard,
-                  this.widget.game.thirdCard.position, _recalculate)
-              : SizedBox(),
-          widget.game.meCard.visible
-              ? _buildAnimatedPos(widget.game.meCard,
-                  this.widget.game.meCard.position, _recalculate)
-              : SizedBox(),
-          widget.game.deckCard.visible
-              ? _buildAnimatedPos(widget.game.deckCard,
-                  this.widget.game.deckCard.position, _recalculate)
-              : SizedBox(),
+
+           _buildAnimatedPos(this.firstCard,
+                  this.firstCard.position, widget._streamControllerFirst),
+          _buildAnimatedPos(this.secondCard,
+                  this.secondCard.position, widget._streamControllerSecond),
+          _buildAnimatedPos(this.thirdCard,
+                  this.thirdCard.position, widget._streamControllerThird),
+          _buildAnimatedPos(this.meCard,
+                  this.meCard.position, widget._streamControllerMe),
+          _buildAnimatedPos(this.deckCard,
+                  this.deckCard.position, widget._streamControllerDeck),
         ]),
       );
     } else {
@@ -227,29 +244,35 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       heightScreen = MediaQuery.of(context).size.height;
       heightCloseCard = 80;
       widthCloseCard = 60;
-      this.widget.game.firstCard.position = firstPlayerPos =
+      this.firstCard.position = firstPlayerPos =
           new Position(getFirstPlayerLeft(), getFirstPlayerTop(), null, null);
-      this.widget.game.secondCard.position = secondPlayerPos =
+      this.secondCard.position = secondPlayerPos =
           new Position(getSecondPlayerLeft(), getSecondPlayerTop(), null, null);
-      this.widget.game.thirdCard.position = thirdPlayerPos =
-          new Position(null, getThirdPlayerTop(), getThirdPlayerRight(), null);
-      this.widget.game.meCard.position =
+      this.thirdCard.position = thirdPlayerPos =
+          new Position(getThirdPlayerLeft(), getThirdPlayerTop(), null, null);
+      this.meCard.position =
           mePos = new Position(getMeLeft(), getMeTop(), null, null);
-      this.widget.game.deckCard.position =
+      this.deckCard.position =
           deckPos = new Position(getDeckLeft(), getDeckTop(), null, null);
     }
   }
 
-  void _recalculate() {
-    setState(() {});
-  }
+//  void _recalculate() {
+//    setState(() {});
+//  }
 
   Widget getAppropriateWidget() {
-    if (widget.game.getPlayerNeedTurn() is Me) {
-      return Turn(widget.game);
-    } else {
-      return new Container(alignment: Alignment.center, child: getAskedText());
-    }
+    return StreamBuilder<int>(
+        stream: widget._streamControllerTurn.stream,
+        builder: (context, snapshot) {
+          if (widget.game.getPlayerNeedTurn() is Me) {
+            return Turn(widget.game, this.widget._streamControllerTurn);
+          } else {
+            return new Container(alignment: Alignment.center, child: getAskedText());
+          }
+        });
+
+
   }
 
   Widget getAskedText() {
@@ -326,17 +349,25 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     setState(() {});
   }
 
-  Widget _buildAnimatedPos(Widget card, Position position, Function onEnd) {
-    return AnimatedPositioned(
-      onEnd: onEnd,
-      left: position.getLeft(),
-      right: position.getRight(),
-      top: position.getTop(),
-      //bottom: position.getBottom(),
-      child: card,
-      duration: Duration(seconds: 2),
-      curve: Curves.fastOutSlowIn,
-    );
+  Widget _buildAnimatedPos(Widget card, Position position, StreamController sc) {
+    return StreamBuilder<Position>(
+        stream: sc.stream,
+        builder: (context, snapshot) {
+          ///snapshot.data?? "first" == snapshot.data != null ? snapshot.data : "first"
+          if (snapshot.data == null) {
+            return SizedBox();
+          }
+          return AnimatedPositioned(
+            left: snapshot.data.getLeft(),
+//            right: snapshot.data.getRight(),
+            top: snapshot.data.getTop(),
+//            bottom: snapshot.data.getBottom(),
+            child: snapshot.data.getVisible()? card : SizedBox(),
+            duration: Duration(seconds: 2),
+            curve: Curves.fastOutSlowIn,
+          );
+        });
+
   }
 
   Widget getFirstPlayerView() {
@@ -435,10 +466,40 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   void dispose() {
-    widget.game.removeListener(_listener);
+    //widget.game.removeListener(_listener);
     for (Player player in widget.game.players) {
       player.removeListener(_listener);
     }
     super.dispose();
   }
+
+  Widget getAnimationCard() {
+    CardQuartets card = CardQuartets("", "", null, "", "", "", "", false);
+    return card;
+  }
+
+//  Future takeCardFromDeckAnimation(Player player) async{
+//    await setPosCardToSpecPlayer(this.deckCard, player);
+////    this.updateObservers();
+//    await setPosToDeck();
+////    this.updateObservers();
+//    //print("give card for: " + player.name);
+//    return new Future.delayed(const Duration(seconds: 2));
+//  }
+
+//  Future setPosCardToSpecPlayer(CardQuartets card, Player player) async{
+//
+//    card.position.setPosition(widget.game.getApproPosition(player));
+//
+////    await Future.delayed(Duration(seconds: 3));
+//    return Future.delayed(Duration(seconds: 3));
+//  }
+
+//  Future setPosToDeck() {
+//    this.deckCard.position.setPosition(deckPos);
+////    await Future.delayed(Duration(seconds: 3));
+//    return Future.delayed(Duration(seconds: 3));
+//  }
+
+
 }

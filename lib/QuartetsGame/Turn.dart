@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
@@ -11,8 +13,10 @@ class Turn extends StatefulWidget {
   Player playerChosenToAsk;
   Subject subjectToAsk;
   CardQuartets cardToAsk;
+  StreamController streamController;
 
-  Turn(QuartetsGame g) {
+  Turn(QuartetsGame g, StreamController sc) {
+    this.streamController = sc;
     this.game = g;
     this.playerChosenToAsk = g.getFirstPlayer();
     List<String> subjects = g.getMyPlayer().getSubjects();
@@ -51,10 +55,11 @@ class _turnState extends State<Turn> {
               child: ButtonTheme(
                   buttonColor: Colors.pink,
                   child: SizedBox(
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),),
                         onPressed: () async {
+
                           if (widget.playerChosenToAsk.getSubjects().contains(widget.subjectToAsk.name_subject)) {
                             setState(() {
                               this.chosenPlayerAndCategoryToAsk = true;
@@ -174,9 +179,9 @@ class _turnState extends State<Turn> {
               child: ButtonTheme(
                   buttonColor: Colors.pink,
                   child: SizedBox(
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),),
                         onPressed: () async {
                           if (await doTurn()) {
                             print("more turn!");
@@ -248,7 +253,7 @@ class _turnState extends State<Turn> {
   Future updateMoreTurn(){
     setState(() {
       chosenPlayerAndCategoryToAsk = false;
-      widget.game.updateObservers();
+      //widget.game.updateObservers();
     });
     return Future.delayed(Duration(seconds: 1));
   }

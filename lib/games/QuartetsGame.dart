@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:engli_app/QuartetsGame/Constants.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
@@ -10,39 +12,36 @@ import '../Constants.dart';
 import 'Game.dart';
 
 class QuartetsGame extends Game {
-  List<Function> observers;
+//  List<Function> observers;
   Deck deck;
   String nameAsked;
   String subjectAsked;
   String cardAsked;
+  StreamController _firstController;
+  StreamController _secondController;
+  StreamController _thirdController;
+  StreamController _meController;
+  StreamController _deckController;
+  StreamController _turnController;
 
-  CardQuartets firstCard;
-  CardQuartets secondCard;
-  CardQuartets thirdCard;
-  CardQuartets meCard;
-  CardQuartets deckCard;
 
-  //List<Subject> subjects;
-
-  QuartetsGame() {
+  QuartetsGame(StreamController sc1, StreamController sc2, StreamController sc3, StreamController scMe, StreamController scDeck, StreamController scTurn) {
     this.nameAsked = null;
     this.subjectAsked = null;
     this.cardAsked = null;
     this.players = [];
-    this.observers = [];
+
+    // controllers for animations.
+    this._firstController = sc1;
+    this._secondController = sc2;
+    this._thirdController = sc3;
+    this._meController = scMe;
+    this._deckController = scDeck;
+
+    this._turnController = scTurn;
+//    this.observers = [];
     reStart();
 
-    this.firstCard = getAnimationCard();
-    this.secondCard = getAnimationCard();
-    this.thirdCard = getAnimationCard();
-    this.meCard = getAnimationCard();
-    this.deckCard = getAnimationCard();
-  }
-
-  Widget getAnimationCard() {
-    CardQuartets card = CardQuartets("", "", null, "", "", "", "", false);
-    //card.visible = false;
-    return card;
   }
 
   void reStart() {
@@ -82,7 +81,8 @@ class QuartetsGame extends Game {
         this.cardAsked = card.english;
       }
       await takeCardFromPlayer(card, player);
-      updateObservers();
+      //updateObservers();
+
       return new Future.delayed(const Duration(seconds: 5), () => true);
     } else {
       // didn't success take card from another player
@@ -90,7 +90,7 @@ class QuartetsGame extends Game {
       this.subjectAsked = subject.name_subject;
       this.cardAsked = "";
       await takeCardFromDeck();
-      updateObservers();
+      //updateObservers();
       return new Future.delayed(const Duration(seconds: 5), () => false);
     }
   }
@@ -112,19 +112,19 @@ class QuartetsGame extends Game {
     }
   }
 
-  void updateObservers() {
-    for (Function f in this.observers) {
-      f();
-    }
-  }
-
-  void addListener(listener) {
-    this.observers.add(listener);
-  }
-
-  void removeListener(listener) {
-    this.observers.remove(listener);
-  }
+//  void //updateObservers() {
+//    for (Function f in this.observers) {
+//      f();
+//    }
+//  }
+//
+//  void addListener(listener) {
+////    this.observers.add(listener);
+//  }
+//
+//  void removeListener(listener) {
+////    this.observers.remove(listener);
+//  }
 
   Player getPlayerByName(String name) {
     //TODO: if there are some players?
@@ -149,15 +149,17 @@ class QuartetsGame extends Game {
     removeAllSeriesDone(player);
     if (checkIfGameDone()) {
       reStart();
-      updateObservers();
+//      //updateObservers();
       return true;
     }
     this.turn = (this.turn + 1) % this.players.length;
-    updateObservers();
+    this._turnController.add(this.turn);
+    //updateObservers();
     checkComputerPlayerTurn();
     if (checkIfGameDone()) {
       reStart();
-      updateObservers();
+      //updateObservers();
+
       return true;
     }
     return false;
@@ -602,22 +604,35 @@ class QuartetsGame extends Game {
   Future takeCardFromDeck() async{
     if(this.deck.cards.length > 0) {
       Player player = getPlayerNeedTurn();
-      await takeCardFromDeckAnimation(player);
-      //this.updateObservers();
+      print(player.name + " need to take card from deck!!");
+
+      animateCard(this._deckController, deckPos, player);
+
       await this.deck.giveCardToPlayer(player);
-      this.updateObservers();
+//      updateObservers();
       return Future.delayed(const Duration(seconds: 2));
     }
   }
 
-  Future takeCardFromDeckAnimation(Player player) async{
-    await setPosCardToSpecPlayer(this.deckCard, player);
-//    this.updateObservers();
-    await setPosToDeck();
-//    this.updateObservers();
-    //print("give card for: " + player.name);
-    return new Future.delayed(const Duration(seconds: 2));
+  void animateCard(StreamController sc, Position source, Player playerGiveToHim) async{
+    //todo: arrange animations!
+    Position p = source;
+    p.visible = true;
+    sc.add(p);
+    await new Future.delayed(Duration(seconds: 2));
+
+
+    p = getApproPosition(playerGiveToHim);
+    sc.add(p);
+    await new Future.delayed(Duration(seconds: 2));
+
+    p.visible = false;
+    p = source;
+    sc.add(p);
+    await new Future.delayed(Duration(seconds: 2));
   }
+
+
 
   List<Subject> getSubjectsOfPlayer(Player player) {
     List<Subject> subjects = [];
@@ -667,12 +682,25 @@ class QuartetsGame extends Game {
     return series.length;
   }
 
+  StreamController getAppropriateController(Player p) {
+    if (p==getFirstPlayer()) {
+      return this._firstController;
+    } else if (p==getSecondPlayer()){
+      return this._secondController;
+    } else if (p==getThirdPlayer()){
+      return this._thirdController;
+    } else if (p==getMyPlayer()){
+      return this._meController;
+    }
+  }
+
   Future takeCardFromPlayer(CardQuartets card, Player tokenFrom) {
     Player player = getPlayerNeedTurn();
     if (!player.takeCardFromPlayer(card, tokenFrom)) {
       throw new Exception("error in take card");
     }
-    //TODO: animation
+    animateCard(getAppropriateController(tokenFrom), getApproPosition(tokenFrom), player);
+
     return new Future.delayed(const Duration(seconds: 2));
   }
 
@@ -696,22 +724,5 @@ class QuartetsGame extends Game {
     } else if (getMyPlayer() == player){
       return mePos;
     } else {throw Exception("didnt find appropriate player");}
-  }
-
-  Future setPosCardToSpecPlayer(CardQuartets card, Player player) async{
-    //card.visible = true;
-    //this.updateObservers();
-    card.position.setPosition(getApproPosition(player));
-    this.updateObservers();
-//    await Future.delayed(Duration(seconds: 3));
-    return Future.delayed(Duration(seconds: 3));
-  }
-
-  Future setPosToDeck() {
-    //this.deckCard.visible = false;
-    this.deckCard.position.setPosition(deckPos);
-    this.updateObservers();
-//    await Future.delayed(Duration(seconds: 3));
-    return Future.delayed(Duration(seconds: 3));
   }
 }
