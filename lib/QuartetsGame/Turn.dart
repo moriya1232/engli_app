@@ -27,7 +27,6 @@ class Turn extends StatefulWidget {
       this.subjectToAsk = null;
       this.cardToAsk = null;
     }
-
   }
 
   @override
@@ -51,34 +50,24 @@ class _turnState extends State<Turn> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              alignment: Alignment.center,
-              child: ButtonTheme(
-                  buttonColor: Colors.pink,
-                  child: SizedBox(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),),
-                        onPressed: () async {
-
-                          if (widget.playerChosenToAsk.getSubjects().contains(widget.subjectToAsk.name_subject)) {
-                            setState(() {
-                              this.chosenPlayerAndCategoryToAsk = true;
-                            });
-                          } else{
-                            widget.game.takeCardFromDeck();
-                            doneTurn();
-                            print("${widget.playerChosenToAsk} don't have subject: ${widget.subjectToAsk}, so player dont ask about spec card.");
-                          }
-                        },
-                        child: Text(
-                          '!שאל',
-                          style: TextStyle(
-                              fontFamily: 'Comix-h',
-                              color: Colors.black87,
-                              fontSize: 15),
-                        ),
-                      ))),
-            ),
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.pink,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                  ),
+                  onPressed: () async {
+                    askClicked();
+                  },
+                  child: Text(
+                    '!שאל',
+                    style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        color: Colors.black87,
+                        fontSize: 15),
+                  ),
+                )),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
@@ -149,14 +138,14 @@ class _turnState extends State<Turn> {
                               widget.game.getPlayerByName(newValue);
                         });
                       },
-                      items: names.map<DropdownMenuItem<String>>((
-                          String value) {
+                      items:
+                          names.map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(
                             value,
-                            style: TextStyle(
-                                fontSize: 15, fontFamily: 'Miri-h'),
+                            style:
+                                TextStyle(fontSize: 15, fontFamily: 'Miri-h'),
                           ),
                         );
                       }).toList(),
@@ -180,29 +169,31 @@ class _turnState extends State<Turn> {
                   buttonColor: Colors.pink,
                   child: SizedBox(
                       child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0)),),
-                        onPressed: () async {
-                          if (await doTurn()) {
-                            print("more turn!");
-                            widget.game.removeAllSeriesDone(
-                                widget.game.getPlayerNeedTurn());
-                            await updateMoreTurn();
-                            if (widget.game.getPlayerNeedTurn().cards.length == 0) {
-                              doneTurn();
-                            }
-                          } else {
-                            doneTurn();
-                          }
-                        },
-                        child: Text(
-                          '!שאל',
-                          style: TextStyle(
-                              fontFamily: 'Comix-h',
-                              color: Colors.black87,
-                              fontSize: 15),
-                        ),
-                      ))),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15.0)),
+                    ),
+                    onPressed: () async {
+                      if (await doTurn()) {
+                        print("more turn!");
+                        widget.game.removeAllSeriesDone(
+                            widget.game.getPlayerNeedTurn());
+                        await updateMoreTurn();
+                        if (widget.game.getPlayerNeedTurn().cards.length == 0) {
+                          doneTurn();
+                        }
+                      } else {
+                        doneTurn();
+                      }
+                    },
+                    child: Text(
+                      '!שאל',
+                      style: TextStyle(
+                          fontFamily: 'Comix-h',
+                          color: Colors.black87,
+                          fontSize: 15),
+                    ),
+                  ))),
             ),
             Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -235,8 +226,8 @@ class _turnState extends State<Turn> {
                         value: value,
                         child: Text(
                           value,
-                          style: TextStyle(fontSize: 18,
-                              fontFamily: 'Courgette-e'),
+                          style: TextStyle(
+                              fontSize: 18, fontFamily: 'Courgette-e'),
                         ),
                       );
                     }).toList(),
@@ -250,7 +241,7 @@ class _turnState extends State<Turn> {
     }
   }
 
-  Future updateMoreTurn(){
+  Future updateMoreTurn() {
     setState(() {
       chosenPlayerAndCategoryToAsk = false;
       //widget.game.updateObservers();
@@ -258,24 +249,23 @@ class _turnState extends State<Turn> {
     return Future.delayed(Duration(seconds: 1));
   }
 
-  void doneTurn(){
+  void doneTurn() {
     if (widget.game.doneTurn()) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) =>
-                WinnerRoom(widget.game)),
+        MaterialPageRoute(builder: (context) => WinnerRoom(widget.game)),
       );
     }
   }
 
-  Future<bool> doTurn() async{
-    print("ask ${widget.playerChosenToAsk.name}, on subject ${widget.subjectToAsk.name_subject}, on card: ${widget.cardToAsk.english}");
-    if (widget.game.askPlayerSpecCard(widget.playerChosenToAsk,
-        widget.subjectToAsk, widget.cardToAsk) !=
+  Future<bool> doTurn() async {
+    print(
+        "ask ${widget.playerChosenToAsk.name}, on subject ${widget.subjectToAsk.name_subject}, on card: ${widget.cardToAsk.english}");
+    if (widget.game.askPlayerSpecCard(
+            widget.playerChosenToAsk, widget.subjectToAsk, widget.cardToAsk) !=
         null) {
-      await widget.game.takeCardFromPlayer(
-          widget.cardToAsk, widget.playerChosenToAsk);
+      await widget.game
+          .takeCardFromPlayer(widget.cardToAsk, widget.playerChosenToAsk);
       return true;
     } else {
       widget.game.takeCardFromDeck();
@@ -289,5 +279,21 @@ class _turnState extends State<Turn> {
 //    } else {
     return widget.cardToAsk.english;
     //}
+  }
+
+  askClicked() {
+    if (widget.playerChosenToAsk
+        .getSubjects()
+        .contains(widget.subjectToAsk.name_subject)) {
+      setState(() {
+        this.chosenPlayerAndCategoryToAsk = true;
+      });
+    } else {
+      widget.game.takeCardFromDeck();
+
+      doneTurn();
+      print(
+          "${widget.playerChosenToAsk} don't have subject: ${widget.subjectToAsk}, so player dont ask about spec card.");
+    }
   }
 }

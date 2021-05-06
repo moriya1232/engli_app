@@ -50,7 +50,7 @@ double getSecondPlayerTop() {
 }
 
 double getThirdPlayerLeft() {
-  return widthScreen - heightCloseCard / 2;
+  return widthScreen - heightCloseCard;
 }
 
 double getThirdPlayerTop() {
