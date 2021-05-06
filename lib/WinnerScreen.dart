@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 import 'games/Game.dart';
 
-class WinnerRoom extends StatefulWidget {
+class WinnerScreen extends StatefulWidget {
   Game game;
 
-  WinnerRoom(Game g) {
+  WinnerScreen(Game g) {
     this.game = g;
   }
 
@@ -14,7 +14,7 @@ class WinnerRoom extends StatefulWidget {
   _winnerRoomState createState() => _winnerRoomState();
 }
 
-class _winnerRoomState extends State<WinnerRoom> {
+class _winnerRoomState extends State<WinnerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

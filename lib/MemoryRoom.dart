@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:engli_app/Winner.dart';
+import 'package:engli_app/WinnerScreen.dart';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
 import 'games/MemoryGame.dart';
@@ -37,23 +37,27 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.game.pairs.isNotEmpty) {
+//    if (widget.game.pairs.isNotEmpty) {
       return getDesign(context);
-    } else {
-      goToWinnerScreen();
-      widget.game = new MemoryGame(widget.computerEnemy, this.widget.enemyName, this.widget._streamControllerMyScore, this.widget._streamControllerEnemyScore);
-      return getDesign(context);
-    }
+//    } else {
+//      goToWinnerScreen();
+//      widget.game = new MemoryGame(widget.computerEnemy, this.widget.enemyName, this.widget._streamControllerMyScore, this.widget._streamControllerEnemyScore);
+//      return getDesign(context);
+//    }
   }
-//
-//  void _listener() {
+
+  void _listener() {
 //    setState(() {});
-//  }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WinnerScreen(this.widget.game)),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-//    widget.game.addListener(_listener);
+    widget.game.addListener(_listener);
 //    for (Player player in widget.game.players) {
 //      player.addListener(_listener);
 //    }
@@ -64,7 +68,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   @override
   void dispose() {
-//    widget.game.removeListener(_listener);
+    widget.game.removeListener(_listener);
 //    for (Player player in widget.game.players) {
 //      player.removeListener(_listener);
 //    }
@@ -200,15 +204,5 @@ class _MemoryRoomState extends State<MemoryRoom> {
         .toList();
 
     return Row(children: colsWidget);
-  }
-
-  void goToWinnerScreen() {
-    //TODO: i dont know why but there is exception here when winner! i think because its called from build.
-    // TODO: check it again^^
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => WinnerRoom(widget.game)),
-    );
   }
 }

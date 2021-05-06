@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/Player.dart';
-import 'package:engli_app/Winner.dart';
+import 'package:engli_app/WinnerScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
@@ -54,6 +54,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   void initState() {
     super.initState();
     firstBuild = true;
+    this.widget.game.addListener(_listener);
 //    for (Player player in widget.game.players) {
 //      player.addListener(_listener);
 //    }
@@ -81,7 +82,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
 
     // get view for asking other players.
-    if (!this.widget.game.checkIfGameDone()) {
+//    if (!this.widget.game.checkIfGameDone()) {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightGreen,
@@ -199,10 +200,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               widget._streamControllerDeck),
         ]),
       );
-    } else {
+//    } else {
       // if game done - go to Winner room.
-      return WinnerRoom(this.widget.game);
-    }
+//      return WinnerRoom(this.widget.game);
+//    }
   }
 
   void setConstants() {
@@ -310,9 +311,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
   }
 
-//  void _listener() {
-//    setState(() {});
-//  }
+  void _listener() {
+    //setState(() {});
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WinnerScreen(this.widget.game)),
+    );
+  }
 
   Widget _buildAnimatedPos(
       Widget card, Position position, StreamController sc) {
@@ -485,7 +490,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   void dispose() {
-    //widget.game.removeListener(_listener);
+    widget.game.removeListener(_listener);
 //    for (Player player in widget.game.players) {
 //      player.removeListener(_listener);
 //    }

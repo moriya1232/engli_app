@@ -3,7 +3,7 @@ import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/Player.dart';
-import 'package:engli_app/Winner.dart';
+import 'package:engli_app/WinnerScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -249,7 +249,7 @@ class _turnState extends State<Turn> {
     if (widget.game.doneTurn()) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => WinnerRoom(widget.game)),
+        MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
       );
     }
   }

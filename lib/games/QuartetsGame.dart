@@ -16,6 +16,7 @@ class QuartetsGame extends Game {
   String nameAsked;
   String subjectAsked;
   String cardAsked;
+  List<Function> observers;
 
   // controllers for animate the view.
   StreamController _firstController;
@@ -34,6 +35,7 @@ class QuartetsGame extends Game {
     this.subjectAsked = null;
     this.cardAsked = null;
     this.players = [];
+    this.observers = [];
 
     // controllers for animations.
     this._firstController = sc1;
@@ -48,6 +50,19 @@ class QuartetsGame extends Game {
     this._myCardsController=myCards;
     this._otherPlayersCardsController=otherCards;
     reStart();
+  }
+    void addListener(listener) {
+    this.observers.add(listener);
+  }
+
+  void removeListener(listener) {
+    this.observers.remove(listener);
+  }
+
+  void updateObservers() {
+    for(Function f in this.observers) {
+      f();
+    }
   }
 
   void reStart() {
@@ -174,6 +189,7 @@ class QuartetsGame extends Game {
 
   bool checkIfGameDone() {
     if (this.deck.cards.length == 0 && !isPlayersHasCards()) {
+      this.updateObservers();
       //TODO: dispose everything
       return true;
     }

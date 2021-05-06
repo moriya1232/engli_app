@@ -1,4 +1,4 @@
-//import 'dart:io';
+
 import 'dart:async';
 
 import 'package:engli_app/Constants.dart';
@@ -13,6 +13,7 @@ class MemoryGame extends Game {
   StreamController _myScoreController;
   StreamController _enemyScoreController;
   List<StreamController> controllers;
+  List<Function> observers;
 
 
   MemoryGame(bool computerEnemy, enemyName, StreamController myScore, StreamController enemyScore) {
@@ -24,6 +25,7 @@ class MemoryGame extends Game {
     this.controllers = [];
     this.players = [];
     this.pairs = [];
+    this.observers = [];
     this.turn = 0;
     reStart(computerEnemy, meName, enemyName);
 //    this.observers = [];
@@ -39,6 +41,20 @@ class MemoryGame extends Game {
     this.pairs = createPairs();
     setGameToPairs(pairs, this);
     this.turn = 0;
+  }
+
+  void addListener(listener) {
+    this.observers.add(listener);
+  }
+
+  void removeListener(listener) {
+    this.observers.remove(listener);
+  }
+
+  void updateObservers() {
+    for(Function f in this.observers) {
+      f();
+    }
   }
 
   void setGameToPairs(List<Pair> list, MemoryGame mg) {
@@ -110,6 +126,15 @@ class MemoryGame extends Game {
 
   void removePair(Pair pair) {
     this.pairs.remove(pair);
+    checkIfGameDone();
+  }
+
+  bool checkIfGameDone() {
+    if (this.pairs.length <= 0) {
+      updateObservers();
+      return true;
+    }
+    return false;
   }
 
   List<CardMemory> getCards() {
@@ -226,14 +251,6 @@ class MemoryGame extends Game {
     ComputerPlayer player = this.players[this.turn] as ComputerPlayer;
     print("computer need to move");
     player.makeMove(this);
-//    updateObservers();
   }
 
-//  void addListener(listener) {
-//    this.observers.add(listener);
-//  }
-//
-//  void removeListener(listener) {
-//    this.observers.remove(listener);
-//  }
 }
