@@ -1,3 +1,5 @@
+import 'package:engli_app/GetInRoom.dart';
+import 'package:engli_app/OpenRoom.dart';
 import 'package:engli_app/QuartetsRoom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,6 @@ class Wrapper extends StatelessWidget {
 //      return ChooseGame();
 //    }
 
-      return Loading();
+      return OpenRoom();
   }
 }

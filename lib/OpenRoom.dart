@@ -1,5 +1,5 @@
-import 'package:engli_app/QuartetsRoom.dart';
 import 'package:flutter/material.dart';
+import 'Loading.dart';
 
 class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
@@ -141,7 +141,7 @@ class _openRoomState extends State<OpenRoom> {
   void startGameClicked() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => QuartetsRoom()),
+      MaterialPageRoute(builder: (context) => Loading()),
     );
   }
 }
