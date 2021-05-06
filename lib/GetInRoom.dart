@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'openRoom.dart';
+import 'OpenRoom.dart';
 
 class GetInRoom extends StatefulWidget {
   @override
-  _getInRoomState createState() => _getInRoomState();
+  _GetInRoomState createState() => _GetInRoomState();
 }
 
-class _getInRoomState extends State<GetInRoom> {
+class _GetInRoomState extends State<GetInRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

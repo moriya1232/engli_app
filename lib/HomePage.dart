@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'loginUser.dart';
-import 'registerationUser.dart';
+import 'LoginUser.dart';
+import 'RegisterationUser.dart';
 import 'package:engli_app/srevices/auth.dart';
 
 

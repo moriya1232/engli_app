@@ -1,9 +1,9 @@
-import 'package:engli_app/chooseEnemy.dart';
-import 'package:engli_app/editingVocabulary.dart';
+import 'package:engli_app/ChooseEnemy.dart';
+import 'package:engli_app/EditingVocabulary.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
 import 'Data.dart';
-import 'getInRoom.dart';
+import 'GetInRoom.dart';
 
 class ChooseGame extends StatefulWidget {
   @override

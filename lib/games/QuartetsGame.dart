@@ -5,7 +5,7 @@ import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Position.dart';
 import 'package:flutter/material.dart';
-import 'package:engli_app/players/player.dart';
+import 'package:engli_app/players/Player.dart';
 import 'package:engli_app/cards/Triple.dart';
 import 'package:engli_app/cards/Subject.dart';
 import '../Constants.dart';

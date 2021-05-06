@@ -1,7 +1,4 @@
-import 'package:engli_app/chooseGame.dart';
-import 'package:engli_app/games/QuartetsGame.dart';
-import 'package:engli_app/homePage.dart';
-import 'package:engli_app/quartetsRoom.dart';
+import 'package:engli_app/QuartetsRoom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

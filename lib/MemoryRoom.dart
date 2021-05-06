@@ -1,9 +1,9 @@
 import 'dart:math';
-import 'package:engli_app/winnerRoom.dart';
+import 'package:engli_app/Winner.dart';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
 import 'games/MemoryGame.dart';
-import 'players/player.dart';
+import 'players/Player.dart';
 
 const int maxCards = 36;
 
