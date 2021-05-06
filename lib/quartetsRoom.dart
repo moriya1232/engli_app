@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/winnerRoom.dart';
@@ -9,6 +8,7 @@ import 'QuartetsGame/Turn.dart';
 import 'cards/CardQuartets.dart';
 import 'cards/Position.dart';
 import 'Constants.dart';
+
 
 class QuartetsRoom extends StatefulWidget {
   QuartetsGame game;
@@ -227,10 +227,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           deckPos = new Position(getDeckLeft(), getDeckTop(), null, null);
     }
   }
-
-//  void _recalculate() {
-//    setState(() {});
-//  }
 
   Widget getAppropriateWidget() {
     return StreamBuilder<int>(
