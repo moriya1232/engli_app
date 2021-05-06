@@ -21,11 +21,17 @@ class _LoadingState extends State<Loading> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
-        title: Text('מחכה לשחקנים נוספים...'),
-        centerTitle: true,
+//        title: Text('מחכה לשחקנים נוספים...'),
+//        centerTitle: true,
       ),
-      body: Column(
+      body: Center( child: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
         children: [
+          Column (
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
           getListNameUsers(),
           SizedBox(
             height: 30,
@@ -34,9 +40,9 @@ class _LoadingState extends State<Loading> {
           SizedBox(
             height: 30,
           ),
-          CircularProgressIndicator(),
+          CircularProgressIndicator(),]),
         ],
-      ),
+      ),),
     );
   }
 
@@ -45,6 +51,9 @@ class _LoadingState extends State<Loading> {
         stream: _usersLoginStreamController.stream,
         builder: (context, snapshot) {
           return ListView.builder(
+
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
               itemCount: this.widget.usersLogin.length,
               itemBuilder: (BuildContext context, int index) {
                 return Text(
@@ -59,7 +68,7 @@ class _LoadingState extends State<Loading> {
         stream: _usersLoginStreamController.stream,
         builder: (context, snapshot) {
           return Text(
-            snapshot.data == null? snapshot.data + " התחבר ": "מחכה להתחברות שחקנים נוספים",
+            snapshot.data != null? snapshot.data + " התחבר ": "מחכה להתחברות שחקנים נוספים...",
           );
         });
   }
