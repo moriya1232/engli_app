@@ -25,9 +25,10 @@ class QuartetsGame extends Game {
   StreamController _turnController;
   StreamController _myCardsController;
   StreamController _otherPlayersCardsController;
+  StreamController _stringsOnDeckController;
 
   QuartetsGame(StreamController sc1, StreamController sc2, StreamController sc3,
-      StreamController scMe, StreamController scDeck, StreamController scTurn, StreamController myCards, StreamController otherCards) {
+      StreamController scMe, StreamController scDeck, StreamController scTurn, StreamController myCards, StreamController otherCards, StreamController scStrings) {
     this.nameAsked = null;
     this.subjectAsked = null;
     this.cardAsked = null;
@@ -41,6 +42,7 @@ class QuartetsGame extends Game {
     this._deckController = scDeck;
 
     this._turnController = scTurn;
+    this._stringsOnDeckController = scStrings;
 
     this._myCardsController=myCards;
     this._otherPlayersCardsController=otherCards;
@@ -158,6 +160,7 @@ class QuartetsGame extends Game {
     }
     this.turn = (this.turn + 1) % this.players.length;
     this._turnController.add(this.turn);
+    this._stringsOnDeckController.add(1);
     //updateObservers();
     checkComputerPlayerTurn();
     if (checkIfGameDone()) {
@@ -736,6 +739,7 @@ class QuartetsGame extends Game {
       animateCard(this._deckController, deckPos, player);
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);
+      this._stringsOnDeckController.add(1);
 
       await this.deck.giveCardToPlayer(player);
 //      updateObservers();

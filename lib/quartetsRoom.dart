@@ -22,6 +22,7 @@ class QuartetsRoom extends StatefulWidget {
 
   final _streamControllerMyCards = StreamController<int>.broadcast();
   final _streamControllerOtherPlayersCards = StreamController<int>.broadcast();
+  final _streamControllerStringsInDeck = StreamController<int>.broadcast();
 
   QuartetsRoom() {
     this.game = new QuartetsGame(
@@ -32,7 +33,8 @@ class QuartetsRoom extends StatefulWidget {
         this._streamControllerDeck,
         this._streamControllerTurn,
         this._streamControllerMyCards,
-        this._streamControllerOtherPlayersCards);
+        this._streamControllerOtherPlayersCards,
+    this._streamControllerStringsInDeck);
   }
 
   @override
@@ -119,32 +121,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
                                     vertical: 20, horizontal: 10),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'נותרו בערימה',
-                                        style:
-                                            TextStyle(fontFamily: 'Abraham-h'),
-                                      ),
-                                      Text(
-                                        '${widget.game.deck.cards.length}',
-                                        style:
-                                            TextStyle(fontFamily: 'Abraham-h'),
-                                      ),
-                                      SizedBox(
-                                        height: 30,
-                                      ),
-                                      Text(
-                                        ' תור ${widget.game.players[widget.game.turn].name}',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: 20,
-                                            fontFamily: 'Abraham-h'),
-                                      ),
-                                    ]),
+                                child: getStringsOnDeck(),
                               ),
                             ),
                           )
@@ -530,6 +507,40 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       player.removeListener(_listener);
     }
     super.dispose();
+  }
+
+  Widget getStringsOnDeck() {
+    return StreamBuilder<int>(
+        stream: this.widget._streamControllerStringsInDeck.stream,
+        builder: (context, snapshot)
+    {
+      return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment:
+          CrossAxisAlignment.center,
+          children: [
+            Text(
+              'נותרו בערימה',
+              style:
+              TextStyle(fontFamily: 'Abraham-h'),
+            ),
+            Text(
+              '${widget.game.deck.cards.length}',
+              style:
+              TextStyle(fontFamily: 'Abraham-h'),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Text(
+              ' תור ${widget.game.players[widget.game.turn].name}',
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 20,
+                  fontFamily: 'Abraham-h'),
+            ),
+          ]);
+    });
   }
 
   Widget getAnimationCard() {
