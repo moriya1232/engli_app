@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
@@ -164,37 +163,34 @@ class _turnState extends State<Turn> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              alignment: Alignment.center,
-              child: ButtonTheme(
-                  buttonColor: Colors.pink,
-                  child: SizedBox(
-                      child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
-                    ),
-                    onPressed: () async {
-                      if (await doTurn()) {
-                        print("more turn!");
-                        widget.game.removeAllSeriesDone(
-                            widget.game.getPlayerNeedTurn());
-                        await updateMoreTurn();
-                        if (widget.game.getPlayerNeedTurn().cards.length == 0) {
-                          doneTurn();
-                        }
-                      } else {
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.pink,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                  ),
+                  onPressed: () async {
+                    if (await doTurn()) {
+                      print("more turn!");
+                      widget.game
+                          .removeAllSeriesDone(widget.game.getPlayerNeedTurn());
+                      await updateMoreTurn();
+                      if (widget.game.getPlayerNeedTurn().cards.length == 0) {
                         doneTurn();
                       }
-                    },
-                    child: Text(
-                      '!שאל',
-                      style: TextStyle(
-                          fontFamily: 'Comix-h',
-                          color: Colors.black87,
-                          fontSize: 15),
-                    ),
-                  ))),
-            ),
+                    } else {
+                      doneTurn();
+                    }
+                  },
+                  child: Text(
+                    '!שאל',
+                    style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        color: Colors.black87,
+                        fontSize: 15),
+                  ),
+                )),
             Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,

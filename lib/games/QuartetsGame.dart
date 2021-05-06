@@ -12,11 +12,12 @@ import '../Constants.dart';
 import 'Game.dart';
 
 class QuartetsGame extends Game {
-//  List<Function> observers;
   Deck deck;
   String nameAsked;
   String subjectAsked;
   String cardAsked;
+
+  // controllers for animate the view.
   StreamController _firstController;
   StreamController _secondController;
   StreamController _thirdController;
@@ -46,11 +47,12 @@ class QuartetsGame extends Game {
 
     this._myCardsController=myCards;
     this._otherPlayersCardsController=otherCards;
-//    this.observers = [];
     reStart();
   }
 
   void reStart() {
+
+    // create players.
     for (int i = 0; i < playersNames.length + 1; i++) {
       if (i == 0) {
         createPlayer(true, quartetsMe);
@@ -58,10 +60,16 @@ class QuartetsGame extends Game {
       }
       createPlayer(false, playersNames[i - 1]);
     }
+
     Deck deck = createDeck();
     deck.handoutDeck(this.players);
     this.deck = deck;
     this.turn = 0;
+
+    //todo: check it! for replace "checkComputerPlayerTurn" to call by turnController
+//    this._turnController.onListen(
+//
+//    );
   }
 
   bool askPlayer(Player player, Subject subject) {
@@ -73,8 +81,11 @@ class QuartetsGame extends Game {
     return false;
   }
 
+  /// return Future with boolean: true if computer success take card from another player, otherwise - false.
   Future<bool> askByComputer(
       Player player, Subject subject, CardQuartets card) async {
+
+    //ask card that not in the right subject.
     if (card.subject != subject.name_subject) {
       throw Exception("not appropriate card and subject!");
     }
@@ -83,11 +94,11 @@ class QuartetsGame extends Game {
       //success take card from another player.
       this.nameAsked = player.name;
       this.subjectAsked = subject.name_subject;
+      // ask subject that the player has.
       if (askPlayer(player, subject)) {
         this.cardAsked = card.english;
       }
       await takeCardFromPlayer(card, player);
-      //updateObservers();
 
       return new Future.delayed(const Duration(seconds: 5), () => true);
     } else {
@@ -96,7 +107,7 @@ class QuartetsGame extends Game {
       this.subjectAsked = subject.name_subject;
       this.cardAsked = "";
       await takeCardFromDeck();
-      //updateObservers();
+
       return new Future.delayed(const Duration(seconds: 5), () => false);
     }
   }
@@ -118,22 +129,8 @@ class QuartetsGame extends Game {
     }
   }
 
-//  void //updateObservers() {
-//    for (Function f in this.observers) {
-//      f();
-//    }
-//  }
-//
-//  void addListener(listener) {
-////    this.observers.add(listener);
-//  }
-//
-//  void removeListener(listener) {
-////    this.observers.remove(listener);
-//  }
-
   Player getPlayerByName(String name) {
-    //TODO: if there are some players?
+    //TODO: if there are some players? I think that when they get in to check it and to add number, like shilo1 and shilo2.
     for (Player player in this.players) {
       if (name == player.name) {
         return player;
@@ -150,22 +147,25 @@ class QuartetsGame extends Game {
     return names;
   }
 
+  void changeToNextPlayerTurn(){
+    this.turn = (this.turn + 1) % this.players.length;
+    this._turnController.add(this.turn);
+  }
+
   bool doneTurn() {
     Player player = getPlayerNeedTurn();
     removeAllSeriesDone(player);
     if (checkIfGameDone()) {
       reStart();
-//      //updateObservers();
       return true;
     }
-    this.turn = (this.turn + 1) % this.players.length;
-    this._turnController.add(this.turn);
+    changeToNextPlayerTurn();
+
+    //update the text on the deck - view.
     this._stringsOnDeckController.add(1);
-    //updateObservers();
     checkComputerPlayerTurn();
     if (checkIfGameDone()) {
       reStart();
-      //updateObservers();
 
       return true;
     }
@@ -230,6 +230,7 @@ class QuartetsGame extends Game {
   }
 
   Deck createDeck() {
+    //TODO: replace it! -- load deck from database
     Subject furnitures = Subject(
         "Furnitures",
         Triple(
@@ -624,102 +625,6 @@ class QuartetsGame extends Game {
     }
     this.players.add(player);
     return player;
-//    List<CardQuartets> cards = [
-//      CardQuartets(
-//          "table",
-//          "שולחן",
-//          Image(
-//            image: AssetImage('images/table.jpg'),
-//          ),
-//          "Furniture",
-//          "chair",
-//          "cupboard",
-//          "bed",
-//          isMe),
-//      CardQuartets(
-//          "chair",
-//          "כסא",
-//          Image(
-//            image: AssetImage('images/chair.jpg'),
-//          ),
-//          "Furniture",
-//          "table",
-//          "cupboard",
-//          "bed",
-//          isMe),
-//      CardQuartets(
-//          "bed",
-//          "מיטה",
-//          Image(
-//            image: AssetImage('images/bed.jpg'),
-//          ),
-//          "Furniture",
-//          "chair",
-//          "cupboard",
-//          "table",
-//          isMe),
-//      CardQuartets(
-//          "cupboard",
-//          "ארון",
-//          Image(
-//            image: AssetImage('images/cupboard.jpg'),
-//          ),
-//          "Furniture",
-//          "chair",
-//          "table",
-//          "bed",
-//          isMe),
-//    ];
-//    if (isMe) {
-//      cards.add(CardQuartets(
-//          "cat",
-//          "חתול",
-//          Image(
-//            image: AssetImage('images/cat.jpg'),
-//          ),
-//          "Pets",
-//          "dog",
-//          "fish",
-//          "hamster",
-//          isMe),);
-//      cards.add(CardQuartets(
-//          "dog",
-//          "כלב",
-//          Image(
-//            image: AssetImage('images/dog.jpg'),
-//          ),
-//          "Pets",
-//          "cat",
-//          "fish",
-//          "hamster",
-//          isMe),);
-//      cards.add(CardQuartets(
-//          "hamster",
-//          "אוגר",
-//          Image(
-//            image: AssetImage('images/hamster.jpg'),
-//          ),
-//          "Pets",
-//          "dog",
-//          "fish",
-//          "cat",
-//          isMe),);
-//      cards.add(CardQuartets(
-//          "fish",
-//          "דג",
-//          Image(
-//            image: AssetImage('images/cat.jpg'),
-//          ),
-//          "Pets",
-//          "dog",
-//          "cat",
-//          "hamster",
-//          isMe),);
-//
-//      return Me(cards);
-//    } else {
-//      return Other(cards);
-//    }
   }
 
   Subject getSubjectByString(String sub) {
@@ -732,24 +637,26 @@ class QuartetsGame extends Game {
   }
 
   Future takeCardFromDeck() async {
+    //if no more cards in deck- enything happen.
     if (this.deck.cards.length > 0) {
       Player player = getPlayerNeedTurn();
       print(player.name + " need to take card from deck!!");
 
+      //animations:
       animateCard(this._deckController, deckPos, player);
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);
       this._stringsOnDeckController.add(1);
 
       await this.deck.giveCardToPlayer(player);
-//      updateObservers();
       return Future.delayed(const Duration(seconds: 2));
     }
   }
 
+  // this mathod is for the cards that need to move between the players and deck.
   void animateCard(
       StreamController sc, Position source, Player playerGiveToHim) async {
-    //todo: arrange animations!
+    //todo: arrange animations! - doesnt work well :(
     Position p = source;
     p.visible = true;
     sc.add(p);
@@ -788,6 +695,7 @@ class QuartetsGame extends Game {
     return isDone;
   }
 
+  //get the series that found yet.
   List<Subject> seriesDone(Player player) {
     List<Subject> series = [];
     for (Subject subject in getSubjectsOfPlayer(player)) {
@@ -822,6 +730,8 @@ class QuartetsGame extends Game {
       return this._thirdController;
     } else if (p == getMyPlayer()) {
       return this._meController;
+    } else {
+      throw Exception("need return controller of player but doesnt found it.");
     }
   }
 
@@ -830,6 +740,8 @@ class QuartetsGame extends Game {
     if (!player.takeCardFromPlayer(card, tokenFrom)) {
       throw new Exception("error in take card");
     }
+
+    //animations:
     animateCard(getAppropriateController(tokenFrom),
         getApproPosition(tokenFrom), player);
     this._myCardsController.add(1);
@@ -838,7 +750,8 @@ class QuartetsGame extends Game {
     return new Future.delayed(const Duration(seconds: 2));
   }
 
-  List<Player> getPlayersWithCardWithoutMe(Player me) {
+  //this method is for asking someone in this return value.
+  List<Player> getPlayersWithCardsWithoutMe(Player me) {
     List<Player> players = [];
     for (Player player in this.players) {
       if (player != me && player.cards.length > 0) {
@@ -848,6 +761,7 @@ class QuartetsGame extends Game {
     return players;
   }
 
+  //for animations cards between players.
   Position getApproPosition(Player player) {
     if (getFirstPlayer() == player) {
       return firstPlayerPos;
@@ -858,7 +772,7 @@ class QuartetsGame extends Game {
     } else if (getMyPlayer() == player) {
       return mePos;
     } else {
-      throw Exception("didnt find appropriate player");
+      throw Exception("didn't find appropriate player");
     }
   }
 }

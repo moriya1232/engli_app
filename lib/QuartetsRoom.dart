@@ -54,10 +54,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   void initState() {
     super.initState();
     firstBuild = true;
-    //widget.game.addListener(_listener);
-    for (Player player in widget.game.players) {
-      player.addListener(_listener);
-    }
+//    for (Player player in widget.game.players) {
+//      player.addListener(_listener);
+//    }
     this.firstCard = getAnimationCard();
     this.secondCard = getAnimationCard();
     this.thirdCard = getAnimationCard();
@@ -142,7 +141,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               ),
             ),
             Expanded(
-              child: getAppropriateWidget(),
+              child: getAppropriateWidgetForTurn(),
             ),
             Container(
               height: MediaQuery.of(context).size.height / 4,
@@ -228,7 +227,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
   }
 
-  Widget getAppropriateWidget() {
+  Widget getAppropriateWidgetForTurn() {
     return StreamBuilder<int>(
         stream: widget._streamControllerTurn.stream,
         builder: (context, snapshot) {
@@ -311,9 +310,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
   }
 
-  void _listener() {
-    setState(() {});
-  }
+//  void _listener() {
+//    setState(() {});
+//  }
 
   Widget _buildAnimatedPos(
       Widget card, Position position, StreamController sc) {
@@ -339,8 +338,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   Widget getFirstPlayerView() {
     return StreamBuilder<int>(
         stream: this.widget._streamControllerOtherPlayersCards.stream,
-        builder: (context, snapshot)
-    {
+        builder: (context, snapshot) {
       return Column(children: [
         Text('${widget.game
             .getFirstPlayer()
@@ -357,7 +355,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   .cards
                   .length,
               // number of items in your list
-              //here the implementation of itemBuilder. take a look at flutter docs to see details
+
               itemBuilder: (BuildContext context, int Itemindex) {
                 return widget.game
                     .getFirstPlayer()
@@ -399,7 +397,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         Container(
           alignment: Alignment.center,
           height: heightCloseCard,
-//                        width: 270,
           child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -408,16 +405,11 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   .cards
                   .length,
               // number of items in your list
-
-              //here the implementation of itemBuilder. take a look at flutter docs to see details
               itemBuilder: (BuildContext context, int Itemindex) {
                 return widget.game
                     .getSecondPlayer()
                     .cards[Itemindex]; // return your widget
               }
-//                          children: widget.game
-//                              .getSecondPlayer()
-//                              .cards,
           ),
         ),
         Text('${widget.game
@@ -457,16 +449,11 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   .cards
                   .length,
               // number of items in your list
-
-              //here the implementation of itemBuilder. take a look at flutter docs to see details
               itemBuilder: (BuildContext context, int Itemindex) {
                 return widget.game
                     .getThirdPlayer()
                     .cards[Itemindex]; // return your widget
               }
-//                          children: widget.game
-//                              .getThirdPlayer()
-//                              .cards,
           ),
         ),
         Text('${widget.game
@@ -499,9 +486,22 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   void dispose() {
     //widget.game.removeListener(_listener);
-    for (Player player in widget.game.players) {
-      player.removeListener(_listener);
-    }
+//    for (Player player in widget.game.players) {
+//      player.removeListener(_listener);
+//    }
+  //dispose all the controlles.
+    this.widget._streamControllerFirst.close();
+    this.widget._streamControllerSecond.close();
+    this.widget._streamControllerThird.close();
+    this.widget._streamControllerMe.close();
+    this.widget._streamControllerDeck.close();
+
+    this.widget._streamControllerTurn.close();
+
+    this.widget._streamControllerMyCards.close();
+    this.widget._streamControllerOtherPlayersCards.close();
+    this.widget._streamControllerStringsInDeck.close();
+
     super.dispose();
   }
 
@@ -543,28 +543,4 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     CardQuartets card = CardQuartets("", "", null, "", "", "", "", false);
     return card;
   }
-
-//  Future takeCardFromDeckAnimation(Player player) async{
-//    await setPosCardToSpecPlayer(this.deckCard, player);
-////    this.updateObservers();
-//    await setPosToDeck();
-////    this.updateObservers();
-//    //print("give card for: " + player.name);
-//    return new Future.delayed(const Duration(seconds: 2));
-//  }
-
-//  Future setPosCardToSpecPlayer(CardQuartets card, Player player) async{
-//
-//    card.position.setPosition(widget.game.getApproPosition(player));
-//
-////    await Future.delayed(Duration(seconds: 3));
-//    return Future.delayed(Duration(seconds: 3));
-//  }
-
-//  Future setPosToDeck() {
-//    this.deckCard.position.setPosition(deckPos);
-////    await Future.delayed(Duration(seconds: 3));
-//    return Future.delayed(Duration(seconds: 3));
-//  }
-
 }

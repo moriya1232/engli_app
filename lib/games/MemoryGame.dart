@@ -1,4 +1,6 @@
 //import 'dart:io';
+import 'dart:async';
+
 import 'package:engli_app/Constants.dart';
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/Pair.dart';
@@ -6,25 +8,34 @@ import 'package:engli_app/players/Player.dart';
 import 'Game.dart';
 
 class MemoryGame extends Game {
-  List<Function> observers;
+//  List<Function> observers;
   List<Pair> pairs;
+  StreamController _myScoreController;
+  StreamController _enemyScoreController;
+  List<StreamController> controllers;
 
 
-  MemoryGame(bool computerEnemy, enemyName) {
+  MemoryGame(bool computerEnemy, enemyName, StreamController myScore, StreamController enemyScore) {
     //TODO: get my name !
     String meName = "need to get my name!";
+
+    this._myScoreController = myScore;
+    this._enemyScoreController = enemyScore;
+    this.controllers = [];
     this.players = [];
     this.pairs = [];
     this.turn = 0;
     reStart(computerEnemy, meName, enemyName);
-    this.observers = [];
+//    this.observers = [];
   }
 
   void reStart(bool computerEnemy, String meName, String enemyName) {
     Me me = createPlayer(true, meName, true);
     Other enemy = createPlayer(false, enemyName, computerEnemy);
     players.add(me);
+    this.controllers.add(this._myScoreController);
     players.add(enemy);
+    this.controllers.add(this._enemyScoreController);
     this.pairs = createPairs();
     setGameToPairs(pairs, this);
     this.turn = 0;
@@ -85,16 +96,16 @@ class MemoryGame extends Game {
     }
     return cards;
   }
-
-  void updateObservers() {
-    for (Function f in this.observers) {
-      f();
-    }
-  }
+//
+//  void updateObservers() {
+//    for (Function f in this.observers) {
+//      f();
+//    }
+//  }
 
   void addPair(Pair pair) {
     this.pairs.add(pair);
-    updateObservers();
+//    updateObservers();
   }
 
   void removePair(Pair pair) {
@@ -152,7 +163,7 @@ class MemoryGame extends Game {
   void changeTurn() {
     print("change turn!!!");
     this.turn = (this.turn + 1) % this.players.length;
-    updateObservers();
+//    updateObservers();
   }
 
   void closeAllCards() {
@@ -187,16 +198,16 @@ class MemoryGame extends Game {
       Pair pairChosen = isPair(chosens[0], chosens[1]);
       if (pairChosen != null) {
         removePair(pairChosen);
-        this.players[this.turn].raiseScore(howMuchScoreForSuccess);
+        this.controllers[this.turn].add(this.players[this.turn].raiseScore(howMuchScoreForSuccess));
         return false;
       } else {
         closeAllCards();
       }
-      updateObservers();
+//      updateObservers();
       changeTurn();
     } else { // chosens.length > 2
       closeAllCards();
-      updateObservers();
+//      updateObservers();
     }
     return true;
   }
@@ -215,14 +226,14 @@ class MemoryGame extends Game {
     ComputerPlayer player = this.players[this.turn] as ComputerPlayer;
     print("computer need to move");
     player.makeMove(this);
-    updateObservers();
+//    updateObservers();
   }
 
-  void addListener(listener) {
-    this.observers.add(listener);
-  }
-
-  void removeListener(listener) {
-    this.observers.remove(listener);
-  }
+//  void addListener(listener) {
+//    this.observers.add(listener);
+//  }
+//
+//  void removeListener(listener) {
+//    this.observers.remove(listener);
+//  }
 }

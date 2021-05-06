@@ -12,42 +12,45 @@ abstract class Player {
   List<CardGame> cards;
   String name;
   int score;
-  List<Function> observers;
+//  List<Function> observers;
 
   Player(List<CardGame> cards, String name) {
     this.cards = cards;
     this.name = name;
     this.score = 0;
-    this.observers = [];
+//    this.observers = [];
   }
 
-  void raiseScore(int howMuch) {
+  int raiseScore(int howMuch) {
     this.score+=howMuch;
-    updateObservers();
+    print("raise score!");
+    return this.score;
+
+//    updateObservers();
   }
 
-  void addListener(listener) {
-    this.observers.add(listener);
-  }
+//  void addListener(listener) {
+//    this.observers.add(listener);
+//  }
+//
+//  void removeListener(listener) {
+//    this.observers.remove(listener);
+//  }
 
-  void removeListener(listener) {
-    this.observers.remove(listener);
-  }
+//  void updateObservers() {
+//    for(Function f in this.observers) {
+//      f();
+//    }
+//  }
 
-  void updateObservers() {
-    for(Function f in this.observers) {
-      f();
-    }
-  }
-
-  void _listener() {
-    updateObservers();
-  }
+//  void _listener() {
+//    updateObservers();
+//  }
 
   void addCard(CardGame card) {
     this.cards.add(card);
-    card.addListener(_listener);
-    updateObservers();
+//    card.addListener(_listener);
+//    updateObservers();
   }
 
   bool takeCardFromPlayer(CardGame card, Player player) {
@@ -136,14 +139,14 @@ class ComputerPlayer extends Other {
         if (game.doneTurn()) {
           return;
         }
-        updateObservers();
+//        updateObservers();
         return;
       }
       //random subject.
       Subject randSub = game.getSubjectByString(cards[random.nextInt(cards.length)].subject);
 
       //random player
-      List<Player> playersWithCards = game.getPlayersWithCardWithoutMe(this);
+      List<Player> playersWithCards = game.getPlayersWithCardsWithoutMe(this);
       if (playersWithCards.length == 0) {
         print("no one to ask :(");
         game.takeCardFromDeck();

@@ -1,22 +1,27 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:engli_app/Winner.dart';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
 import 'games/MemoryGame.dart';
-import 'players/Player.dart';
+
 
 const int maxCards = 36;
 
 //TODO: play against other virtual players.
 
 class MemoryRoom extends StatefulWidget {
+  final _streamControllerMyScore = StreamController<int>.broadcast();
+  final _streamControllerEnemyScore = StreamController<int>.broadcast();
+
   MemoryGame game;
   bool computerEnemy;
   String enemyName = "";
 
+
   MemoryRoom(bool computerEnemy, String en) {
     this.computerEnemy = computerEnemy;
-    this.game = new MemoryGame(computerEnemy, en);
+    this.game = new MemoryGame(computerEnemy, en, this._streamControllerMyScore, this._streamControllerEnemyScore);
     this.enemyName = en;
   }
 
@@ -28,28 +33,30 @@ class _MemoryRoomState extends State<MemoryRoom> {
   List<List<CardMemory>> columns = [];
   int howMuchCardsInColumn = 0;
 
+
+
   @override
   Widget build(BuildContext context) {
     if (widget.game.pairs.isNotEmpty) {
       return getDesign(context);
     } else {
       goToWinnerScreen();
-      widget.game = new MemoryGame(widget.computerEnemy, this.widget.enemyName);
+      widget.game = new MemoryGame(widget.computerEnemy, this.widget.enemyName, this.widget._streamControllerMyScore, this.widget._streamControllerEnemyScore);
       return getDesign(context);
     }
   }
-
-  void _listener() {
-    setState(() {});
-  }
+//
+//  void _listener() {
+//    setState(() {});
+//  }
 
   @override
   void initState() {
     super.initState();
-    widget.game.addListener(_listener);
-    for (Player player in widget.game.players) {
-      player.addListener(_listener);
-    }
+//    widget.game.addListener(_listener);
+//    for (Player player in widget.game.players) {
+//      player.addListener(_listener);
+//    }
     this.howMuchCardsInColumn =
         sqrt(widget.game.getCards().length).round();
     initializeBoard();
@@ -57,10 +64,13 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   @override
   void dispose() {
-    widget.game.removeListener(_listener);
-    for (Player player in widget.game.players) {
-      player.removeListener(_listener);
-    }
+//    widget.game.removeListener(_listener);
+//    for (Player player in widget.game.players) {
+//      player.removeListener(_listener);
+//    }
+    this.widget._streamControllerMyScore.close();
+    this.widget._streamControllerEnemyScore.close();
+
     super.dispose();
   }
 
@@ -91,13 +101,16 @@ class _MemoryRoomState extends State<MemoryRoom> {
                 ),
               ),
               Center(
-                child: Text(
-                    ' נקודות: ${widget.game.getEnemy().score}',
-                    style: TextStyle(
-                        color: Colors.lightGreen,
-                        fontSize: fontSize,
-                        fontFamily: 'Abraham-h'),
-                  ),
+                child: StreamBuilder<int>(
+                    stream: this.widget._streamControllerEnemyScore.stream,
+                    builder: (context, snapshot) {
+                      return Text(
+                        ' נקודות: ${widget.game.getEnemy().score}',
+                        style: TextStyle(
+                            color: Colors.lightGreen,
+                            fontSize: fontSize,
+                            fontFamily: 'Abraham-h'),
+                      ); } ),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,12 +132,16 @@ class _MemoryRoomState extends State<MemoryRoom> {
                 ),
               ),
               Center(
-                child: Text(
-                  ' נקודות: ${widget.game.getMe().score}',
-                  style: TextStyle(
-                      color: Colors.lightGreen,
-                      fontSize: fontSize,
-                      fontFamily: 'Abraham-h'),
+                child: StreamBuilder<int>(
+                    stream: this.widget._streamControllerMyScore.stream,
+                    builder: (context, snapshot) {
+                      return Text(
+                        ' נקודות: ${widget.game.getMe().score}',
+                        style: TextStyle(
+                            color: Colors.lightGreen,
+                            fontSize: fontSize,
+                            fontFamily: 'Abraham-h'),
+                      ); }
                 ),
               ),
               Expanded(
