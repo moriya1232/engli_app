@@ -46,15 +46,7 @@ class _CardMemoryState extends State<CardMemory> {
         },
       );
     } else {
-      return GestureDetector(
-        child: getOpenCard(context),
-        onTap: () async {
-          if (widget.game.allowSwapCards()) {
-            await changeStatusCard(true);
-            widget.game.cardClicked();
-          }
-        },
-      );
+      return getOpenCard(context);
     }
   }
 
