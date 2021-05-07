@@ -1,6 +1,4 @@
-
 import 'dart:async';
-
 import 'package:engli_app/Constants.dart';
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/Pair.dart';
@@ -8,7 +6,6 @@ import 'package:engli_app/players/Player.dart';
 import 'Game.dart';
 
 class MemoryGame extends Game {
-//  List<Function> observers;
   List<Pair> pairs;
   StreamController _myScoreController;
   StreamController _enemyScoreController;
@@ -33,7 +30,6 @@ this.computerEnemy = computerEnemy;
     this.observers = [];
     this.turn = 0;
     reStart(computerEnemy, meName, enemyName);
-//    this.observers = [];
   }
 
   void reStart(bool computerEnemy, String meName, String enemyName) {
@@ -121,16 +117,9 @@ this.computerEnemy = computerEnemy;
     }
     return cards;
   }
-//
-//  void updateObservers() {
-//    for (Function f in this.observers) {
-//      f();
-//    }
-//  }
 
   void addPair(Pair pair) {
     this.pairs.add(pair);
-//    updateObservers();
   }
 
   void removePair(Pair pair) {
@@ -198,7 +187,6 @@ this.computerEnemy = computerEnemy;
     print("change turn!!!");
     this.turn = (this.turn + 1) % this.players.length;
     this._turnController.add("change turn!");
-//    updateObservers();
   }
 
   void closeAllCards() {
@@ -239,11 +227,9 @@ this.computerEnemy = computerEnemy;
       } else {
         closeAllCards();
       }
-//      updateObservers();
       changeTurn();
     } else { // chosens.length > 2
       closeAllCards();
-//      updateObservers();
     }
     return true;
   }
