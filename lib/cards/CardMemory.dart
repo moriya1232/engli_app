@@ -8,12 +8,15 @@ class CardMemory extends CardGame {
   bool isEnglishCard;
   bool isClose;
   MemoryGame game;
+  bool computerEnemy;
 
-  CardMemory(String english, String hebrew, bool isEnglish)
+  CardMemory(String english, String hebrew, bool isEnglish, bool computerEnemy)
       : super(english, hebrew) {
+    print(computerEnemy);
     this.isEnglishCard = isEnglish;
     this.isClose = true;
     this.game=null;
+    this.computerEnemy = computerEnemy;
   }
 
   void setGame(MemoryGame mg) {
@@ -71,37 +74,28 @@ class _CardMemoryState extends State<CardMemory> {
   }
 
   Widget getOpenCard(BuildContext context) {
-    if (widget.isEnglishCard) {
       return new Card(
           child: FittedBox(
             fit: BoxFit.contain,
-            child: Text(
-              widget.english,
-              style: TextStyle(
-                fontFamily: "Carter-e"
+            child: Column ( children: [
+              this.widget.computerEnemy? SizedBox(): RotatedBox(
+                quarterTurns: 2,
+                child: textCard(),
               ),
-            ),
+              textCard(),
+            ]),
           ),
       );
-    } else {
-      return
-//        new Container(
-//        height: 100,
-//        width: 70,
-//        child:
-        Card(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: Text(
-              widget.hebrew,
-              style: TextStyle(
-                fontFamily: "Dorian-h"
-              ),
-            ),
-          ),
-        //),
-      );
-    }
+
+  }
+
+  Widget textCard() {
+    return Text(
+      widget.isEnglishCard? widget.english: widget.hebrew,
+      style: TextStyle(
+          fontFamily: widget.isEnglishCard?"Carter-e":"Dorian-h"
+      ),
+    );
   }
 
   Widget getCloseCard(BuildContext context) {

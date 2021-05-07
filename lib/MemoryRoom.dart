@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:engli_app/WinnerScreen.dart';
+import 'package:engli_app/players/Player.dart';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
 import 'games/MemoryGame.dart';
-
 
 const int maxCards = 36;
 
@@ -13,15 +13,22 @@ const int maxCards = 36;
 class MemoryRoom extends StatefulWidget {
   final _streamControllerMyScore = StreamController<int>.broadcast();
   final _streamControllerEnemyScore = StreamController<int>.broadcast();
+  final _streamControllerMoreTurn = StreamController<String>.broadcast();
+  final _streamControllerTurn = StreamController<String>.broadcast();
 
   MemoryGame game;
   bool computerEnemy;
   String enemyName = "";
 
-
   MemoryRoom(bool computerEnemy, String en) {
     this.computerEnemy = computerEnemy;
-    this.game = new MemoryGame(computerEnemy, en, this._streamControllerMyScore, this._streamControllerEnemyScore);
+    this.game = new MemoryGame(
+        computerEnemy,
+        en,
+        this._streamControllerMyScore,
+        this._streamControllerEnemyScore,
+        this._streamControllerMoreTurn,
+        this._streamControllerTurn);
     this.enemyName = en;
   }
 
@@ -33,12 +40,10 @@ class _MemoryRoomState extends State<MemoryRoom> {
   List<List<CardMemory>> columns = [];
   int howMuchCardsInColumn = 0;
 
-
-
   @override
   Widget build(BuildContext context) {
 //    if (widget.game.pairs.isNotEmpty) {
-      return getDesign(context);
+    return getDesign(context);
 //    } else {
 //      goToWinnerScreen();
 //      widget.game = new MemoryGame(widget.computerEnemy, this.widget.enemyName, this.widget._streamControllerMyScore, this.widget._streamControllerEnemyScore);
@@ -61,8 +66,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
 //    for (Player player in widget.game.players) {
 //      player.addListener(_listener);
 //    }
-    this.howMuchCardsInColumn =
-        sqrt(widget.game.getCards().length).round();
+    this.howMuchCardsInColumn = sqrt(widget.game.getCards().length).round();
     initializeBoard();
   }
 
@@ -74,100 +78,160 @@ class _MemoryRoomState extends State<MemoryRoom> {
 //    }
     this.widget._streamControllerMyScore.close();
     this.widget._streamControllerEnemyScore.close();
+    this.widget._streamControllerMoreTurn.close();
+    this.widget._streamControllerTurn.close();
 
     super.dispose();
   }
 
   Widget getDesign(BuildContext context) {
-    double fontSize = MediaQuery.of(context).size.height/30;
+    double fontSize = MediaQuery.of(context).size.height / 30;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
-        title: Text('משחק זיכרון'),
-        centerTitle: true,
-        shadowColor: Colors.black87,
-      ),
-      body: Center(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Center(
-                  child: Text(
-                    ' ${widget.game.getEnemy().name}',
-                    style: TextStyle(
-                        color: Colors.lightGreen,
-                        fontSize: fontSize,
-                        fontFamily: 'Gan-h'),
-                  ),
-                ),
-              ),
-              Center(
-                child: StreamBuilder<int>(
-                    stream: this.widget._streamControllerEnemyScore.stream,
-                    builder: (context, snapshot) {
-                      return Text(
-                        ' נקודות: ${widget.game.getEnemy().score}',
-                        style: TextStyle(
-                            color: Colors.lightGreen,
-                            fontSize: fontSize,
-                            fontFamily: 'Abraham-h'),
-                      ); } ),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+        appBar: AppBar(
+          backgroundColor: Colors.lightGreen,
+          title: Text('משחק זיכרון'),
+          centerTitle: true,
+          shadowColor: Colors.black87,
+        ),
+        body: Stack(children: [
+          Center(
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  drawBoard(),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: Center(
-                  child: Text(
-                    ' ${widget.game.getMe().name}',
-                    style: TextStyle(
-                        color: Colors.lightGreen,
-                        fontSize: fontSize,
-                        fontFamily: 'Gan-h'),
-                  ),
-                ),
-              ),
-              Center(
-                child: StreamBuilder<int>(
-                    stream: this.widget._streamControllerMyScore.stream,
-                    builder: (context, snapshot) {
-                      return Text(
-                        ' נקודות: ${widget.game.getMe().score}',
-                        style: TextStyle(
-                            color: Colors.lightGreen,
-                            fontSize: fontSize,
-                            fontFamily: 'Abraham-h'),
-                      ); }
-                ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                      ' תור: ${widget.game.players[widget.game.turn].name}',
-                      style: TextStyle(
-                          color: Colors.pink,
-                          fontSize: fontSize,
-                          fontFamily: 'Abraham-h'),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Center(
+                      child: enemyNameWidget(fontSize),
                     ),
                   ),
-                ),
+                  Center(
+                    child: enemyScoreWidget(fontSize),
+                  ),
+                  Expanded(child: SingleChildScrollView(child: drawBoard())),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    child: Center(
+                      child: Text(
+                        ' ${widget.game.getMe().name}',
+                        style: TextStyle(
+                            color: Colors.lightGreen,
+                            fontSize: fontSize,
+                            fontFamily: 'Gan-h'),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: myScoreWidget(fontSize),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: turnWidget(fontSize),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+          Center(
+            child: moreTurnWidget(),
+          )
+        ]));
+  }
+
+  Widget myScoreWidget(double fontSize) {
+    return StreamBuilder<int>(
+        stream: this.widget._streamControllerMyScore.stream,
+        builder: (context, snapshot) {
+          return Text(
+            ' נקודות: ${widget.game.getMe().score}',
+            style: TextStyle(
+                color: Colors.lightGreen,
+                fontSize: fontSize,
+                fontFamily: 'Abraham-h'),
+          );
+        });
+  }
+
+  Widget enemyScoreWidget(double fontSize) {
+    int rotated = 0;
+    if (!this.widget.computerEnemy) {
+      rotated = 2;
+    }
+    return StreamBuilder<int>(
+        stream: this.widget._streamControllerEnemyScore.stream,
+        builder: (context, snapshot) {
+          return RotatedBox(
+              quarterTurns: rotated,
+              child: Text(
+                ' נקודות: ${widget.game.getEnemy().score}',
+                style: TextStyle(
+                    color: Colors.lightGreen,
+                    fontSize: fontSize,
+                    fontFamily: 'Abraham-h'),
+              ));
+        });
+  }
+
+  Widget enemyNameWidget(double fontSize) {
+    int rotated = 0;
+    if (!this.widget.computerEnemy) {
+      rotated = 2;
+    }
+    return RotatedBox(
+        quarterTurns: rotated,
+        child:  Text(
+      ' ${widget.game.getEnemy().name}',
+      style: TextStyle(
+          color: Colors.lightGreen,
+          fontSize: fontSize,
+          fontFamily: 'Gan-h'),
+    ),);
+  }
+
+  Widget moreTurnWidget() {
+    return StreamBuilder<String>(
+        stream: this.widget._streamControllerMoreTurn.stream,
+        builder: (context, snapshot) {
+          String string = snapshot.data ?? "";
+          if (!this.widget.computerEnemy && !(this.widget.game.getPlayerNeedTurn() is Me)) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                RotatedBox(
+                  quarterTurns: 2,
+                  child: textMoreTurn(string),
+                ),
+              ]
+            );
+          }
+          else {return textMoreTurn(string);}
+        });
+  }
+
+  Widget textMoreTurn(String string) {
+    return Text(
+        string,
+        style: TextStyle(
+        color: Colors.pink, fontSize: 40, fontFamily: 'Gan-h'));
+  }
+
+  Widget turnWidget(double fontSize) {
+    return StreamBuilder<String>(
+        stream: this.widget._streamControllerTurn.stream,
+        builder: (context, snapshot) {
+          return Text(
+            ' תור: ${widget.game.players[widget.game.turn].name}',
+            style: TextStyle(
+                color: Colors.pink,
+                fontSize: fontSize,
+                fontFamily: 'Abraham-h'),
+          );
+        });
   }
 
   void initializeBoard() {
@@ -196,8 +260,10 @@ class _MemoryRoomState extends State<MemoryRoom> {
         .map((col) => Column(
             children: col
                 .map((card) => Container(
-              height: MediaQuery.of(context).size.height*(2/3)/howMuchCardsInColumn,
-                      width: MediaQuery.of(context).size.width/columns.length,
+                      height: MediaQuery.of(context).size.height *
+                          (2 / 3) /
+                          howMuchCardsInColumn,
+                      width: MediaQuery.of(context).size.width / columns.length,
                       child: card,
                     ))
                 .toList()))

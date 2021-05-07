@@ -12,16 +12,21 @@ class MemoryGame extends Game {
   List<Pair> pairs;
   StreamController _myScoreController;
   StreamController _enemyScoreController;
+  StreamController _moreTurnController;
+  StreamController _turnController;
   List<StreamController> controllers;
   List<Function> observers;
+  bool computerEnemy;
 
 
-  MemoryGame(bool computerEnemy, enemyName, StreamController myScore, StreamController enemyScore) {
+  MemoryGame(bool computerEnemy, enemyName, StreamController myScore, StreamController enemyScore, StreamController moreTurn, StreamController turn) {
     //TODO: get my name !
     String meName = "need to get my name!";
-
+this.computerEnemy = computerEnemy;
     this._myScoreController = myScore;
     this._enemyScoreController = enemyScore;
+    this._moreTurnController = moreTurn;
+    this._turnController = turn;
     this.controllers = [];
     this.players = [];
     this.pairs = [];
@@ -102,7 +107,11 @@ class MemoryGame extends Game {
 
   Pair createPair(String english, String hebrew) {
     return new Pair(
-        CardMemory(english, hebrew, true), CardMemory(english, hebrew, false));
+        CardMemory(english, hebrew, true, this.computerEnemy), CardMemory(english, hebrew, false, this.computerEnemy));
+  }
+
+  Player getPlayerNeedTurn(){
+    return this.players[turn];
   }
 
   List<CardMemory> getCardsFromPairs(List<Pair> pairs) {
@@ -188,6 +197,7 @@ class MemoryGame extends Game {
   void changeTurn() {
     print("change turn!!!");
     this.turn = (this.turn + 1) % this.players.length;
+    this._turnController.add("change turn!");
 //    updateObservers();
   }
 
@@ -224,6 +234,7 @@ class MemoryGame extends Game {
       if (pairChosen != null) {
         removePair(pairChosen);
         this.controllers[this.turn].add(this.players[this.turn].raiseScore(howMuchScoreForSuccess));
+        showMoreTurnWidget();
         return false;
       } else {
         closeAllCards();
@@ -237,7 +248,13 @@ class MemoryGame extends Game {
     return true;
   }
 
-  void cardClicked() {
+  void showMoreTurnWidget() async {
+    this._moreTurnController.add("!עוד תור");
+    await Future.delayed(Duration(seconds: 2));
+    this._moreTurnController.add("");
+  }
+
+  void cardClicked(){
     if (checkOpenCards() && this.players[this.turn] is ComputerPlayer) {
       computerMove();
       return;
