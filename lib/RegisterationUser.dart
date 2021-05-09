@@ -1,4 +1,3 @@
-
 import 'package:engli_app/Data.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +18,10 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
+    /*print("i clear");
     passwordControllerReg.clear();
     nameControllerReg.clear();
-    mailControllerReg.clear();
+    mailControllerReg.clear();*/
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -114,8 +114,10 @@ class _RegistrationState extends State<Registration> {
                           primary: Colors.amberAccent,
                         ),
                         onPressed: () {
-                          registerClicked(mailControllerReg.text,
-                              passwordControllerReg.text, nameControllerReg.text);
+                          registerClicked(
+                              mailControllerReg.text,
+                              passwordControllerReg.text,
+                              nameControllerReg.text);
                         },
                         child: Text('הירשם',
                             style: TextStyle(
@@ -152,7 +154,6 @@ class _RegistrationState extends State<Registration> {
 
   @override
   void dispose() {
-
     //TODO: but cant because after it it cant build again. when i register and exit and again register, the text field disposed yet.
 //    nameController.dispose();
 //    passwordController.dispose();

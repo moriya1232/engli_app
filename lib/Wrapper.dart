@@ -19,6 +19,6 @@ class Wrapper extends StatelessWidget {
 //      return ChooseGame();
 //    }
 
-      return ChooseGame();
+    return ChooseGame();
   }
 }
