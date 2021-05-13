@@ -1,3 +1,4 @@
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'OpenRoom.dart';
@@ -30,8 +31,8 @@ class _GetInRoomState extends State<GetInRoom> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.0)),
-                      primary: Colors.amberAccent,
+                            borderRadius: BorderRadius.circular(22.0)),
+                        primary: Colors.amberAccent,
                       ),
                       onPressed: () {
                         openRoomClicked();
@@ -69,12 +70,12 @@ class _GetInRoomState extends State<GetInRoom> {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.0)),
-                      primary: Colors.pink,
+                            borderRadius: BorderRadius.circular(22.0)),
+                        primary: Colors.pink,
                       ),
-                        onPressed: () {
+                      onPressed: () {
                         getInToRoomClicked();
-                        },
+                      },
                       child: Text('כנס לחדר',
                           style: TextStyle(
                               fontFamily: 'Comix-h',
@@ -85,7 +86,11 @@ class _GetInRoomState extends State<GetInRoom> {
     );
   }
 
-  void openRoomClicked() {
+  void openRoomClicked() async {
+    Map player = Map<String, Object>();
+    //player.
+    await GameDatabaseService()
+        .updateGame(false, null, 0, null, UniqueKey().toString());
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => OpenRoom()),
@@ -94,7 +99,5 @@ class _GetInRoomState extends State<GetInRoom> {
 
   void getInToRoomClicked() {
     //TODO
-
-
   }
 }
