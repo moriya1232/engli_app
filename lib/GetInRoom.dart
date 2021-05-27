@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'OpenRoom.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class GetInRoom extends StatefulWidget {
   @override
@@ -87,10 +89,7 @@ class _GetInRoomState extends State<GetInRoom> {
   }
 
   void openRoomClicked() async {
-    Map player = Map<String, Object>();
-    //player.
-    await GameDatabaseService()
-        .updateGame(false, null, 0, null, UniqueKey().toString());
+    await createGame();
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => OpenRoom()),
@@ -99,5 +98,21 @@ class _GetInRoomState extends State<GetInRoom> {
 
   void getInToRoomClicked() {
     //TODO
+  }
+  Future<void> createGame() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    String gameId = UniqueKey().toString();
+    List<int> cards = [];
+    String name = _auth.currentUser.displayName.toString();
+    await GameDatabaseService().updateGame(false, null, 0, null, gameId);
+    await FirebaseFirestore.instance
+        .collection("games")
+        .doc(gameId)
+        .collection("players")
+        .add({
+      'cards': cards,
+      'name': name,
+      'score': 0,
+    });
   }
 }

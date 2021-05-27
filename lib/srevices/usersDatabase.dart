@@ -16,9 +16,5 @@ class UsersDatabase {
       print('PROBLEM!!!' + e.toString());
       return null;
     }
-
-    return await usersCollection.doc(uid).set({
-      'name': name,
-    });
   }
 }
