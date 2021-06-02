@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
-import 'package:engli_app/players/Player.dart';
+import 'package:engli_app/players/player.dart';
 import 'package:engli_app/QuartetsGame/Constants.dart';
 
 class Deck {

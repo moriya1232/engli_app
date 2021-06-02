@@ -1,4 +1,4 @@
-import 'package:engli_app/players/Player.dart';
+import 'package:engli_app/players/player.dart';
 import 'package:flutter/material.dart';
 
 import 'games/Game.dart';

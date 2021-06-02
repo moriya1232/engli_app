@@ -107,6 +107,7 @@ abstract class Other extends Player {
 
 class ComputerPlayer extends Other {
   double rememberCance = 0.5;
+
   ComputerPlayer(List<CardGame> cards, String name) : super(cards, name);
   void changeRememberChance(double r) {
     this.rememberCance = r;

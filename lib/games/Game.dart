@@ -1,4 +1,4 @@
-import 'package:engli_app/players/Player.dart';
+import 'package:engli_app/players/player.dart';
 
 class Game{
   List<Player> players;

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:engli_app/WinnerScreen.dart';
-import 'package:engli_app/players/Player.dart';
+import 'package:engli_app/players/player.dart';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
 import 'games/MemoryGame.dart';

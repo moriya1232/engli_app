@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:engli_app/Constants.dart';
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/Pair.dart';
-import 'package:engli_app/players/Player.dart';
+import 'package:engli_app/players/player.dart';
 import 'Game.dart';
 
 class MemoryGame extends Game {

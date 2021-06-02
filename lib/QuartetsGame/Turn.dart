@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
-import 'package:engli_app/players/Player.dart';
+import 'package:engli_app/players/player.dart';
 import 'package:engli_app/WinnerScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
