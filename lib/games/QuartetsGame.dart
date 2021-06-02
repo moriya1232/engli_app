@@ -44,6 +44,7 @@ class QuartetsGame extends Game {
     this._meController = scMe;
     this._deckController = scDeck;
 
+
     this._turnController = scTurn;
     this._stringsOnDeckController = scStrings;
 

@@ -321,8 +321,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   Widget _buildAnimatedPos(
       Widget card, Position position, StreamController sc) {
+    position.visible = false;
     return StreamBuilder<Position>(
         stream: sc.stream,
+        initialData: position,
         builder: (context, snapshot) {
           ///snapshot.data?? "first" == snapshot.data != null ? snapshot.data : "first"
 //          if (snapshot.data == null || snapshot.data == position) {
@@ -335,7 +337,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             top: snapshot.data.getTop(),
 //            bottom: snapshot.data.getBottom(),
             child: snapshot.data.getVisible() ? card : SizedBox(),
-            duration: Duration(seconds: 2),
+            duration: Duration(seconds: 1, milliseconds: 300),
             curve: Curves.fastOutSlowIn,
           );
         });
