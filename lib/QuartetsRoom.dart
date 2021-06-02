@@ -325,6 +325,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         stream: sc.stream,
         builder: (context, snapshot) {
           ///snapshot.data?? "first" == snapshot.data != null ? snapshot.data : "first"
+//          if (snapshot.data == null || snapshot.data == position) {
           if (snapshot.data == null) {
             return SizedBox();
           }

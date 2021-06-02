@@ -103,7 +103,11 @@ class _GetInRoomState extends State<GetInRoom> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     String gameId = UniqueKey().toString();
     List<int> cards = [];
-    String name = _auth.currentUser.displayName.toString();
+    User user = _auth.currentUser;
+    String name ="";
+    if (user!=null) {
+      name = user.displayName;
+    }
     await GameDatabaseService().updateGame(false, null, 0, null, gameId);
     await FirebaseFirestore.instance
         .collection("games")

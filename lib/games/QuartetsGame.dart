@@ -658,34 +658,33 @@ class QuartetsGame extends Game {
       Player player = getPlayerNeedTurn();
       print(player.name + " need to take card from deck!!");
 
-      //animations:
-      animateCard(this._deckController, deckPos, player);
+      //animation:
+      animateCard(this._deckController, deckPos, getApproPosition(player));
+      await this.deck.giveCardToPlayer(player);
+
+      //update view:
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);
       this._stringsOnDeckController.add(1);
 
-      await this.deck.giveCardToPlayer(player);
       return Future.delayed(const Duration(seconds: 2));
     }
   }
 
   // this mathod is for the cards that need to move between the players and deck.
-  void animateCard(
-      StreamController sc, Position source, Player playerGiveToHim) async {
-    //todo: arrange animations! - doesnt work well :(
-    Position p = source;
-    p.visible = true;
-    sc.add(p);
-    await new Future.delayed(Duration(seconds: 2));
+  void animateCard (
+      StreamController sc, Position source, Position target) async {
 
-    p = getApproPosition(playerGiveToHim);
-    sc.add(p);
+    Position su = source;
+    Position  ta = target;
+    su.visible = true;
+    sc.add(su);
+    ta.visible = true;
+    sc.add(ta);
     await new Future.delayed(Duration(seconds: 2));
-
-    p.visible = false;
-    p = source;
-    sc.add(p);
-    await new Future.delayed(Duration(seconds: 2));
+    su.visible = false;
+    sc.add(su);
+//    await new Future.delayed(Duration(seconds: 2));
   }
 
   List<Subject> getSubjectsOfPlayer(Player player) {
@@ -759,7 +758,7 @@ class QuartetsGame extends Game {
 
     //animations:
     animateCard(getAppropriateController(tokenFrom),
-        getApproPosition(tokenFrom), player);
+        getApproPosition(tokenFrom), getApproPosition(player));
     this._myCardsController.add(1);
     this._otherPlayersCardsController.add(1);
 

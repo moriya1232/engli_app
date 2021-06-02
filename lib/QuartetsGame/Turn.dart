@@ -262,10 +262,10 @@ class _turnState extends State<Turn> {
         null) {
       await widget.game
           .takeCardFromPlayer(widget.cardToAsk, widget.playerChosenToAsk);
-      return true;
+      return Future.delayed(Duration(seconds: 2)).then((value) => true);
     } else {
-      widget.game.takeCardFromDeck();
-      return false;
+      await widget.game.takeCardFromDeck();
+      return Future.delayed(Duration(seconds: 2)).then((value) => false);
     }
   }
 
@@ -277,7 +277,7 @@ class _turnState extends State<Turn> {
     //}
   }
 
-  askClicked() {
+  askClicked() async{
     if (widget.playerChosenToAsk
         .getSubjects()
         .contains(widget.subjectToAsk.name_subject)) {
@@ -285,7 +285,7 @@ class _turnState extends State<Turn> {
         this.chosenPlayerAndCategoryToAsk = true;
       });
     } else {
-      widget.game.takeCardFromDeck();
+      await widget.game.takeCardFromDeck();
 
       doneTurn();
       print(

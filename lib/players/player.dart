@@ -23,7 +23,7 @@ abstract class Player {
 
   int raiseScore(int howMuch) {
     this.score+=howMuch;
-    print("raise score!");
+//    print("raise score!");
     return this.score;
 
 //    updateObservers();
@@ -55,13 +55,14 @@ abstract class Player {
 
   bool takeCardFromPlayer(CardGame card, Player player) {
     if (player.cards.contains(card)) {
+      print(this.name + " take card from " + player.name);
       this.cards.add(card);
       player.cards.remove(card);
       if (this is Me) {
-        print("give card to my player");
+//        print("give card to my player");
         card.changeStatusCard(true);
       } else {
-        print("give card to enemy player");
+//        print("give card to enemy player");
         card.changeStatusCard(false);
       }
       return true;
@@ -126,11 +127,11 @@ class ComputerPlayer extends Other {
         makeMove(game);
       }
 
-      print("done computer turn");
+//      print("done computer turn");
 
     }
     else if (game is QuartetsGame) {
-      print("computer player turn");
+//      print("computer player turn");
 
       var random = Random();
       List<CardQuartets> cards = game.getPlayerNeedTurn().cards.cast<CardQuartets>();
@@ -149,7 +150,7 @@ class ComputerPlayer extends Other {
       //random player
       List<Player> playersWithCards = game.getPlayersWithCardsWithoutMe(this);
       if (playersWithCards.length == 0) {
-        print("no one to ask :(");
+//        print("no one to ask :(");
         game.takeCardFromDeck();
         if (game.doneTurn()) {
           return;
@@ -161,8 +162,8 @@ class ComputerPlayer extends Other {
 
       //random card.
       CardQuartets randCard = getCardThatNotHave(randSub);
-      print("random subject: ${randSub.name_subject}");
-      print("random card: ${randCard.english}");
+//      print("random subject: ${randSub.name_subject}");
+//      print("random card: ${randCard.english}");
 
       //ask by chooses. if succeed take card, play again!
       if (await game.askByComputer(randPlayer, randSub, randCard)){
@@ -175,7 +176,7 @@ class ComputerPlayer extends Other {
         if (game.doneTurn()) {
           return;
         }
-        print("done computer turn");
+//        print("done computer turn");
       }
     }
   }
