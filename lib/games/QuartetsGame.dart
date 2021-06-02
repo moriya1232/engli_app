@@ -24,13 +24,16 @@ class QuartetsGame extends Game {
   StreamController _thirdController;
   StreamController _meController;
   StreamController _deckController;
+
   StreamController _turnController;
+
   StreamController _myCardsController;
+  StreamController _myScroeController;
   StreamController _otherPlayersCardsController;
   StreamController _stringsOnDeckController;
 
   QuartetsGame(StreamController sc1, StreamController sc2, StreamController sc3,
-      StreamController scMe, StreamController scDeck, StreamController scTurn, StreamController myCards, StreamController otherCards, StreamController scStrings) {
+      StreamController scMe, StreamController scDeck, StreamController scTurn, StreamController myCards, StreamController myScore, StreamController otherCards, StreamController scStrings) {
     this.nameAsked = null;
     this.subjectAsked = null;
     this.cardAsked = null;
@@ -49,6 +52,7 @@ class QuartetsGame extends Game {
     this._stringsOnDeckController = scStrings;
 
     this._myCardsController=myCards;
+    this._myScroeController = myScore;
     this._otherPlayersCardsController=otherCards;
     reStart();
   }
@@ -618,15 +622,15 @@ class QuartetsGame extends Game {
       days,
       family,
       food,
-      days1,
-      family1,
-      food1,
-      days2,
-      family2,
-      food2,
-      days3,
-      family3,
-      food3
+//      days1,
+//      family1,
+//      food1,
+//      days2,
+//      family2,
+//      food2,
+//      days3,
+//      family3,
+//      food3
     ];
 //    List<Subject> subs = [furnitures, pets, days, family, food];
     Deck deck = new Deck(subs);
@@ -733,6 +737,12 @@ class QuartetsGame extends Game {
         }
       }
       player.raiseScore(10);
+      this._myScroeController.add(10);
+      this._myCardsController.add(1);
+      this._otherPlayersCardsController.add(1);
+      this._turnController.add(1);
+
+
     }
     return series.length;
   }
