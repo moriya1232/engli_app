@@ -170,6 +170,7 @@ class QuartetsGame extends Game {
   void changeToNextPlayerTurn(){
     this.turn = (this.turn + 1) % this.players.length;
     this._turnController.add(this.turn);
+    // TODO: update server about turn.
   }
 
   bool doneTurn() {
