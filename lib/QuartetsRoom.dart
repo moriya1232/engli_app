@@ -539,6 +539,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     this.widget._streamControllerTurn.close();
 
     this.widget._streamControllerMyCards.close();
+    this.widget._streamControllerMyScore.close();
     this.widget._streamControllerOtherPlayersCards.close();
     this.widget._streamControllerStringsInDeck.close();
 

@@ -382,6 +382,61 @@ class QuartetsGame extends Game {
             Image(
               image: AssetImage('images/soup.png'),
             )));
+    Subject colors = Subject(
+        "Colors",
+        Triple(
+            "red",
+            "אדום",
+            null),
+        Triple(
+            "black",
+            "שחור",
+            null),
+        Triple(
+            "blue",
+            "כחול",
+            null),
+        Triple(
+            "green",
+            "ירוק",
+            null));
+    Subject musicalInstruments = Subject(
+        "Musical Instruments",
+        Triple(
+            "guitar",
+            "גיטרה",
+            null),
+        Triple(
+            "piano",
+            "פסנתר",
+            null),
+        Triple(
+            "flute",
+            "חליל צד",
+            null),
+        Triple(
+            "Ukulele",
+            "יוקלילי",
+            null));
+    Subject clothes = Subject(
+        "Clothes",
+        Triple(
+            "T-shirt",
+            "חולצת-טי",
+            null),
+        Triple(
+            "dress",
+            "שמלה",
+            null),
+        Triple(
+            "shoes",
+            "נעליים",
+            null),
+        Triple(
+            "skirt",
+            "חצאית",
+            null));
+
     Subject days1 = Subject(
         "Days1",
         Triple(
@@ -622,6 +677,9 @@ class QuartetsGame extends Game {
       days,
       family,
       food,
+      clothes,
+      colors,
+      musicalInstruments,
 //      days1,
 //      family1,
 //      food1,
