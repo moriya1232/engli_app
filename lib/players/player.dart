@@ -56,8 +56,11 @@ abstract class Player {
   bool takeCardFromPlayer(CardGame card, Player player) {
     if (player.cards.contains(card)) {
       print(this.name + " take card from " + player.name);
+
       this.cards.add(card);
       player.cards.remove(card);
+      // TODO: update server about cards of 2 player.
+      //TODO: update server about give "card" from "this" player to "player" player.
       if (this is Me) {
 //        print("give card to my player");
         card.changeStatusCard(true);
@@ -65,6 +68,8 @@ abstract class Player {
 //        print("give card to enemy player");
         card.changeStatusCard(false);
       }
+
+
       return true;
     } else {
       return false;
