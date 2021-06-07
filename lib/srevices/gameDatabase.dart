@@ -17,4 +17,17 @@ class GameDatabaseService {
       'gameId': id,
     });
   }
+
+  Future addPlayer(String gameId, String name) async {
+    List<int> cards = [];
+    await FirebaseFirestore.instance
+        .collection("games")
+        .doc(gameId)
+        .collection("players")
+        .add({
+      'cards': cards,
+      'name': name,
+      'score': 0,
+    });
+  }
 }

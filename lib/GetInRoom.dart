@@ -6,9 +6,12 @@ import 'OpenRoom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class GetInRoom extends StatefulWidget {
+  String gameId;
   @override
   _GetInRoomState createState() => _GetInRoomState();
 }
+
+final gameIdController = TextEditingController();
 
 class _GetInRoomState extends State<GetInRoom> {
   @override
@@ -53,6 +56,7 @@ class _GetInRoomState extends State<GetInRoom> {
                   textDirection: TextDirection.rtl,
                   child: TextFormField(
                     textAlign: TextAlign.center,
+                    controller: gameIdController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: const BorderRadius.all(
@@ -76,7 +80,7 @@ class _GetInRoomState extends State<GetInRoom> {
                         primary: Colors.pink,
                       ),
                       onPressed: () {
-                        getInToRoomClicked();
+                        getInToRoomClicked(gameIdController.text);
                       },
                       child: Text('כנס לחדר',
                           style: TextStyle(
@@ -96,27 +100,30 @@ class _GetInRoomState extends State<GetInRoom> {
     );
   }
 
-  void getInToRoomClicked() {
-    //TODO
+  void getInToRoomClicked(String gameId) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
+    String name = "";
+    if (user != null) {
+      name = user.displayName;
+    }
+    await GameDatabaseService().addPlayer(gameId, name);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OpenRoom()),
+    );
   }
+
   Future<void> createGame() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     String gameId = UniqueKey().toString();
     List<int> cards = [];
     User user = _auth.currentUser;
-    String name ="";
-    if (user!=null) {
+    String name = "";
+    if (user != null) {
       name = user.displayName;
     }
     await GameDatabaseService().updateGame(false, null, 0, null, gameId);
-    await FirebaseFirestore.instance
-        .collection("games")
-        .doc(gameId)
-        .collection("players")
-        .add({
-      'cards': cards,
-      'name': name,
-      'score': 0,
-    });
+    await GameDatabaseService().addPlayer(gameId, name);
   }
 }

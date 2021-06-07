@@ -139,7 +139,8 @@ class _RegistrationState extends State<Registration> {
   }
 
   void registerClicked(email, pass, nameUser) async {
-    dynamic res = _auth.registerWithEmailAndPassword(email, pass, nameUser);
+    dynamic res =
+        await _auth.registerWithEmailAndPassword(email, pass, nameUser);
     if (res == null) {
       setState(() => error = 'email is invaild');
       print("error mail");

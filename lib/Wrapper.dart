@@ -20,6 +20,6 @@ class Wrapper extends StatelessWidget {
       return ChooseGame();
     }
 
-//      return QuartetsRoom();
+    return QuartetsRoom();
   }
 }
