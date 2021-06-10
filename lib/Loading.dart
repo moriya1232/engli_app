@@ -3,11 +3,15 @@ import 'package:engli_app/QuartetsRoom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'cards/Subject.dart';
+
 class Loading extends StatefulWidget {
   List<User> usersLogin;
+  List<Subject> subjects;
 
-  Loading() {
+  Loading(List<Subject> list) {
     this.usersLogin = [];
+    this.subjects = list;
   }
 
   @override
@@ -73,7 +77,7 @@ class _LoadingState extends State<Loading> {
   void continueToGameClicked() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => QuartetsRoom()),
+      MaterialPageRoute(builder: (context) => QuartetsRoom(this.widget.usersLogin, this.widget.subjects)),
     );
 
   }

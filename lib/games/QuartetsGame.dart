@@ -4,6 +4,7 @@ import 'package:engli_app/QuartetsGame/Constants.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Position.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/cards/Triple.dart';
@@ -16,7 +17,9 @@ class QuartetsGame extends Game {
   String nameAsked;
   String subjectAsked;
   String cardAsked;
-  List<Function> observers;
+  List<Subject> subjects;
+
+//  List<Function> observers;
 
   // controllers for animate the view.
   StreamController _firstController;
@@ -28,17 +31,19 @@ class QuartetsGame extends Game {
   StreamController _turnController;
 
   StreamController _myCardsController;
-  StreamController _myScroeController;
+  StreamController _myScoreController;
   StreamController _otherPlayersCardsController;
   StreamController _stringsOnDeckController;
 
-  QuartetsGame(StreamController sc1, StreamController sc2, StreamController sc3,
+  QuartetsGame(List<User> users, List<Subject> subjects, StreamController sc1, StreamController sc2, StreamController sc3,
       StreamController scMe, StreamController scDeck, StreamController scTurn, StreamController myCards, StreamController myScore, StreamController otherCards, StreamController scStrings) {
+
+    this.subjects = subjects;
     this.nameAsked = null;
     this.subjectAsked = null;
     this.cardAsked = null;
     this.players = [];
-    this.observers = [];
+//    this.observers = [];
 
     // controllers for animations.
     this._firstController = sc1;
@@ -47,31 +52,14 @@ class QuartetsGame extends Game {
     this._meController = scMe;
     this._deckController = scDeck;
 
-
     this._turnController = scTurn;
     this._stringsOnDeckController = scStrings;
 
     this._myCardsController=myCards;
-    this._myScroeController = myScore;
+    this._myScoreController = myScore;
     this._otherPlayersCardsController=otherCards;
-    reStart();
-  }
-    void addListener(listener) {
-    this.observers.add(listener);
-  }
 
-  void removeListener(listener) {
-    this.observers.remove(listener);
-  }
-
-  void updateObservers() {
-    for(Function f in this.observers) {
-      f();
-    }
-  }
-
-  void reStart() {
-
+    //TODO: switch users to players. how??
     // create players.
     for (int i = 0; i < playersNames.length + 1; i++) {
       if (i == 0) {
@@ -81,7 +69,26 @@ class QuartetsGame extends Game {
       createPlayer(false, playersNames[i - 1]);
     }
 
-    Deck deck = createDeck();
+    reStart();
+  }
+//    void addListener(listener) {
+//    this.observers.add(listener);
+//  }
+//
+//  void removeListener(listener) {
+//    this.observers.remove(listener);
+//  }
+//
+//  void updateObservers() {
+//    for(Function f in this.observers) {
+//      f();
+//    }
+//  }
+
+  void reStart() {
+
+    //TODO: initialize cards in players hand.
+    Deck deck = createDeck(subjects);
     deck.handoutDeck(this.players);
     this.deck = deck;
     this.turn = 0;
@@ -195,7 +202,7 @@ class QuartetsGame extends Game {
 
   bool checkIfGameDone() {
     if (this.deck.cards.length == 0 && !isPlayersHasCards()) {
-      this.updateObservers();
+//      this.updateObservers();
       //TODO: dispose everything
       return true;
     }
@@ -251,8 +258,19 @@ class QuartetsGame extends Game {
     }
   }
 
-  Deck createDeck() {
-    //TODO: replace it! -- load deck from database
+  Deck createDeck(List<Subject> subjects) {
+
+//    TODO: take this line when there is subjects.
+//    Deck deck = new Deck(subjects);
+//  return deck;
+
+    List<Subject> subs = mySubjects();
+    Deck deck = new Deck(subs);
+
+    return deck;
+  }
+
+  List<Subject> mySubjects() {
     Subject furnitures = Subject(
         "Furnitures",
         Triple(
@@ -691,9 +709,7 @@ class QuartetsGame extends Game {
 //      family3,
 //      food3
     ];
-//    List<Subject> subs = [furnitures, pets, days, family, food];
-    Deck deck = new Deck(subs);
-    return deck;
+    return subs;
   }
 
   Player createPlayer(bool isMe, String name) {
@@ -796,7 +812,7 @@ class QuartetsGame extends Game {
         }
       }
       player.raiseScore(10);
-      this._myScroeController.add(10);
+      this._myScoreController.add(10);
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);
       this._turnController.add(1);
