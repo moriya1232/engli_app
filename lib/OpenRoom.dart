@@ -1,3 +1,4 @@
+import 'package:engli_app/cards/Subject.dart';
 import 'package:flutter/material.dart';
 import 'Loading.dart';
 
@@ -6,23 +7,7 @@ class OpenRoom extends StatefulWidget {
   Map<String, bool> series;
 
   OpenRoom() {
-    //TODO: insert the series from database.
-    List<String> list = [
-      "Pets",
-      "Family",
-      "Body",
-      "Furnitures",
-      "Animals",
-      "Colors",
-      "Food",
-      "Cars",
-      "Musical Instruments",
-      "Professions",
-      "Appliances",
-      "Languages",
-      "Clothes",
-      "Games"
-    ];
+    List<String> list = getAllSeriesNames();
     this.series = Map.fromIterable(list, key: (e) => e, value: (e) => false);
   }
 
@@ -139,9 +124,42 @@ class _openRoomState extends State<OpenRoom> {
   }
 
   void startGameClicked() {
+    List<Subject> series = loadAllMarkedSeries();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Loading()),
+      MaterialPageRoute(builder: (context) => Loading(series)),
     );
   }
+
+
+
+
 }
+
+List<String> getAllSeriesNames() {
+
+  //TODO: take the list from the database. --SHILO.
+  List<String> list = [
+    "Pets",
+    "Family",
+    "Body",
+    "Furnitures",
+    "Animals",
+    "Colors",
+    "Food",
+    "Cars",
+    "Musical Instruments",
+    "Professions",
+    "Appliances",
+    "Languages",
+    "Clothes",
+    "Games"
+  ];
+  return list;
+}
+List<Subject> loadAllMarkedSeries() {
+//TODO: load the marked series to the game --SHILO
+List<Subject> list = [];
+return list;
+}
+

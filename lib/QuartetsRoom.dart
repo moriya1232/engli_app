@@ -2,12 +2,14 @@ import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/WinnerScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
 import 'cards/CardQuartets.dart';
 import 'cards/Position.dart';
 import 'Constants.dart';
+import 'cards/Subject.dart';
 
 
 class QuartetsRoom extends StatefulWidget {
@@ -25,8 +27,9 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerStringsInDeck = StreamController<int>.broadcast();
   final _streamControllerMyScore = StreamController<int>.broadcast();
 
-  QuartetsRoom() {
+  QuartetsRoom(List<User> users, List<Subject> subjects) {
     this.game = new QuartetsGame(
+      users, subjects,
         this._streamControllerFirst,
         this._streamControllerSecond,
         this._streamControllerThird,
@@ -56,7 +59,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   void initState() {
     super.initState();
     firstBuild = true;
-    this.widget.game.addListener(_listener);
+//    this.widget.game.addListener(_listener);
 //    for (Player player in widget.game.players) {
 //      player.addListener(_listener);
 //    }
@@ -342,13 +345,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
   }
 
-  void _listener() {
-    //setState(() {});
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => WinnerScreen(this.widget.game)),
-    );
-  }
+//  void _listener() {
+//    //setState(() {});
+//    Navigator.push(
+//      context,
+//      MaterialPageRoute(builder: (context) => WinnerScreen(this.widget.game)),
+//    );
+//  }
 
   Widget _buildAnimatedPos(Widget card, Position position,
       StreamController sc) {
@@ -525,7 +528,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   void dispose() {
-    widget.game.removeListener(_listener);
+//    widget.game.removeListener(_listener);
 //    for (Player player in widget.game.players) {
 //      player.removeListener(_listener);
 //    }
