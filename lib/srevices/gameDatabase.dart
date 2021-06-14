@@ -30,4 +30,23 @@ class GameDatabaseService {
       'score': 0,
     });
   }
+
+  Future<List<String>> getSubjectsList(
+    String subjectsId,
+  ) async {
+    List<String> subjectsList = null;
+    await FirebaseFirestore.instance
+        .collection("subjects")
+        .doc(subjectsId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        print(documentSnapshot.data()["subjects_list"]);
+        var x = documentSnapshot.data()["subjects_list"];
+        List<String> strList = x.cast<String>();
+        subjectsList = strList;
+      }
+    });
+    return Future.value(subjectsList);
+  }
 }

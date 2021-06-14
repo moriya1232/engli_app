@@ -1,14 +1,22 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/cards/Subject.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
 import 'Loading.dart';
 
 class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
   Map<String, bool> series;
+  final _sc = StreamController<List<String>>.broadcast();
 
   OpenRoom() {
-    List<String> list = getAllSeriesNames();
-    this.series = Map.fromIterable(list, key: (e) => e, value: (e) => false);
+    List<String> list = [];
+    this.series = {};
+    //List<String> list = getAllSeriesNames() as List<String>;
+    // this.series = Map.fromIterable(list, key: (e) => e, value: (e) => false);
   }
 
   @override
@@ -18,6 +26,8 @@ class OpenRoom extends StatefulWidget {
 class _openRoomState extends State<OpenRoom> {
   @override
   Widget build(BuildContext context) {
+    getAllSeriesNames();
+    //widget.series = Map.fromIterable(list, key: (e) => e, value: (e) => false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -32,20 +42,7 @@ class _openRoomState extends State<OpenRoom> {
             Expanded(
               child: Container(
                 height: 500,
-                child: ListView(
-                  shrinkWrap: true,
-                  children: widget.series.keys.map((String key) {
-                    return new CheckboxListTile(
-                      title: new Text(key),
-                      value: widget.series[key],
-                      onChanged: (bool value) {
-                        setState(() {
-                          widget.series[key] = value;
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
+                child: _buildSubjectsList(widget._sc),
               ),
             ),
             Padding(
@@ -131,35 +128,43 @@ class _openRoomState extends State<OpenRoom> {
     );
   }
 
+  void getAllSeriesNames() async {
+    List<String> l =
+        await GameDatabaseService().getSubjectsList("generic_subjects");
+    print(l);
+    this.widget._sc.add(l);
+  }
 
+  Widget _buildSubjectsList(StreamController sc) {
+    return StreamBuilder<List<String>>(
+        stream: sc.stream,
+        initialData: [],
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return Container();
+          }
+          widget.series = Map.fromIterable(snapshot.data,
+              key: (e) => e, value: (e) => false);
+          return ListView(
+            shrinkWrap: true,
+            children: widget.series.keys.map((String key) {
+              return new CheckboxListTile(
+                title: new Text(key),
+                value: widget.series[key],
+                onChanged: (bool value) {
+                  setState(() {
+                    widget.series[key] = value;
+                  });
+                },
+              );
+            }).toList(),
+          );
+        });
+  }
 
-
-}
-
-List<String> getAllSeriesNames() {
-
-  //TODO: take the list from the database. --SHILO.
-  List<String> list = [
-    "Pets",
-    "Family",
-    "Body",
-    "Furnitures",
-    "Animals",
-    "Colors",
-    "Food",
-    "Cars",
-    "Musical Instruments",
-    "Professions",
-    "Appliances",
-    "Languages",
-    "Clothes",
-    "Games"
-  ];
-  return list;
-}
-List<Subject> loadAllMarkedSeries() {
+  List<Subject> loadAllMarkedSeries() {
 //TODO: load the marked series to the game --SHILO
-List<Subject> list = [];
-return list;
+    List<Subject> list = [];
+    return list;
+  }
 }
-
