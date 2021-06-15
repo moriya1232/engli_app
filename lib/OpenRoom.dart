@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +9,13 @@ import 'Loading.dart';
 class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
   Map<String, bool> series;
+  String gameId;
   final _sc = StreamController<List<String>>.broadcast();
 
-  OpenRoom() {
+  OpenRoom(String gameId) {
     List<String> list = [];
     this.series = {};
+    this.gameId = gameId;
     //List<String> list = getAllSeriesNames() as List<String>;
     // this.series = Map.fromIterable(list, key: (e) => e, value: (e) => false);
   }
@@ -121,10 +122,10 @@ class _openRoomState extends State<OpenRoom> {
   }
 
   void startGameClicked() {
-    List<Subject> series = loadAllMarkedSeries();
+    loadAllMarkedSeries();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Loading(series)),
+      MaterialPageRoute(builder: (context) => Loading(widget.gameId)),
     );
   }
 
@@ -162,9 +163,18 @@ class _openRoomState extends State<OpenRoom> {
         });
   }
 
-  List<Subject> loadAllMarkedSeries() {
+  void loadAllMarkedSeries() async {
 //TODO: load the marked series to the game --SHILO
-    List<Subject> list = [];
-    return list;
+    //widget.series
+    List<String> list = [];
+    for (var k in widget.series.keys) {
+      if (widget.series[k]) {
+        list.add(k);
+      }
+    }
+    print(list);
+
+//update the game file
+    await GameDatabaseService().updateSubjectList(widget.gameId, list);
   }
 }

@@ -9,9 +9,9 @@ class Loading extends StatefulWidget {
   List<User> usersLogin;
   List<Subject> subjects;
 
-  Loading(List<Subject> list) {
+  Loading(String gameId) {
     this.usersLogin = [];
-    this.subjects = list;
+    //this.subjects = list;
   }
 
   @override
@@ -54,8 +54,7 @@ class _LoadingState extends State<Loading> {
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(22.0)),
-                      padding:
-                      const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
                       primary: Colors.amberAccent,
                     ),
                     onPressed: () {
@@ -77,9 +76,10 @@ class _LoadingState extends State<Loading> {
   void continueToGameClicked() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => QuartetsRoom(this.widget.usersLogin, this.widget.subjects)),
+      MaterialPageRoute(
+          builder: (context) =>
+              QuartetsRoom(this.widget.usersLogin, this.widget.subjects)),
     );
-
   }
 
   Widget getListNameUsers() {

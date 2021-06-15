@@ -11,7 +11,6 @@ import 'cards/Position.dart';
 import 'Constants.dart';
 import 'cards/Subject.dart';
 
-
 class QuartetsRoom extends StatefulWidget {
   QuartetsGame game;
   final _streamControllerFirst = StreamController<Position>.broadcast();
@@ -29,7 +28,8 @@ class QuartetsRoom extends StatefulWidget {
 
   QuartetsRoom(List<User> users, List<Subject> subjects) {
     this.game = new QuartetsGame(
-      users, subjects,
+        users,
+        subjects,
         this._streamControllerFirst,
         this._streamControllerSecond,
         this._streamControllerThird,
@@ -76,10 +76,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     firstBuild = false;
     // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
     if (widget.game.getPlayerNeedTurn() is Me &&
-        this.widget.game
-            .getPlayerNeedTurn()
-            .cards
-            .length == 0) {
+        this.widget.game.getPlayerNeedTurn().cards.length == 0) {
       this
           .widget
           .game
@@ -119,14 +116,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         Padding(
                           padding: EdgeInsets.all(20),
                           child: Container(
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .height / 5,
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width / 4,
+                            height: MediaQuery.of(context).size.height / 5,
+                            width: MediaQuery.of(context).size.width / 4,
                             color: Colors.amberAccent,
                           ),
                         ),
@@ -147,10 +138,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         ),
                       if (widget.game.players.length == 3)
                         Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width / 3,
+                          width: MediaQuery.of(context).size.width / 3,
                         )
                     ],
                   ),
@@ -162,24 +150,18 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             child: getAppropriateWidgetForTurn(),
           ),
           Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 4,
+            height: MediaQuery.of(context).size.height / 4,
             child: getMyCards(),
           ),
           Container(
             color: Colors.black12,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height / 16,
+            height: MediaQuery.of(context).size.height / 16,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
-                    child: getMyText(),
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: getMyText(),
                 ),
 //                  Expanded(
 //                    child:
@@ -225,34 +207,19 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   void setConstants() {
     if (firstBuild) {
-      rowHeight = MediaQuery
-          .of(context)
-          .size
-          .height / 4;
-      fontSizeNames = MediaQuery
-          .of(context)
-          .size
-          .height / 30;
-      otherPlayersHeight = MediaQuery
-          .of(context)
-          .size
-          .height * (4 / 10);
-      widthScreen = MediaQuery
-          .of(context)
-          .size
-          .width;
-      heightScreen = MediaQuery
-          .of(context)
-          .size
-          .height;
+      rowHeight = MediaQuery.of(context).size.height / 4;
+      fontSizeNames = MediaQuery.of(context).size.height / 30;
+      otherPlayersHeight = MediaQuery.of(context).size.height * (4 / 10);
+      widthScreen = MediaQuery.of(context).size.width;
+      heightScreen = MediaQuery.of(context).size.height;
       heightCloseCard = 80;
       widthCloseCard = 60;
       this.firstCard.position = firstPlayerPos =
-      new Position(getFirstPlayerLeft(), getFirstPlayerTop(), null, null);
+          new Position(getFirstPlayerLeft(), getFirstPlayerTop(), null, null);
       this.secondCard.position = secondPlayerPos =
-      new Position(getSecondPlayerLeft(), getSecondPlayerTop(), null, null);
+          new Position(getSecondPlayerLeft(), getSecondPlayerTop(), null, null);
       this.thirdCard.position = thirdPlayerPos =
-      new Position(getThirdPlayerLeft(), getThirdPlayerTop(), null, null);
+          new Position(getThirdPlayerLeft(), getThirdPlayerTop(), null, null);
       this.meCard.position =
           mePos = new Position(getMeLeft(), getMeTop(), null, null);
       this.deckCard.position =
@@ -274,9 +241,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   }
 
   Widget getAskedText() {
-    String asked = widget.game
-        .getPlayerNeedTurn()
-        .name;
+    String asked = widget.game.getPlayerNeedTurn().name;
     String wasAsked = widget.game.nameAsked;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
@@ -293,22 +258,22 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             new TextSpan(
                 text: '$asked',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'asked '),
             new TextSpan(
                 text: '$wasAsked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'about the card: '),
             new TextSpan(
                 text: '$cardAsked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'in subject: '),
             new TextSpan(
                 text: '$subjectAsked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
           ],
         ),
       );
@@ -325,17 +290,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             new TextSpan(
                 text: '$asked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'asked '),
             new TextSpan(
                 text: '$wasAsked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'about subject: '),
             new TextSpan(
                 text: '$subjectAsked',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: ', and he does not have this subject'),
           ],
         ),
@@ -353,8 +318,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 //    );
 //  }
 
-  Widget _buildAnimatedPos(Widget card, Position position,
-      StreamController sc) {
+  Widget _buildAnimatedPos(
+      Widget card, Position position, StreamController sc) {
     position.visible = false;
     return StreamBuilder<Position>(
         stream: sc.stream,
@@ -382,34 +347,22 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         stream: this.widget._streamControllerOtherPlayersCards.stream,
         builder: (context, snapshot) {
           return Column(children: [
-            Text('${widget.game
-                .getFirstPlayer()
-                .cards
-                .length}'),
+            Text('${widget.game.getFirstPlayer().cards.length}'),
             Container(
               alignment: Alignment.center,
               height: heightCloseCard,
               child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.game
-                      .getFirstPlayer()
-                      .cards
-                      .length,
+                  itemCount: widget.game.getFirstPlayer().cards.length,
                   // number of items in your list
 
                   itemBuilder: (BuildContext context, int Itemindex) {
-                    return widget.game
-                        .getFirstPlayer()
-                        .cards[Itemindex];
+                    return widget.game.getFirstPlayer().cards[Itemindex];
                   }),
             ),
             Text(
-              '${widget.game
-                  .getFirstPlayer()
-                  .name}: ${widget.game
-                  .getFirstPlayer()
-                  .score}',
+              '${widget.game.getFirstPlayer().name}: ${widget.game.getFirstPlayer().score}',
               style: TextStyle(
                 fontFamily: 'Comix-h',
                 fontSize: fontSizeNames,
@@ -425,11 +378,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         builder: (context, snapshot) {
           return Column(children: [
             Text(
-              '${widget.game
-                  .getSecondPlayer()
-                  .name}: ${widget.game
-                  .getSecondPlayer()
-                  .score}',
+              '${widget.game.getSecondPlayer().name}: ${widget.game.getSecondPlayer().score}',
               style: TextStyle(
                 fontFamily: 'Comix-h',
                 fontSize: fontSizeNames,
@@ -441,22 +390,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.game
-                      .getSecondPlayer()
-                      .cards
-                      .length,
+                  itemCount: widget.game.getSecondPlayer().cards.length,
                   // number of items in your list
                   itemBuilder: (BuildContext context, int Itemindex) {
                     return widget.game
                         .getSecondPlayer()
                         .cards[Itemindex]; // return your widget
-                  }
-              ),
+                  }),
             ),
-            Text('${widget.game
-                .getSecondPlayer()
-                .cards
-                .length}'),
+            Text('${widget.game.getSecondPlayer().cards.length}'),
           ]);
         });
   }
@@ -467,11 +409,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         builder: (context, snapshot) {
           return Column(children: [
             Text(
-              '${widget.game
-                  .getThirdPlayer()
-                  .name}: ${widget.game
-                  .getThirdPlayer()
-                  .score}',
+              '${widget.game.getThirdPlayer().name}: ${widget.game.getThirdPlayer().score}',
               style: TextStyle(
                 fontFamily: 'Comix-h',
                 fontSize: fontSizeNames,
@@ -484,22 +422,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.game
-                      .getThirdPlayer()
-                      .cards
-                      .length,
+                  itemCount: widget.game.getThirdPlayer().cards.length,
                   // number of items in your list
                   itemBuilder: (BuildContext context, int Itemindex) {
                     return widget.game
                         .getThirdPlayer()
                         .cards[Itemindex]; // return your widget
-                  }
-              ),
+                  }),
             ),
-            Text('${widget.game
-                .getThirdPlayer()
-                .cards
-                .length}'),
+            Text('${widget.game.getThirdPlayer().cards.length}'),
           ]);
         });
   }
@@ -511,10 +442,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           return ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: widget.game
-                  .getMyPlayer()
-                  .cards
-                  .length,
+              itemCount: widget.game.getMyPlayer().cards.length,
               // number of items in your list
 
               //here the implementation of itemBuilder. take a look at flutter docs to see details
@@ -555,18 +483,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         builder: (context, snapshot) {
           return Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment:
-              CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   'נותרו בערימה',
-                  style:
-                  TextStyle(fontFamily: 'Abraham-h'),
+                  style: TextStyle(fontFamily: 'Abraham-h'),
                 ),
                 Text(
                   '${widget.game.deck.cards.length}',
-                  style:
-                  TextStyle(fontFamily: 'Abraham-h'),
+                  style: TextStyle(fontFamily: 'Abraham-h'),
                 ),
                 SizedBox(
                   height: 30,
@@ -574,9 +499,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 Text(
                   ' תור ${widget.game.players[widget.game.turn].name}',
                   style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 20,
-                      fontFamily: 'Abraham-h'),
+                      color: Colors.red, fontSize: 20, fontFamily: 'Abraham-h'),
                 ),
               ]);
         });
@@ -586,31 +509,18 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     return StreamBuilder<int>(
         stream: this.widget._streamControllerMyScore.stream,
         builder: (context, snapshot) {
-        return Text(
-    '${widget.game
-        .getMyPlayer()
-        .name}: ${widget.game
-        .getMyPlayer()
-        .score}',
-    style: TextStyle(
-    fontFamily: 'Comix-h',
-    fontSize: fontSizeNames,
-    ),
-    );
+          return Text(
+            '${widget.game.getMyPlayer().name}: ${widget.game.getMyPlayer().score}',
+            style: TextStyle(
+              fontFamily: 'Comix-h',
+              fontSize: fontSizeNames,
+            ),
+          );
+        });
   }
 
-  );
+  Widget getAnimationCard() {
+    CardQuartets card = CardQuartets("", "", null, "", "", "", "", false);
+    return card;
+  }
 }
-
-Widget getAnimationCard() {
-  CardQuartets card = CardQuartets(
-      "",
-      "",
-      null,
-      "",
-      "",
-      "",
-      "",
-      false);
-  return card;
-}}

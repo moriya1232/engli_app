@@ -8,13 +8,14 @@ class GameDatabaseService {
       FirebaseFirestore.instance.collection('games');
 
   Future updateGame(bool finished, List<Player> players, int turn, Deck deck,
-      String id) async {
+      String id, List<String> subjects) async {
     return await gameCollection.doc(id).set({
       'finished': finished,
       'players': players,
       'turn': turn,
       'deck': deck,
       'gameId': id,
+      'subjects': subjects,
     });
   }
 
@@ -34,7 +35,7 @@ class GameDatabaseService {
   Future<List<String>> getSubjectsList(
     String subjectsId,
   ) async {
-    List<String> subjectsList = null;
+    List<String> subjectsList;
     await FirebaseFirestore.instance
         .collection("subjects")
         .doc(subjectsId)
@@ -48,5 +49,11 @@ class GameDatabaseService {
       }
     });
     return Future.value(subjectsList);
+  }
+
+  Future updateSubjectList(String gameId, List<String> subList) async {
+    return await gameCollection.doc(gameId).update({
+      'subjects': subList,
+    });
   }
 }

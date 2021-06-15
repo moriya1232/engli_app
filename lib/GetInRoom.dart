@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:engli_app/Loading.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -93,10 +94,11 @@ class _GetInRoomState extends State<GetInRoom> {
   }
 
   void openRoomClicked() async {
-    await createGame();
+    String gameId = UniqueKey().toString();
+    await createGame(gameId);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => OpenRoom()),
+      MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
     );
   }
 
@@ -110,20 +112,19 @@ class _GetInRoomState extends State<GetInRoom> {
     await GameDatabaseService().addPlayer(gameId, name);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => OpenRoom()),
+      MaterialPageRoute(builder: (context) => Loading(gameId)),
     );
   }
 
-  Future<void> createGame() async {
+  Future<void> createGame(String gameId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
-    String gameId = UniqueKey().toString();
     List<int> cards = [];
     User user = _auth.currentUser;
     String name = "";
     if (user != null) {
       name = user.displayName;
     }
-    await GameDatabaseService().updateGame(false, null, 0, null, gameId);
+    await GameDatabaseService().updateGame(false, null, 0, null, gameId, null);
     await GameDatabaseService().addPlayer(gameId, name);
   }
 }
