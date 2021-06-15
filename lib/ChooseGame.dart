@@ -1,9 +1,14 @@
+//import 'dart:html';
+
 import 'package:engli_app/ChooseEnemy.dart';
 import 'package:engli_app/EditingVocabulary.dart';
+import 'package:engli_app/QuartetsInstructions.dart';
 import 'package:engli_app/srevices/auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Data.dart';
 import 'GetInRoom.dart';
+import 'MemoryInstructions.dart';
 
 class ChooseGame extends StatefulWidget {
   @override
@@ -12,6 +17,7 @@ class ChooseGame extends StatefulWidget {
 
 class _ChooseGameState extends State<ChooseGame> {
   AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,26 +29,53 @@ class _ChooseGameState extends State<ChooseGame> {
       body: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: EdgeInsets.all(15),
-                child: GestureDetector(
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+//              Align(
+//                alignment: Alignment.topLeft,
+//                child:
+                  Padding(
+                    padding: EdgeInsets.all(15),
+                    child: GestureDetector(
 //                  style: ElevatedButton.styleFrom(
 //                      shape: RoundedRectangleBorder(
 //                          borderRadius: BorderRadius.circular(22.0)),
 //                      primary: Colors.amberAccent),
-                  onTap: () {
-                    logoutClicked();
-                  },
-                  child: Text('התנתק',
-                      style: TextStyle(
-                          fontFamily: 'Comix-h',
-                          color: Colors.teal,
-                          fontSize: 20)),
-                ),
-              ),
-            ),
+                      onTap: () {
+                        print("instructions");
+                        instructionsClicked();
+                      },
+                      child: Text('הוראות',
+                          style: TextStyle(
+                              fontFamily: 'Comix-h',
+                              color: Colors.teal,
+                              fontSize: 20)),
+                    ),
+//                ),
+                  ),
+//              Align(
+//                alignment: Alignment.topRight,
+//                child:
+                  Padding(
+                    padding: EdgeInsets.all(15),
+                    child: GestureDetector(
+//                  style: ElevatedButton.styleFrom(
+//                      shape: RoundedRectangleBorder(
+//                          borderRadius: BorderRadius.circular(22.0)),
+//                      primary: Colors.amberAccent),
+                      onTap: () {
+                        logoutClicked();
+                      },
+                      child: Text('התנתק',
+                          style: TextStyle(
+                              fontFamily: 'Comix-h',
+                              color: Colors.teal,
+                              fontSize: 20)),
+                    ),
+                  ),
+//              ),
+                ]),
             Padding(
               padding: EdgeInsets.fromLTRB(0, 60, 0, 20),
               child: Text(
@@ -141,12 +174,93 @@ class _ChooseGameState extends State<ChooseGame> {
     );
   }
 
+  void instructionsClicked() {
+    _showMaterialDialog();
+  }
+
+  _showMaterialDialog() {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              title: new Text(
+                "איזה משחק?",
+                textAlign: TextAlign.center,
+                textDirection: TextDirection.rtl,
+              ),
+              content: new Wrap(
+                textDirection: TextDirection.rtl,
+                alignment: WrapAlignment.center,
+                direction: Axis.vertical,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        quartetsInsructionsClicked();
+                      },
+                      child: Text('- רביעיות',
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                              fontFamily: 'Abraham-h',
+                              color: Colors.teal,
+                              fontSize: 30)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        memoryInstructionsClicked();
+                      },
+                      child: Text('- משחק זיכרון',
+                          textDirection: TextDirection.rtl,
+                          style: TextStyle(
+                              fontFamily: 'Abraham-h',
+                              color: Colors.teal,
+                              fontSize: 30)),
+                    ),
+                  ),
+//                  ElevatedButton(
+//                    child: SizedBox(
+//                      child: Text("hi"),
+//                    ),
+//                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('סגור',
+                  textDirection: TextDirection.rtl),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
+  }
+
   void editVocabularyClicked() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => new EditingVocabulaty()),
     );
   }
+
+  void memoryInstructionsClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => new MemoryInstructions()),
+    );
+  }
+
+  void quartetsInsructionsClicked() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => new QuartetsInstructions()),
+    );
+  }
+
+
 
   void logoutClicked() async {
     await _auth.signOut();
