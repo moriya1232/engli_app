@@ -1,23 +1,17 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
 import 'Loading.dart';
 
 class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
-  Map<String, bool> series;
+  List<CheckBoxTile> series;
   String gameId;
   final _sc = StreamController<List<String>>.broadcast();
 
   OpenRoom(String gameId) {
-    List<String> list = [];
-    this.series = {};
+    this.series = [];
     this.gameId = gameId;
-    //List<String> list = getAllSeriesNames() as List<String>;
-    // this.series = Map.fromIterable(list, key: (e) => e, value: (e) => false);
   }
 
   @override
@@ -28,7 +22,6 @@ class _openRoomState extends State<OpenRoom> {
   @override
   Widget build(BuildContext context) {
     getAllSeriesNames();
-    //widget.series = Map.fromIterable(list, key: (e) => e, value: (e) => false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -122,6 +115,9 @@ class _openRoomState extends State<OpenRoom> {
   }
 
   void startGameClicked() {
+    for (CheckBoxTile cb in this.widget.series) {
+      print(cb.title + ": " + cb.value.toString());
+    }
     loadAllMarkedSeries();
     Navigator.push(
       context,
@@ -141,24 +137,18 @@ class _openRoomState extends State<OpenRoom> {
         stream: sc.stream,
         initialData: [],
         builder: (context, snapshot) {
+          print("stream!");
           if (snapshot.data == null) {
             return Container();
           }
-          widget.series = Map.fromIterable(snapshot.data,
-              key: (e) => e, value: (e) => false);
+          List<CheckBoxTile> l = [];
+          for (String s in snapshot.data) {
+            l.add(new CheckBoxTile(s));
+          }
+          widget.series = l;
           return ListView(
             shrinkWrap: true,
-            children: widget.series.keys.map((String key) {
-              return new CheckboxListTile(
-                title: new Text(key),
-                value: widget.series[key],
-                onChanged: (bool value) {
-                  setState(() {
-                    widget.series[key] = value;
-                  });
-                },
-              );
-            }).toList(),
+            children: widget.series,
           );
         });
   }
@@ -167,14 +157,51 @@ class _openRoomState extends State<OpenRoom> {
 //TODO: load the marked series to the game --SHILO
     //widget.series
     List<String> list = [];
-    for (var k in widget.series.keys) {
-      if (widget.series[k]) {
-        list.add(k);
-      }
-    }
-    print(list);
+//    for (var k in widget.series.keys) {
+//      if (widget.series[k]) {
+//        list.add(k);
+//      }
+//    }
+//    print(list);
 
 //update the game file
     await GameDatabaseService().updateSubjectList(widget.gameId, list);
+  }
+}
+
+class CheckBoxTile extends StatefulWidget {
+  final _sc = StreamController<bool>.broadcast();
+  String title = "";
+  bool value;
+
+  CheckBoxTile(String title) {
+    this.title = title;
+  }
+
+  @override
+  _CheckBoxTileState createState() => _CheckBoxTileState();
+}
+
+class _CheckBoxTileState extends State<CheckBoxTile> {
+  @override
+  Widget build(BuildContext context) {
+    return _buildCheckBox(widget._sc);
+  }
+
+  Widget _buildCheckBox(StreamController sc) {
+    return StreamBuilder<bool>(
+        stream: sc.stream,
+        initialData: false,
+        builder: (context, snapshot) {
+          return CheckboxListTile(
+            title: Text(widget.title),
+            value: snapshot.data ?? false,
+            onChanged: (bool value) {
+              widget.value = value;
+              print("refresh! " + this.widget.title + ": "  + value.toString());
+              sc.add(value);
+            },
+          );
+        });
   }
 }

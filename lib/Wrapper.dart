@@ -16,14 +16,12 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    if (user == null) {
-      return FirstScreen();
-    } else {
-      return ChooseGame();
-    }
+//    if (user == null) {
+//      return FirstScreen();
+//    } else {
+//      return ChooseGame();
+//    }
 
-//    return GetInRoom();
-
-//  return MemoryInstructions();
+    return GetInRoom();
   }
 }
