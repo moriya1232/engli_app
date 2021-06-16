@@ -157,14 +157,13 @@ class _openRoomState extends State<OpenRoom> {
 //TODO: load the marked series to the game --SHILO
     //widget.series
     List<String> list = [];
-//    for (var k in widget.series.keys) {
-//      if (widget.series[k]) {
-//        list.add(k);
-//      }
-//    }
-//    print(list);
+    for (var k in widget.series) {
+      if (k.value) {
+        list.add(k.title);
+      }
+    }
 
-//update the game file
+//update the subject list in the game file
     await GameDatabaseService().updateSubjectList(widget.gameId, list);
   }
 }
@@ -198,7 +197,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
             value: snapshot.data ?? false,
             onChanged: (bool value) {
               widget.value = value;
-              print("refresh! " + this.widget.title + ": "  + value.toString());
+              print("refresh! " + this.widget.title + ": " + value.toString());
               sc.add(value);
             },
           );
