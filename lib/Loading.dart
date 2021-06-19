@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:engli_app/QuartetsRoom.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,21 @@ class Loading extends StatefulWidget {
 
   Loading(String gameId) {
     this.usersLogin = [];
-    //this.subjects = list;
+    createAllSubjects(gameId);
+    this.subjects = [];
+  }
+  Future createAllSubjects(String gameId) async {
+    List<String> str_sub =
+        await GameDatabaseService().getGameListSubjects(gameId);
+    print("str_sub: " + str_sub.toString());
+    String subjectId = await GameDatabaseService().getSucjectsId(gameId);
+    for (String s in str_sub) {
+      Subject sub = await GameDatabaseService()
+          .createSubjectFromDatabase("generic_subjects", s);
+      print(sub.toString());
+      subjects.add(sub);
+      print(sub.toString());
+    }
   }
 
   @override

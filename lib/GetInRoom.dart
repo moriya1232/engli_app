@@ -124,7 +124,8 @@ class _GetInRoomState extends State<GetInRoom> {
     if (user != null) {
       name = user.displayName;
     }
-    await GameDatabaseService().updateGame(false, null, 0, null, gameId, null);
+    await GameDatabaseService()
+        .updateGame(false, null, 0, null, gameId, null, user.uid);
     await GameDatabaseService().addPlayer(gameId, name);
   }
 }

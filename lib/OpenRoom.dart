@@ -116,7 +116,7 @@ class _openRoomState extends State<OpenRoom> {
 
   void startGameClicked() {
     for (CheckBoxTile cb in this.widget.series) {
-      print(cb.title + ": " + cb.value.toString());
+      // print(cb.title + ": " + cb.value.toString());
     }
     loadAllMarkedSeries();
     Navigator.push(
@@ -128,7 +128,6 @@ class _openRoomState extends State<OpenRoom> {
   void getAllSeriesNames() async {
     List<String> l =
         await GameDatabaseService().getSubjectsList("generic_subjects");
-    print(l);
     this.widget._sc.add(l);
   }
 
@@ -137,7 +136,7 @@ class _openRoomState extends State<OpenRoom> {
         stream: sc.stream,
         initialData: [],
         builder: (context, snapshot) {
-          print("stream!");
+          // print("stream come! - subjects from database");
           if (snapshot.data == null) {
             return Container();
           }
@@ -154,11 +153,10 @@ class _openRoomState extends State<OpenRoom> {
   }
 
   void loadAllMarkedSeries() async {
-//TODO: load the marked series to the game --SHILO
     //widget.series
     List<String> list = [];
     for (var k in widget.series) {
-      if (k.value) {
+      if (k.value != null && k.value != false) {
         list.add(k.title);
       }
     }
@@ -197,7 +195,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
             value: snapshot.data ?? false,
             onChanged: (bool value) {
               widget.value = value;
-              print("refresh! " + this.widget.title + ": " + value.toString());
+              // print("refresh! " + this.widget.title + ": " + value.toString());
               sc.add(value);
             },
           );
