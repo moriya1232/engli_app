@@ -121,7 +121,7 @@ class _openRoomState extends State<OpenRoom> {
     loadAllMarkedSeries();
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Loading(widget.gameId)),
+      MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
     );
   }
 

@@ -112,7 +112,7 @@ class _GetInRoomState extends State<GetInRoom> {
     await GameDatabaseService().addPlayer(gameId, name);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Loading(gameId)),
+      MaterialPageRoute(builder: (context) => Loading(gameId, false)),
     );
   }
 
@@ -125,7 +125,7 @@ class _GetInRoomState extends State<GetInRoom> {
       name = user.displayName;
     }
     await GameDatabaseService()
-        .updateGame(false, null, 0, null, gameId, null, user.uid);
+        .updateGame(false, null, 0, null, gameId, null, user.uid, false);
     await GameDatabaseService().addPlayer(gameId, name);
   }
 }

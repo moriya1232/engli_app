@@ -37,7 +37,7 @@ class QuartetsGame extends Game {
   StreamController _stringsOnDeckController;
 
   QuartetsGame(
-      List<User> users,
+      List<Player> users,
       List<Subject> subjects,
       Map<String, int> caID,
       StreamController sc1,

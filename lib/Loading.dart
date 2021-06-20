@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/QuartetsRoom.dart';
+import 'package:engli_app/players/player.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +9,18 @@ import 'package:flutter/material.dart';
 import 'cards/Subject.dart';
 
 class Loading extends StatefulWidget {
-  List<User> usersLogin;
+  bool isBoss;
+  List<Player> usersLogin;
   List<Subject> subjects;
   final Map<String, int> cardsId = {};
+  String gameId;
 
-  Loading(String gameId) {
+  Loading(String gameId, bool isBoss) {
     this.usersLogin = [];
     this.subjects = [];
+    this.isBoss = isBoss;
     createAllSubjects(gameId);
+    this.gameId = gameId;
   }
   Future createAllSubjects(String gameId) async {
     int z = 0;
@@ -72,22 +78,23 @@ class _LoadingState extends State<Loading> {
                   SizedBox(
                     height: 50,
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22.0)),
-                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                      primary: Colors.amberAccent,
-                    ),
-                    onPressed: () {
-                      continueToGameClicked();
-                    },
-                    child: Text('המשך למשחק',
-                        style: TextStyle(
-                            fontFamily: 'Comix-h',
-                            color: Colors.black87,
-                            fontSize: 20)),
-                  )
+                  if (widget.isBoss)
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(22.0)),
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                        primary: Colors.amberAccent,
+                      ),
+                      onPressed: () {
+                        continueToGameClicked();
+                      },
+                      child: Text('המשך למשחק',
+                          style: TextStyle(
+                              fontFamily: 'Comix-h',
+                              color: Colors.black87,
+                              fontSize: 20)),
+                    )
                 ]),
           ],
         ),
@@ -95,7 +102,10 @@ class _LoadingState extends State<Loading> {
     );
   }
 
-  void continueToGameClicked() {
+  void continueToGameClicked() async {
+    GameDatabaseService().changeContinueState(this.widget.gameId);
+    this.widget.usersLogin =
+        await GameDatabaseService().getPlayersList(this.widget.gameId);
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -114,7 +124,7 @@ class _LoadingState extends State<Loading> {
               itemCount: this.widget.usersLogin.length,
               itemBuilder: (BuildContext context, int index) {
                 return Text(
-                  this.widget.usersLogin[index].displayName,
+                  this.widget.usersLogin[index].name,
                 );
               });
         });
@@ -134,5 +144,32 @@ class _LoadingState extends State<Loading> {
 
   void addUser(User user) {
     this._usersLoginStreamController.add(user.displayName);
+  }
+
+  void removeUser(User user) {
+    //TODO: change it
+    this._usersLoginStreamController.add(user.displayName);
+  }
+
+  void testIfContinue() {
+    StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("games")
+            .doc(widget.gameId)
+            .snapshots(),
+        initialData: null,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data['continueToGame'] == true) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => QuartetsRoom(this.widget.usersLogin,
+                        this.widget.subjects, this.widget.cardsId)),
+              );
+            }
+          }
+          return null;
+        });
   }
 }

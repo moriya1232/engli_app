@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:engli_app/cards/CardGame.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/cards/Triple.dart';
 import 'package:engli_app/players/player.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class GameDatabaseService {
@@ -11,7 +13,7 @@ class GameDatabaseService {
       FirebaseFirestore.instance.collection('games');
 
   Future updateGame(bool finished, List<Player> players, int turn, Deck deck,
-      String id, List<String> subjects, subjctsId) async {
+      String id, List<String> subjects, subjectsId, con) async {
     return await gameCollection.doc(id).set({
       'finished': finished,
       'players': players,
@@ -19,7 +21,8 @@ class GameDatabaseService {
       'deck': deck,
       'gameId': id,
       'subjects': subjects,
-      'subjectsId': subjctsId,
+      'subjectsId': subjectsId,
+      'continueToGame': con
     });
   }
 
@@ -121,5 +124,36 @@ class GameDatabaseService {
       }
     });
     return Future.value(card);
+  }
+
+  void changeContinueState(gameId) async {
+    await gameCollection.doc(gameId).update({
+      'continueToGame': true,
+    });
+  }
+
+  Future<List<Player>> getPlayersList(String gameId) async {
+    List<Player> players = [];
+    await FirebaseFirestore.instance
+        .collection("games")
+        .doc(gameId)
+        .collection("players")
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((value) {
+        List<CardGame> cards = [];
+        final FirebaseAuth _auth = FirebaseAuth.instance;
+        User user = _auth.currentUser;
+        print("ID IS:");
+        print(value.id);
+        print("USER ID IS:");
+        print(user.uid);
+        if (value.id.toString() == user.uid) {
+          players.add(Me(cards, value.data()["name"]));
+        } else {
+          players.add(VirtualPlayer(cards, value.data()["name"]));
+        }
+      });
+    });
   }
 }
