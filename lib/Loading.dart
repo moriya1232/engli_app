@@ -9,24 +9,31 @@ import 'cards/Subject.dart';
 class Loading extends StatefulWidget {
   List<User> usersLogin;
   List<Subject> subjects;
+  final Map<String, int> cardsId = {};
 
   Loading(String gameId) {
     this.usersLogin = [];
-    createAllSubjects(gameId);
     this.subjects = [];
+    createAllSubjects(gameId);
   }
   Future createAllSubjects(String gameId) async {
-    List<String> str_sub =
+    int z = 0;
+    List<String> strSub =
         await GameDatabaseService().getGameListSubjects(gameId);
-    print("str_sub: " + str_sub.toString());
     String subjectId = await GameDatabaseService().getSucjectsId(gameId);
-    for (String s in str_sub) {
+    for (String s in strSub) {
       Subject sub = await GameDatabaseService()
           .createSubjectFromDatabase("generic_subjects", s);
-      print(sub.toString());
       subjects.add(sub);
-      print(sub.toString());
+      List<String> nameCards = sub.getNamesCards();
+      int nameCardLen = nameCards.length;
+      for (int i = 0; i < nameCardLen; i++) {
+        String cardId = sub.name_subject + nameCards[i];
+        this.cardsId[cardId] = z;
+        z++;
+      }
     }
+    print(this.cardsId.toString());
   }
 
   @override
@@ -92,8 +99,8 @@ class _LoadingState extends State<Loading> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              QuartetsRoom(this.widget.usersLogin, this.widget.subjects)),
+          builder: (context) => QuartetsRoom(this.widget.usersLogin,
+              this.widget.subjects, this.widget.cardsId)),
     );
   }
 

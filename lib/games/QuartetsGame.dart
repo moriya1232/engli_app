@@ -18,6 +18,7 @@ class QuartetsGame extends Game {
   String subjectAsked;
   String cardAsked;
   List<Subject> subjects;
+  Map<String, int> cardsId;
 
 //  List<Function> observers;
 
@@ -35,10 +36,22 @@ class QuartetsGame extends Game {
   StreamController _otherPlayersCardsController;
   StreamController _stringsOnDeckController;
 
-  QuartetsGame(List<User> users, List<Subject> subjects, StreamController sc1, StreamController sc2, StreamController sc3,
-      StreamController scMe, StreamController scDeck, StreamController scTurn, StreamController myCards, StreamController myScore, StreamController otherCards, StreamController scStrings) {
-
+  QuartetsGame(
+      List<User> users,
+      List<Subject> subjects,
+      Map<String, int> caID,
+      StreamController sc1,
+      StreamController sc2,
+      StreamController sc3,
+      StreamController scMe,
+      StreamController scDeck,
+      StreamController scTurn,
+      StreamController myCards,
+      StreamController myScore,
+      StreamController otherCards,
+      StreamController scStrings) {
     this.subjects = subjects;
+    this.cardsId = caID;
     this.nameAsked = null;
     this.subjectAsked = null;
     this.cardAsked = null;
@@ -55,9 +68,9 @@ class QuartetsGame extends Game {
     this._turnController = scTurn;
     this._stringsOnDeckController = scStrings;
 
-    this._myCardsController=myCards;
+    this._myCardsController = myCards;
     this._myScoreController = myScore;
-    this._otherPlayersCardsController=otherCards;
+    this._otherPlayersCardsController = otherCards;
 
     //TODO: switch users to players. how??
     // create players.
@@ -86,7 +99,6 @@ class QuartetsGame extends Game {
 //  }
 
   void reStart() {
-
     //TODO: initialize cards in players hand.
     Deck deck = createDeck(subjects);
     deck.handoutDeck(this.players);
@@ -111,7 +123,6 @@ class QuartetsGame extends Game {
   /// return Future with boolean: true if computer success take card from another player, otherwise - false.
   Future<bool> askByComputer(
       Player player, Subject subject, CardQuartets card) async {
-
     //ask card that not in the right subject.
     if (card.subject != subject.name_subject) {
       throw Exception("not appropriate card and subject!");
@@ -174,7 +185,7 @@ class QuartetsGame extends Game {
     return names;
   }
 
-  void changeToNextPlayerTurn(){
+  void changeToNextPlayerTurn() {
     this.turn = (this.turn + 1) % this.players.length;
     this._turnController.add(this.turn);
     // TODO: update server about turn.
@@ -259,7 +270,6 @@ class QuartetsGame extends Game {
   }
 
   Deck createDeck(List<Subject> subjects) {
-
 //    TODO: take this line when there is subjects.
 //    Deck deck = new Deck(subjects);
 //  return deck;
@@ -403,58 +413,22 @@ class QuartetsGame extends Game {
             )));
     Subject colors = Subject(
         "Colors",
-        Triple(
-            "red",
-            "אדום",
-            null),
-        Triple(
-            "black",
-            "שחור",
-            null),
-        Triple(
-            "blue",
-            "כחול",
-            null),
-        Triple(
-            "green",
-            "ירוק",
-            null));
+        Triple("red", "אדום", null),
+        Triple("black", "שחור", null),
+        Triple("blue", "כחול", null),
+        Triple("green", "ירוק", null));
     Subject musicalInstruments = Subject(
         "Musical Instruments",
-        Triple(
-            "guitar",
-            "גיטרה",
-            null),
-        Triple(
-            "piano",
-            "פסנתר",
-            null),
-        Triple(
-            "flute",
-            "חליל צד",
-            null),
-        Triple(
-            "Ukulele",
-            "יוקלילי",
-            null));
+        Triple("guitar", "גיטרה", null),
+        Triple("piano", "פסנתר", null),
+        Triple("flute", "חליל צד", null),
+        Triple("Ukulele", "יוקלילי", null));
     Subject clothes = Subject(
         "Clothes",
-        Triple(
-            "T-shirt",
-            "חולצת-טי",
-            null),
-        Triple(
-            "dress",
-            "שמלה",
-            null),
-        Triple(
-            "shoes",
-            "נעליים",
-            null),
-        Triple(
-            "skirt",
-            "חצאית",
-            null));
+        Triple("T-shirt", "חולצת-טי", null),
+        Triple("dress", "שמלה", null),
+        Triple("shoes", "נעליים", null),
+        Triple("skirt", "חצאית", null));
 
     Subject days1 = Subject(
         "Days1",
@@ -752,11 +726,10 @@ class QuartetsGame extends Game {
   }
 
   // this mathod is for the cards that need to move between the players and deck.
-  void animateCard (
+  void animateCard(
       StreamController sc, Position source, Position target) async {
-
     Position su = source;
-    Position  ta = target;
+    Position ta = target;
     su.visible = true;
     sc.add(su);
     ta.visible = true;
@@ -816,8 +789,6 @@ class QuartetsGame extends Game {
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);
       this._turnController.add(1);
-
-
     }
     return series.length;
   }

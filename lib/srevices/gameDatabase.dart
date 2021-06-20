@@ -102,8 +102,6 @@ class GameDatabaseService {
         .collection("user_subjects")
         .doc(subName)
         .collection("cards");
-    print("DOC!!");
-    print(document.toString());
     Triple card1 = await createTriple("card1", document);
     Triple card2 = await createTriple("card2", document);
     Triple card3 = await createTriple("card3", document);
@@ -118,8 +116,6 @@ class GameDatabaseService {
     await document.doc(spec_card).get().then((DocumentSnapshot ds) {
       if (ds.exists) {
         card.english = ds.data()["english"];
-        print("In METH");
-        print(card.english);
         card.hebrew = ds.data()["hebrew"];
         card.image = Image(image: AssetImage(ds.data()["image"]));
       }

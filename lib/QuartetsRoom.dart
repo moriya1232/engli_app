@@ -26,10 +26,12 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerStringsInDeck = StreamController<int>.broadcast();
   final _streamControllerMyScore = StreamController<int>.broadcast();
 
-  QuartetsRoom(List<User> users, List<Subject> subjects) {
+  QuartetsRoom(
+      List<User> users, List<Subject> subjects, Map<String, int> cardId) {
     this.game = new QuartetsGame(
         users,
         subjects,
+        cardId,
         this._streamControllerFirst,
         this._streamControllerSecond,
         this._streamControllerThird,
