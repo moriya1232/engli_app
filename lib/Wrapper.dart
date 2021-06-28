@@ -1,5 +1,6 @@
 import 'package:engli_app/ChooseEnemy.dart';
 import 'package:engli_app/ChooseGame.dart';
+import 'package:engli_app/EditingVocabulary.dart';
 import 'package:engli_app/GetInRoom.dart';
 import 'package:engli_app/HomePage.dart';
 import 'package:engli_app/OpenRoom.dart';
@@ -15,13 +16,13 @@ import 'Loading.dart';
 class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-    if (user == null) {
-      return FirstScreen();
-    } else {
-      return ChooseGame();
-    }
+//    final user = Provider.of<User>(context);
+//    if (user == null) {
+//      return FirstScreen();
+//    } else {
+//      return ChooseGame();
+//    }
 
-    // return GetInRoom();
+     return EditingVocabulaty();
   }
 }
