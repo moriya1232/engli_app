@@ -27,12 +27,15 @@ class GameDatabaseService {
   }
 
   Future addPlayer(String gameId, String name) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
     List<int> cards = [];
     await FirebaseFirestore.instance
         .collection("games")
         .doc(gameId)
         .collection("players")
-        .add({
+        .doc(user.uid.toString())
+        .set({
       'cards': cards,
       'name': name,
       'score': 0,
@@ -144,9 +147,7 @@ class GameDatabaseService {
         List<CardGame> cards = [];
         final FirebaseAuth _auth = FirebaseAuth.instance;
         User user = _auth.currentUser;
-        print("ID IS:");
         print(value.id);
-        print("USER ID IS:");
         print(user.uid);
         if (value.id.toString() == user.uid) {
           players.add(Me(cards, value.data()["name"]));

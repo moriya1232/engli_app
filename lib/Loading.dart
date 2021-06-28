@@ -50,6 +50,26 @@ class _LoadingState extends State<Loading> {
   final _usersLoginStreamController = StreamController<String>.broadcast();
 
   @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("games")
+        .doc(this.widget.gameId)
+        .snapshots()
+        .listen((event) {
+      if (event.data()['continueToGame'] == true) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => QuartetsRoom(this.widget.usersLogin,
+                  this.widget.subjects, this.widget.cardsId)),
+        );
+      }
+    });
+    //listen
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -66,6 +86,7 @@ class _LoadingState extends State<Loading> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  //testIfContinue(),
                   getListNameUsers(),
                   SizedBox(
                     height: 30,
@@ -103,15 +124,15 @@ class _LoadingState extends State<Loading> {
   }
 
   void continueToGameClicked() async {
-    GameDatabaseService().changeContinueState(this.widget.gameId);
     this.widget.usersLogin =
         await GameDatabaseService().getPlayersList(this.widget.gameId);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => QuartetsRoom(this.widget.usersLogin,
-              this.widget.subjects, this.widget.cardsId)),
-    );
+    GameDatabaseService().changeContinueState(this.widget.gameId);
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //       builder: (context) => QuartetsRoom(this.widget.usersLogin,
+    //           this.widget.subjects, this.widget.cardsId)),
+    // );
   }
 
   Widget getListNameUsers() {
@@ -151,25 +172,24 @@ class _LoadingState extends State<Loading> {
     this._usersLoginStreamController.add(user.displayName);
   }
 
-  void testIfContinue() {
-    StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("games")
-            .doc(widget.gameId)
-            .snapshots(),
-        initialData: null,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data['continueToGame'] == true) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => QuartetsRoom(this.widget.usersLogin,
-                        this.widget.subjects, this.widget.cardsId)),
-              );
-            }
-          }
-          return null;
-        });
-  }
+  // Future<Widget> testIfContinue() async {
+  //   StreamBuilder<DocumentSnapshot>(
+  //       stream: FirebaseFirestore.instance
+  //           .collection("games")
+  //           .doc(widget.gameId)
+  //           .snapshots(),
+  //       builder: (context, snapshot) {
+  //         if (snapshot.data != null) {
+  //           if (snapshot.data['continueToGame'] == true) {
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(
+  //                   builder: (context) => QuartetsRoom(this.widget.usersLogin,
+  //                       this.widget.subjects, this.widget.cardsId)),
+  //             );
+  //           }
+  //         }
+  //         return SizedBox();
+  //       });
+  // }
 }
