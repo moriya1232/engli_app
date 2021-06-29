@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /*
@@ -6,22 +8,9 @@ import 'package:flutter/material.dart';
  */
 
 class EditingVocabulaty extends StatefulWidget {
+  // TODO: need to be stream from the server
+  final seriesController = StreamController<List<String>>.broadcast();
   List<String> series;
-
-  EditingVocabulaty() {
-    //TODO: insert here the series from database
-    this.series = [
-      "Pets",
-      "Family",
-      "Body",
-      "Furnitures",
-      "Animals",
-      "Colors",
-      "Food",
-      "Cars",
-      "Musical Instruments"
-    ];
-  }
 
   @override
   _EditingVocabulatyState createState() => _EditingVocabulatyState();
@@ -39,6 +28,25 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
   final thirdHeb = TextEditingController();
   final forthEng = TextEditingController();
   final forthHeb = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    //TODO: insert here the series from database
+    this.widget.series = [
+      "Pets",
+      "Family",
+      "Body",
+      "Furnitures",
+      "Animals",
+      "Colors",
+      "Food",
+      "Cars",
+      "Musical Instruments"
+    ];
+    this.widget.seriesController.add(this.widget.series);
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -212,45 +220,55 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
           ),
           Expanded(
             child: Container(
-              child: new ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.series.length,
-                itemBuilder: (context, index) {
-                  return SizedBox(
-                    height: 50,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                            child: Text(
-                              '${widget.series[index]}',
-                              style: TextStyle(fontFamily: 'Comix-h', fontSize: 20),
-
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          IconButton(icon: Icon(Icons.clear), onPressed: (){
-                            removeSer(widget.series[index]);
-                          })
-//                          Image(
-//                            image: AssetImage('icons/pencil.jpg'),
-//                            height: 20,
-//                          )
-                        ]),
-                  );
-//                return ListTile(
-//                  title: Text('${widget.series[index]}'),
-                },
-              ),
+              child: _getListSeries(),
             ),
           ),
         ]),
 
+    );
+  }
+
+  Widget _getListSeries() {
+    return StreamBuilder<List<String>>(
+      stream: this.widget.seriesController.stream,
+        initialData: this.widget.series,
+        builder: (context, snapshot) {
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: snapshot.data.length,
+            itemBuilder: (context, index) {
+              return SizedBox(
+                height: 50,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                        child: Text(
+                          '${snapshot.data[index]}',
+                          style: TextStyle(fontFamily: 'Comix-h', fontSize: 20),
+
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      IconButton(icon: Icon(Icons.clear), onPressed: (){
+                        removeSer(snapshot.data[index]);
+                      })
+//                          Image(
+//                            image: AssetImage('icons/pencil.jpg'),
+//                            height: 20,
+//                          )
+                    ]),
+              );
+//                return ListTile(
+//                  title: Text('${widget.series[index]}'),
+            },
+          );
+        }
     );
   }
 
@@ -487,7 +505,9 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
   }
 
   removeSer(String ser) {
-    //TODO: shilo
+    this.widget.series.remove(ser);
+    this.widget.seriesController.add(this.widget.series);
+    //TODO: update server - shilo
   }
 
   addSer() {
@@ -501,6 +521,8 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
     String forthHeb = this.forthHeb.text;
     String forthEng = this.forthEng.text;
 
-    //TODO: shilo!
+    this.widget.series.add(nameSer);
+    this.widget.seriesController.add(this.widget.series);
+    //TODO: update server - shilo!
   }
 }
