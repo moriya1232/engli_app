@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
 
 /*
@@ -45,7 +46,6 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
       "Musical Instruments"
     ];
     this.widget.seriesController.add(this.widget.series);
-
   }
 
   @override
@@ -57,33 +57,32 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
         centerTitle: true,
         title: Text('עריכת אוצר מילים'),
       ),
-      body:
-        Column(children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    primary: Colors.pink,
-                  ),
-                  onPressed: () {
-                    _showMaterialDialog();
-                  },
-                  child: Text(
-                    'הכנסת סרייה חדשה',
-                    style: TextStyle(
-                        fontFamily: 'Comix-h',
-                        color: Colors.black87,
-                        fontSize: 20),
-                  ),
+      body: Column(children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  primary: Colors.pink,
+                ),
+                onPressed: () {
+                  _showMaterialDialog();
+                },
+                child: Text(
+                  'הכנסת סרייה חדשה',
+                  style: TextStyle(
+                      fontFamily: 'Comix-h',
+                      color: Colors.black87,
+                      fontSize: 20),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
 //                SingleChildScrollView(
 //                  child: Column(children:
 //                  <Widget>[
@@ -208,29 +207,28 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
 //                    ),
 //                  ]),
 //                ),
-          Text(
-            'סריות קיימות',
-            style: TextStyle(
-              fontSize: 30,
-              fontFamily: 'Abraham-h',
-            ),
+        Text(
+          'סריות קיימות',
+          style: TextStyle(
+            fontSize: 30,
+            fontFamily: 'Abraham-h',
           ),
-          SizedBox(
-            height: 20,
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Expanded(
+          child: Container(
+            child: _getListSeries(),
           ),
-          Expanded(
-            child: Container(
-              child: _getListSeries(),
-            ),
-          ),
-        ]),
-
+        ),
+      ]),
     );
   }
 
   Widget _getListSeries() {
     return StreamBuilder<List<String>>(
-      stream: this.widget.seriesController.stream,
+        stream: this.widget.seriesController.stream,
         initialData: this.widget.series,
         builder: (context, snapshot) {
           return ListView.builder(
@@ -249,15 +247,16 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                         child: Text(
                           '${snapshot.data[index]}',
                           style: TextStyle(fontFamily: 'Comix-h', fontSize: 20),
-
                         ),
                       ),
                       SizedBox(
                         width: 10,
                       ),
-                      IconButton(icon: Icon(Icons.clear), onPressed: (){
-                        removeSer(snapshot.data[index]);
-                      })
+                      IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            removeSer(snapshot.data[index]);
+                          })
 //                          Image(
 //                            image: AssetImage('icons/pencil.jpg'),
 //                            height: 20,
@@ -268,8 +267,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
 //                  title: Text('${widget.series[index]}'),
             },
           );
-        }
-    );
+        });
   }
 
   _showMaterialDialog() {
@@ -282,21 +280,21 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
               textAlign: TextAlign.center,
               textDirection: TextDirection.rtl,
               style: TextStyle(
-                    fontFamily: 'Abraham-h',
-                    fontSize: 30,
-                  ),
+                fontFamily: 'Abraham-h',
+                fontSize: 30,
+              ),
             ),
             content: Wrap(
               children: [
                 TextField(
-                  onChanged: (value) {
-
-                  },
+                  onChanged: (value) {},
                   controller: nameSer,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(hintText: "הכנס שם סרייה"),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 SizedBox(
                   height: 50,
                   child: Row(
@@ -306,37 +304,37 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: this.firstHeb,
                               decoration: InputDecoration(
-                                hintText: "עברית",
+                                  hintText: "עברית",
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
-
                             ),
                           ),
                         ),
                         Expanded(
                           child: Padding(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: firstEng,
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
                             ),
                           ),
                         ),
                         Text("1"),
-
                       ]),
                 ),
                 SizedBox(
@@ -348,37 +346,37 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: this.secondHeb,
                               decoration: InputDecoration(
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
-
                             ),
                           ),
                         ),
                         Expanded(
                           child: Padding(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: secondEng,
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
                             ),
                           ),
                         ),
                         Text("2"),
-
                       ]),
                 ),
                 SizedBox(
@@ -390,37 +388,37 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: this.thirdHeb,
                               decoration: InputDecoration(
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
-
                             ),
                           ),
                         ),
                         Expanded(
                           child: Padding(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: thirdEng,
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
                             ),
                           ),
                         ),
                         Text("3"),
-
                       ]),
                 ),
                 SizedBox(
@@ -432,24 +430,24 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                       children: [
                         Expanded(
                           child: Padding(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: this.forthHeb,
                               decoration: InputDecoration(
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
-
                             ),
                           ),
                         ),
                         Expanded(
                           child: Padding(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: forthEng,
                               //TODO: check limits!
@@ -458,14 +456,14 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
                             ),
                           ),
                         ),
                         Text("4"),
-
                       ]),
                 ),
                 ElevatedButton(
@@ -510,7 +508,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
     //TODO: update server - shilo
   }
 
-  addSer() {
+  addSer() async {
     String nameSer = this.nameSer.text;
     String firstHeb = this.firstHeb.text;
     String firstEng = this.firstEng.text;
@@ -520,7 +518,8 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
     String thirdHeb = this.thirdHeb.text;
     String forthHeb = this.forthHeb.text;
     String forthEng = this.forthEng.text;
-
+    await GameDatabaseService().addSeries(nameSer, firstEng, firstHeb,
+        secondEng, secondHeb, thirdEng, thirdHeb, forthEng, forthHeb);
     this.widget.series.add(nameSer);
     this.widget.seriesController.add(this.widget.series);
     //TODO: update server - shilo!

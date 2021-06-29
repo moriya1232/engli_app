@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 class GameDatabaseService {
   final CollectionReference gameCollection =
       FirebaseFirestore.instance.collection('games');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future updateGame(bool finished, List<Player> players, int turn, Deck deck,
       String id, List<String> subjects, subjectsId, con) async {
@@ -156,5 +157,90 @@ class GameDatabaseService {
         }
       });
     });
+  }
+
+  void addSeries(String nameSeries, String eng1, String heb1, String eng2,
+      String heb2, String eng3, String heb3, String eng4, String heb4) async {
+    List<String> sub = [];
+    await FirebaseFirestore.instance
+        .collection("subjects")
+        .doc(_auth.currentUser.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var x = documentSnapshot.data()["subjects_list"];
+        sub = x.cast<String>();
+      }
+    });
+    sub.add(nameSeries);
+    await FirebaseFirestore.instance
+        .collection("subjects")
+        .doc(_auth.currentUser.uid.toString())
+        .set({'subjects_list': sub});
+    //
+    // bool ifDocExist = false;
+    // await FirebaseFirestore.instance
+    //     .collection("subjects")
+    //     .doc(_auth.currentUser.uid.toString())
+    //     .get()
+    //     .then((doc) {
+    //   if (doc.exists) {
+    //     ifDocExist = true;
+    //   } else {
+    //     ifDocExist = false;
+    //   }
+    // });
+    // List<String> subjectList = [nameSeries];
+    // if (!ifDocExist) {
+    //   print("NOT EXIST!");
+    //   await FirebaseFirestore.instance
+    //       .collection("subjects")
+    //       .doc(_auth.currentUser.uid.toString())
+    //       .set({
+    //     'subject_list': subjectList,
+    //   });
+    // } else {
+    //   print("EXIST!");
+    //   await FirebaseFirestore.instance
+    //       .collection("subjects")
+    //       .doc(_auth.currentUser.uid.toString())
+    //       .update({
+    //     'subject_list': FieldValue.arrayUnion(subjectList),
+    //   });
+    // }
+
+    //save the quarters
+    await FirebaseFirestore.instance
+        .collection("subjects")
+        .doc(this._auth.currentUser.uid.toString())
+        .collection("user_subjects")
+        .doc(nameSeries)
+        .collection("cards")
+        .doc("card1")
+        .set({'english': eng1, 'hebrew': heb1, 'image': null});
+    await FirebaseFirestore.instance
+        .collection("subjects")
+        .doc(this._auth.currentUser.uid.toString())
+        .collection("user_subjects")
+        .doc(nameSeries)
+        .collection("cards")
+        .doc("card2")
+        .set({'english': eng2, 'hebrew': heb2, 'image': null});
+    await FirebaseFirestore.instance
+        .collection("subjects")
+        .doc(this._auth.currentUser.uid.toString())
+        .collection("user_subjects")
+        .doc(nameSeries)
+        .collection("cards")
+        .doc("card3")
+        .set({'english': eng3, 'hebrew': heb3, 'image': null});
+    await FirebaseFirestore.instance
+        .collection("subjects")
+        .doc(this._auth.currentUser.uid.toString())
+        .collection("user_subjects")
+        .doc(nameSeries)
+        .collection("cards")
+        .doc("card4")
+        .set({'english': eng4, 'hebrew': heb4, 'image': null});
   }
 }
