@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 /*
 2. לשנות שיהיה אפשר לכתוב בעברית בחלק של העברית.TODO:
 5. כפתור "סיימתי"TODO:
+TODO: dont possible put "," in names cards and subject.
  */
 
 class EditingVocabulaty extends StatefulWidget {
@@ -518,8 +519,8 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
     String thirdHeb = this.thirdHeb.text;
     String forthHeb = this.forthHeb.text;
     String forthEng = this.forthEng.text;
-    await GameDatabaseService().addSeries(nameSer, firstEng, firstHeb,
-        secondEng, secondHeb, thirdEng, thirdHeb, forthEng, forthHeb);
+    GameDatabaseService().addSeries(nameSer, firstEng, firstHeb, secondEng,
+        secondHeb, thirdEng, thirdHeb, forthEng, forthHeb);
     this.widget.series.add(nameSer);
     this.widget.seriesController.add(this.widget.series);
     //TODO: update server - shilo!

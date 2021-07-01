@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/cards/CardGame.dart';
-import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/cards/Triple.dart';
@@ -11,6 +10,8 @@ import 'package:flutter/material.dart';
 class GameDatabaseService {
   final CollectionReference gameCollection =
       FirebaseFirestore.instance.collection('games');
+  final CollectionReference subjectCollection =
+      FirebaseFirestore.instance.collection('subjects');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future updateGame(bool finished, List<Player> players, int turn, Deck deck,
@@ -31,8 +32,7 @@ class GameDatabaseService {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     List<int> cards = [];
-    await FirebaseFirestore.instance
-        .collection("games")
+    await gameCollection
         .doc(gameId)
         .collection("players")
         .doc(user.uid.toString())
@@ -47,13 +47,11 @@ class GameDatabaseService {
     String subjectsId,
   ) async {
     List<String> subjectsList;
-    await FirebaseFirestore.instance
-        .collection("subjects")
+    await subjectCollection
         .doc(subjectsId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        // print(documentSnapshot.data()["subjects_list"]);
         var x = documentSnapshot.data()["subjects_list"];
         List<String> strList = x.cast<String>();
         subjectsList = strList;
@@ -70,14 +68,11 @@ class GameDatabaseService {
 
   Future<List<String>> getGameListSubjects(gameId) async {
     List<String> subjectsList;
-    await FirebaseFirestore.instance
-        .collection("games")
+    await gameCollection
         .doc(gameId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        // print("ON LOADING:");
-        // print(documentSnapshot.data()['subjects']);
         var x = documentSnapshot.data()["subjects"];
         List<String> strList = x.cast<String>();
         subjectsList = strList;
@@ -86,10 +81,9 @@ class GameDatabaseService {
     return Future.value(subjectsList);
   }
 
-  Future<String> getSucjectsId(gameId) async {
+  Future<String> getSubjectsId(gameId) async {
     String subjectsId;
-    await FirebaseFirestore.instance
-        .collection("games")
+    await gameCollection
         .doc(gameId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
@@ -103,7 +97,7 @@ class GameDatabaseService {
 
   Future<Subject> createSubjectFromDatabase(
       String collectionName, String subName) async {
-    var document = await FirebaseFirestore.instance
+    var document = FirebaseFirestore.instance
         .collection("subjects/")
         .doc(collectionName)
         .collection("user_subjects")
@@ -118,9 +112,9 @@ class GameDatabaseService {
   }
 
   Future<Triple> createTriple(
-      String spec_card, CollectionReference document) async {
+      String specCard, CollectionReference document) async {
     Triple card = Triple(null, null, null);
-    await document.doc(spec_card).get().then((DocumentSnapshot ds) {
+    await document.doc(specCard).get().then((DocumentSnapshot ds) {
       if (ds.exists) {
         card.english = ds.data()["english"];
         card.hebrew = ds.data()["hebrew"];
@@ -138,8 +132,7 @@ class GameDatabaseService {
 
   Future<List<Player>> getPlayersList(String gameId) async {
     List<Player> players = [];
-    await FirebaseFirestore.instance
-        .collection("games")
+    await gameCollection
         .doc(gameId)
         .collection("players")
         .get()
@@ -148,22 +141,22 @@ class GameDatabaseService {
         List<CardGame> cards = [];
         final FirebaseAuth _auth = FirebaseAuth.instance;
         User user = _auth.currentUser;
-        print(value.id);
-        print(user.uid);
         if (value.id.toString() == user.uid) {
-          players.add(Me(cards, value.data()["name"]));
+          players.add(Me(cards, value.data()["name"], user.uid.toString()));
         } else {
-          players.add(VirtualPlayer(cards, value.data()["name"]));
+          players.add(
+              VirtualPlayer(cards, value.data()["name"], user.uid.toString()));
         }
       });
     });
+    return Future.value(players);
   }
 
   void addSeries(String nameSeries, String eng1, String heb1, String eng2,
       String heb2, String eng3, String heb3, String eng4, String heb4) async {
+    //update the subjects list
     List<String> sub = [];
-    await FirebaseFirestore.instance
-        .collection("subjects")
+    await subjectCollection
         .doc(_auth.currentUser.uid.toString())
         .get()
         .then((DocumentSnapshot documentSnapshot) {
@@ -173,41 +166,9 @@ class GameDatabaseService {
       }
     });
     sub.add(nameSeries);
-    await FirebaseFirestore.instance
-        .collection("subjects")
+    await subjectCollection
         .doc(_auth.currentUser.uid.toString())
         .set({'subjects_list': sub});
-    //
-    // bool ifDocExist = false;
-    // await FirebaseFirestore.instance
-    //     .collection("subjects")
-    //     .doc(_auth.currentUser.uid.toString())
-    //     .get()
-    //     .then((doc) {
-    //   if (doc.exists) {
-    //     ifDocExist = true;
-    //   } else {
-    //     ifDocExist = false;
-    //   }
-    // });
-    // List<String> subjectList = [nameSeries];
-    // if (!ifDocExist) {
-    //   print("NOT EXIST!");
-    //   await FirebaseFirestore.instance
-    //       .collection("subjects")
-    //       .doc(_auth.currentUser.uid.toString())
-    //       .set({
-    //     'subject_list': subjectList,
-    //   });
-    // } else {
-    //   print("EXIST!");
-    //   await FirebaseFirestore.instance
-    //       .collection("subjects")
-    //       .doc(_auth.currentUser.uid.toString())
-    //       .update({
-    //     'subject_list': FieldValue.arrayUnion(subjectList),
-    //   });
-    // }
 
     //save the quarters
     await FirebaseFirestore.instance
@@ -242,5 +203,32 @@ class GameDatabaseService {
         .collection("cards")
         .doc("card4")
         .set({'english': eng4, 'hebrew': heb4, 'image': null});
+  }
+
+  void initializePlayerCard(
+      List<int> cards, String gameId, String playerId) async {
+    await gameCollection
+        .doc(gameId)
+        .collection("players")
+        .doc(playerId)
+        .update({'cards': cards});
+  }
+
+  void updateDeck(List<int> cards, String gameId) async {
+    await gameCollection.doc(gameId).update({'deck': cards});
+  }
+
+  Future<List<int>> getDeck(String gameId) async {
+    List<int> d;
+    await gameCollection
+        .doc(gameId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var x = documentSnapshot.data()["deck"];
+        d = x;
+      }
+    });
+    return Future.value(d);
   }
 }

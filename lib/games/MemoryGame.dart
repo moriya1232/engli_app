@@ -15,11 +15,16 @@ class MemoryGame extends Game {
   List<Function> observers;
   bool computerEnemy;
 
-
-  MemoryGame(bool computerEnemy, enemyName, StreamController myScore, StreamController enemyScore, StreamController moreTurn, StreamController turn) {
+  MemoryGame(
+      bool computerEnemy,
+      enemyName,
+      StreamController myScore,
+      StreamController enemyScore,
+      StreamController moreTurn,
+      StreamController turn) {
     //TODO: get my name !
     String meName = "need to get my name!";
-this.computerEnemy = computerEnemy;
+    this.computerEnemy = computerEnemy;
     this._myScoreController = myScore;
     this._enemyScoreController = enemyScore;
     this._moreTurnController = moreTurn;
@@ -53,7 +58,7 @@ this.computerEnemy = computerEnemy;
   }
 
   void updateObservers() {
-    for(Function f in this.observers) {
+    for (Function f in this.observers) {
       f();
     }
   }
@@ -68,12 +73,12 @@ this.computerEnemy = computerEnemy;
   Player createPlayer(bool isMe, String name, bool computerEnemy) {
     List<CardMemory> cards = [];
     if (isMe) {
-      return Me(cards, name);
+      return Me(cards, name, "");
     } else {
       if (computerEnemy) {
-        return ComputerPlayer(cards, name);
+        return ComputerPlayer(cards, name, "");
       } else {
-        return VirtualPlayer(cards, name);
+        return VirtualPlayer(cards, name, "");
       }
     }
   }
@@ -102,11 +107,11 @@ this.computerEnemy = computerEnemy;
   }
 
   Pair createPair(String english, String hebrew) {
-    return new Pair(
-        CardMemory(english, hebrew, true, this.computerEnemy), CardMemory(english, hebrew, false, this.computerEnemy));
+    return new Pair(CardMemory(english, hebrew, true, this.computerEnemy),
+        CardMemory(english, hebrew, false, this.computerEnemy));
   }
 
-  Player getPlayerNeedTurn(){
+  Player getPlayerNeedTurn() {
     return this.players[turn];
   }
 
@@ -216,19 +221,23 @@ this.computerEnemy = computerEnemy;
         chosens.add(card);
       }
     }
-    if (chosens.length < 2) { return false;}
-    else if (chosens.length == 2) {
+    if (chosens.length < 2) {
+      return false;
+    } else if (chosens.length == 2) {
       Pair pairChosen = isPair(chosens[0], chosens[1]);
       if (pairChosen != null) {
         removePair(pairChosen);
-        this.controllers[this.turn].add(this.players[this.turn].raiseScore(howMuchScoreForSuccess));
+        this
+            .controllers[this.turn]
+            .add(this.players[this.turn].raiseScore(howMuchScoreForSuccess));
         showMoreTurnWidget();
         return false;
       } else {
         closeAllCards();
       }
       changeTurn();
-    } else { // chosens.length > 2
+    } else {
+      // chosens.length > 2
       closeAllCards();
     }
     return true;
@@ -240,7 +249,7 @@ this.computerEnemy = computerEnemy;
     this._moreTurnController.add("");
   }
 
-  void cardClicked(){
+  void cardClicked() {
     if (checkOpenCards() && this.players[this.turn] is ComputerPlayer) {
       computerMove();
       return;
@@ -255,5 +264,4 @@ this.computerEnemy = computerEnemy;
     print("computer need to move");
     player.makeMove(this);
   }
-
 }

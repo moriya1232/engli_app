@@ -120,7 +120,7 @@ class _GetInRoomState extends State<GetInRoom> {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     List<int> cards = [];
     User user = _auth.currentUser;
-    String name = "";
+    String name = user.displayName;
     if (user != null) {
       name = user.displayName;
     }

@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/WinnerScreen.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +29,13 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerMyScore = StreamController<int>.broadcast();
 
   QuartetsRoom(
-      List<Player> users, List<Subject> subjects, Map<String, int> cardId) {
+    List<Player> users,
+    List<Subject> subjects,
+    Map<CardQuartets, int> cardId,
+    String gameId,
+  ) {
     this.game = new QuartetsGame(
+        gameId,
         users,
         subjects,
         cardId,
@@ -60,11 +67,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   void initState() {
     super.initState();
-    firstBuild = true;
-//    this.widget.game.addListener(_listener);
-//    for (Player player in widget.game.players) {
-//      player.addListener(_listener);
-//    }
+    FirebaseFirestore.instance
+        .collection("games")
+        .doc(widget.game.gameId)
+        .snapshots()
+        .listen((DocumentSnapshot documentSnapshot) {
+      List<dynamic> nDeck = documentSnapshot.data()['deck'];
+      List<int> newDeck = nDeck.cast<int>();
+      GameDatabaseService().updateDeck(newDeck, this.widget.game.gameId);
+    });
     this.firstCard = getAnimationCard();
     this.secondCard = getAnimationCard();
     this.thirdCard = getAnimationCard();
@@ -103,7 +114,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             height: otherPlayersHeight,
             child: SingleChildScrollView(
               child: Column(children: [
-                getFirstPlayerView(),
+                //TODO: remove condition
+                if (widget.game.players.length > 1) getFirstPlayerView(),
                 Container(
                   height: rowHeight,
                   child: Row(

@@ -21,7 +21,6 @@ class Deck {
 
     // Go through all elements.
     for (var i = this.cards.length - 1; i > 0; i--) {
-
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
 
@@ -32,7 +31,7 @@ class Deck {
     return this.cards;
   }
 
-  Future giveCardToPlayer(Player player){
+  Future giveCardToPlayer(Player player) {
     if (this.cards.isEmpty) {
       throw Exception("no more cards in the pile");
     } else {
@@ -54,5 +53,13 @@ class Deck {
         giveCardToPlayer(player);
       }
     }
+  }
+
+  void printDeck() {
+    print("print the cards in the deck!");
+    for (CardQuartets card in this.cards) {
+      print(card.subject + ": " + card.english);
+    }
+    print("done print the cards in the deck");
   }
 }

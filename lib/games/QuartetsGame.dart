@@ -4,6 +4,7 @@ import 'package:engli_app/QuartetsGame/Constants.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Position.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:engli_app/players/player.dart';
@@ -12,15 +13,15 @@ import 'package:engli_app/cards/Subject.dart';
 import '../Constants.dart';
 import 'Game.dart';
 
+//TODO MORIYA!!!  REMOVE THE HEAD LINE
 class QuartetsGame extends Game {
   Deck deck;
   String nameAsked;
   String subjectAsked;
   String cardAsked;
   List<Subject> subjects;
-  Map<String, int> cardsId;
-
-//  List<Function> observers;
+  Map<CardQuartets, int> cardsId;
+  String gameId;
 
   // controllers for animate the view.
   StreamController _firstController;
@@ -37,9 +38,10 @@ class QuartetsGame extends Game {
   StreamController _stringsOnDeckController;
 
   QuartetsGame(
+      String gameId,
       List<Player> users,
       List<Subject> subjects,
-      Map<String, int> caID,
+      Map<CardQuartets, int> caID,
       StreamController sc1,
       StreamController sc2,
       StreamController sc3,
@@ -50,12 +52,13 @@ class QuartetsGame extends Game {
       StreamController myScore,
       StreamController otherCards,
       StreamController scStrings) {
+    this.gameId = gameId;
     this.subjects = subjects;
     this.cardsId = caID;
     this.nameAsked = null;
     this.subjectAsked = null;
     this.cardAsked = null;
-    this.players = [];
+    this.players = users;
 //    this.observers = [];
 
     // controllers for animations.
@@ -72,43 +75,46 @@ class QuartetsGame extends Game {
     this._myScoreController = myScore;
     this._otherPlayersCardsController = otherCards;
 
-    //TODO: switch users to players. how??
-    // create players.
-    for (int i = 0; i < playersNames.length + 1; i++) {
-      if (i == 0) {
-        createPlayer(true, quartetsMe);
-        continue;
-      }
-      createPlayer(false, playersNames[i - 1]);
-    }
+    // // create players.
+    // for (int i = 0; i < playersNames.length + 1; i++) {
+    //   if (i == 0) {
+    //     createPlayer(true, quartetsMe);
+    //     continue;
+    //   }
+    //   createPlayer(false, playersNames[i - 1]);
+    // }
 
     reStart();
   }
-//    void addListener(listener) {
-//    this.observers.add(listener);
-//  }
-//
-//  void removeListener(listener) {
-//    this.observers.remove(listener);
-//  }
-//
-//  void updateObservers() {
-//    for(Function f in this.observers) {
-//      f();
-//    }
-//  }
-
   void reStart() {
     //TODO: initialize cards in players hand.
-    Deck deck = createDeck(subjects);
+    Deck deck = createDeck(this.subjects);
+
+    //deck.printDeck();
+
     deck.handoutDeck(this.players);
     this.deck = deck;
-    this.turn = 0;
+    final Map<String, List<int>> playersCards = {};
+    //initialize arrays with all the id cards to every player in the game.
+    for (Player p in players) {
+      playersCards[p.uid] = [];
+      for (CardQuartets q in p.cards) {
+        int x = this.cardsId[q];
+        playersCards[p.uid].add(x);
+      }
+      GameDatabaseService()
+          .initializePlayerCard(playersCards[p.uid], this.gameId, p.uid);
+    }
+    //initialize the deck
+    List<int> deckCards = [];
+    for (CardQuartets q in deck.cards) {
+      int x = this.cardsId[q];
+      deckCards.add(x);
+    }
+    GameDatabaseService().updateDeck(deckCards, this.gameId);
 
-    //todo: check it! for replace "checkComputerPlayerTurn" to call by turnController
-//    this._turnController.onListen(
-//
-//    );
+    //TODO: randomal turn.
+    this.turn = 0;
   }
 
   bool askPlayer(Player player, Subject subject) {
@@ -195,7 +201,7 @@ class QuartetsGame extends Game {
     Player player = getPlayerNeedTurn();
     removeAllSeriesDone(player);
     if (checkIfGameDone()) {
-      reStart();
+      //reStart();
       return true;
     }
     changeToNextPlayerTurn();
@@ -204,7 +210,7 @@ class QuartetsGame extends Game {
     this._stringsOnDeckController.add(1);
     checkComputerPlayerTurn();
     if (checkIfGameDone()) {
-      reStart();
+      //reStart();
 
       return true;
     }
@@ -270,432 +276,432 @@ class QuartetsGame extends Game {
   }
 
   Deck createDeck(List<Subject> subjects) {
-//    TODO: take this line when there is subjects.
-//    Deck deck = new Deck(subjects);
-//  return deck;
-
-    List<Subject> subs = mySubjects();
-    Deck deck = new Deck(subs);
-
+    Deck deck = new Deck(subjects);
     return deck;
-  }
 
-  List<Subject> mySubjects() {
-    Subject furnitures = Subject(
-        "Furnitures",
-        Triple(
-            "table",
-            "שולחן",
-            Image(
-              image: AssetImage('images/table.jpg'),
-            )),
-        Triple(
-            "chair",
-            "כסא",
-            Image(
-              image: AssetImage('images/chair.jpg'),
-            )),
-        Triple(
-            "bed",
-            "מיטה",
-            Image(
-              image: AssetImage('images/bed.jpg'),
-            )),
-        Triple(
-            "cupboard",
-            "ארון",
-            Image(
-              image: AssetImage('images/cupboard.jpg'),
-            )));
-    Subject pets = Subject(
-        "Pets",
-        Triple(
-            "cat",
-            "חתול",
-            Image(
-              image: AssetImage('images/cat.jpg'),
-            )),
-        Triple(
-            "dog",
-            "כלב",
-            Image(
-              image: AssetImage('images/dog.jpg'),
-            )),
-        Triple(
-            "hamster",
-            "אוגר",
-            Image(
-              image: AssetImage('images/hamster.jpg'),
-            )),
-        Triple(
-            "fish",
-            "דג",
-            Image(
-              image: AssetImage('images/fish.jpg'),
-            )));
-    Subject days = Subject(
-        "Days",
-        Triple(
-            "sunday",
-            "יום ראשון",
-            Image(
-              image: AssetImage('images/sunday.png'),
-            )),
-        Triple(
-            "monday",
-            "יום שני",
-            Image(
-              image: AssetImage('images/monday.png'),
-            )),
-        Triple(
-            "saturday",
-            "יום שבת",
-            Image(
-              image: AssetImage('images/saturday.png'),
-            )),
-        Triple(
-            "friday",
-            "יום שישי",
-            Image(
-              image: AssetImage('images/friday.png'),
-            )));
-    Subject family = Subject(
-        "Family",
-        Triple(
-            "father",
-            "אבא",
-            Image(
-              image: AssetImage('images/father.png'),
-            )),
-        Triple(
-            "mother",
-            "אמא",
-            Image(
-              image: AssetImage('images/mother.jpg'),
-            )),
-        Triple(
-            "sister",
-            "אחות",
-            Image(
-              image: AssetImage('images/sister.jpg'),
-            )),
-        Triple(
-            "brother",
-            "אח",
-            Image(
-              image: AssetImage('images/brother.jpg'),
-            )));
-    Subject food = Subject(
-        "Food",
-        Triple(
-            "pizza",
-            "פיצה",
-            Image(
-              image: AssetImage('images/pizza.jpg'),
-            )),
-        Triple(
-            "rice",
-            "אורז",
-            Image(
-              image: AssetImage('images/rice.jpg'),
-            )),
-        Triple(
-            "meat",
-            "בשר",
-            Image(
-              image: AssetImage('images/meat.jpg'),
-            )),
-        Triple(
-            "soup",
-            "מרק",
-            Image(
-              image: AssetImage('images/soup.png'),
-            )));
-    Subject colors = Subject(
-        "Colors",
-        Triple("red", "אדום", null),
-        Triple("black", "שחור", null),
-        Triple("blue", "כחול", null),
-        Triple("green", "ירוק", null));
-    Subject musicalInstruments = Subject(
-        "Musical Instruments",
-        Triple("guitar", "גיטרה", null),
-        Triple("piano", "פסנתר", null),
-        Triple("flute", "חליל צד", null),
-        Triple("Ukulele", "יוקלילי", null));
-    Subject clothes = Subject(
-        "Clothes",
-        Triple("T-shirt", "חולצת-טי", null),
-        Triple("dress", "שמלה", null),
-        Triple("shoes", "נעליים", null),
-        Triple("skirt", "חצאית", null));
-
-    Subject days1 = Subject(
-        "Days1",
-        Triple(
-            "sunday",
-            "יום ראשון",
-            Image(
-              image: AssetImage('images/sunday.png'),
-            )),
-        Triple(
-            "monday",
-            "יום שני",
-            Image(
-              image: AssetImage('images/monday.png'),
-            )),
-        Triple(
-            "saturday",
-            "יום שבת",
-            Image(
-              image: AssetImage('images/saturday.png'),
-            )),
-        Triple(
-            "friday",
-            "יום שישי",
-            Image(
-              image: AssetImage('images/friday.png'),
-            )));
-    Subject family1 = Subject(
-        "Family1",
-        Triple(
-            "father",
-            "אבא",
-            Image(
-              image: AssetImage('images/father.png'),
-            )),
-        Triple(
-            "mother",
-            "אמא",
-            Image(
-              image: AssetImage('images/mother.jpg'),
-            )),
-        Triple(
-            "sister",
-            "אחות",
-            Image(
-              image: AssetImage('images/sister.jpg'),
-            )),
-        Triple(
-            "brother",
-            "אח",
-            Image(
-              image: AssetImage('images/brother.jpg'),
-            )));
-    Subject food1 = Subject(
-        "Food1",
-        Triple(
-            "pizza",
-            "פיצה",
-            Image(
-              image: AssetImage('images/pizza.jpg'),
-            )),
-        Triple(
-            "rice",
-            "אורז",
-            Image(
-              image: AssetImage('images/rice.jpg'),
-            )),
-        Triple(
-            "meat",
-            "בשר",
-            Image(
-              image: AssetImage('images/meat.jpg'),
-            )),
-        Triple(
-            "soup",
-            "מרק",
-            Image(
-              image: AssetImage('images/soup.png'),
-            )));
-    Subject days2 = Subject(
-        "Days2",
-        Triple(
-            "sunday",
-            "יום ראשון",
-            Image(
-              image: AssetImage('images/sunday.png'),
-            )),
-        Triple(
-            "monday",
-            "יום שני",
-            Image(
-              image: AssetImage('images/monday.png'),
-            )),
-        Triple(
-            "saturday",
-            "יום שבת",
-            Image(
-              image: AssetImage('images/saturday.png'),
-            )),
-        Triple(
-            "friday",
-            "יום שישי",
-            Image(
-              image: AssetImage('images/friday.png'),
-            )));
-    Subject family2 = Subject(
-        "Family2",
-        Triple(
-            "father",
-            "אבא",
-            Image(
-              image: AssetImage('images/father.png'),
-            )),
-        Triple(
-            "mother",
-            "אמא",
-            Image(
-              image: AssetImage('images/mother.jpg'),
-            )),
-        Triple(
-            "sister",
-            "אחות",
-            Image(
-              image: AssetImage('images/sister.jpg'),
-            )),
-        Triple(
-            "brother",
-            "אח",
-            Image(
-              image: AssetImage('images/brother.jpg'),
-            )));
-    Subject food2 = Subject(
-        "Food2",
-        Triple(
-            "pizza",
-            "פיצה",
-            Image(
-              image: AssetImage('images/pizza.jpg'),
-            )),
-        Triple(
-            "rice",
-            "אורז",
-            Image(
-              image: AssetImage('images/rice.jpg'),
-            )),
-        Triple(
-            "meat",
-            "בשר",
-            Image(
-              image: AssetImage('images/meat.jpg'),
-            )),
-        Triple(
-            "soup",
-            "מרק",
-            Image(
-              image: AssetImage('images/soup.png'),
-            )));
-    Subject days3 = Subject(
-        "Days3",
-        Triple(
-            "sunday",
-            "יום ראשון",
-            Image(
-              image: AssetImage('images/sunday.png'),
-            )),
-        Triple(
-            "monday",
-            "יום שני",
-            Image(
-              image: AssetImage('images/monday.png'),
-            )),
-        Triple(
-            "saturday",
-            "יום שבת",
-            Image(
-              image: AssetImage('images/saturday.png'),
-            )),
-        Triple(
-            "friday",
-            "יום שישי",
-            Image(
-              image: AssetImage('images/friday.png'),
-            )));
-    Subject family3 = Subject(
-        "Family3",
-        Triple(
-            "father",
-            "אבא",
-            Image(
-              image: AssetImage('images/father.png'),
-            )),
-        Triple(
-            "mother",
-            "אמא",
-            Image(
-              image: AssetImage('images/mother.jpg'),
-            )),
-        Triple(
-            "sister",
-            "אחות",
-            Image(
-              image: AssetImage('images/sister.jpg'),
-            )),
-        Triple(
-            "brother",
-            "אח",
-            Image(
-              image: AssetImage('images/brother.jpg'),
-            )));
-    Subject food3 = Subject(
-        "Food3",
-        Triple(
-            "pizza",
-            "פיצה",
-            Image(
-              image: AssetImage('images/pizza.jpg'),
-            )),
-        Triple(
-            "rice",
-            "אורז",
-            Image(
-              image: AssetImage('images/rice.jpg'),
-            )),
-        Triple(
-            "meat",
-            "בשר",
-            Image(
-              image: AssetImage('images/meat.jpg'),
-            )),
-        Triple(
-            "soup",
-            "מרק",
-            Image(
-              image: AssetImage('images/soup.png'),
-            )));
-    List<Subject> subs = [
-      furnitures,
-      pets,
-      days,
-      family,
-      food,
-      clothes,
-      colors,
-      musicalInstruments,
-//      days1,
-//      family1,
-//      food1,
-//      days2,
-//      family2,
-//      food2,
-//      days3,
-//      family3,
-//      food3
-    ];
-    return subs;
+    // List<Subject> subs = mySubjects();
+    // Deck deck = new Deck(subs);
+    //
+    // return deck;
   }
+  //
+  // List<Subject> mySubjects() {
+  //   return [];
+//     Subject furnitures = Subject(
+//         "Furnitures",
+//         Triple(
+//             "table",
+//             "שולחן",
+//             Image(
+//               image: AssetImage('images/table.jpg'),
+//             )),
+//         Triple(
+//             "chair",
+//             "כסא",
+//             Image(
+//               image: AssetImage('images/chair.jpg'),
+//             )),
+//         Triple(
+//             "bed",
+//             "מיטה",
+//             Image(
+//               image: AssetImage('images/bed.jpg'),
+//             )),
+//         Triple(
+//             "cupboard",
+//             "ארון",
+//             Image(
+//               image: AssetImage('images/cupboard.jpg'),
+//             )));
+//     Subject pets = Subject(
+//         "Pets",
+//         Triple(
+//             "cat",
+//             "חתול",
+//             Image(
+//               image: AssetImage('images/cat.jpg'),
+//             )),
+//         Triple(
+//             "dog",
+//             "כלב",
+//             Image(
+//               image: AssetImage('images/dog.jpg'),
+//             )),
+//         Triple(
+//             "hamster",
+//             "אוגר",
+//             Image(
+//               image: AssetImage('images/hamster.jpg'),
+//             )),
+//         Triple(
+//             "fish",
+//             "דג",
+//             Image(
+//               image: AssetImage('images/fish.jpg'),
+//             )));
+//     Subject days = Subject(
+//         "Days",
+//         Triple(
+//             "sunday",
+//             "יום ראשון",
+//             Image(
+//               image: AssetImage('images/sunday.png'),
+//             )),
+//         Triple(
+//             "monday",
+//             "יום שני",
+//             Image(
+//               image: AssetImage('images/monday.png'),
+//             )),
+//         Triple(
+//             "saturday",
+//             "יום שבת",
+//             Image(
+//               image: AssetImage('images/saturday.png'),
+//             )),
+//         Triple(
+//             "friday",
+//             "יום שישי",
+//             Image(
+//               image: AssetImage('images/friday.png'),
+//             )));
+//     Subject family = Subject(
+//         "Family",
+//         Triple(
+//             "father",
+//             "אבא",
+//             Image(
+//               image: AssetImage('images/father.png'),
+//             )),
+//         Triple(
+//             "mother",
+//             "אמא",
+//             Image(
+//               image: AssetImage('images/mother.jpg'),
+//             )),
+//         Triple(
+//             "sister",
+//             "אחות",
+//             Image(
+//               image: AssetImage('images/sister.jpg'),
+//             )),
+//         Triple(
+//             "brother",
+//             "אח",
+//             Image(
+//               image: AssetImage('images/brother.jpg'),
+//             )));
+//     Subject food = Subject(
+//         "Food",
+//         Triple(
+//             "pizza",
+//             "פיצה",
+//             Image(
+//               image: AssetImage('images/pizza.jpg'),
+//             )),
+//         Triple(
+//             "rice",
+//             "אורז",
+//             Image(
+//               image: AssetImage('images/rice.jpg'),
+//             )),
+//         Triple(
+//             "meat",
+//             "בשר",
+//             Image(
+//               image: AssetImage('images/meat.jpg'),
+//             )),
+//         Triple(
+//             "soup",
+//             "מרק",
+//             Image(
+//               image: AssetImage('images/soup.png'),
+//             )));
+//     Subject colors = Subject(
+//         "Colors",
+//         Triple("red", "אדום", null),
+//         Triple("black", "שחור", null),
+//         Triple("blue", "כחול", null),
+//         Triple("green", "ירוק", null));
+//     Subject musicalInstruments = Subject(
+//         "Musical Instruments",
+//         Triple("guitar", "גיטרה", null),
+//         Triple("piano", "פסנתר", null),
+//         Triple("flute", "חליל צד", null),
+//         Triple("Ukulele", "יוקלילי", null));
+//     Subject clothes = Subject(
+//         "Clothes",
+//         Triple("T-shirt", "חולצת-טי", null),
+//         Triple("dress", "שמלה", null),
+//         Triple("shoes", "נעליים", null),
+//         Triple("skirt", "חצאית", null));
+//
+//     Subject days1 = Subject(
+//         "Days1",
+//         Triple(
+//             "sunday",
+//             "יום ראשון",
+//             Image(
+//               image: AssetImage('images/sunday.png'),
+//             )),
+//         Triple(
+//             "monday",
+//             "יום שני",
+//             Image(
+//               image: AssetImage('images/monday.png'),
+//             )),
+//         Triple(
+//             "saturday",
+//             "יום שבת",
+//             Image(
+//               image: AssetImage('images/saturday.png'),
+//             )),
+//         Triple(
+//             "friday",
+//             "יום שישי",
+//             Image(
+//               image: AssetImage('images/friday.png'),
+//             )));
+//     Subject family1 = Subject(
+//         "Family1",
+//         Triple(
+//             "father",
+//             "אבא",
+//             Image(
+//               image: AssetImage('images/father.png'),
+//             )),
+//         Triple(
+//             "mother",
+//             "אמא",
+//             Image(
+//               image: AssetImage('images/mother.jpg'),
+//             )),
+//         Triple(
+//             "sister",
+//             "אחות",
+//             Image(
+//               image: AssetImage('images/sister.jpg'),
+//             )),
+//         Triple(
+//             "brother",
+//             "אח",
+//             Image(
+//               image: AssetImage('images/brother.jpg'),
+//             )));
+//     Subject food1 = Subject(
+//         "Food1",
+//         Triple(
+//             "pizza",
+//             "פיצה",
+//             Image(
+//               image: AssetImage('images/pizza.jpg'),
+//             )),
+//         Triple(
+//             "rice",
+//             "אורז",
+//             Image(
+//               image: AssetImage('images/rice.jpg'),
+//             )),
+//         Triple(
+//             "meat",
+//             "בשר",
+//             Image(
+//               image: AssetImage('images/meat.jpg'),
+//             )),
+//         Triple(
+//             "soup",
+//             "מרק",
+//             Image(
+//               image: AssetImage('images/soup.png'),
+//             )));
+//     Subject days2 = Subject(
+//         "Days2",
+//         Triple(
+//             "sunday",
+//             "יום ראשון",
+//             Image(
+//               image: AssetImage('images/sunday.png'),
+//             )),
+//         Triple(
+//             "monday",
+//             "יום שני",
+//             Image(
+//               image: AssetImage('images/monday.png'),
+//             )),
+//         Triple(
+//             "saturday",
+//             "יום שבת",
+//             Image(
+//               image: AssetImage('images/saturday.png'),
+//             )),
+//         Triple(
+//             "friday",
+//             "יום שישי",
+//             Image(
+//               image: AssetImage('images/friday.png'),
+//             )));
+//     Subject family2 = Subject(
+//         "Family2",
+//         Triple(
+//             "father",
+//             "אבא",
+//             Image(
+//               image: AssetImage('images/father.png'),
+//             )),
+//         Triple(
+//             "mother",
+//             "אמא",
+//             Image(
+//               image: AssetImage('images/mother.jpg'),
+//             )),
+//         Triple(
+//             "sister",
+//             "אחות",
+//             Image(
+//               image: AssetImage('images/sister.jpg'),
+//             )),
+//         Triple(
+//             "brother",
+//             "אח",
+//             Image(
+//               image: AssetImage('images/brother.jpg'),
+//             )));
+//     Subject food2 = Subject(
+//         "Food2",
+//         Triple(
+//             "pizza",
+//             "פיצה",
+//             Image(
+//               image: AssetImage('images/pizza.jpg'),
+//             )),
+//         Triple(
+//             "rice",
+//             "אורז",
+//             Image(
+//               image: AssetImage('images/rice.jpg'),
+//             )),
+//         Triple(
+//             "meat",
+//             "בשר",
+//             Image(
+//               image: AssetImage('images/meat.jpg'),
+//             )),
+//         Triple(
+//             "soup",
+//             "מרק",
+//             Image(
+//               image: AssetImage('images/soup.png'),
+//             )));
+//     Subject days3 = Subject(
+//         "Days3",
+//         Triple(
+//             "sunday",
+//             "יום ראשון",
+//             Image(
+//               image: AssetImage('images/sunday.png'),
+//             )),
+//         Triple(
+//             "monday",
+//             "יום שני",
+//             Image(
+//               image: AssetImage('images/monday.png'),
+//             )),
+//         Triple(
+//             "saturday",
+//             "יום שבת",
+//             Image(
+//               image: AssetImage('images/saturday.png'),
+//             )),
+//         Triple(
+//             "friday",
+//             "יום שישי",
+//             Image(
+//               image: AssetImage('images/friday.png'),
+//             )));
+//     Subject family3 = Subject(
+//         "Family3",
+//         Triple(
+//             "father",
+//             "אבא",
+//             Image(
+//               image: AssetImage('images/father.png'),
+//             )),
+//         Triple(
+//             "mother",
+//             "אמא",
+//             Image(
+//               image: AssetImage('images/mother.jpg'),
+//             )),
+//         Triple(
+//             "sister",
+//             "אחות",
+//             Image(
+//               image: AssetImage('images/sister.jpg'),
+//             )),
+//         Triple(
+//             "brother",
+//             "אח",
+//             Image(
+//               image: AssetImage('images/brother.jpg'),
+//             )));
+//     Subject food3 = Subject(
+//         "Food3",
+//         Triple(
+//             "pizza",
+//             "פיצה",
+//             Image(
+//               image: AssetImage('images/pizza.jpg'),
+//             )),
+//         Triple(
+//             "rice",
+//             "אורז",
+//             Image(
+//               image: AssetImage('images/rice.jpg'),
+//             )),
+//         Triple(
+//             "meat",
+//             "בשר",
+//             Image(
+//               image: AssetImage('images/meat.jpg'),
+//             )),
+//         Triple(
+//             "soup",
+//             "מרק",
+//             Image(
+//               image: AssetImage('images/soup.png'),
+//             )));
+//     List<Subject> subs = [
+//       furnitures,
+//       pets,
+//       days,
+//       family,
+//       food,
+//       clothes,
+//       colors,
+//       musicalInstruments,
+// //      days1,
+// //      family1,
+// //      food1,
+// //      days2,
+// //      family2,
+// //      food2,
+// //      days3,
+// //      family3,
+// //      food3
+//     ];
+//     return subs;
+//   }
 
-  Player createPlayer(bool isMe, String name) {
-    Player player;
-    if (isMe) {
-      player = Me([], name);
-    } else {
-      player = ComputerPlayer([], name);
-    }
-    this.players.add(player);
-    return player;
-  }
+  // Player createPlayer(bool isMe, String name) {
+  //   Player player;
+  //   if (isMe) {
+  //     player = Me([], name);
+  //   } else {
+  //     player = VirtualPlayer([], name);
+  //   }
+  //   this.players.add(player);
+  //   return player;
+  // }
 
   Subject getSubjectByString(String sub) {
     for (Subject s in this.deck.subjects) {

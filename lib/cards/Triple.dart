@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 
 class Triple {
@@ -7,9 +5,15 @@ class Triple {
   String hebrew;
   Image image;
 
-  Triple(String en, String he, Image im) {
+  Triple(String en, String he, String im) {
     this.english = en;
     this.hebrew = he;
-    this.image = im;
+    if (im == null)
+      im = null;
+    else {
+      this.image = Image(
+        image: AssetImage(im),
+      );
+    }
   }
 }

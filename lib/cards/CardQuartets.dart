@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../Constants.dart';
 import 'CardGame.dart';
 
-
 class CardQuartets extends CardGame {
   var english = "";
   var hebrew = "";
@@ -29,7 +28,7 @@ class CardQuartets extends CardGame {
   @override
   _CardQuartetsState createState() => _CardQuartetsState();
 
-  CardQuartets changeToMine(){
+  CardQuartets changeToMine() {
     this.myCard = true;
     return this;
   }
@@ -69,9 +68,9 @@ class CardQuartets extends CardGame {
   }
 }
 
-class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMixin {
+class _CardQuartetsState extends State<CardQuartets>
+    with TickerProviderStateMixin {
   AnimationController _animationController;
-
 
   @override
   void initState() {
@@ -85,6 +84,7 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
     _animationController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     if (widget.myCard) {
@@ -106,8 +106,8 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
 //      height=bigHeight;
 //      width = bigWidth;
 //    }
-    double height = MediaQuery.of(context).size.height/4;
-    double fontSizeWords = height/13;
+    double height = MediaQuery.of(context).size.height / 4;
+    double fontSizeWords = height / 13;
     double width = 130;
     //TODO: animations.
 //    return PositionedTransition(
@@ -124,73 +124,69 @@ class _CardQuartetsState extends State<CardQuartets> with TickerProviderStateMix
 //        parent: _animationController,
 //        curve: Curves.elasticInOut,
 //      )),
-        return new Container(
+    return new Container(
       height: height,
       width: width,
       child: Card(
         shape: new RoundedRectangleBorder(
-                side: new BorderSide(color: Colors.black87, width: 1.0),
-                borderRadius: BorderRadius.circular(4.0)),
+            side: new BorderSide(color: Colors.black87, width: 1.0),
+            borderRadius: BorderRadius.circular(4.0)),
         borderOnForeground: true,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Container(
-              decoration: new BoxDecoration(
-                  color: Colors.tealAccent,
-                  border: Border.all(color: Colors.white70)),
-              child: Center(
-                  child: Text(
-                widget.subject,
-                style: TextStyle(
-                  fontFamily: "AkayaK-e",
-                  fontSize: 25,
-                ),
-              )),
-            ),
-
-            Center(
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          Container(
+            decoration: new BoxDecoration(
+                color: Colors.tealAccent,
+                border: Border.all(color: Colors.white70)),
+            child: Center(
+                child: Text(
+              widget.subject,
+              style: TextStyle(
+                fontFamily: "AkayaK-e",
+                fontSize: 25,
+              ),
+            )),
+          ),
+          Center(
               child: Container(
-                width: width,
-                  height: height/4,
-                  child: widget.image)
+                  width: width, height: height / 4, child: widget.image)),
+          Center(
+            child: Text(
+              widget.english,
+              style: TextStyle(
+                  fontFamily: "Carter-e",
+                  fontSize: fontSizeWords,
+                  color: Colors.lightGreen),
             ),
-                Center(
-                  child: Text(
-                    widget.english,
-                    style: TextStyle(
-                        fontFamily: "Carter-e",
-                        fontSize: fontSizeWords,
-                        color: Colors.lightGreen
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    widget.word1,
-                    style: TextStyle(
-                        fontFamily: "Carter-e",
-                        fontSize: fontSizeWords,
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    widget.word2,
-                    style: TextStyle(
-                        fontFamily: "Carter-e",
-                        fontSize: fontSizeWords,
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    widget.word3,
-                    style: TextStyle(
-                        fontFamily: "Carter-e",
-                        fontSize: fontSizeWords,
-                    ),
-                  ),
-                ),
-          ]),
+          ),
+          Center(
+            child: Text(
+              widget.word1,
+              style: TextStyle(
+                fontFamily: "Carter-e",
+                fontSize: fontSizeWords,
+              ),
+            ),
+          ),
+          Center(
+            child: Text(
+              widget.word2,
+              style: TextStyle(
+                fontFamily: "Carter-e",
+                fontSize: fontSizeWords,
+              ),
+            ),
+          ),
+          Center(
+            child: Text(
+              widget.word3,
+              style: TextStyle(
+                fontFamily: "Carter-e",
+                fontSize: fontSizeWords,
+              ),
+            ),
+          ),
+        ]),
       ),
 //        ),
     );

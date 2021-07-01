@@ -17,7 +17,9 @@ class Turn extends StatefulWidget {
   Turn(QuartetsGame g, StreamController sc) {
     this.streamController = sc;
     this.game = g;
-    this.playerChosenToAsk = g.getFirstPlayer();
+    //TODO: remove it
+    this.playerChosenToAsk = g.getMyPlayer();
+    // this.playerChosenToAsk = g.getFirstPlayer();
     List<String> subjects = g.getMyPlayer().getSubjects();
     if (subjects.isNotEmpty) {
       this.subjectToAsk = g.getSubjectByString(subjects[0]);
@@ -277,7 +279,7 @@ class _turnState extends State<Turn> {
     //}
   }
 
-  askClicked() async{
+  askClicked() async {
     if (widget.playerChosenToAsk
         .getSubjects()
         .contains(widget.subjectToAsk.name_subject)) {
