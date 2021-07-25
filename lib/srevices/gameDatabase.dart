@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/cards/CardGame.dart';
+import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/cards/Triple.dart';
+import 'package:engli_app/games/Game.dart';
+import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -230,5 +233,52 @@ class GameDatabaseService {
       }
     });
     return Future.value(d);
+  }
+
+  void updateTakeCardFromDeck(
+      QuartetsGame game, CardQuartets card, Player player) {
+    removeCardFromDeck(game, card);
+    addCardToPlayer(game, card, player);
+  }
+
+  void removeCardFromDeck(QuartetsGame game, CardQuartets card) async {
+    await gameCollection
+        .doc(game.gameId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var x = documentSnapshot.data()["deck"];
+        List<int> deck = x.cast<int>();
+        int cardId = game.cardsId[card];
+        for (int c in deck) {
+          if (c == cardId) {
+            deck.remove(c);
+          }
+        }
+        gameCollection.doc(game.gameId).update({'deck': deck});
+      }
+    });
+  }
+
+  void addCardToPlayer(
+      QuartetsGame game, CardQuartets card, Player player) async {
+    await gameCollection
+        .doc(game.gameId)
+        .collection("players")
+        .doc(player.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var x = documentSnapshot.data()['cards'];
+        List<int> playerCards = x.cast<int>();
+        int cardId = game.cardsId[card];
+        playerCards.add(cardId);
+        gameCollection
+            .doc(game.gameId)
+            .collection("players")
+            .doc(player.uid)
+            .update({'cards': playerCards});
+      }
+    });
   }
 }

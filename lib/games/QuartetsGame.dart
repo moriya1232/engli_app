@@ -720,8 +720,8 @@ class QuartetsGame extends Game {
 
       //animation:
       animateCard(this._deckController, deckPos, getApproPosition(player));
-      await this.deck.giveCardToPlayer(player);
-
+      CardQuartets card = await this.deck.giveCardToPlayer(player, this);
+      //GameDatabaseService().updateDeck(cards, gameId);
       //update view:
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);

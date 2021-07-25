@@ -1,8 +1,11 @@
 import 'dart:math';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
+import 'package:engli_app/games/Game.dart';
+import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/QuartetsGame/Constants.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 
 class Deck {
   List<CardQuartets> cards = [];
@@ -31,7 +34,7 @@ class Deck {
     return this.cards;
   }
 
-  Future giveCardToPlayer(Player player) {
+  Future giveCardToPlayer(Player player, QuartetsGame game) async {
     if (this.cards.isEmpty) {
       throw Exception("no more cards in the pile");
     } else {
@@ -42,6 +45,9 @@ class Deck {
       } else {
         player.addCard(card.changeToNotMine());
       }
+      if (game != null) {
+        GameDatabaseService().updateTakeCardFromDeck(game, card, player);
+      }
     }
     return new Future.delayed(const Duration(seconds: 1));
   }
@@ -50,7 +56,7 @@ class Deck {
     shuffle();
     for (int round = 0; round < howMuchCardsToDivide; round++) {
       for (Player player in players) {
-        giveCardToPlayer(player);
+        giveCardToPlayer(player, null);
       }
     }
   }
