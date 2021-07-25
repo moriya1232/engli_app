@@ -74,7 +74,21 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         .listen((DocumentSnapshot documentSnapshot) {
       List<dynamic> nDeck = documentSnapshot.data()['deck'];
       List<int> newDeck = nDeck.cast<int>();
-      GameDatabaseService().updateDeck(newDeck, this.widget.game.gameId);
+      updateDeck(newDeck);
+      //GameDatabaseService().updateDeck(newDeck, this.widget.game.gameId);
+    });
+    FirebaseFirestore.instance
+        .collection("games")
+        .doc(widget.game.gameId)
+        .collection("players")
+        .snapshots()
+        .listen((event) {
+      event.docChanges.forEach((element) {
+        String playerId = element.doc.reference.id;
+        List<dynamic> nCard = element.doc.data()['cards'];
+        List<int> newCards = nCard.cast<int>();
+        updatePlayerCards(newCards, playerId);
+      });
     });
     this.firstCard = getAnimationCard();
     this.secondCard = getAnimationCard();
@@ -536,5 +550,29 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   Widget getAnimationCard() {
     CardQuartets card = CardQuartets("", "", null, "", "", "", "", false);
     return card;
+  }
+
+  void updateDeck(List<int> nDeck) {
+    List<CardQuartets> newDeck = [];
+    for (var i in nDeck) {
+      var key = widget.game.cardsId.keys
+          .firstWhere((k) => widget.game.cardsId[k] == i, orElse: () => null);
+      newDeck.add(key);
+    }
+    widget.game.deck.cards = newDeck;
+  }
+
+  void updatePlayerCards(List<int> cards, String id) {
+    List<CardQuartets> newCardsList = [];
+    for (var i in cards) {
+      var key = widget.game.cardsId.keys
+          .firstWhere((k) => widget.game.cardsId[k] == i, orElse: () => null);
+      newCardsList.add(key);
+    }
+    for (var i in widget.game.players) {
+      if (i.uid == id) {
+        i.cards = newCardsList;
+      }
+    }
   }
 }
