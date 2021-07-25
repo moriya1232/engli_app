@@ -89,7 +89,12 @@ class _LoadingState extends State<Loading> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  //testIfContinue(),
+                  Text(
+                    this.widget.gameId,
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
                   getListNameUsers(),
                   SizedBox(
                     height: 30,

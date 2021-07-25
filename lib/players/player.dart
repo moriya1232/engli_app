@@ -38,6 +38,7 @@ abstract class Player {
 
       this.cards.add(card);
       player.cards.remove(card);
+
       // TODO: update server about cards of 2 player.
       //TODO: update server about give "card" from "this" player to "player" player.
       if (this is Me) {

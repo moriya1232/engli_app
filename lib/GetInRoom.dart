@@ -95,6 +95,7 @@ class _GetInRoomState extends State<GetInRoom> {
 
   void openRoomClicked() async {
     String gameId = UniqueKey().toString();
+    print(gameId);
     await createGame(gameId);
     Navigator.push(
       context,
@@ -103,6 +104,7 @@ class _GetInRoomState extends State<GetInRoom> {
   }
 
   void getInToRoomClicked(String gameId) async {
+    gameId = "[#" + gameId + "]";
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     String name = "";

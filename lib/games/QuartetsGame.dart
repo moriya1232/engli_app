@@ -195,6 +195,7 @@ class QuartetsGame extends Game {
     this.turn = (this.turn + 1) % this.players.length;
     this._turnController.add(this.turn);
     // TODO: update server about turn.
+    GameDatabaseService().updateTurn(gameId, this.turn);
   }
 
   bool doneTurn() {
@@ -791,6 +792,7 @@ class QuartetsGame extends Game {
         }
       }
       player.raiseScore(10);
+      GameDatabaseService().updateScore(player.score, player.uid, this);
       this._myScoreController.add(10);
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);
@@ -809,7 +811,7 @@ class QuartetsGame extends Game {
     } else if (p == getMyPlayer()) {
       return this._meController;
     } else {
-      throw Exception("need return controller of player but doesnt found it.");
+      throw Exception("need return controller of player but doesn't found it.");
     }
   }
 
@@ -818,6 +820,8 @@ class QuartetsGame extends Game {
     if (!player.takeCardFromPlayer(card, tokenFrom)) {
       throw new Exception("error in take card");
     }
+    //the token succeed, write the change to the document.
+    GameDatabaseService().transferCard(player, tokenFrom, this, card);
 
     //animations:
     animateCard(getAppropriateController(tokenFrom),

@@ -61,7 +61,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   CardQuartets deckCard;
   FlutterTts flutterTts = FlutterTts();
 
-
   bool firstBuild = true;
 
   @override
@@ -75,7 +74,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       List<dynamic> nDeck = documentSnapshot.data()['deck'];
       List<int> newDeck = nDeck.cast<int>();
       updateDeck(newDeck);
-      //GameDatabaseService().updateDeck(newDeck, this.widget.game.gameId);
+      dynamic turn = documentSnapshot.data()['turn'];
+      turn = turn.cast<int>();
+      widget.game.turn = turn;
     });
     FirebaseFirestore.instance
         .collection("games")
@@ -87,7 +88,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         String playerId = element.doc.reference.id;
         List<dynamic> nCard = element.doc.data()['cards'];
         List<int> newCards = nCard.cast<int>();
+        dynamic score = element.doc.data()['score'];
+        score = score.cast<int>();
         updatePlayerCards(newCards, playerId);
+        updatePlayerScore(playerId, score);
       });
     });
     this.firstCard = getAnimationCard();
@@ -276,7 +280,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     String wasAsked = widget.game.nameAsked;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
-    String textToSpeech = asked + " ask " + wasAsked + " about " + cardAsked + " in subject: " +subjectAsked;
+    String textToSpeech = asked +
+        " ask " +
+        wasAsked +
+        " about " +
+        cardAsked +
+        " in subject: " +
+        subjectAsked;
     print(textToSpeech);
     _speak(textToSpeech);
 
@@ -579,6 +589,14 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     for (var i in widget.game.players) {
       if (i.uid == id) {
         i.cards = newCardsList;
+      }
+    }
+  }
+
+  void updatePlayerScore(String playerId, int score) {
+    for (var i in widget.game.players) {
+      if (i.uid == playerId) {
+        i.score = score;
       }
     }
   }

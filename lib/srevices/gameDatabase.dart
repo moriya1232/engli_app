@@ -281,4 +281,48 @@ class GameDatabaseService {
       }
     });
   }
+
+  void deleteCardToPlayer(
+      Player player, QuartetsGame game, CardQuartets card) async {
+    await gameCollection
+        .doc(game.gameId)
+        .collection("players")
+        .doc(player.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var x = documentSnapshot.data()['cards'];
+        List<int> playerCards = x.cast<int>();
+        int cardId = game.cardsId[card];
+        for (int c in playerCards) {
+          if (c == cardId) {
+            playerCards.remove(c);
+          }
+        }
+        gameCollection
+            .doc(game.gameId)
+            .collection("players")
+            .doc(player.uid)
+            .update({'cards': playerCards});
+      }
+    });
+  }
+
+  void transferCard(Player takePlayer, Player tokenFrom, QuartetsGame game,
+      CardQuartets card) {
+    deleteCardToPlayer(tokenFrom, game, card);
+    addCardToPlayer(game, card, takePlayer);
+  }
+
+  void updateTurn(String gameId, int turn) {
+    gameCollection.doc(gameId).update({'turn': turn});
+  }
+
+  void updateScore(int score, playerId, QuartetsGame game) async {
+    await gameCollection
+        .doc(game.gameId)
+        .collection("players")
+        .doc(playerId)
+        .update({'score': score});
+  }
 }
