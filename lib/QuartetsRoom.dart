@@ -2,11 +2,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
-import 'package:engli_app/WinnerScreen.dart';
-import 'package:engli_app/srevices/gameDatabase.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'QuartetsGame/Turn.dart';
 import 'cards/CardQuartets.dart';
 import 'cards/Position.dart';
@@ -61,6 +59,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   CardQuartets thirdCard;
   CardQuartets meCard;
   CardQuartets deckCard;
+  FlutterTts flutterTts = FlutterTts();
+
 
   bool firstBuild = true;
 
@@ -265,11 +265,21 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         });
   }
 
+  Future _speak(String text) async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1);
+    await flutterTts.speak(text);
+  }
+
   Widget getAskedText() {
     String asked = widget.game.getPlayerNeedTurn().name;
     String wasAsked = widget.game.nameAsked;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
+    String textToSpeech = asked + " ask " + wasAsked + " about " + cardAsked + " in subject: " +subjectAsked;
+    print(textToSpeech);
+    _speak(textToSpeech);
+
     if (cardAsked != null && wasAsked != null && subjectAsked != null) {
       return RichText(
         textAlign: TextAlign.center,
