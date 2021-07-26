@@ -81,7 +81,10 @@ class QuartetsGame extends Game {
 
   void createGame() async {
     await createAllSubjects(gameId);
-    await reStart();
+    String mangerID = await GameDatabaseService().getManagerId(gameId);
+    if (mangerID == this.getMyPlayer().uid) {
+      await reStart();
+    }
     this._gameStart.add(true);
   }
 
@@ -89,8 +92,6 @@ class QuartetsGame extends Game {
     int z = 0;
     List<String> strSub =
         await GameDatabaseService().getGameListSubjects(gameId);
-    print("strSub: ");
-    print(strSub);
 
     // String subjectId = await GameDatabaseService().getSubjectsId(gameId);
     for (String s in strSub) {
@@ -109,9 +110,6 @@ class QuartetsGame extends Game {
   void reStart() {
     //TODO: initialize cards in players hand.
     Deck deck = createDeck(this.subjects);
-
-    //deck.printDeck();
-
     deck.handoutDeck(this.players);
     this.deck = deck;
     Map<String, List<int>> playersCards = {};

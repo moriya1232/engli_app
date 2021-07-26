@@ -27,7 +27,7 @@ class GameDatabaseService {
       'deck': deck,
       'gameId': id,
       'subjects': subjects,
-      'subjectsId': subjectsId,
+      'managerId': subjectsId,
       'continueToGame': con
     });
   }
@@ -96,14 +96,14 @@ class GameDatabaseService {
     return Future.value(subjectsList);
   }
 
-  Future<String> getSubjectsId(gameId) async {
+  Future<String> getManagerId(gameId) async {
     String subjectsId;
     await gameCollection
         .doc(gameId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        var x = documentSnapshot.data()["subjectsId"];
+        var x = documentSnapshot.data()["managerId"];
         subjectsId = x;
       }
     });

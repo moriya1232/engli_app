@@ -130,6 +130,7 @@ class _LoadingState extends State<Loading> {
   Widget getListNameUsers() {
     return StreamBuilder<List<String>>(
         stream: _usersLoginStreamController.stream,
+        initialData: [],
         builder: (context, snapshot) {
           return ListView.builder(
               shrinkWrap: true,
