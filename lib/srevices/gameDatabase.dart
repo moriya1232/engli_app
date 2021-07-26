@@ -146,7 +146,7 @@ class GameDatabaseService {
   }
 
   Future<List<Player>> getPlayersList(String gameId) async {
-    List<Player> players = [];
+    List<Player> players = [null];
     await gameCollection
         .doc(gameId)
         .collection("players")
@@ -157,7 +157,7 @@ class GameDatabaseService {
         final FirebaseAuth _auth = FirebaseAuth.instance;
         User user = _auth.currentUser;
         if (value.id.toString() == user.uid) {
-          players.add(Me(cards, value.data()["name"], user.uid.toString()));
+          players[0] = Me(cards, value.data()["name"], user.uid.toString());
         } else {
           players.add(
               VirtualPlayer(cards, value.data()["name"], user.uid.toString()));
