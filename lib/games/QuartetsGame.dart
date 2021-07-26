@@ -88,9 +88,11 @@ class QuartetsGame extends Game {
     if (mangerID == this.getMyPlayer().uid) {
       await reStart();
     }
-    for (Player p in this.players) {
-      p.cards = await GameDatabaseService().getPlayerCards(this, p.uid);
-    }
+    // for (Player p in this.players) {
+    //   if (mangerID == this.getMyPlayer().uid) {
+    //     p.cards = await GameDatabaseService().getPlayerCards(this, p.uid);
+    //   }
+    // }
     this._gameStart.add(true);
   }
 

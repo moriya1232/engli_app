@@ -374,6 +374,7 @@ class GameDatabaseService {
         }
       }
     });
+    print(cardsPlayer);
     return Future.value(cardsPlayer);
   }
 }
