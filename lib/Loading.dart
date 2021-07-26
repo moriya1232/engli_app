@@ -11,31 +11,16 @@ import 'cards/Subject.dart';
 class Loading extends StatefulWidget {
   bool isBoss;
   List<Player> usersLogin;
-  List<Subject> subjects;
-  final Map<CardQuartets, int> cardsId = {};
   String gameId;
+  // List<Subject> subjects;
+  // Map<CardQuartets, int> cardsId = {};
 
   Loading(String gameId, bool isBoss) {
     this.usersLogin = [];
-    this.subjects = [];
     this.isBoss = isBoss;
-    createAllSubjects(gameId);
     this.gameId = gameId;
-  }
-  Future createAllSubjects(String gameId) async {
-    int z = 0;
-    List<String> strSub =
-        await GameDatabaseService().getGameListSubjects(gameId);
-    String subjectId = await GameDatabaseService().getSubjectsId(gameId);
-    for (String s in strSub) {
-      Subject sub = await GameDatabaseService()
-          .createSubjectFromDatabase("generic_subjects", s);
-      subjects.add(sub);
-      for (CardQuartets card in sub.getCards()) {
-        this.cardsId[card] = z;
-        z++;
-      }
-    }
+    // this.subjects = subs;
+    // this.cardsId = cardsId;
   }
 
   @override
@@ -59,11 +44,11 @@ class _LoadingState extends State<Loading> {
           context,
           MaterialPageRoute(
               builder: (context) => QuartetsRoom(
-                    this.widget.usersLogin,
-                    this.widget.subjects,
-                    this.widget.cardsId,
-                    this.widget.gameId,
-                  )),
+                  this.widget.usersLogin,
+                  // this.widget.subjects,
+                  // this.widget.cardsId,
+                  this.widget.gameId,
+                  false)),
         );
       }
     });

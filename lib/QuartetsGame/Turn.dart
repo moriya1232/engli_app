@@ -18,7 +18,7 @@ class Turn extends StatefulWidget {
     this.streamController = sc;
     this.game = g;
     //TODO: remove it
-    this.playerChosenToAsk = g.getMyPlayer();
+    this.playerChosenToAsk = g.players[(g.turn + 1) % g.players.length];
     // this.playerChosenToAsk = g.getFirstPlayer();
     List<String> subjects = g.getMyPlayer().getSubjects();
     if (subjects.isNotEmpty) {

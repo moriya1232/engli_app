@@ -95,7 +95,7 @@ class _GetInRoomState extends State<GetInRoom> {
 
   void openRoomClicked() async {
     String gameId = UniqueKey().toString();
-    print(gameId);
+    // print(gameId);
     await createGame(gameId);
     Navigator.push(
       context,

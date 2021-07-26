@@ -1,17 +1,26 @@
 import 'dart:async';
+import 'dart:math';
+import 'package:engli_app/players/player.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
 import 'Loading.dart';
+import 'QuartetsGame/Constants.dart';
+import 'QuartetsRoom.dart';
+import 'cards/CardQuartets.dart';
+import 'cards/Subject.dart';
 
 class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
   List<CheckBoxTile> series;
   String gameId;
+  // List<Subject> subjects;
+  // final Map<CardQuartets, int> cardsId = {};
   final _sc = StreamController<List<String>>.broadcast();
 
   OpenRoom(String gameId) {
     this.series = [];
     this.gameId = gameId;
+    // this.subjects = [];
   }
 
   @override
@@ -90,39 +99,97 @@ class _openRoomState extends State<OpenRoom> {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: EdgeInsets.all(40),
-                child: SizedBox(
-                    child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    primary: Colors.pink,
-                  ),
-                  onPressed: () {
-                    startGameClicked();
-                  },
-                  child: Text(
-                    '!התחל משחק',
-                    style: TextStyle(
-                        fontFamily: 'Comix-h',
-                        color: Colors.black87,
-                        fontSize: 20),
-                  ),
-                )),
+                child: Column(
+                  children: [
+                    SizedBox(
+                        child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        primary: Colors.pink,
+                      ),
+                      onPressed: () {
+                        startGameClicked(true);
+                      },
+                      child: Text(
+                        'שחק מול המחשב',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.black87,
+                            fontSize: 20),
+                      ),
+                    )),
+                    SizedBox(
+                        child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        primary: Colors.pink,
+                      ),
+                      onPressed: () {
+                        startGameClicked(false);
+                      },
+                      child: Text(
+                        '!התחל משחק',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.black87,
+                            fontSize: 20),
+                      ),
+                    )),
+                  ],
+                ),
               ),
             ),
           ]),
     );
   }
 
-  void startGameClicked() {
-    for (CheckBoxTile cb in this.widget.series) {
-      // print(cb.title + ": " + cb.value.toString());
-    }
+  void startGameClicked(bool isAgainstComputer) {
+    // for (CheckBoxTile cb in this.widget.series) {
+    //   print(cb.title + ": " + cb.value.toString());
+    // }
     loadAllMarkedSeries();
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
-    );
+    if (!isAgainstComputer) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
+      );
+    } else {
+      List<Player> players = [];
+      // create players.
+      for (int i = 0; i < int.parse(this.widget.dropdownValue); i++) {
+        if (i == 0) {
+          createPlayer(players, true, quartetsMe);
+          continue;
+        }
+        var random = Random();
+        createPlayer(players, false,
+            optionalsNames[random.nextInt(optionalsNames.length)]);
+      }
+
+      //TODO: change it to GetInRoom!
+      //this.widget.gameId = "-1";
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => QuartetsRoom(
+                    players,
+                    this.widget.gameId,
+                    true,
+                  )));
+    }
+  }
+
+  Player createPlayer(List<Player> players, bool isMe, String name) {
+    Player player;
+    if (isMe) {
+      player = Me([], name, "");
+    } else {
+      player = VirtualPlayer([], name, "");
+    }
+    players.add(player);
+    return player;
   }
 
   void getAllSeriesNames() async {

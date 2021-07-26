@@ -20,8 +20,10 @@ class QuartetsGame extends Game {
   String subjectAsked;
   String cardAsked;
   List<Subject> subjects;
-  Map<CardQuartets, int> cardsId;
+  Map<CardQuartets, int> cardsId = {};
   String gameId;
+  bool againstComputer = false;
+  StreamController _gameStart;
 
   // controllers for animate the view.
   StreamController _firstController;
@@ -39,9 +41,8 @@ class QuartetsGame extends Game {
 
   QuartetsGame(
       String gameId,
-      List<Player> users,
-      List<Subject> subjects,
-      Map<CardQuartets, int> caID,
+      List<Player> players,
+      StreamController gameStart,
       StreamController sc1,
       StreamController sc2,
       StreamController sc3,
@@ -53,14 +54,16 @@ class QuartetsGame extends Game {
       StreamController otherCards,
       StreamController scStrings) {
     this.gameId = gameId;
-    this.subjects = subjects;
-    this.cardsId = caID;
+    this.subjects = [];
+    this.deck = new Deck(this.subjects);
+
+    // this.cardsId = caID;
     this.nameAsked = null;
     this.subjectAsked = null;
     this.cardAsked = null;
-    this.players = users;
-//    this.observers = [];
+    this.players = players;
 
+    this._gameStart = gameStart;
     // controllers for animations.
     this._firstController = sc1;
     this._secondController = sc2;
@@ -74,18 +77,35 @@ class QuartetsGame extends Game {
     this._myCardsController = myCards;
     this._myScoreController = myScore;
     this._otherPlayersCardsController = otherCards;
-
-    // // create players.
-    // for (int i = 0; i < playersNames.length + 1; i++) {
-    //   if (i == 0) {
-    //     createPlayer(true, quartetsMe);
-    //     continue;
-    //   }
-    //   createPlayer(false, playersNames[i - 1]);
-    // }
-
-    reStart();
   }
+
+  void createGame() async {
+    await createAllSubjects(gameId);
+    await reStart();
+    this._gameStart.add(true);
+  }
+
+  void createAllSubjects(String gameId) async {
+    int z = 0;
+    List<String> strSub =
+        await GameDatabaseService().getGameListSubjects(gameId);
+    print("strSub: ");
+    print(strSub);
+
+    // String subjectId = await GameDatabaseService().getSubjectsId(gameId);
+    for (String s in strSub) {
+      Subject sub = await GameDatabaseService()
+          .createSubjectFromDatabase("generic_subjects", s);
+      this.subjects.add(sub);
+      for (CardQuartets card in sub.getCards()) {
+        this.cardsId[card] = z;
+        z++;
+      }
+    }
+    print("subject from method: ");
+    print(subjects);
+  }
+
   void reStart() {
     //TODO: initialize cards in players hand.
     Deck deck = createDeck(this.subjects);
@@ -94,7 +114,7 @@ class QuartetsGame extends Game {
 
     deck.handoutDeck(this.players);
     this.deck = deck;
-    final Map<String, List<int>> playersCards = {};
+    Map<String, List<int>> playersCards = {};
     //initialize arrays with all the id cards to every player in the game.
     for (Player p in players) {
       playersCards[p.uid] = [];
@@ -103,7 +123,7 @@ class QuartetsGame extends Game {
         playersCards[p.uid].add(x);
       }
       GameDatabaseService()
-          .initializePlayerCard(playersCards[p.uid], this.gameId, p.uid);
+          .initializePlayerCard(playersCards[p.uid], this, p.uid);
     }
     //initialize the deck
     List<int> deckCards = [];
@@ -111,7 +131,7 @@ class QuartetsGame extends Game {
       int x = this.cardsId[q];
       deckCards.add(x);
     }
-    GameDatabaseService().updateDeck(deckCards, this.gameId);
+    GameDatabaseService().updateDeck(deckCards, this);
 
     //TODO: randomal turn.
     this.turn = 0;
@@ -169,6 +189,7 @@ class QuartetsGame extends Game {
   void checkComputerPlayerTurn() {
     Player player = this.getPlayerNeedTurn();
     if (player is ComputerPlayer) {
+      print("computer move!");
       player.makeMove(this);
     }
   }
@@ -195,7 +216,7 @@ class QuartetsGame extends Game {
     this.turn = (this.turn + 1) % this.players.length;
     this._turnController.add(this.turn);
     // TODO: update server about turn.
-    GameDatabaseService().updateTurn(gameId, this.turn);
+    GameDatabaseService().updateTurn(this, this.turn);
   }
 
   bool doneTurn() {
@@ -253,6 +274,9 @@ class QuartetsGame extends Game {
   }
 
   Player getSecondPlayer() {
+    if (this.players.length <= 2) {
+      return null;
+    }
     try {
       return this.players.elementAt(2);
     } catch (e) {
@@ -261,6 +285,9 @@ class QuartetsGame extends Game {
   }
 
   Player getThirdPlayer() {
+    if (this.players.length <= 3) {
+      return null;
+    }
     try {
       return this.players.elementAt(3);
     } catch (e) {

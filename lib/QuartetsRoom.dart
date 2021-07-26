@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'QuartetsGame/Turn.dart';
 import 'cards/CardQuartets.dart';
+import 'cards/Deck.dart';
 import 'cards/Position.dart';
 import 'Constants.dart';
 import 'cards/Subject.dart';
 
 class QuartetsRoom extends StatefulWidget {
   QuartetsGame game;
+  final _scGameStart = StreamController<bool>.broadcast();
   final _streamControllerFirst = StreamController<Position>.broadcast();
   final _streamControllerSecond = StreamController<Position>.broadcast();
   final _streamControllerThird = StreamController<Position>.broadcast();
@@ -27,16 +29,16 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerMyScore = StreamController<int>.broadcast();
 
   QuartetsRoom(
-    List<Player> users,
-    List<Subject> subjects,
-    Map<CardQuartets, int> cardId,
+    List<Player> players,
+    // List<Subject> subjects,
+    // Map<CardQuartets, int> cardId,
     String gameId,
+    bool againstComputer,
   ) {
     this.game = new QuartetsGame(
         gameId,
-        users,
-        subjects,
-        cardId,
+        players,
+        this._scGameStart,
         this._streamControllerFirst,
         this._streamControllerSecond,
         this._streamControllerThird,
@@ -47,6 +49,10 @@ class QuartetsRoom extends StatefulWidget {
         this._streamControllerMyScore,
         this._streamControllerOtherPlayersCards,
         this._streamControllerStringsInDeck);
+    if (againstComputer) {
+      game.againstComputer = againstComputer;
+    }
+    this.game.createGame();
   }
 
   @override
@@ -66,18 +72,26 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   void initState() {
     super.initState();
-    FirebaseFirestore.instance
-        .collection("games")
-        .doc(widget.game.gameId)
-        .snapshots()
-        .listen((DocumentSnapshot documentSnapshot) {
-      List<dynamic> nDeck = documentSnapshot.data()['deck'];
-      List<int> newDeck = nDeck.cast<int>();
-      updateDeck(newDeck);
-      dynamic turn = documentSnapshot.data()['turn'];
-      turn = turn.cast<int>();
-      widget.game.turn = turn;
-    });
+    if (this.widget.game.gameId != "-1")
+      FirebaseFirestore.instance
+          .collection("games")
+          .doc(widget.game.gameId)
+          .snapshots()
+          .listen((DocumentSnapshot documentSnapshot) {
+        List<dynamic> nDeck = documentSnapshot.data()['deck'];
+        if (nDeck == null) {
+          nDeck = [];
+        }
+        List<int> newDeck = nDeck.cast<int>();
+        updateDeck(newDeck);
+
+        dynamic turn = documentSnapshot.data()['turn'];
+        if (turn == null) {
+          turn = 0;
+        }
+        // turn = turn.cast<int>();
+        widget.game.turn = turn;
+      });
     FirebaseFirestore.instance
         .collection("games")
         .doc(widget.game.gameId)
@@ -87,9 +101,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       event.docChanges.forEach((element) {
         String playerId = element.doc.reference.id;
         List<dynamic> nCard = element.doc.data()['cards'];
-        List<int> newCards = nCard.cast<int>();
+        List<int> newCards;
+        if (nCard != null) {
+          newCards = nCard.cast<int>();
+        } else {
+          newCards = [];
+        }
         dynamic score = element.doc.data()['score'];
-        score = score.cast<int>();
+        if (score == null) {
+          score = 0;
+        }
+        // score = score.cast<int>();
         updatePlayerCards(newCards, playerId);
         updatePlayerScore(playerId, score);
       });
@@ -106,7 +128,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     setConstants();
     firstBuild = false;
     // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
-    if (widget.game.getPlayerNeedTurn() is Me &&
+    if (this.widget.game.turn != null &&
+        widget.game.getPlayerNeedTurn() is Me &&
         this.widget.game.getPlayerNeedTurn().cards.length == 0) {
       this.widget.game.deck.giveCardToPlayer(
           this.widget.game.getPlayerNeedTurn(), this.widget.game);
@@ -116,13 +139,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
     // get view for asking other players.
 //    if (!this.widget.game.checkIfGameDone()) {
+
+    return getUpdatedView();
+
+//    } else {
+    // if game done - go to Winner room.
+//      return WinnerRoom(this.widget.game);
+//    }
+  }
+
+  Widget getView() {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
-        title: Text('משחק רביעיות'),
-        centerTitle: true,
-        shadowColor: Colors.black87,
-      ),
       body: Stack(children: [
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Container(
@@ -228,10 +255,19 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             widget._streamControllerDeck),
       ]),
     );
-//    } else {
-    // if game done - go to Winner room.
-//      return WinnerRoom(this.widget.game);
-//    }
+  }
+
+  Widget getUpdatedView() {
+    return StreamBuilder<bool>(
+        stream: widget._scGameStart.stream,
+        initialData: false,
+        builder: (context, snapshot) {
+          if (snapshot.data) {
+            return getView();
+          } else {
+            return Container();
+          }
+        });
   }
 
   void setConstants() {
@@ -280,15 +316,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     String wasAsked = widget.game.nameAsked;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
-    String textToSpeech = asked +
-        " ask " +
-        wasAsked +
-        " about " +
-        cardAsked +
-        " in subject: " +
-        subjectAsked;
-    print(textToSpeech);
-    _speak(textToSpeech);
+    if (wasAsked != null && cardAsked != null && subjectAsked != null) {
+      String textToSpeech = asked +
+          " ask " +
+          wasAsked +
+          " about " +
+          cardAsked +
+          " in subject: " +
+          subjectAsked;
+      print(textToSpeech);
+      _speak(textToSpeech);
+    }
 
     if (cardAsked != null && wasAsked != null && subjectAsked != null) {
       return RichText(
@@ -574,8 +612,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     for (var i in nDeck) {
       var key = widget.game.cardsId.keys
           .firstWhere((k) => widget.game.cardsId[k] == i, orElse: () => null);
-      newDeck.add(key);
     }
+
     widget.game.deck.cards = newDeck;
   }
 
