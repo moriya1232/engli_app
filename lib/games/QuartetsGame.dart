@@ -88,6 +88,9 @@ class QuartetsGame extends Game {
     if (mangerID == this.getMyPlayer().uid) {
       await reStart();
     }
+    for (Player p in this.players) {
+      p.cards = await GameDatabaseService().getPlayerCards(this, p.uid);
+    }
     this._gameStart.add(true);
   }
 
@@ -106,8 +109,6 @@ class QuartetsGame extends Game {
         z++;
       }
     }
-    print("subject from method: ");
-    print(subjects);
   }
 
   void reStart() {
@@ -123,10 +124,11 @@ class QuartetsGame extends Game {
         int x = this.cardsId[q];
         playersCards[p.uid].add(x);
       }
+      //update server about the cards of the players
       GameDatabaseService()
           .initializePlayerCard(playersCards[p.uid], this, p.uid);
     }
-    //initialize the deck
+    //update server about the deck
     List<int> deckCards = [];
     for (CardQuartets q in deck.cards) {
       int x = this.cardsId[q];

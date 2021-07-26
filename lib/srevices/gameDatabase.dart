@@ -4,7 +4,6 @@ import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/cards/Triple.dart';
-import 'package:engli_app/games/Game.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -354,5 +353,27 @@ class GameDatabaseService {
           .doc(playerId)
           .update({'score': score});
     }
+  }
+
+  Future<List<CardGame>> getPlayerCards(
+      QuartetsGame game, String playerId) async {
+    List<CardGame> cardsPlayer = [];
+    await gameCollection
+        .doc(game.gameId)
+        .collection('players')
+        .doc(playerId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var x = documentSnapshot.data()['cards'];
+        List<int> intArrayCards = x.cast<int>();
+        for (int i in intArrayCards) {
+          CardQuartets iKey = game.cardsId.keys
+              .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
+          cardsPlayer.add(iKey);
+        }
+      }
+    });
+    return Future.value(cardsPlayer);
   }
 }
