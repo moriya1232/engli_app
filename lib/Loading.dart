@@ -28,7 +28,8 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
-  final _usersLoginStreamController = StreamController<String>.broadcast();
+  final _usersLoginStreamController =
+      StreamController<List<String>>.broadcast();
   StreamSubscription<DocumentSnapshot> _eventsSubscription = null;
 
   @override
@@ -38,6 +39,10 @@ class _LoadingState extends State<Loading> {
         .doc(this.widget.gameId)
         .snapshots()
         .listen((event) {
+      List<dynamic> names = event.data()['players'];
+      names = names.cast<String>();
+      this._usersLoginStreamController.add(names);
+
       if (event.data()['continueToGame'] == true) {
         _eventsSubscription.cancel();
         Navigator.push(
@@ -84,7 +89,7 @@ class _LoadingState extends State<Loading> {
                   SizedBox(
                     height: 30,
                   ),
-                  getUserLogin(),
+                  //getUserLogin(),
                   SizedBox(
                     height: 30,
                   ),
@@ -123,39 +128,31 @@ class _LoadingState extends State<Loading> {
   }
 
   Widget getListNameUsers() {
-    return StreamBuilder<String>(
+    return StreamBuilder<List<String>>(
         stream: _usersLoginStreamController.stream,
         builder: (context, snapshot) {
           return ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.zero,
-              itemCount: this.widget.usersLogin.length,
+              itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
                 return Text(
-                  this.widget.usersLogin[index].name,
+                  snapshot.data[index],
                 );
               });
         });
   }
 
-  Widget getUserLogin() {
-    return StreamBuilder<String>(
-        stream: _usersLoginStreamController.stream,
-        builder: (context, snapshot) {
-          return Text(
-            snapshot.data != null
-                ? snapshot.data + " התחבר "
-                : "...מחכה להתחברות שחקנים נוספים",
-          );
-        });
-  }
+  // Widget getUserLogin() {
+  //   return StreamBuilder<List<String>>(
+  //       stream: _usersLoginStreamController.stream,
+  //       builder: (context, snapshot) {
+  //         return Text(
+  //           snapshot.data != null
+  //               ? snapshot.data + " התחבר "
+  //               : "...מחכה להתחברות שחקנים נוספים",
+  //         );
+  //       });
+  // }
 
-  void addUser(User user) {
-    this._usersLoginStreamController.add(user.displayName);
-  }
-
-  void removeUser(User user) {
-    //TODO: change it
-    this._usersLoginStreamController.add(user.displayName);
-  }
 }

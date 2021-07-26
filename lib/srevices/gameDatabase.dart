@@ -17,8 +17,9 @@ class GameDatabaseService {
       FirebaseFirestore.instance.collection('subjects');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future updateGame(bool finished, List<Player> players, int turn, Deck deck,
+  Future updateGame(bool finished, List<String> players, int turn, Deck deck,
       String id, List<String> subjects, subjectsId, con) async {
+    players = [];
     return await gameCollection.doc(id).set({
       'finished': finished,
       'players': players,
@@ -43,6 +44,17 @@ class GameDatabaseService {
       'cards': cards,
       'name': name,
       'score': 0,
+    });
+    await gameCollection
+        .doc(gameId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var x = documentSnapshot.data()['players'];
+        List<String> newPlayersList = x.cast<String>();
+        newPlayersList.add(name);
+        gameCollection.doc(gameId).update({'players': newPlayersList});
+      }
     });
   }
 
