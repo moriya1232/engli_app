@@ -49,11 +49,7 @@ class _LoadingState extends State<Loading> {
           context,
           MaterialPageRoute(
               builder: (context) => QuartetsRoom(
-                  this.widget.usersLogin,
-                  // this.widget.subjects,
-                  // this.widget.cardsId,
-                  this.widget.gameId,
-                  false)),
+                  this.widget.usersLogin, this.widget.gameId, false)),
         );
       }
     });
@@ -122,8 +118,8 @@ class _LoadingState extends State<Loading> {
   }
 
   void continueToGameClicked() async {
-    this.widget.usersLogin =
-        await GameDatabaseService().getPlayersList(this.widget.gameId);
+    // this.widget.usersLogin =
+    //     await GameDatabaseService().getPlayersList(this.widget.gameId);
     GameDatabaseService().changeContinueState(this.widget.gameId);
   }
 

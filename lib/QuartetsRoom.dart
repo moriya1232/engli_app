@@ -30,8 +30,6 @@ class QuartetsRoom extends StatefulWidget {
 
   QuartetsRoom(
     List<Player> players,
-    // List<Subject> subjects,
-    // Map<CardQuartets, int> cardId,
     String gameId,
     bool againstComputer,
   ) {

@@ -80,6 +80,9 @@ class QuartetsGame extends Game {
   }
 
   void createGame() async {
+    if (!this.againstComputer) {
+      this.players = await GameDatabaseService().getPlayersList(this.gameId);
+    }
     await createAllSubjects(gameId);
     String mangerID = await GameDatabaseService().getManagerId(gameId);
     if (mangerID == this.getMyPlayer().uid) {

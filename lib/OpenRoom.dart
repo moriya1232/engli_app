@@ -186,7 +186,7 @@ class _openRoomState extends State<OpenRoom> {
     if (isMe) {
       player = Me([], name, "");
     } else {
-      player = VirtualPlayer([], name, "");
+      player = ComputerPlayer([], name, "");
     }
     players.add(player);
     return player;
