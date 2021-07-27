@@ -19,7 +19,7 @@ class QuartetsGame extends Game {
   bool isManager;
   String gameId;
   bool againstComputer = false;
-  bool dataUpload = false;
+  bool initialize = false;
   List<Player> listTurn = [];
   StreamController _gameStart;
   // controllers for animate the view.
@@ -78,6 +78,11 @@ class QuartetsGame extends Game {
     this._otherPlayersCardsController = otherCards;
   }
 
+  void changeInitialize(bool b) {
+    this._gameStart.add(b);
+    this.initialize = b;
+  }
+
   void createGame() async {
     if (!this.againstComputer) {
       this.players = await GameDatabaseService().getPlayersList(this);
@@ -91,7 +96,7 @@ class QuartetsGame extends Game {
       p.cards = await GameDatabaseService().getPlayerCards(this, p);
     }
     if (!this.isManager) {
-      this._gameStart.add(true);
+      this.changeInitialize(true);
     }
   }
 
@@ -121,6 +126,8 @@ class QuartetsGame extends Game {
       Subject sub = await GameDatabaseService()
           .createSubjectFromDatabase("generic_subjects", s);
       this.subjects.add(sub);
+      print("SUBJECTS:");
+      print(this.subjects);
       for (CardQuartets card in sub.getCards()) {
         this.cardsId[card] = z;
         z++;
@@ -157,6 +164,7 @@ class QuartetsGame extends Game {
     await GameDatabaseService().updateDeck(deckCards, this);
     await GameDatabaseService().updateInitializeGame(this);
     await GameDatabaseService().updateContinueState(this.gameId);
+
   }
 
   bool askPlayer(Player player, Subject subject) {
@@ -919,6 +927,8 @@ class QuartetsGame extends Game {
   }
 
   void updateDeck(List<int> nDeck) {
+    print("cards id: ");
+    print(this.cardsId.values);
     print("in update deck");
     List<CardQuartets> newDeck = [];
     for (var i in nDeck) {
@@ -926,6 +936,9 @@ class QuartetsGame extends Game {
           .cardsId
           .keys
           .firstWhere((k) => this.cardsId[k] == i, orElse: () => null);
+
+      print("key:");
+      print(key);
       newDeck.add(key);
     }
     for (var i in newDeck) {

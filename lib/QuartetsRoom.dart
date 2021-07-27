@@ -56,6 +56,7 @@ class QuartetsRoom extends StatefulWidget {
 
   @override
   _QuartetsRoomState createState() => _QuartetsRoomState();
+
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
@@ -81,7 +82,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         dynamic initData = event['initializeGame'];
         if (initData) {
           if (!widget.game.isManager) {
-            this.widget._scGameStart.add(true);
+            this.widget.game.changeInitialize(true);
             //   widget.game.takeDataOfGame();
           }
 
@@ -110,28 +111,30 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         .collection("players")
         .snapshots()
         .listen((event) {
-      event.docChanges.forEach((element) {
-        String playerId = element.doc.reference.id;
-        List<dynamic> nCard = element.doc.data()['cards'];
-        List<int> newCards;
-        if (nCard != null) {
-          newCards = nCard.cast<int>();
-        } else {
-          newCards = [];
-        }
-        dynamic score = element.doc.data()['score'];
-        if (score == null) {
-          score = 0;
-        }
-        // score = score.cast<int>();
-        widget.game.updatePlayerCards(newCards, playerId);
-        widget.game.updatePlayerScore(playerId, score);
-        this.widget._streamControllerTurn.add(this.widget.game.turn);
-        this.widget._streamControllerStringsInDeck.add(1);
-        this.widget._streamControllerOtherPlayersCards.add(1);
-        this.widget._streamControllerMyCards.add(1);
-        this.widget._streamControllerMyScore.add(1);
-      });
+          if (this.widget.game.initialize) {
+            event.docChanges.forEach((element) {
+              String playerId = element.doc.reference.id;
+              List<dynamic> nCard = element.doc.data()['cards'];
+              List<int> newCards;
+              if (nCard != null) {
+                newCards = nCard.cast<int>();
+              } else {
+                newCards = [];
+              }
+              dynamic score = element.doc.data()['score'];
+              if (score == null) {
+                score = 0;
+              }
+              // score = score.cast<int>();
+              widget.game.updatePlayerCards(newCards, playerId);
+              widget.game.updatePlayerScore(playerId, score);
+              this.widget._streamControllerTurn.add(this.widget.game.turn);
+              this.widget._streamControllerStringsInDeck.add(1);
+              this.widget._streamControllerOtherPlayersCards.add(1);
+              this.widget._streamControllerMyCards.add(1);
+              this.widget._streamControllerMyScore.add(1);
+            });
+          }
     });
     this.firstCard = getAnimationCard();
     this.secondCard = getAnimationCard();
