@@ -87,6 +87,9 @@ class QuartetsGame extends Game {
     if (mangerID == this.getMyPlayer().uid) {
       await reStart();
     }
+    for (Player p in this.players) {
+      p.cards = await GameDatabaseService().getPlayerCards(this, p);
+    }
   }
 
   // void takeDataOfGame() async {
@@ -145,12 +148,12 @@ class QuartetsGame extends Game {
       int x = this.cardsId[q];
       deckCards.add(x);
     }
-    GameDatabaseService().updateDeck(deckCards, this);
-    GameDatabaseService().updateInitializeGame(this);
-
     //TODO: randomal turn.
     this.turn = 0;
     this._gameStart.add(true);
+    GameDatabaseService().updateDeck(deckCards, this);
+    GameDatabaseService().updateContinueState(this.gameId);
+    GameDatabaseService().updateInitializeGame(this);
   }
 
   bool askPlayer(Player player, Subject subject) {
@@ -909,6 +912,53 @@ class QuartetsGame extends Game {
       return mePos;
     } else {
       throw Exception("didn't find appropriate player");
+    }
+  }
+
+  void updateDeck(List<int> nDeck) {
+    print("in update deck");
+    List<CardQuartets> newDeck = [];
+    for (var i in nDeck) {
+      var key = this
+          .cardsId
+          .keys
+          .firstWhere((k) => this.cardsId[k] == i, orElse: () => null);
+      newDeck.add(key);
+    }
+    for (var i in newDeck) {
+      print(i.english);
+    }
+    this.deck.setCards(newDeck);
+  }
+
+  void updatePlayerCards(List<int> cards, String id) {
+    List<CardQuartets> newCardsList = [];
+    for (var i in cards) {
+      var key = this
+          .cardsId
+          .keys
+          .firstWhere((k) => this.cardsId[k] == i, orElse: () => null);
+      newCardsList.add(key);
+    }
+    for (Player p in this.players) {
+      if (p.uid == id) {
+        p.cards = newCardsList;
+      }
+      for (CardQuartets c in p.cards) {
+        if (p is Me) {
+          c.changeToMine();
+        } else {
+          c.changeToNotMine();
+        }
+      }
+    }
+  }
+
+  void updatePlayerScore(String playerId, int score) {
+    for (var i in this.players) {
+      if (i.uid == playerId) {
+        i.score = score;
+      }
     }
   }
 }

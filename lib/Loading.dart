@@ -131,7 +131,14 @@ class _LoadingState extends State<Loading> {
   void continueToGameClicked() async {
     // this.widget.usersLogin =
     //     await GameDatabaseService().getPlayersList(this.widget.gameId);
-    GameDatabaseService().updateContinueState(this.widget.gameId);
+    _eventsSubscription.cancel();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => QuartetsRoom(this.widget.usersLogin,
+              this.widget.gameId, widget.isBoss, false)),
+    );
+    //GameDatabaseService().updateContinueState(this.widget.gameId);
   }
 
   String cleanGameId(String s) {

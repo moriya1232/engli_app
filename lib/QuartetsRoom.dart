@@ -84,7 +84,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         }
         List<int> newDeck = nDeck.cast<int>();
         print(newDeck);
-        updateDeck(newDeck);
+        widget.game.updateDeck(newDeck);
 
         //update if turn change
         dynamic turn = event.data()['turn'];
@@ -124,8 +124,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           score = 0;
         }
         // score = score.cast<int>();
-        updatePlayerCards(newCards, playerId);
-        updatePlayerScore(playerId, score);
+        widget.game.updatePlayerCards(newCards, playerId);
+        widget.game.updatePlayerScore(playerId, score);
         this.widget._streamControllerTurn.add(this.widget.game.turn);
         this.widget._streamControllerStringsInDeck.add(1);
         this.widget._streamControllerOtherPlayersCards.add(1);
@@ -624,48 +624,5 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   Widget getAnimationCard() {
     CardQuartets card = CardQuartets("", "", null, "", "", "", "", false);
     return card;
-  }
-
-  void updateDeck(List<int> nDeck) {
-    print("in update deck");
-    List<CardQuartets> newDeck = [];
-    for (var i in nDeck) {
-      var key = widget.game.cardsId.keys
-          .firstWhere((k) => widget.game.cardsId[k] == i, orElse: () => null);
-      newDeck.add(key);
-    }
-    for (var i in newDeck) {
-      print(i.english);
-    }
-    widget.game.deck.setCards(newDeck);
-  }
-
-  void updatePlayerCards(List<int> cards, String id) {
-    List<CardQuartets> newCardsList = [];
-    for (var i in cards) {
-      var key = widget.game.cardsId.keys
-          .firstWhere((k) => widget.game.cardsId[k] == i, orElse: () => null);
-      newCardsList.add(key);
-    }
-    for (Player p in widget.game.players) {
-      if (p.uid == id) {
-        p.cards = newCardsList;
-      }
-      for (CardQuartets c in p.cards) {
-        if (p is Me) {
-          c.changeToMine();
-        } else {
-          c.changeToNotMine();
-        }
-      }
-    }
-  }
-
-  void updatePlayerScore(String playerId, int score) {
-    for (var i in widget.game.players) {
-      if (i.uid == playerId) {
-        i.score = score;
-      }
-    }
   }
 }
