@@ -1,6 +1,5 @@
 ///shiloooooooo
 
-
 import 'dart:async';
 
 import 'package:engli_app/QuartetsGame/Constants.dart';
@@ -93,8 +92,7 @@ class QuartetsGame extends Game {
     }
   }
 
-  void takeDataOfGame() {
-    print("in the methode!!");
+  void takeDataOfGame() async {
     Map<String, List<int>> playersCards = {};
     //initialize arrays with all the id cards to every player in the game.
     for (Player p in players) {
@@ -108,6 +106,7 @@ class QuartetsGame extends Game {
       GameDatabaseService()
           .initializePlayerCard(playersCards[p.uid], this, p.uid);
     }
+    this.deck.cards = await GameDatabaseService().getDeck(this);
   }
 
   void createAllSubjects(String gameId) async {
