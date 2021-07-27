@@ -155,6 +155,7 @@ class QuartetsGame extends Game {
 
     //TODO: randomal turn.
     this.turn = 0;
+    this._gameStart.add(true);
   }
 
   bool askPlayer(Player player, Subject subject) {
