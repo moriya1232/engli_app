@@ -3,6 +3,7 @@ import 'package:engli_app/Constants.dart';
 import 'package:engli_app/cards/CardMemory.dart';
 import 'package:engli_app/cards/Pair.dart';
 import 'package:engli_app/players/player.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'Game.dart';
 
 class MemoryGame extends Game {
@@ -22,8 +23,7 @@ class MemoryGame extends Game {
       StreamController enemyScore,
       StreamController moreTurn,
       StreamController turn) {
-    //TODO: get my name !
-    String meName = "need to get my name!";
+    String meName = FirebaseAuth.instance.currentUser.displayName;
     this.computerEnemy = computerEnemy;
     this._myScoreController = myScore;
     this._enemyScoreController = enemyScore;
@@ -151,7 +151,7 @@ class MemoryGame extends Game {
   bool allowSwapCards() {
     List<CardMemory> chosens = [];
     for (CardMemory card in getCards()) {
-      if (!card.isClose) {
+      if (!card.getIsClose()) {
         chosens.add(card);
       }
     }
@@ -198,8 +198,8 @@ class MemoryGame extends Game {
 
   void closeAllCards() {
     for (CardMemory card in getCards()) {
-      if (!card.isClose) {
-        card.isClose = true;
+      if (!card.getIsClose()) {
+        card.setIsClose(true);
         card.updateObservers();
       }
     }
@@ -207,19 +207,19 @@ class MemoryGame extends Game {
   }
 
   Future changeCardState(CardMemory card, bool isClose) {
-    if (card.isClose != isClose) {
+    if (card.getIsClose() != isClose) {
       print("turn card");
-      card.isClose = isClose;
+      card.setIsClose(isClose);
       card.updateObservers();
-      return new Future.delayed(const Duration(seconds: 2));
     }
+    return new Future.delayed(const Duration(seconds: 2));
   }
 
   //return true if switch player turn, false - if its need to stay in his turn.
   bool checkOpenCards() {
     List<CardMemory> chosens = [];
     for (CardMemory card in getCards()) {
-      if (!card.isClose) {
+      if (!card.getIsClose()) {
         chosens.add(card);
       }
     }
@@ -239,7 +239,6 @@ class MemoryGame extends Game {
       }
       changeTurn();
     } else {
-      // chosens.length > 2
       closeAllCards();
     }
     return true;

@@ -1,11 +1,9 @@
 import 'dart:core';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'Position.dart';
 
 abstract class CardGame extends StatefulWidget {
-  bool visible;
   String english = "";
   String hebrew = "";
   List<Function> observers;
@@ -15,7 +13,6 @@ abstract class CardGame extends StatefulWidget {
     this.english = english;
     this.hebrew = hebrew;
     this.observers = [];
-    this.visible = true;
     this.position = Position(null, null, null, null);
   }
 

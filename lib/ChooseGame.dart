@@ -1,6 +1,3 @@
-//import 'dart:html';
-
-import 'package:engli_app/ChooseEnemy.dart';
 import 'package:engli_app/EditingVocabulary.dart';
 import 'package:engli_app/QuartetsInstructions.dart';
 import 'package:engli_app/srevices/auth.dart';
@@ -9,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'GetInRoom.dart';
 import 'MemoryInstructions.dart';
+import 'OpenMemoryRoom.dart';
 
 class ChooseGame extends StatefulWidget {
   @override
@@ -170,7 +168,7 @@ class _ChooseGameState extends State<ChooseGame> {
   void memoryClicked() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ChooseEnemy()),
+      MaterialPageRoute(builder: (context) => OpenMemoryRoom()),
     );
   }
 

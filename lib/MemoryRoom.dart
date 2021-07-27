@@ -20,16 +20,16 @@ class MemoryRoom extends StatefulWidget {
   bool computerEnemy;
   String enemyName = "";
 
-  MemoryRoom(bool computerEnemy, String en) {
+  MemoryRoom(bool computerEnemy, String enemyName) {
     this.computerEnemy = computerEnemy;
     this.game = new MemoryGame(
         computerEnemy,
-        en,
+        enemyName,
         this._streamControllerMyScore,
         this._streamControllerEnemyScore,
         this._streamControllerMoreTurn,
         this._streamControllerTurn);
-    this.enemyName = en;
+    this.enemyName = enemyName;
   }
 
   @override

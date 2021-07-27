@@ -5,22 +5,30 @@ import 'package:flutter/material.dart';
 import 'CardGame.dart';
 
 class CardMemory extends CardGame {
-  bool isEnglishCard;
-  bool isClose;
-  MemoryGame game;
-  bool computerEnemy;
+  bool _isEnglishCard;
+  bool _isClose;
+  MemoryGame _game;
+  bool _computerEnemy;
 
   CardMemory(String english, String hebrew, bool isEnglish, bool computerEnemy)
       : super(english, hebrew) {
     print(computerEnemy);
-    this.isEnglishCard = isEnglish;
-    this.isClose = true;
-    this.game=null;
-    this.computerEnemy = computerEnemy;
+    this._isEnglishCard = isEnglish;
+    this._isClose = true;
+    this._game=null;
+    this._computerEnemy = computerEnemy;
+  }
+
+  bool getIsClose() {
+    return this._isClose;
+  }
+
+  void setIsClose(bool b) {
+    this._isClose = b;
   }
 
   void setGame(MemoryGame mg) {
-    this.game = mg;
+    this._game = mg;
   }
 
   @override
@@ -28,23 +36,21 @@ class CardMemory extends CardGame {
 
   @override
   Future changeStatusCard(bool b) {
-    this.isClose = b;
+    this._isClose = b;
     return new Future.delayed(const Duration(seconds: 1));
   }
-
-
 }
 
 class _CardMemoryState extends State<CardMemory> {
   @override
   Widget build(BuildContext context) {
-    if (widget.isClose) {
+    if (widget._isClose) {
       return GestureDetector(
         child: getCloseCard(context),
         onTap: () async {
-          if (widget.game.allowSwapCards()) {
+          if (widget._game.allowSwapCards()) {
             await changeStatusCard(false);
-            widget.game.cardClicked();
+            widget._game.cardClicked();
           }
         },
       );
@@ -54,9 +60,7 @@ class _CardMemoryState extends State<CardMemory> {
   }
 
   void _listener() {
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -68,7 +72,9 @@ class _CardMemoryState extends State<CardMemory> {
 
   Future changeStatusCard(bool isClose) async {
     setState(() {
-      widget.isClose = isClose;
+      // check if can change to:
+      // widget.changeStatusCard(isClose);
+      widget._isClose = isClose;
     });
     return new Future.delayed(const Duration(seconds: 2));
   }
@@ -78,7 +84,7 @@ class _CardMemoryState extends State<CardMemory> {
           child: FittedBox(
             fit: BoxFit.contain,
             child: Column ( children: [
-              this.widget.computerEnemy? SizedBox(): RotatedBox(
+              this.widget._computerEnemy? SizedBox(): RotatedBox(
                 quarterTurns: 2,
                 child: textCard(),
               ),
@@ -91,23 +97,16 @@ class _CardMemoryState extends State<CardMemory> {
 
   Widget textCard() {
     return Text(
-      widget.isEnglishCard? widget.english: widget.hebrew,
+      widget._isEnglishCard? widget.english: widget.hebrew,
       style: TextStyle(
-          fontFamily: widget.isEnglishCard?"Carter-e":"Dorian-h"
+          fontFamily: widget._isEnglishCard?"Carter-e":"Dorian-h"
       ),
     );
   }
 
   Widget getCloseCard(BuildContext context) {
-//    int howMuchCards = this.widget.game.pairs.length * 2;
-    return
-//      new Container(
-//      height: 100,
-//      width: 70,
-//      child:
-      Card(
+    return Card(
         color: Colors.amberAccent,
-//      ),
     );
   }
 }

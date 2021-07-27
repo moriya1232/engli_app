@@ -5,17 +5,17 @@ import '../Constants.dart';
 import 'CardGame.dart';
 
 class CardQuartets extends CardGame {
-  var english = "";
-  var hebrew = "";
+  String english = "";
+  String hebrew = "";
   String subject;
   Image image;
-  var word1 = "";
-  var word2 = "";
-  var word3 = "";
+  String word1 = "";
+  String word2 = "";
+  String word3 = "";
   bool myCard = true;
 
-  CardQuartets(var english, var hebrew, Image image, String subject, var wo1,
-      var wo2, var wo3, bool myCard)
+  CardQuartets(String english, String hebrew, Image image, String subject, String wo1,
+      String wo2, String wo3, bool myCard)
       : super(english, hebrew) {
     this.image = image;
     this.subject = subject;
@@ -37,13 +37,6 @@ class CardQuartets extends CardGame {
     this.myCard = false;
     return this;
   }
-//
-//  CardQuartetsNoImage(var english, var hebrew, var subject) {
-//    this.english = english;
-//    this.hebrew = hebrew;
-//    this.image = null;
-//    this.subject = subject;
-//  }
 
   getImage() {
     return image;
@@ -94,36 +87,11 @@ class _CardQuartetsState extends State<CardQuartets>
     }
   }
 
-//  double smallHeight = 100;
-//  double smallWidth = 140;
-//  double bigHeight = 200;
-//  double bigWidth = 140;
 
   Widget getOpenCard(BuildContext context) {
-//    double height=smallHeight;
-//    double width = smallWidth;
-//    if (!widget.small) {
-//      height=bigHeight;
-//      width = bigWidth;
-//    }
     double height = MediaQuery.of(context).size.height / 4;
     double fontSizeWords = height / 13;
     double width = 130;
-    //TODO: animations.
-//    return PositionedTransition(
-//      rect: RelativeRectTween(
-//        begin:
-//        RelativeRect.fromSize(
-//            const Rect.fromLTWH(0, 0, width, height), biggest),
-//        end:
-//        RelativeRect.fromSize(
-//            Rect.fromLTWH(biggest.width - bigLogo,
-//                biggest.height - bigLogo, bigLogo, bigLogo),
-//            biggest),
-//      ).animate(CurvedAnimation(
-//        parent: _animationController,
-//        curve: Curves.elasticInOut,
-//      )),
     return new Container(
       height: height,
       width: width,
@@ -134,6 +102,8 @@ class _CardQuartetsState extends State<CardQuartets>
         borderOnForeground: true,
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+
+              //subject
           Container(
             decoration: new BoxDecoration(
                 color: Colors.tealAccent,
@@ -147,9 +117,13 @@ class _CardQuartetsState extends State<CardQuartets>
               ),
             )),
           ),
+
+          // image
           Center(
               child: Container(
                   width: width, height: height / 4, child: widget.image)),
+
+          // my english word
           Center(
             child: Text(
               widget.english,
@@ -159,6 +133,8 @@ class _CardQuartetsState extends State<CardQuartets>
                   color: Colors.lightGreen),
             ),
           ),
+
+          // word 1
           Center(
             child: Text(
               widget.word1,
@@ -168,6 +144,8 @@ class _CardQuartetsState extends State<CardQuartets>
               ),
             ),
           ),
+
+          // word 2
           Center(
             child: Text(
               widget.word2,
@@ -177,6 +155,8 @@ class _CardQuartetsState extends State<CardQuartets>
               ),
             ),
           ),
+
+          // word 3
           Center(
             child: Text(
               widget.word3,
@@ -192,13 +172,6 @@ class _CardQuartetsState extends State<CardQuartets>
     );
   }
 
-  Color getColor(bool chosen) {
-    if (chosen) {
-      return Colors.red;
-    } else {
-      return Colors.white70;
-    }
-  }
 
   Future changeStatusCard(bool isMyCard) async {
     setState(() {

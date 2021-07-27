@@ -6,7 +6,6 @@ class Position {
   double _bottom;
   bool _visible;
 
-
   set visible(bool value) {
     _visible = value;
   }
@@ -46,14 +45,12 @@ class Position {
     return this._visible;
   }
 
-
   void setPositionTopRight(double right, double top) {
     this._left = null;
     this._top = top;
     this._right = right;
     this._bottom = null;
   }
-
 
   void setPositionBottomLeft(double left, double bottom) {
     this._left = left;
@@ -69,5 +66,4 @@ class Position {
     this._bottom = p.getBottom();
     return this;
   }
-
 }

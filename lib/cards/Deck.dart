@@ -12,7 +12,6 @@ class Deck {
 
   Deck(List<Subject> subs) {
     this.subjects = subs;
-    // until here is the fake subs.
     for (Subject sub in subs) {
       this.cards.addAll(sub.getCards());
     }
