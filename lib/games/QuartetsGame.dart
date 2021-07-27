@@ -128,7 +128,7 @@ class QuartetsGame extends Game {
     }
   }
 
-  void reStart() {
+  void reStart() async {
     //TODO: initialize cards in players hand.
     Deck deck = createDeck(this.subjects);
     deck.handoutDeck(this.players);
@@ -142,7 +142,7 @@ class QuartetsGame extends Game {
         playersCards[p.uid].add(x);
       }
       //update server about the cards of the players
-      GameDatabaseService()
+      await GameDatabaseService()
           .initializePlayerCard(playersCards[p.uid], this, p.uid);
     }
     //update server about the deck
@@ -154,9 +154,9 @@ class QuartetsGame extends Game {
     //TODO: randomal turn.
     this.turn = 0;
     this._gameStart.add(true);
-    GameDatabaseService().updateDeck(deckCards, this);
-    GameDatabaseService().updateContinueState(this.gameId);
-    GameDatabaseService().updateInitializeGame(this);
+    await GameDatabaseService().updateDeck(deckCards, this);
+    await GameDatabaseService().updateContinueState(this.gameId);
+    await GameDatabaseService().updateInitializeGame(this);
   }
 
   bool askPlayer(Player player, Subject subject) {
