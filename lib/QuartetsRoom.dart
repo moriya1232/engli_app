@@ -81,13 +81,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           .snapshots()
           .listen((event) {
         //update if initialize game
-        dynamic initData = event['initializeGame'];
-        if (initData) {
+//        dynamic initData = event['initializeGame'];
+//        if (initData) {
           print("GET IN!!!!!!!!!!!!!!!!!!!!!!!");
-          if (!widget.game.isManager) {
-            this.widget.game.changeInitialize(true);
-            //   widget.game.takeDataOfGame();
-          }
+//          if (!widget.game.isManager) {
+//            this.widget.game.changeInitialize(true);
+//            //   widget.game.takeDataOfGame();
+//          }
 
           ///update my deck
           List<dynamic> nDeck = event.data()['deck'];
@@ -107,7 +107,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           }
           // turn = turn.cast<int>();
           widget.game.turn = turn;
-        }
+
       });
 
 
@@ -118,7 +118,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           .collection("players")
           .snapshots()
           .listen((event) {
-        if (this.widget.game.initialize) {
+//        if (this.widget.game.initialize) {
           event.docChanges.forEach((element) {
             String playerId = element.doc.reference.id;
             List<dynamic> nCard = element.doc.data()['cards'];
@@ -141,7 +141,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             this.widget._streamControllerMyCards.add(1);
             this.widget._streamControllerMyScore.add(1);
           });
-        }
+//        }
       });
       this.firstCard = getAnimationCard();
       this.secondCard = getAnimationCard();

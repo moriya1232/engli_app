@@ -90,11 +90,11 @@ class QuartetsGame extends Game {
       this.players = await GameDatabaseService().getPlayersList(this);
     }
     await createAllSubjects(gameId);
-    await GameDatabaseService().getManagerId(gameId);
 
     /// only manager
     if (this.isManager) {
       await reStart();
+      changeScoresOfPlayers();
     }
 //    else {
 //      /// all players except manager
@@ -172,7 +172,6 @@ class QuartetsGame extends Game {
     await GameDatabaseService().updateTurn(this, this.turn);
     await GameDatabaseService().updateDeck(deckCards, this);
     await GameDatabaseService().updateInitializeGame(this);
-    changeScoresOfPlayers();
     await GameDatabaseService().updateContinueState(this.gameId);
 
   }
