@@ -91,6 +91,7 @@ class QuartetsGame extends Game {
   }
 
   void takeDataOfGame() {
+    print("in the methode!!");
     Map<String, List<int>> playersCards = {};
     //initialize arrays with all the id cards to every player in the game.
     for (Player p in players) {
