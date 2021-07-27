@@ -76,9 +76,24 @@ class _LoadingState extends State<Loading> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    this.widget.gameId,
+                    ':קוד משחק',
                     style: TextStyle(
                       fontSize: 30,
+                      fontFamily: 'Comix-h'
+                    ),
+                  ),
+                  Text(
+                    cleanGameId(this.widget.gameId),
+                    style: TextStyle(
+                      fontSize: 60,
+                    ),
+                  ),
+                  SizedBox(height: 40,),
+                  Text(
+                    ':שחקנים מחוברים',
+                    style: TextStyle(
+                        fontSize: 30,
+                        fontFamily: 'Comix-h'
                     ),
                   ),
                   getListNameUsers(),
@@ -123,6 +138,10 @@ class _LoadingState extends State<Loading> {
     GameDatabaseService().changeContinueState(this.widget.gameId);
   }
 
+  String cleanGameId(String s) {
+    return s.substring(2,s.length-1);
+  }
+
   Widget getListNameUsers() {
     return StreamBuilder<List<String>>(
         stream: _usersLoginStreamController.stream,
@@ -130,11 +149,18 @@ class _LoadingState extends State<Loading> {
         builder: (context, snapshot) {
           return ListView.builder(
               shrinkWrap: true,
-              padding: EdgeInsets.zero,
+              padding: EdgeInsets.symmetric(vertical: 7),
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
-                return Text(
-                  snapshot.data[index],
+                return Center(
+                  child: Text(
+                    snapshot.data[index],
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontFamily: 'AkayaK-e',
+                      color: Colors.pink,
+                    ),
+                  ),
                 );
               });
         });
