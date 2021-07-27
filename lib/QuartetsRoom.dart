@@ -77,23 +77,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           .doc(widget.game.gameId)
           .snapshots()
           .listen((event) {
-        List<dynamic> nDeck = event.data()['deck'];
-        //update if deck change
-        if (nDeck == null) {
-          nDeck = [];
-        }
-        List<int> newDeck = nDeck.cast<int>();
-        print(newDeck);
-        widget.game.updateDeck(newDeck);
-
-        //update if turn change
-        dynamic turn = event.data()['turn'];
-        if (turn == null) {
-          turn = 0;
-        }
-        // turn = turn.cast<int>();
-        widget.game.turn = turn;
-
         //update if initialize game
         dynamic initData = event['initializeGame'];
         if (initData) {
@@ -101,6 +84,23 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             this.widget._scGameStart.add(true);
             //   widget.game.takeDataOfGame();
           }
+
+          List<dynamic> nDeck = event.data()['deck'];
+          //update if deck change
+          if (nDeck == null) {
+            nDeck = [];
+          }
+          List<int> newDeck = nDeck.cast<int>();
+          print(newDeck);
+          widget.game.updateDeck(newDeck);
+
+          //update if turn change
+          dynamic turn = event.data()['turn'];
+          if (turn == null) {
+            turn = 0;
+          }
+          // turn = turn.cast<int>();
+          widget.game.turn = turn;
         }
       });
     //listen about changes in players cards and scores

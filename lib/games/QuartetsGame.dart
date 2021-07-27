@@ -155,8 +155,8 @@ class QuartetsGame extends Game {
     this.turn = 0;
     this._gameStart.add(true);
     await GameDatabaseService().updateDeck(deckCards, this);
-    await GameDatabaseService().updateContinueState(this.gameId);
     await GameDatabaseService().updateInitializeGame(this);
+    await GameDatabaseService().updateContinueState(this.gameId);
   }
 
   bool askPlayer(Player player, Subject subject) {

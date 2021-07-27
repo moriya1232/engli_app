@@ -388,8 +388,6 @@ class GameDatabaseService {
         c.changeToNotMine();
       }
     }
-    print("in game database");
-    print(cardsPlayer);
     return Future.value(cardsPlayer);
   }
 
