@@ -89,8 +89,6 @@ class QuartetsGame extends Game {
     }
     for (Player p in this.players) {
       if (mangerID != this.getMyPlayer().uid) {
-        print("in func!!!");
-        print("manID = " + mangerID + "player id = " + this.getMyPlayer().uid);
         p.cards = await GameDatabaseService().getPlayerCards(this, p.uid);
       }
     }
@@ -120,6 +118,9 @@ class QuartetsGame extends Game {
     deck.handoutDeck(this.players);
     this.deck = deck;
     Map<String, List<int>> playersCards = {};
+    for (var p in players) {
+      print("name:" + p.name + " id:" + p.uid);
+    }
     //initialize arrays with all the id cards to every player in the game.
     for (Player p in players) {
       playersCards[p.uid] = [];
@@ -128,6 +129,7 @@ class QuartetsGame extends Game {
         playersCards[p.uid].add(x);
       }
       //update server about the cards of the players
+      print(p.uid);
       GameDatabaseService()
           .initializePlayerCard(playersCards[p.uid], this, p.uid);
     }

@@ -156,10 +156,9 @@ class GameDatabaseService {
         final FirebaseAuth _auth = FirebaseAuth.instance;
         User user = _auth.currentUser;
         if (value.id.toString() == user.uid) {
-          players[0] = Me(cards, value.data()["name"], user.uid.toString());
+          players[0] = Me(cards, value.data()["name"], value.id);
         } else {
-          players.add(
-              VirtualPlayer(cards, value.data()["name"], user.uid.toString()));
+          players.add(VirtualPlayer(cards, value.data()["name"], value.id));
         }
       });
     });
