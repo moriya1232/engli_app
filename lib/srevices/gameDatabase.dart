@@ -225,8 +225,6 @@ class GameDatabaseService {
   void initializePlayerCard(
       List<int> cards, QuartetsGame game, String playerId) async {
     if (!game.againstComputer) {
-      print("in initialize");
-      print(cards);
       await gameCollection
           .doc(game.gameId)
           .collection("players")
