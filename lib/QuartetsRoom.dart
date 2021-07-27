@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'QuartetsGame/Turn.dart';
 import 'cards/CardQuartets.dart';
-import 'cards/Deck.dart';
 import 'cards/Position.dart';
 import 'Constants.dart';
-import 'cards/Subject.dart';
 
 class QuartetsRoom extends StatefulWidget {
   QuartetsGame game;
@@ -302,6 +300,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   Widget getAppropriateWidgetForTurn() {
     return StreamBuilder<int>(
         stream: widget._streamControllerTurn.stream,
+        initialData: 0,
         builder: (context, snapshot) {
           if (widget.game.getPlayerNeedTurn() is Me) {
             return Turn(widget.game, this.widget._streamControllerTurn);
