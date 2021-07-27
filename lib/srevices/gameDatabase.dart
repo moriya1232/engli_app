@@ -318,19 +318,21 @@ class GameDatabaseService {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
+          List<int> updateList = [];
           var x = documentSnapshot.data()['cards'];
           List<int> playerCards = x.cast<int>();
           int cardId = game.cardsId[card];
           for (int c in playerCards) {
-            if (c == cardId) {
-              playerCards.remove(c);
+            if (c != cardId) {
+              updateList.add(c);
             }
           }
+          print(updateList);
           gameCollection
               .doc(game.gameId)
               .collection("players")
               .doc(player.uid)
-              .update({'cards': playerCards});
+              .update({'cards': updateList});
         }
       });
     }
