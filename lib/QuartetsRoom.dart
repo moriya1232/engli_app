@@ -97,12 +97,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
         //update if initialize game
         dynamic initData = event['initializeGame'];
-        // if (initData) {
-        //   if (!widget.game.isManager) {
-        //this.widget._scGameStart.add(true);
-        //     widget.game.takeDataOfGame();
-        //   }
-        // }
+        if (initData) {
+          if (!widget.game.isManager) {
+            this.widget._scGameStart.add(true);
+            //   widget.game.takeDataOfGame();
+          }
+        }
       });
     //listen about changes in players cards and scores
     FirebaseFirestore.instance
