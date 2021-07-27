@@ -83,6 +83,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           nDeck = [];
         }
         List<int> newDeck = nDeck.cast<int>();
+        print(newDeck);
         updateDeck(newDeck);
         this.widget._streamControllerStringsInDeck.add(1);
 
@@ -626,6 +627,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   }
 
   void updateDeck(List<int> nDeck) {
+    print("in update deck");
     List<CardQuartets> newDeck = [];
     for (var i in nDeck) {
       var key = widget.game.cardsId.keys

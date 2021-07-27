@@ -18,6 +18,7 @@ class Deck {
   }
 
   void setCards(List<CardQuartets> list) {
+    print("in set cards");
     this.cards = list;
   }
 
