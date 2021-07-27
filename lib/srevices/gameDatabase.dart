@@ -385,6 +385,7 @@ class GameDatabaseService {
   }
 
   void updateInitializeGame(QuartetsGame game) async {
+    print("in initialize!!!!");
     await gameCollection.doc(game.gameId).update({'initializeGame': true});
   }
 

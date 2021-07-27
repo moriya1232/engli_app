@@ -75,25 +75,27 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           .collection("games")
           .doc(widget.game.gameId)
           .snapshots()
-          .listen((DocumentSnapshot documentSnapshot) {
-        List<dynamic> nDeck = documentSnapshot.data()['deck'];
+          .listen((event) {
+        List<dynamic> nDeck = event.data()['deck'];
         if (nDeck == null) {
           nDeck = [];
         }
         List<int> newDeck = nDeck.cast<int>();
         updateDeck(newDeck);
 
-        dynamic turn = documentSnapshot.data()['turn'];
+        dynamic turn = event.data()['turn'];
         if (turn == null) {
           turn = 0;
         }
         // turn = turn.cast<int>();
         widget.game.turn = turn;
-        dynamic initData = documentSnapshot['initializeGame'];
-        initData = initData.cast<bool>();
+        dynamic initData = event['initializeGame'];
         print(initData);
+        print(initData.runtimeType);
         if (initData) {
+          print("init data true!");
           widget.game.dataUpload = true;
+          widget.game.takeDataOfGame();
         }
       });
     FirebaseFirestore.instance

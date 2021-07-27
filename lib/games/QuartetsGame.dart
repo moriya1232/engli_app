@@ -88,15 +88,10 @@ class QuartetsGame extends Game {
     if (mangerID == this.getMyPlayer().uid) {
       await reStart();
     }
+  }
+
+  void takeDataOfGame() {
     Map<String, List<int>> playersCards = {};
-    for (var p in players) {
-      print("name:" + p.name + " id:" + p.uid);
-    }
-    int i = 0;
-    while (!this.dataUpload) {
-      print(i);
-      i++;
-    }
     //initialize arrays with all the id cards to every player in the game.
     for (Player p in players) {
       playersCards[p.uid] = [];
