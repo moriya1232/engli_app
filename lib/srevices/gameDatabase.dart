@@ -411,4 +411,15 @@ class GameDatabaseService {
     });
     return Future.value(deck);
   }
+
+  Future<int> getTurn(QuartetsGame game) async {
+    int newTurn;
+    gameCollection.doc(game.gameId).get().then((value) {
+      if (value.exists) {
+        var turn = value.data()['turn'];
+        newTurn = turn.cast<int>();
+      }
+    });
+    return Future.value(newTurn);
+  }
 }
