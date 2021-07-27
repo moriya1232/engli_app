@@ -49,7 +49,7 @@ class _LoadingState extends State<Loading> {
           context,
           MaterialPageRoute(
               builder: (context) => QuartetsRoom(
-                  this.widget.usersLogin, this.widget.gameId, false)),
+                  this.widget.usersLogin, this.widget.gameId, widget.isBoss, false)),
         );
       }
     });

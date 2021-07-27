@@ -22,6 +22,7 @@ class QuartetsGame extends Game {
   String cardAsked;
   List<Subject> subjects;
   Map<CardQuartets, int> cardsId = {};
+  bool isManager;
   String gameId;
   bool againstComputer = false;
   bool dataUpload = false;
@@ -43,6 +44,7 @@ class QuartetsGame extends Game {
 
   QuartetsGame(
       String gameId,
+      bool isManager,
       List<Player> players,
       StreamController gameStart,
       StreamController sc1,
@@ -55,6 +57,7 @@ class QuartetsGame extends Game {
       StreamController myScore,
       StreamController otherCards,
       StreamController scStrings) {
+    this.isManager = isManager;
     this.gameId = gameId;
     this.subjects = [];
     this.deck = new Deck(this.subjects);

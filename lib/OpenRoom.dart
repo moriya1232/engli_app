@@ -177,6 +177,7 @@ class _openRoomState extends State<OpenRoom> {
                     players,
                     this.widget.gameId,
                     true,
+                    true,
                   )));
     }
   }

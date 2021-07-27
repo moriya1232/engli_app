@@ -29,10 +29,12 @@ class QuartetsRoom extends StatefulWidget {
   QuartetsRoom(
     List<Player> players,
     String gameId,
+    bool isManager,
     bool againstComputer,
   ) {
     this.game = new QuartetsGame(
         gameId,
+        isManager,
         players,
         this._scGameStart,
         this._streamControllerFirst,
