@@ -85,7 +85,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         List<int> newDeck = nDeck.cast<int>();
         print(newDeck);
         updateDeck(newDeck);
-        this.widget._streamControllerStringsInDeck.add(1);
 
         //update if turn change
         dynamic turn = event.data()['turn'];
@@ -94,7 +93,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         }
         // turn = turn.cast<int>();
         widget.game.turn = turn;
-        this.widget._streamControllerTurn.add(turn);
 
         //update if initialize game
         dynamic initData = event['initializeGame'];
@@ -128,6 +126,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         // score = score.cast<int>();
         updatePlayerCards(newCards, playerId);
         updatePlayerScore(playerId, score);
+        this.widget._streamControllerTurn.add(this.widget.game.turn);
+        this.widget._streamControllerStringsInDeck.add(1);
         this.widget._streamControllerOtherPlayersCards.add(1);
         this.widget._streamControllerMyCards.add(1);
         this.widget._streamControllerMyScore.add(1);
