@@ -1,6 +1,7 @@
 import 'package:engli_app/Data.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Registration extends StatefulWidget {
   @override
@@ -73,6 +74,7 @@ class _RegistrationState extends State<Registration> {
                           decoration: InputDecoration(
                               //hintText: "הכנס כתובת מייל",
                               ),
+                            inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-z0-9A-Z]")), LengthLimitingTextInputFormatter(10)],
                         )),
                   ),
                   Text(':סיסמא '),
@@ -89,6 +91,7 @@ class _RegistrationState extends State<Registration> {
                           decoration: InputDecoration(
                               //hintText: "הכנס שם",
                               ),
+                            inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
                         )),
                   ),
                   Text(':שם '),

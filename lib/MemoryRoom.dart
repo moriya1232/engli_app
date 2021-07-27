@@ -225,7 +225,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
         stream: this.widget._streamControllerTurn.stream,
         builder: (context, snapshot) {
           return Text(
-            ' תור: ${widget.game.players[widget.game.turn].name}',
+            "${widget.game.players[widget.game.turn].name}'s turn",
             style: TextStyle(
                 color: Colors.pink,
                 fontSize: fontSize,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:engli_app/MemoryRoom.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OpenMemoryRoom extends StatefulWidget {
   final _nameEnemy = TextEditingController();
@@ -47,7 +48,8 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
                             hintText: ":שם יריב",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
-                            )),
+                            ),),
+                        inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))],
                         textAlign: TextAlign.center,
                       ),
                     ),

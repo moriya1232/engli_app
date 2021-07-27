@@ -245,7 +245,7 @@ class MemoryGame extends Game {
   }
 
   void showMoreTurnWidget() async {
-    this._moreTurnController.add("!עוד תור");
+    this._moreTurnController.add("more turn!");
     await Future.delayed(Duration(seconds: 2));
     this._moreTurnController.add("");
   }

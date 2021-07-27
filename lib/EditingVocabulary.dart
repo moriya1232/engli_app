@@ -1,11 +1,11 @@
 import 'dart:async';
 
+import 'package:engli_app/ChooseGame.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /*
-2. לשנות שיהיה אפשר לכתוב בעברית בחלק של העברית.TODO:
-5. כפתור "סיימתי"TODO:
 TODO: dont possible put "," in names cards and subject.
  */
 
@@ -68,7 +68,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0)),
-                  primary: Colors.pink,
+                  primary: Colors.amberAccent,
                 ),
                 onPressed: () {
                   _showMaterialDialog();
@@ -223,6 +223,33 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
             child: _getListSeries(),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              primary: Colors.pink,
+              padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ChooseGame(),
+              ));
+
+            },
+            child: Text(
+              'סיימתי',
+              style: TextStyle(
+                  fontFamily: 'Comix-h',
+                  color: Colors.black87,
+                  fontSize: 30),
+            ),
+          ),
+        ),
       ]),
     );
   }
@@ -288,10 +315,11 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
             content: Wrap(
               children: [
                 TextField(
-                  onChanged: (value) {},
                   controller: nameSer,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(hintText: "הכנס שם סרייה"),
+                  inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
+
                 ),
                 SizedBox(
                   height: 10,
@@ -316,6 +344,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
+                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[א-ת]")), LengthLimitingTextInputFormatter(10)],
                             ),
                           ),
                         ),
@@ -331,6 +360,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
+                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -357,6 +387,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
+                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[א-ת]")), LengthLimitingTextInputFormatter(10)],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -373,6 +404,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
+                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -399,6 +431,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
+                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[א-ת]")), LengthLimitingTextInputFormatter(10)],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -415,6 +448,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
+                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -441,6 +475,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
+                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[א-ת]")), LengthLimitingTextInputFormatter(10)],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -451,15 +486,13 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
                               controller: forthEng,
-                              //TODO: check limits!
-//                              maxLines: 1,
-//                              maxLength: 10,
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
+                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
                               textAlign: TextAlign.center,
                             ),
                           ),
