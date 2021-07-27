@@ -90,22 +90,22 @@ class QuartetsGame extends Game {
       this.players = await GameDatabaseService().getPlayersList(this);
     }
     await createAllSubjects(gameId);
-    String mangerID = await GameDatabaseService().getManagerId(gameId);
+    await GameDatabaseService().getManagerId(gameId);
 
     /// only manager
     if (this.isManager) {
       await reStart();
-    } else {
-      /// all players except manager
-      for (Player p in this.players) {
-        p.cards = await GameDatabaseService().getPlayerCards(this, p);
-      }
-      this.deck.setCards(await GameDatabaseService().getDeck(this));
-      this.turn = await GameDatabaseService().getTurn(this);
-      /// update initialize parameter
-      ///
-      this.changeInitialize(true);
     }
+//    else {
+//      /// all players except manager
+//      for (Player p in this.players) {
+//        p.cards = await GameDatabaseService().getPlayerCards(this, p);
+//      }
+//      this.deck.setCards(await GameDatabaseService().getDeck(this));
+//      this.turn = await GameDatabaseService().getTurn(this);
+//      /// update initialize parameter
+//      //this.changeInitialize(true);
+//    }
   }
 
   // void takeDataOfGame() async {
@@ -124,7 +124,7 @@ class QuartetsGame extends Game {
   //   this.deck.cards = await GameDatabaseService().getDeck(this);
   // }
 
-  void createAllSubjects(String gameId) async {
+  Future<int> createAllSubjects(String gameId) async {
     int z = 0;
     List<String> strSub =
         await GameDatabaseService().getGameListSubjects(gameId);
@@ -139,6 +139,7 @@ class QuartetsGame extends Game {
         z++;
       }
     }
+    return Future.value(0);
   }
 
   /// manager create all the members and update the server.
@@ -934,22 +935,19 @@ class QuartetsGame extends Game {
     }
   }
 
-  void updateDeck(List<int> nDeck) {
+  /// update my deck member from the server.
+  List<CardQuartets> updateMyDeck(List<int> nDeck) {
     print("cards id: ");
     print(this.cardsId.values);
-    print("in update deck");
-    List<CardQuartets> newDeck = [];
+    List<CardQuartets> newDeckCards = [];
     for (var i in nDeck) {
       var key = this
           .cardsId
           .keys
           .firstWhere((k) => this.cardsId[k] == i, orElse: () => null);
-      newDeck.add(key);
+      newDeckCards.add(key);
     }
-    print("new deck:");
-    print(newDeck);
-
-    this.deck.setCards(newDeck);
+    return newDeckCards;
   }
 
   void updatePlayerCards(List<int> cards, String id) {

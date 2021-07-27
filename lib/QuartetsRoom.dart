@@ -83,20 +83,24 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         //update if initialize game
         dynamic initData = event['initializeGame'];
         if (initData) {
+          print("GET IN!!!!!!!!!!!!!!!!!!!!!!!");
           if (!widget.game.isManager) {
             this.widget.game.changeInitialize(true);
             //   widget.game.takeDataOfGame();
           }
 
+          ///update my deck
           List<dynamic> nDeck = event.data()['deck'];
           //update if deck change
           if (nDeck == null) {
             nDeck = [];
           }
           List<int> newDeck = nDeck.cast<int>();
-          widget.game.updateDeck(newDeck);
+          print("new_deck");
+          print(newDeck);
+          widget.game.deck.setCards(widget.game.updateMyDeck(newDeck));
 
-          //update if turn change
+          ///update my turn
           dynamic turn = event.data()['turn'];
           if (turn == null) {
             turn = 0;
@@ -106,7 +110,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         }
       });
 
-      
+
       ///listen about changes in players cards and scores
       FirebaseFirestore.instance
           .collection("games")
