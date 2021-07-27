@@ -33,8 +33,7 @@ class GameDatabaseService {
   }
 
   Future addPlayer(String gameId, String name) async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    User user = _auth.currentUser;
+    User user = FirebaseAuth.instance.currentUser;
     List<int> cards = [];
     await gameCollection
         .doc(gameId)

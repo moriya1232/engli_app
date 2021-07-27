@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
@@ -90,13 +91,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         // turn = turn.cast<int>();
         widget.game.turn = turn;
         dynamic initData = event['initializeGame'];
-        print(initData);
-        print(initData.runtimeType);
+        //check
         if (initData) {
-          this.widget._scGameStart.add(true);
-          print("init data true!");
-          widget.game.dataUpload = true;
-          widget.game.takeDataOfGame();
+          if (!widget.game.isManager) {
+            this.widget._scGameStart.add(true);
+            widget.game.takeDataOfGame();
+          }
         }
       });
     FirebaseFirestore.instance
