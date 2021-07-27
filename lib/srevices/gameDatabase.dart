@@ -263,6 +263,7 @@ class GameDatabaseService {
 
   void deleteCardFromDeck(QuartetsGame game, CardQuartets card) async {
     if (!game.againstComputer) {
+      List<int> newDeck = [];
       await gameCollection
           .doc(game.gameId)
           .get()
@@ -272,11 +273,11 @@ class GameDatabaseService {
           List<int> deck = x.cast<int>();
           int cardId = game.cardsId[card];
           for (int c in deck) {
-            if (c == cardId) {
-              deck.remove(c);
+            if (c != cardId) {
+              newDeck.add(c);
             }
           }
-          gameCollection.doc(game.gameId).update({'deck': deck});
+          gameCollection.doc(game.gameId).update({'deck': newDeck});
         }
       });
     }

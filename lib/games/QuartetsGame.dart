@@ -145,8 +145,8 @@ class QuartetsGame extends Game {
       int x = this.cardsId[q];
       deckCards.add(x);
     }
-    GameDatabaseService().updateDeck(deckCards, this);
     GameDatabaseService().updateInitializeGame(this);
+    GameDatabaseService().updateDeck(deckCards, this);
 
     //TODO: randomal turn.
     this.turn = 0;
