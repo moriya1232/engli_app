@@ -22,8 +22,8 @@ class QuartetsGame extends Game {
   Map<CardQuartets, int> cardsId = {};
   String gameId;
   bool againstComputer = false;
+  List<Player> listTurn = [];
   StreamController _gameStart;
-
   // controllers for animate the view.
   StreamController _firstController;
   StreamController _secondController;
@@ -80,7 +80,7 @@ class QuartetsGame extends Game {
 
   void createGame() async {
     if (!this.againstComputer) {
-      this.players = await GameDatabaseService().getPlayersList(this.gameId);
+      this.players = await GameDatabaseService().getPlayersList(this);
     }
     await createAllSubjects(gameId);
     String mangerID = await GameDatabaseService().getManagerId(gameId);
@@ -278,7 +278,7 @@ class QuartetsGame extends Game {
   }
 
   Player getPlayerNeedTurn() {
-    return this.players.elementAt(this.turn);
+    return this.listTurn.elementAt(this.turn);
   }
 
   int getNumPlayers() {

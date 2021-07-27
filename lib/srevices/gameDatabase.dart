@@ -144,10 +144,10 @@ class GameDatabaseService {
     });
   }
 
-  Future<List<Player>> getPlayersList(String gameId) async {
+  Future<List<Player>> getPlayersList(QuartetsGame game) async {
     List<Player> players = [null];
     await gameCollection
-        .doc(gameId)
+        .doc(game.gameId)
         .collection("players")
         .get()
         .then((querySnapshot) {
@@ -155,11 +155,15 @@ class GameDatabaseService {
         List<CardGame> cards = [];
         final FirebaseAuth _auth = FirebaseAuth.instance;
         User user = _auth.currentUser;
+        Player p;
         if (value.id.toString() == user.uid) {
-          players[0] = Me(cards, value.data()["name"], value.id);
+          p = Me(cards, value.data()["name"], value.id);
+          players[0] = p;
         } else {
-          players.add(VirtualPlayer(cards, value.data()["name"], value.id));
+          p = VirtualPlayer(cards, value.data()["name"], value.id);
+          players.add(p);
         }
+        game.listTurn.add(p);
       });
     });
     return Future.value(players);
