@@ -91,7 +91,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         widget.game.turn = turn;
         dynamic initData = documentSnapshot['initializeGame'];
         initData = initData.cast<bool>();
-        if (initData == true) {
+        if (!initData) {
           widget.game.dataUpload = true;
         }
       });

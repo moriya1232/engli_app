@@ -92,7 +92,11 @@ class QuartetsGame extends Game {
     for (var p in players) {
       print("name:" + p.name + " id:" + p.uid);
     }
-    while (!this.dataUpload) {}
+    int i = 0;
+    while (!this.dataUpload) {
+      print(i);
+      i++;
+    }
     //initialize arrays with all the id cards to every player in the game.
     for (Player p in players) {
       playersCards[p.uid] = [];
