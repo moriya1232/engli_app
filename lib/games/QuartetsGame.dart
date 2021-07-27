@@ -13,7 +13,6 @@ import 'package:engli_app/cards/Subject.dart';
 import '../Constants.dart';
 import 'Game.dart';
 
-//TODO MORIYA!!!  REMOVE THE HEAD LINE
 class QuartetsGame extends Game {
   Deck deck;
   String nameAsked;
@@ -85,14 +84,15 @@ class QuartetsGame extends Game {
     }
     await createAllSubjects(gameId);
     String mangerID = await GameDatabaseService().getManagerId(gameId);
+    printSubjects();
     if (mangerID == this.getMyPlayer().uid) {
       await reStart();
     }
-    // for (Player p in this.players) {
-    //   if (mangerID == this.getMyPlayer().uid) {
-    //     p.cards = await GameDatabaseService().getPlayerCards(this, p.uid);
-    //   }
-    // }
+    for (Player p in this.players) {
+      if (mangerID != this.getMyPlayer().uid) {
+        p.cards = await GameDatabaseService().getPlayerCards(this, p.uid);
+      }
+    }
     this._gameStart.add(true);
   }
 
@@ -189,6 +189,18 @@ class QuartetsGame extends Game {
       }
     }
     return null;
+  }
+
+  void printSubjects() {
+    for (Subject sub in this.subjects) {
+      print("sub: " + sub.name_subject);
+    }
+  }
+
+  void printCardsInTheGame(List<CardQuartets> list) {
+    for (CardQuartets card in list) {
+      print("card: " + card.english + " in Subject: " + card.subject);
+    }
   }
 
   void checkComputerPlayerTurn() {
