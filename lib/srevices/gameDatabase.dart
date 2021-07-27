@@ -359,20 +359,24 @@ class GameDatabaseService {
   }
 
   Future<List<CardGame>> getPlayerCards(
-      QuartetsGame game, String playerId) async {
+      QuartetsGame game, Player player) async {
     List<CardGame> cardsPlayer = [];
     await gameCollection
         .doc(game.gameId)
         .collection('players')
-        .doc(playerId)
+        .doc(player.uid)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         var x = documentSnapshot.data()['cards'];
         List<int> intArrayCards = x.cast<int>();
         for (int i in intArrayCards) {
-          CardQuartets iKey = game.cardsId.keys
-              .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
+          CardQuartets iKey = game.cardsId.keys.firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
+          if (player is Me) {
+            iKey.changeToMine();
+          } else {
+            iKey.changeToNotMine();
+          }
           print("card: " + iKey.english);
           cardsPlayer.add(iKey);
         }

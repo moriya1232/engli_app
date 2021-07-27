@@ -627,7 +627,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       var key = widget.game.cardsId.keys
           .firstWhere((k) => widget.game.cardsId[k] == i, orElse: () => null);
     }
-    widget.game.deck.cards = newDeck;
+    widget.game.deck.setCards(newDeck);
   }
 
   void updatePlayerCards(List<int> cards, String id) {

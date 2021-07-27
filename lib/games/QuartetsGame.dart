@@ -1,16 +1,10 @@
-///shiloooooooo
-
 import 'dart:async';
-
-import 'package:engli_app/QuartetsGame/Constants.dart';
+import 'package:engli_app/cards/CardGame.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Position.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:engli_app/players/player.dart';
-import 'package:engli_app/cards/Triple.dart';
 import 'package:engli_app/cards/Subject.dart';
 import '../Constants.dart';
 import 'Game.dart';
@@ -88,27 +82,28 @@ class QuartetsGame extends Game {
     if (!this.againstComputer) {
       this.players = await GameDatabaseService().getPlayersList(this);
     }
-    await createAllSubjects(gameId);
+    createAllSubjects(gameId);
     String mangerID = await GameDatabaseService().getManagerId(gameId);
     if (mangerID == this.getMyPlayer().uid) {
-      await reStart();
+      reStart();
     }
   }
 
   void takeDataOfGame() async {
-    Map<String, List<int>> playersCards = {};
-    //initialize arrays with all the id cards to every player in the game.
     for (Player p in players) {
-      playersCards[p.uid] = [];
-      for (CardQuartets q in p.cards) {
-        int x = this.cardsId[q];
-        playersCards[p.uid].add(x);
-      }
-      //update server about the cards of the players
-      print(p.uid);
-      GameDatabaseService()
-          .initializePlayerCard(playersCards[p.uid], this, p.uid);
+      List<CardGame> cardsOfPlayer =  await GameDatabaseService().getPlayerCards(this, p);
     }
+//    for (Player p in players) {
+//      playersCards[p.uid] = [];
+//      for (CardQuartets q in p.cards) {
+//        int x = this.cardsId[q];
+//        playersCards[p.uid].add(x);
+//      }
+//      //update server about the cards of the players
+//      print(p.uid);
+//      GameDatabaseService()
+//          .initializePlayerCard(playersCards[p.uid], this, p.uid);
+//    }
     this.deck.cards = await GameDatabaseService().getDeck(this);
   }
 
@@ -786,7 +781,7 @@ class QuartetsGame extends Game {
 
       //animation:
       animateCard(this._deckController, deckPos, getApproPosition(player));
-      CardQuartets card = await this.deck.giveCardToPlayer(player, this);
+      await this.deck.giveCardToPlayer(player, this);
       //GameDatabaseService().updateDeck(cards, gameId);
       //update view:
       this._myCardsController.add(1);

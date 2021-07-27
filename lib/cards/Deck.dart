@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
-import 'package:engli_app/games/Game.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/QuartetsGame/Constants.dart';
@@ -17,6 +16,10 @@ class Deck {
     for (Subject sub in subs) {
       this.cards.addAll(sub.getCards());
     }
+  }
+
+  void setCards(List<CardQuartets> list) {
+    this.cards = list;
   }
 
   List<CardQuartets> shuffle() {

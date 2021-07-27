@@ -178,6 +178,7 @@ class MemoryGame extends Game {
         return player;
       }
     }
+    return null;
   }
 
   Player getEnemy() {
@@ -186,6 +187,7 @@ class MemoryGame extends Game {
         return player;
       }
     }
+    return null;
   }
 
   void changeTurn() {
