@@ -82,19 +82,27 @@ class QuartetsGame extends Game {
     this.initialize = b;
   }
 
+  /// all the players (except the manager) create the game members
   void createGame() async {
+
+    ///all players
     if (!this.againstComputer) {
       this.players = await GameDatabaseService().getPlayersList(this);
     }
     await createAllSubjects(gameId);
     String mangerID = await GameDatabaseService().getManagerId(gameId);
-    if (mangerID == this.getMyPlayer().uid) {
+
+    /// only manager
+    if (this.isManager) {
       await reStart();
-    }
-    for (Player p in this.players) {
-      p.cards = await GameDatabaseService().getPlayerCards(this, p);
-    }
-    if (!this.isManager) {
+    } else {
+      /// all players except manager
+      for (Player p in this.players) {
+        p.cards = await GameDatabaseService().getPlayerCards(this, p);
+      }
+      this.deck.setCards(await GameDatabaseService().getDeck(this));
+      this.turn = await GameDatabaseService().getTurn(this);
+      /// update initialize parameter
       this.changeInitialize(true);
     }
   }
@@ -132,6 +140,7 @@ class QuartetsGame extends Game {
     }
   }
 
+  /// manager create all the members and update the server.
   void reStart() async {
     //TODO: initialize cards in players hand.
     Deck deck = createDeck(this.subjects);
@@ -158,6 +167,7 @@ class QuartetsGame extends Game {
     //TODO: randomal turn.
     this.turn = 0;
     this._gameStart.add(true);
+    await GameDatabaseService().updateTurn(this, this.turn);
     await GameDatabaseService().updateDeck(deckCards, this);
     await GameDatabaseService().updateInitializeGame(this);
     await GameDatabaseService().updateContinueState(this.gameId);

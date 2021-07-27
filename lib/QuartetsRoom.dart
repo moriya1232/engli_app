@@ -71,7 +71,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   void initState() {
     super.initState();
-    if (!this.widget.game.againstComputer)
+
+    if (!this.widget.game.againstComputer) {
+
+      ///listen to changes in specific game.
       FirebaseFirestore.instance
           .collection("games")
           .doc(widget.game.gameId)
@@ -102,43 +105,46 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           widget.game.turn = turn;
         }
       });
-    //listen about changes in players cards and scores
-    FirebaseFirestore.instance
-        .collection("games")
-        .doc(widget.game.gameId)
-        .collection("players")
-        .snapshots()
-        .listen((event) {
-          if (this.widget.game.initialize) {
-            event.docChanges.forEach((element) {
-              String playerId = element.doc.reference.id;
-              List<dynamic> nCard = element.doc.data()['cards'];
-              List<int> newCards;
-              if (nCard != null) {
-                newCards = nCard.cast<int>();
-              } else {
-                newCards = [];
-              }
-              dynamic score = element.doc.data()['score'];
-              if (score == null) {
-                score = 0;
-              }
-              // score = score.cast<int>();
-              widget.game.updatePlayerCards(newCards, playerId);
-              widget.game.updatePlayerScore(playerId, score);
-              this.widget._streamControllerTurn.add(this.widget.game.turn);
-              this.widget._streamControllerStringsInDeck.add(1);
-              this.widget._streamControllerOtherPlayersCards.add(1);
-              this.widget._streamControllerMyCards.add(1);
-              this.widget._streamControllerMyScore.add(1);
-            });
-          }
-    });
-    this.firstCard = getAnimationCard();
-    this.secondCard = getAnimationCard();
-    this.thirdCard = getAnimationCard();
-    this.meCard = getAnimationCard();
-    this.deckCard = getAnimationCard();
+
+      
+      ///listen about changes in players cards and scores
+      FirebaseFirestore.instance
+          .collection("games")
+          .doc(widget.game.gameId)
+          .collection("players")
+          .snapshots()
+          .listen((event) {
+        if (this.widget.game.initialize) {
+          event.docChanges.forEach((element) {
+            String playerId = element.doc.reference.id;
+            List<dynamic> nCard = element.doc.data()['cards'];
+            List<int> newCards;
+            if (nCard != null) {
+              newCards = nCard.cast<int>();
+            } else {
+              newCards = [];
+            }
+            dynamic score = element.doc.data()['score'];
+            if (score == null) {
+              score = 0;
+            }
+            // score = score.cast<int>();
+            widget.game.updatePlayerCards(newCards, playerId);
+            widget.game.updatePlayerScore(playerId, score);
+            this.widget._streamControllerTurn.add(this.widget.game.turn);
+            this.widget._streamControllerStringsInDeck.add(1);
+            this.widget._streamControllerOtherPlayersCards.add(1);
+            this.widget._streamControllerMyCards.add(1);
+            this.widget._streamControllerMyScore.add(1);
+          });
+        }
+      });
+      this.firstCard = getAnimationCard();
+      this.secondCard = getAnimationCard();
+      this.thirdCard = getAnimationCard();
+      this.meCard = getAnimationCard();
+      this.deckCard = getAnimationCard();
+    }
   }
 
   @override
