@@ -148,14 +148,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     setConstants();
     firstBuild = false;
     // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
-    if (this.widget.game.turn != null &&
-        widget.game.getPlayerNeedTurn() is Me &&
-        this.widget.game.getPlayerNeedTurn().cards.length == 0) {
-      this.widget.game.deck.giveCardToPlayer(
-          this.widget.game.getPlayerNeedTurn(), this.widget.game);
-      this.widget.game.doneTurn();
-      //this.widget.game.updateObservers();
-    }
+    // TODO care of this!
+//    if (this.widget.game.turn != null &&
+//        widget.game.getPlayerNeedTurn() is Me &&
+//        this.widget.game.getPlayerNeedTurn().cards.length == 0) {
+//      this.widget.game.deck.giveCardToPlayer(
+//          this.widget.game.getPlayerNeedTurn(), this.widget.game);
+//      this.widget.game.doneTurn();
+//      //this.widget.game.updateObservers();
+//    }
 
     // get view for asking other players.
 //    if (!this.widget.game.checkIfGameDone()) {
