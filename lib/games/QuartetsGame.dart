@@ -103,6 +103,7 @@ class QuartetsGame extends Game {
       this.deck.setCards(await GameDatabaseService().getDeck(this));
       this.turn = await GameDatabaseService().getTurn(this);
       /// update initialize parameter
+      ///
       this.changeInitialize(true);
     }
   }
