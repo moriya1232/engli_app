@@ -4,9 +4,9 @@ import 'package:engli_app/ChooseEnemy.dart';
 import 'package:engli_app/EditingVocabulary.dart';
 import 'package:engli_app/QuartetsInstructions.dart';
 import 'package:engli_app/srevices/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'Data.dart';
 import 'GetInRoom.dart';
 import 'MemoryInstructions.dart';
 
@@ -79,9 +79,9 @@ class _ChooseGameState extends State<ChooseGame> {
             Padding(
               padding: EdgeInsets.fromLTRB(0, 60, 0, 20),
               child: Text(
-                '!שלום ${Data().getName()}',
+                ' Hello ${FirebaseAuth.instance.currentUser.displayName} !',
                 style: TextStyle(
-                  fontFamily: 'Abraham-h',
+                  fontFamily: 'AkayaK-e',
                   fontSize: 40,
                 ),
               ),

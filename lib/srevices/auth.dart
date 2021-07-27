@@ -1,3 +1,4 @@
+
 import 'package:engli_app/srevices/usersDatabase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -13,6 +14,8 @@ class AuthService {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User user = result.user;
+      //TODO: BUG: if I logout and after that login as anonymous user - name get NULL
+      await user.updateProfile(displayName: "GUEST_" + user.uid.substring(0,3), photoURL: null);
       return user;
     } catch (e) {
       print(e.toString());
