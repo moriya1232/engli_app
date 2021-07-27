@@ -84,12 +84,13 @@ class QuartetsGame extends Game {
     }
     await createAllSubjects(gameId);
     String mangerID = await GameDatabaseService().getManagerId(gameId);
-    printSubjects();
     if (mangerID == this.getMyPlayer().uid) {
       await reStart();
     }
     for (Player p in this.players) {
       if (mangerID != this.getMyPlayer().uid) {
+        print("in func!!!");
+        print("manID = " + mangerID + "player id = " + this.getMyPlayer().uid);
         p.cards = await GameDatabaseService().getPlayerCards(this, p.uid);
       }
     }
