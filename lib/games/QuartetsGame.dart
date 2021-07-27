@@ -90,6 +90,9 @@ class QuartetsGame extends Game {
     for (Player p in this.players) {
       p.cards = await GameDatabaseService().getPlayerCards(this, p);
     }
+    if (!this.isManager) {
+      this._gameStart.add(true);
+    }
   }
 
   // void takeDataOfGame() async {
