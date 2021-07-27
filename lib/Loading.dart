@@ -48,8 +48,8 @@ class _LoadingState extends State<Loading> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => QuartetsRoom(
-                  this.widget.usersLogin, this.widget.gameId, widget.isBoss, false)),
+              builder: (context) => QuartetsRoom(this.widget.usersLogin,
+                  this.widget.gameId, widget.isBoss, false)),
         );
       }
     });
@@ -77,10 +77,7 @@ class _LoadingState extends State<Loading> {
                 children: [
                   Text(
                     ':קוד משחק',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontFamily: 'Comix-h'
-                    ),
+                    style: TextStyle(fontSize: 30, fontFamily: 'Comix-h'),
                   ),
                   Text(
                     cleanGameId(this.widget.gameId),
@@ -88,13 +85,12 @@ class _LoadingState extends State<Loading> {
                       fontSize: 60,
                     ),
                   ),
-                  SizedBox(height: 40,),
+                  SizedBox(
+                    height: 40,
+                  ),
                   Text(
                     ':שחקנים מחוברים',
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontFamily: 'Comix-h'
-                    ),
+                    style: TextStyle(fontSize: 30, fontFamily: 'Comix-h'),
                   ),
                   getListNameUsers(),
                   SizedBox(
@@ -135,11 +131,11 @@ class _LoadingState extends State<Loading> {
   void continueToGameClicked() async {
     // this.widget.usersLogin =
     //     await GameDatabaseService().getPlayersList(this.widget.gameId);
-    GameDatabaseService().changeContinueState(this.widget.gameId);
+    GameDatabaseService().updateContinueState(this.widget.gameId);
   }
 
   String cleanGameId(String s) {
-    return s.substring(2,s.length-1);
+    return s.substring(2, s.length - 1);
   }
 
   Widget getListNameUsers() {

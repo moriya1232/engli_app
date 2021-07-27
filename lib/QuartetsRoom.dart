@@ -78,6 +78,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           .snapshots()
           .listen((event) {
         List<dynamic> nDeck = event.data()['deck'];
+        //update if deck change
         if (nDeck == null) {
           nDeck = [];
         }
@@ -85,6 +86,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         updateDeck(newDeck);
         this.widget._streamControllerStringsInDeck.add(1);
 
+        //update if turn change
         dynamic turn = event.data()['turn'];
         if (turn == null) {
           turn = 0;
@@ -92,19 +94,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         // turn = turn.cast<int>();
         widget.game.turn = turn;
         this.widget._streamControllerTurn.add(turn);
+
+        //update if initialize game
         dynamic initData = event['initializeGame'];
-        //check
-        if (initData) {
-          if (!widget.game.isManager) {
-            this.widget._scGameStart.add(true);
-            widget.game.takeDataOfGame();
-          }
-        }
-        this.widget._streamControllerOtherPlayersCards.add(1);
-        this.widget._streamControllerMyCards.add(1);
-        this.widget._streamControllerOtherPlayersCards.add(1);
-        this.widget._streamControllerMyScore.add(1);
+        // if (initData) {
+        //   if (!widget.game.isManager) {
+        //this.widget._scGameStart.add(true);
+        //     widget.game.takeDataOfGame();
+        //   }
+        // }
       });
+    //listen about changes in players cards and scores
     FirebaseFirestore.instance
         .collection("games")
         .doc(widget.game.gameId)
@@ -127,6 +127,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         // score = score.cast<int>();
         updatePlayerCards(newCards, playerId);
         updatePlayerScore(playerId, score);
+        this.widget._streamControllerOtherPlayersCards.add(1);
+        this.widget._streamControllerMyCards.add(1);
+        this.widget._streamControllerMyScore.add(1);
       });
     });
     this.firstCard = getAnimationCard();
@@ -576,6 +579,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   Widget getStringsOnDeck() {
     return StreamBuilder<int>(
+        initialData: 1,
         stream: this.widget._streamControllerStringsInDeck.stream,
         builder: (context, snapshot) {
           return Column(
@@ -637,9 +641,16 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           .firstWhere((k) => widget.game.cardsId[k] == i, orElse: () => null);
       newCardsList.add(key);
     }
-    for (var i in widget.game.players) {
-      if (i.uid == id) {
-        i.cards = newCardsList;
+    for (Player p in widget.game.players) {
+      if (p.uid == id) {
+        p.cards = newCardsList;
+      }
+      for (CardQuartets c in p.cards) {
+        if (p is Me) {
+          c.changeToMine();
+        } else {
+          c.changeToNotMine();
+        }
       }
     }
   }

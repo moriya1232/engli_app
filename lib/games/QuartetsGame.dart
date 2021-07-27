@@ -82,30 +82,28 @@ class QuartetsGame extends Game {
     if (!this.againstComputer) {
       this.players = await GameDatabaseService().getPlayersList(this);
     }
-    createAllSubjects(gameId);
+    await createAllSubjects(gameId);
     String mangerID = await GameDatabaseService().getManagerId(gameId);
     if (mangerID == this.getMyPlayer().uid) {
-      reStart();
+      await reStart();
     }
   }
 
-  void takeDataOfGame() async {
-    for (Player p in players) {
-      List<CardGame> cardsOfPlayer =  await GameDatabaseService().getPlayerCards(this, p);
-    }
-//    for (Player p in players) {
-//      playersCards[p.uid] = [];
-//      for (CardQuartets q in p.cards) {
-//        int x = this.cardsId[q];
-//        playersCards[p.uid].add(x);
-//      }
-//      //update server about the cards of the players
-//      print(p.uid);
-//      GameDatabaseService()
-//          .initializePlayerCard(playersCards[p.uid], this, p.uid);
-//    }
-    this.deck.cards = await GameDatabaseService().getDeck(this);
-  }
+  // void takeDataOfGame() async {
+  //   Map<String, List<int>> playersCards = {};
+  //   for (Player p in players) {
+  //     playersCards[p.uid] = [];
+  //     for (CardQuartets q in p.cards) {
+  //       int x = this.cardsId[q];
+  //       playersCards[p.uid].add(x);
+  //     }
+  //     //update server about the cards of the players
+  //     print(p.uid);
+  //     GameDatabaseService()
+  //         .initializePlayerCard(playersCards[p.uid], this, p.uid);
+  //   }
+  //   this.deck.cards = await GameDatabaseService().getDeck(this);
+  // }
 
   void createAllSubjects(String gameId) async {
     int z = 0;
@@ -129,11 +127,8 @@ class QuartetsGame extends Game {
     Deck deck = createDeck(this.subjects);
     deck.handoutDeck(this.players);
     this.deck = deck;
-    Map<String, List<int>> playersCards = {};
-    for (var p in players) {
-      print("name:" + p.name + " id:" + p.uid);
-    }
     //initialize arrays with all the id cards to every player in the game.
+    Map<String, List<int>> playersCards = {};
     for (Player p in players) {
       playersCards[p.uid] = [];
       for (CardQuartets q in p.cards) {
@@ -141,7 +136,6 @@ class QuartetsGame extends Game {
         playersCards[p.uid].add(x);
       }
       //update server about the cards of the players
-      print(p.uid);
       GameDatabaseService()
           .initializePlayerCard(playersCards[p.uid], this, p.uid);
     }

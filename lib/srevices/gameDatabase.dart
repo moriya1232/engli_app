@@ -138,7 +138,7 @@ class GameDatabaseService {
     return Future.value(card);
   }
 
-  void changeContinueState(gameId) async {
+  void updateContinueState(gameId) async {
     await gameCollection.doc(gameId).update({
       'continueToGame': true,
     });
@@ -225,6 +225,8 @@ class GameDatabaseService {
   void initializePlayerCard(
       List<int> cards, QuartetsGame game, String playerId) async {
     if (!game.againstComputer) {
+      print("in initialize");
+      print(cards);
       await gameCollection
           .doc(game.gameId)
           .collection("players")
@@ -256,12 +258,12 @@ class GameDatabaseService {
   void updateTakeCardFromDeck(
       QuartetsGame game, CardQuartets card, Player player) {
     if (!game.againstComputer) {
-      removeCardFromDeck(game, card);
+      deleteCardFromDeck(game, card);
       addCardToPlayer(game, card, player);
     }
   }
 
-  void removeCardFromDeck(QuartetsGame game, CardQuartets card) async {
+  void deleteCardFromDeck(QuartetsGame game, CardQuartets card) async {
     if (!game.againstComputer) {
       await gameCollection
           .doc(game.gameId)
@@ -371,12 +373,9 @@ class GameDatabaseService {
         var x = documentSnapshot.data()['cards'];
         List<int> intArrayCards = x.cast<int>();
         for (int i in intArrayCards) {
-          CardQuartets iKey = game.cardsId.keys.firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
-          if (player is Me) {
-            iKey.changeToMine();
-          } else {
-            iKey.changeToNotMine();
-          }
+          CardQuartets iKey = game.cardsId.keys
+              .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
+
           print("card: " + iKey.english);
           cardsPlayer.add(iKey);
         }
@@ -388,7 +387,6 @@ class GameDatabaseService {
   }
 
   void updateInitializeGame(QuartetsGame game) async {
-    print("in initialize!!!!");
     await gameCollection.doc(game.gameId).update({'initializeGame': true});
   }
 
