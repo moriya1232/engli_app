@@ -370,10 +370,12 @@ class GameDatabaseService {
         for (int i in intArrayCards) {
           CardQuartets iKey = game.cardsId.keys
               .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
+          print("card: " + iKey.english);
           cardsPlayer.add(iKey);
         }
       }
     });
+    print("in game database");
     print(cardsPlayer);
     return Future.value(cardsPlayer);
   }
