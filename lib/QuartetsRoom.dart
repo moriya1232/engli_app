@@ -70,7 +70,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   void initState() {
     super.initState();
-    if (this.widget.game.gameId != "-1")
+    if (!this.widget.game.againstComputer)
       FirebaseFirestore.instance
           .collection("games")
           .doc(widget.game.gameId)
@@ -89,6 +89,11 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         }
         // turn = turn.cast<int>();
         widget.game.turn = turn;
+        dynamic initData = documentSnapshot['initializeGame'];
+        initData = initData.cast<bool>();
+        if (initData == true) {
+          widget.game.dataUpload = true;
+        }
       });
     FirebaseFirestore.instance
         .collection("games")
@@ -611,7 +616,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       var key = widget.game.cardsId.keys
           .firstWhere((k) => widget.game.cardsId[k] == i, orElse: () => null);
     }
-
     widget.game.deck.cards = newDeck;
   }
 

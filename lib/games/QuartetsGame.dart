@@ -22,6 +22,7 @@ class QuartetsGame extends Game {
   Map<CardQuartets, int> cardsId = {};
   String gameId;
   bool againstComputer = false;
+  bool dataUpload = false;
   List<Player> listTurn = [];
   StreamController _gameStart;
   // controllers for animate the view.
@@ -87,12 +88,23 @@ class QuartetsGame extends Game {
     if (mangerID == this.getMyPlayer().uid) {
       await reStart();
     }
-    for (Player p in this.players) {
-      if (mangerID != this.getMyPlayer().uid) {
-        p.cards = await GameDatabaseService().getPlayerCards(this, p.uid);
-      }
+    Map<String, List<int>> playersCards = {};
+    for (var p in players) {
+      print("name:" + p.name + " id:" + p.uid);
     }
-    this._gameStart.add(true);
+    while (!this.dataUpload) {}
+    //initialize arrays with all the id cards to every player in the game.
+    for (Player p in players) {
+      playersCards[p.uid] = [];
+      for (CardQuartets q in p.cards) {
+        int x = this.cardsId[q];
+        playersCards[p.uid].add(x);
+      }
+      //update server about the cards of the players
+      print(p.uid);
+      GameDatabaseService()
+          .initializePlayerCard(playersCards[p.uid], this, p.uid);
+    }
   }
 
   void createAllSubjects(String gameId) async {
@@ -140,6 +152,7 @@ class QuartetsGame extends Game {
       deckCards.add(x);
     }
     GameDatabaseService().updateDeck(deckCards, this);
+    GameDatabaseService().updateInitializeGame(this);
 
     //TODO: randomal turn.
     this.turn = 0;

@@ -27,7 +27,8 @@ class GameDatabaseService {
       'gameId': id,
       'subjects': subjects,
       'managerId': subjectsId,
-      'continueToGame': con
+      'continueToGame': con,
+      'initializeGame': false
     });
   }
 
@@ -381,5 +382,29 @@ class GameDatabaseService {
     print("in game database");
     print(cardsPlayer);
     return Future.value(cardsPlayer);
+  }
+
+  void updateInitializeGame(QuartetsGame game) async {
+    await gameCollection.doc(game.gameId).update({'initializeGame': true});
+  }
+
+  Future<List<CardQuartets>> getDeck(QuartetsGame game) {
+    List<CardQuartets> deck = [];
+    gameCollection
+        .doc(game.gameId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        var simpleDeck = documentSnapshot.data()['deck'];
+        simpleDeck = simpleDeck.cast<int>();
+        for (int i in simpleDeck) {
+          CardQuartets iKey = game.cardsId.keys
+              .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
+          print("card: " + iKey.english);
+          deck.add(iKey);
+        }
+      }
+    });
+    return Future.value(deck);
   }
 }
