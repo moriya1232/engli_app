@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:engli_app/cards/CardGame.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Position.dart';
@@ -126,8 +125,6 @@ class QuartetsGame extends Game {
       Subject sub = await GameDatabaseService()
           .createSubjectFromDatabase("generic_subjects", s);
       this.subjects.add(sub);
-      print("SUBJECTS:");
-      print(this.subjects);
       for (CardQuartets card in sub.getCards()) {
         this.cardsId[card] = z;
         z++;
@@ -936,14 +933,11 @@ class QuartetsGame extends Game {
           .cardsId
           .keys
           .firstWhere((k) => this.cardsId[k] == i, orElse: () => null);
-
-      print("key:");
-      print(key);
       newDeck.add(key);
     }
-    for (var i in newDeck) {
-      print(i.english);
-    }
+    print("new deck:");
+    print(newDeck);
+
     this.deck.setCards(newDeck);
   }
 

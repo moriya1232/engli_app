@@ -326,7 +326,6 @@ class GameDatabaseService {
               updateList.add(c);
             }
           }
-          print(updateList);
           gameCollection
               .doc(game.gameId)
               .collection("players")
@@ -376,13 +375,12 @@ class GameDatabaseService {
         for (int i in intArrayCards) {
           CardQuartets iKey = game.cardsId.keys
               .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
-          print("card: " + iKey.english);
           cardsPlayer.add(iKey);
         }
       }
     });
     for (CardQuartets c in cardsPlayer) {
-      if (c is Me) {
+      if (player is Me) {
         c.changeToMine();
       } else {
         c.changeToNotMine();
@@ -407,7 +405,6 @@ class GameDatabaseService {
         for (int i in simpleDeck) {
           CardQuartets iKey = game.cardsId.keys
               .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
-          print("card: " + iKey.english);
           deck.add(iKey);
         }
       }
