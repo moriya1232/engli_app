@@ -14,6 +14,7 @@ class AuthService {
     try {
       UserCredential result = await _auth.signInAnonymously();
       User user = result.user;
+      print("IM HERE!!!!");
       //TODO: BUG: if I logout and after that login as anonymous user - name get NULL
       await user.updateProfile(displayName: "GUEST_" + user.uid.substring(0,3), photoURL: null);
       return user;

@@ -93,6 +93,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         print(initData);
         print(initData.runtimeType);
         if (initData) {
+          this.widget._scGameStart.add(true);
           print("init data true!");
           widget.game.dataUpload = true;
           widget.game.takeDataOfGame();
