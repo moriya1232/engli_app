@@ -172,7 +172,15 @@ class QuartetsGame extends Game {
     await GameDatabaseService().updateTurn(this, this.turn);
     await GameDatabaseService().updateDeck(deckCards, this);
     await GameDatabaseService().updateInitializeGame(this);
+    changeScoresOfPlayers();
     await GameDatabaseService().updateContinueState(this.gameId);
+
+  }
+
+  void changeScoresOfPlayers() async {
+    for(Player p in players) {
+      GameDatabaseService().updateScore(0, p.uid, this);
+    }
 
   }
 
