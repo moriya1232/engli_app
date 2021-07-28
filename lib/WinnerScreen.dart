@@ -22,12 +22,14 @@ class _winnerRoomState extends State<WinnerScreen> {
         backgroundColor: Colors.lightGreen,
       ),
       body: Center(
-        child: Container(
-          child: Text(
-            winnerName(),
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
+        child: SingleChildScrollView(
+          child: Container(
+            child: Text(
+              winnerName(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
+            ),
           ),
         ),
       ),

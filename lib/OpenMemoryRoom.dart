@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class OpenMemoryRoom extends StatefulWidget {
+  final _error = StreamController<String>.broadcast();
   final _nameEnemy = TextEditingController();
 
   List<CheckBoxTile> series;
@@ -36,29 +37,22 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: SizedBox(
-                  height: 50,
-                  child: Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                      child: TextFormField(
-                        controller: this.widget._nameEnemy,
-                        decoration: InputDecoration(
-                            hintText: ":שם יריב",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),),
-                        inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))],
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                child: TextFormField(
+                  controller: this.widget._nameEnemy,
+                  decoration: InputDecoration(
+                      hintText: "שם יריב",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),),
+                  inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))],
+                  textAlign: TextAlign.center,
                 ),
               ),
+              Padding(padding: EdgeInsets.all(20),
+              child: getError(),),
               Expanded(
                 child: Container(
-                  height: 500,
                   child: _buildSubjectsList(widget._subjectsList),
                 ),
               ),
@@ -117,7 +111,27 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
     );
   }
 
+  Widget getError() {
+    return StreamBuilder<String>(
+        stream: this.widget._error.stream,
+        initialData: "",
+        builder: (context, snapshot) {
+          return Text(
+            snapshot.data,
+            style: TextStyle(
+              fontFamily: 'Trashim-h',
+              fontSize: 15,
+              color: Colors.red,
+            ),
+          );
+        });
+  }
+
   void startGameClicked(bool isAgainstComputer) {
+    if (this.widget._nameEnemy.text.length == 0 ) {
+      this.widget._error.add("הכנס שם יריב");
+      return;
+    }
     Navigator.push(
       context,
       MaterialPageRoute(

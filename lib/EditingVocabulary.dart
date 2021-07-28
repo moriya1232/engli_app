@@ -58,32 +58,33 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
         centerTitle: true,
         title: Text('עריכת אוצר מילים'),
       ),
-      body: Column(children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0)),
-                  primary: Colors.amberAccent,
-                ),
-                onPressed: () {
-                  _showMaterialDialog();
-                },
-                child: Text(
-                  'הכנסת סרייה חדשה',
-                  style: TextStyle(
-                      fontFamily: 'Comix-h',
-                      color: Colors.black87,
-                      fontSize: 20),
+      body: SingleChildScrollView(
+        child: Column(children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    primary: Colors.amberAccent,
+                  ),
+                  onPressed: () {
+                    _showMaterialDialog();
+                  },
+                  child: Text(
+                    'הכנסת סרייה חדשה',
+                    style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        color: Colors.black87,
+                        fontSize: 20),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
 //                SingleChildScrollView(
 //                  child: Column(children:
 //                  <Widget>[
@@ -208,49 +209,50 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
 //                    ),
 //                  ]),
 //                ),
-        Text(
-          'סריות קיימות',
-          style: TextStyle(
-            fontSize: 30,
-            fontFamily: 'Abraham-h',
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Expanded(
-          child: Container(
-            child: _getListSeries(),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              primary: Colors.pink,
-              padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+          Text(
+            'סריות קיימות',
+            style: TextStyle(
+              fontSize: 30,
+              fontFamily: 'Abraham-h',
             ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ChooseGame(),
-              ));
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: Container(
+              child: _getListSeries(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                primary: Colors.pink,
+                padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ChooseGame(),
+                ));
 
-            },
-            child: Text(
-              'סיימתי',
-              style: TextStyle(
-                  fontFamily: 'Comix-h',
-                  color: Colors.black87,
-                  fontSize: 30),
+              },
+              child: Text(
+                'סיימתי',
+                style: TextStyle(
+                    fontFamily: 'Comix-h',
+                    color: Colors.black87,
+                    fontSize: 30),
+              ),
             ),
           ),
-        ),
-      ]),
+        ]),
+      ),
     );
   }
 
