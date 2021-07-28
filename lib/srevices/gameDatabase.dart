@@ -423,4 +423,33 @@ class GameDatabaseService {
     });
     return Future.value(newTurn);
   }
+
+  void deleteQuartet(
+      Subject subjectToDelete, QuartetsGame game, Player player) async {
+    List<int> newCardsList = [];
+    await gameCollection
+        .doc(game.gameId)
+        .collection('players')
+        .doc(player.uid)
+        .get()
+        .then((value) {
+      if (value.exists) {
+        var playerCards = value.data()['cards'];
+        playerCards = playerCards.cast<int>();
+        newCardsList = playerCards;
+        for (int i in playerCards) {
+          for (CardQuartets card in subjectToDelete.cards) {
+            if (i == game.cardsId[card]) {
+              newCardsList.remove(i);
+            }
+          }
+        }
+      }
+    });
+    gameCollection
+        .doc(game.gameId)
+        .collection('players')
+        .doc(player.uid)
+        .update({'cards': newCardsList});
+  }
 }

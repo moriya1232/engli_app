@@ -920,14 +920,7 @@ class QuartetsGame extends Game {
   int removeAllSeriesDone(Player player) {
     List<Subject> series = seriesDone(player);
     for (Subject subject in series) {
-      for (CardQuartets card in subject.getCards()) {
-        try {
-          //player.cards.remove(card);
-          //GameDatabaseService().deleteCardToPlayer(player, this, card);
-        } catch (e) {
-          throw new Exception("remove card that not in player's cards.");
-        }
-      }
+      GameDatabaseService().deleteQuartet(subject, this, player);
       player.raiseScore(10);
       GameDatabaseService().updateScore(player.score, player.uid, this);
       this._myScoreController.add(10);
