@@ -111,8 +111,10 @@ class QuartetsGame extends Game {
         this.playerTakeName = event.data()['take'];
         this.playerTokenName = event.data()['tokenFrom'];
         CardQuartets card = event.data()['cardToken'];
-        this.subjectAsked = card.subject;
-        this.cardAsked = card.english;
+        if (card != null) {
+          this.subjectAsked = card.subject;
+          this.cardAsked = card.english;
+        }
 
         ///update my deck
         List<dynamic> nDeck = event.data()['deck'];
