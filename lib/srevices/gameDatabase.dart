@@ -427,26 +427,13 @@ class GameDatabaseService {
   void deleteQuartet(
       Subject subjectToDelete, QuartetsGame game, Player player) async {
     List<int> newCardsList = [];
+    for (CardQuartets i in player.cards) {
+      newCardsList.add(game.cardsId[i]);
+    }
+    for (CardQuartets c in player.cards) {
+      newCardsList.remove(game.cardsId[c]);
+    }
     await gameCollection
-        .doc(game.gameId)
-        .collection('players')
-        .doc(player.uid)
-        .get()
-        .then((value) {
-      if (value.exists) {
-        var playerCards = value.data()['cards'];
-        playerCards = playerCards.cast<int>();
-        newCardsList = playerCards;
-        for (int i in playerCards) {
-          for (CardQuartets card in subjectToDelete.cards) {
-            if (i == game.cardsId[card]) {
-              newCardsList.remove(i);
-            }
-          }
-        }
-      }
-    });
-    gameCollection
         .doc(game.gameId)
         .collection('players')
         .doc(player.uid)
