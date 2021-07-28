@@ -54,7 +54,7 @@ class QuartetsGame extends Game {
       StreamController myScore,
       StreamController otherCards,
       StreamController scStrings) {
-    speak("Maccabi Haifa");
+    speak("Hello");
 
     this.isManager = isManager;
     this.gameId = gameId;

@@ -25,7 +25,7 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerOtherPlayersCards = StreamController<int>.broadcast();
   final _streamControllerStringsInDeck = StreamController<int>.broadcast();
   final _streamControllerMyScore = StreamController<int>.broadcast();
-  String stringToSpeek = "";
+  String stringToSpeak = "";
 
   QuartetsRoom(
     List<Player> players,
@@ -250,7 +250,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   child: RawMaterialButton(
                     padding: EdgeInsets.all(10.0),
                     onPressed: () {
-                      this.widget.game.speak(stringToSpeek);
+                      this.widget.game.speak(this.widget.stringToSpeak);
                     },
                     hoverColor: Colors.black87,
                     highlightColor: Colors.lightGreen,
@@ -353,12 +353,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     print(subjectAsked);
     print("cardAsked: ");
     print(cardAsked);
-    if (cardAsked != null) {
-      this.widget.game.speak(cardAsked);
-    }
+    // if (cardAsked != null) {
+    //   this.widget.game.speak(cardAsked);
+    // }
     //take from the deck
     if (asked != null && wasAsked == "deck") {
-      this.widget.stringToSpeek = asked + " take from the deck";
+      this.widget.stringToSpeak = asked + " take from the deck";
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -379,7 +379,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
     // ask about spec card
     else if (cardAsked != null && wasAsked != null && subjectAsked != null) {
-      this.widget.stringToSpeek =
+      this.widget.stringToSpeak =
           asked + " take from " + wasAsked + " about card " + cardAsked;
       return RichText(
         textAlign: TextAlign.center,
@@ -415,6 +415,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
     // ask about subject and doesnt have
     else if (cardAsked == null && wasAsked != null && subjectAsked != null) {
+      this.widget.stringToSpeak =
+          asked + " take from " + wasAsked + " about subject " + subjectAsked;
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -443,8 +445,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         ),
       );
     } else {
-      this.widget.stringToSpeek =
-          asked + " take from " + wasAsked + " about subject " + subjectAsked;
       return new Container();
     }
   }
