@@ -430,7 +430,7 @@ class GameDatabaseService {
     for (CardQuartets i in player.cards) {
       newCardsList.add(game.cardsId[i]);
     }
-    for (CardQuartets c in player.cards) {
+    for (CardQuartets c in subjectToDelete.cards) {
       newCardsList.remove(game.cardsId[c]);
     }
     await gameCollection
