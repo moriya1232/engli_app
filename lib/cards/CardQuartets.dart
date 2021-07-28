@@ -101,72 +101,74 @@ class _CardQuartetsState extends State<CardQuartets>
             borderRadius: BorderRadius.circular(4.0)),
         borderOnForeground: true,
         child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            SingleChildScrollView(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
 
-              //subject
+                //subject
           Container(
-            decoration: new BoxDecoration(
-                color: Colors.tealAccent,
-                border: Border.all(color: Colors.white70)),
-            child: Center(
-                child: Text(
-              widget.subject,
-              style: TextStyle(
-                fontFamily: "AkayaK-e",
-                fontSize: 25,
-              ),
-            )),
+              decoration: new BoxDecoration(
+                  color: Colors.tealAccent,
+                  border: Border.all(color: Colors.white70)),
+              child: Center(
+                  child: Text(
+                widget.subject,
+                style: TextStyle(
+                  fontFamily: "AkayaK-e",
+                  fontSize: 25,
+                ),
+              )),
           ),
 
           // image
           Center(
-              child: Container(
-                  width: width, height: height / 4, child: widget.image)),
+                child: Container(
+                    width: width, height: height / 4, child: widget.image)),
 
           // my english word
           Center(
-            child: Text(
-              widget.english,
-              style: TextStyle(
-                  fontFamily: "Carter-e",
-                  fontSize: fontSizeWords,
-                  color: Colors.lightGreen),
-            ),
+              child: Text(
+                widget.english,
+                style: TextStyle(
+                    fontFamily: "Carter-e",
+                    fontSize: fontSizeWords,
+                    color: Colors.lightGreen),
+              ),
           ),
 
           // word 1
           Center(
-            child: Text(
-              widget.word1,
-              style: TextStyle(
-                fontFamily: "Carter-e",
-                fontSize: fontSizeWords,
+              child: Text(
+                widget.word1,
+                style: TextStyle(
+                  fontFamily: "Carter-e",
+                  fontSize: fontSizeWords,
+                ),
               ),
-            ),
           ),
 
           // word 2
           Center(
-            child: Text(
-              widget.word2,
-              style: TextStyle(
-                fontFamily: "Carter-e",
-                fontSize: fontSizeWords,
+              child: Text(
+                widget.word2,
+                style: TextStyle(
+                  fontFamily: "Carter-e",
+                  fontSize: fontSizeWords,
+                ),
               ),
-            ),
           ),
 
           // word 3
           Center(
-            child: Text(
-              widget.word3,
-              style: TextStyle(
-                fontFamily: "Carter-e",
-                fontSize: fontSizeWords,
+              child: Text(
+                widget.word3,
+                style: TextStyle(
+                  fontFamily: "Carter-e",
+                  fontSize: fontSizeWords,
+                ),
               ),
-            ),
           ),
         ]),
+            ),
       ),
 //        ),
     );
