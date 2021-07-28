@@ -359,20 +359,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     print(subjectAsked);
     print("cardAsked: ");
     print(cardAsked);
-    if (wasAsked != null && cardAsked != null && subjectAsked != null) {
-      String textToSpeech = asked +
-          " ask " +
-          wasAsked +
-          " about " +
-          cardAsked +
-          " in subject: " +
-          subjectAsked;
-      print(textToSpeech);
-      _speak(textToSpeech);
+    if (cardAsked != null) {
+      // String textToSpeech = "";
+      // print(textToSpeech);
+      _speak(cardAsked);
     }
-
-    // ask about spec card
-    if (cardAsked != null && wasAsked != null && subjectAsked != null) {
+    //take from the deck
+    if (asked != null && wasAsked == "deck") {
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -383,7 +376,27 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               color: Colors.black87),
           children: [
             new TextSpan(
-                text: '$asked',
+                text: '$asked ',
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'take from the deck '),
+          ],
+        ),
+      );
+    }
+    // ask about spec card
+    else if (cardAsked != null && wasAsked != null && subjectAsked != null) {
+      return RichText(
+        textAlign: TextAlign.center,
+        text: new TextSpan(
+          style: new TextStyle(
+              wordSpacing: 10,
+              fontSize: 20,
+              fontFamily: 'Carter-e',
+              color: Colors.black87),
+          children: [
+            new TextSpan(
+                text: '$asked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'asked '),
