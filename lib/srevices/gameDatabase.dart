@@ -28,7 +28,10 @@ class GameDatabaseService {
       'subjects': subjects,
       'managerId': subjectsId,
       'continueToGame': con,
-      'initializeGame': false
+      'initializeGame': false,
+      'tokenFrom': null,
+      'take': null,
+      'cardToken': null
     });
   }
 
@@ -438,5 +441,56 @@ class GameDatabaseService {
         .collection('players')
         .doc(player.uid)
         .update({'cards': newCardsList});
+  }
+
+  Future<int> getCardToken(QuartetsGame game) async {
+    int cardToken;
+    gameCollection.doc(game.gameId).get().then((value) {
+      if (value.exists) {
+        var cToken = value.data()['cardToken'];
+        cardToken = cToken.cast<int>();
+      }
+    });
+    return Future.value(cardToken);
+  }
+
+  Future<int> getTake(QuartetsGame game) async {
+    int take;
+    gameCollection.doc(game.gameId).get().then((value) {
+      if (value.exists) {
+        var cTake = value.data()['take'];
+        take = cTake.cast<int>();
+      }
+    });
+    return Future.value(take);
+  }
+
+  Future<int> getTokenFrom(QuartetsGame game) async {
+    int tokenFrom;
+    gameCollection.doc(game.gameId).get().then((value) {
+      if (value.exists) {
+        var tokenF = value.data()['tokenFrom'];
+        tokenFrom = tokenF.cast<int>();
+      }
+    });
+    return Future.value(tokenFrom);
+  }
+
+  void updateTake(QuartetsGame game, int take) {
+    if (!game.againstComputer) {
+      gameCollection.doc(game.gameId).update({'take': take});
+    }
+  }
+
+  void updateTokenFrom(QuartetsGame game, int t) {
+    if (!game.againstComputer) {
+      gameCollection.doc(game.gameId).update({'tokenFrom': t});
+    }
+  }
+
+  void updateCardToken(QuartetsGame game, int c) {
+    if (!game.againstComputer) {
+      gameCollection.doc(game.gameId).update({'cardToken': c});
+    }
   }
 }

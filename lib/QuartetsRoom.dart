@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,6 +19,7 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerDeck = StreamController<Position>.broadcast();
 
   final _streamControllerTurn = StreamController<int>.broadcast();
+  // final _streamControllerStringsTurn = StreamController<int>.broadcast();
 
   final _streamControllerMyCards = StreamController<int>.broadcast();
   final _streamControllerOtherPlayersCards = StreamController<int>.broadcast();
@@ -55,7 +55,6 @@ class QuartetsRoom extends StatefulWidget {
 
   @override
   _QuartetsRoomState createState() => _QuartetsRoomState();
-
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
@@ -140,12 +139,11 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 ////        }
 //      });
 //    }
-      this.firstCard = getAnimationCard();
-      this.secondCard = getAnimationCard();
-      this.thirdCard = getAnimationCard();
-      this.meCard = getAnimationCard();
-      this.deckCard = getAnimationCard();
-
+    this.firstCard = getAnimationCard();
+    this.secondCard = getAnimationCard();
+    this.thirdCard = getAnimationCard();
+    this.meCard = getAnimationCard();
+    this.deckCard = getAnimationCard();
   }
 
   @override
@@ -332,6 +330,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         });
   }
 
+  // Widget getStringsToTurn() {
+  //   return StreamBuilder<int>(
+  //       stream: widget._streamControllerStringsTurn.stream,
+  //       initialData: 0,
+  //       builder: (context, snapshot) {
+  //
+  //       });
+  // }
+
   Future _speak(String text) async {
     await flutterTts.setLanguage("en-US");
     await flutterTts.setPitch(1);
@@ -339,8 +346,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   }
 
   Widget getAskedText() {
-    String asked = widget.game.getPlayerNeedTurn().name;
-    String wasAsked = widget.game.nameAsked;
+    String asked = widget.game.playerTakeName;
+    String wasAsked = widget.game.playerTokenName;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
     if (wasAsked != null && cardAsked != null && subjectAsked != null) {

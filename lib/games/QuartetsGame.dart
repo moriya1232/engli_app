@@ -11,7 +11,8 @@ import 'Game.dart';
 
 class QuartetsGame extends Game {
   Deck deck;
-  String nameAsked;
+  String playerTakeName;
+  String playerTokenName;
   String subjectAsked;
   String cardAsked;
   List<Subject> subjects;
@@ -56,7 +57,8 @@ class QuartetsGame extends Game {
     this.deck = new Deck(this.subjects);
 
     // this.cardsId = caID;
-    this.nameAsked = null;
+    this.playerTakeName = null;
+    this.playerTokenName = null;
     this.subjectAsked = null;
     this.cardAsked = null;
     this.players = players;
@@ -104,6 +106,13 @@ class QuartetsGame extends Game {
         if (!this.isManager) {
           this._gameStart.add(true);
         }
+
+        //update tokens parameters
+        this.playerTakeName = event.data()['take'];
+        this.playerTokenName = event.data()['tokenFrom'];
+        CardQuartets card = event.data()['cardToken'];
+        this.subjectAsked = card.subject;
+        this.cardAsked = card.english;
 
         ///update my deck
         List<dynamic> nDeck = event.data()['deck'];
@@ -157,6 +166,20 @@ class QuartetsGame extends Game {
 //        }
       });
     }
+  }
+
+  Future<String> getNamePlayerTake() async {
+    return this.listTurn[await GameDatabaseService().getTake(this)].name;
+  }
+
+  Future<String> getNamePlayerTokenFrom() async {
+    return this.listTurn[await GameDatabaseService().getTokenFrom(this)].name;
+  }
+
+  Future<String> getStringCardToken() async {
+    return this
+        .idToCard(await GameDatabaseService().getCardToken(this))
+        .english;
   }
 
   // void takeDataOfGame() async {
@@ -250,7 +273,7 @@ class QuartetsGame extends Game {
 
     if (askPlayerSpecCard(player, subject, card) != null) {
       //success take card from another player.
-      this.nameAsked = player.name;
+      // this.pl = player.name;
       this.subjectAsked = subject.name_subject;
       // ask subject that the player has.
       if (askPlayer(player, subject)) {
@@ -261,7 +284,7 @@ class QuartetsGame extends Game {
       return new Future.delayed(const Duration(seconds: 5), () => true);
     } else {
       // didn't success take card from another player
-      this.nameAsked = player.name;
+      // this.nameAsked = player.name;
       this.subjectAsked = subject.name_subject;
       this.cardAsked = "";
       await takeCardFromDeck();
@@ -858,6 +881,12 @@ class QuartetsGame extends Game {
       //animation:
       animateCard(this._deckController, deckPos, getApproPosition(player));
       await this.deck.giveCardToPlayer(player, this);
+
+      // update tokens parameters.
+      GameDatabaseService().updateTake(this, this.listTurn.indexOf(player));
+      GameDatabaseService().updateTokenFrom(this, -1);
+      GameDatabaseService().updateCardToken(this, -1);
+
       //GameDatabaseService().updateDeck(cards, gameId);
       //update view:
       this._myCardsController.add(1);
@@ -953,6 +982,12 @@ class QuartetsGame extends Game {
     //the token succeed, write the change to the document.
     GameDatabaseService().transferCard(player, tokenFrom, this, card);
 
+    //update takes parameters in server.
+    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player));
+    GameDatabaseService()
+        .updateTokenFrom(this, this.listTurn.indexOf(tokenFrom));
+    GameDatabaseService().updateCardToken(this, this.cardsId[card]);
+
     //animations:
     animateCard(getAppropriateController(tokenFrom),
         getApproPosition(tokenFrom), getApproPosition(player));
@@ -1030,5 +1065,13 @@ class QuartetsGame extends Game {
         i.score = score;
       }
     }
+  }
+
+  CardQuartets idToCard(int id) {
+    CardQuartets iKey = this
+        .cardsId
+        .keys
+        .firstWhere((k) => this.cardsId[k] == id, orElse: () => null);
+    return iKey;
   }
 }
