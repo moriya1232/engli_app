@@ -123,6 +123,7 @@ class QuartetsGame extends Game {
           }
         }
 
+
         this.subjectAsked = subject;
         if (cardToken != null) {
           this.cardAsked = this.idToCard(cardToken).english;
