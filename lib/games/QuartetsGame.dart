@@ -923,6 +923,7 @@ class QuartetsGame extends Game {
       for (CardQuartets card in subject.getCards()) {
         try {
           player.cards.remove(card);
+          GameDatabaseService().deleteCardToPlayer(player, this, card);
         } catch (e) {
           throw new Exception("remove card that not in player's cards.");
         }
