@@ -122,6 +122,7 @@ class QuartetsGame extends Game {
             this.playerTokenName = "deck";
           }
         }
+
         this.subjectAsked = subject;
         if (cardToken != null) {
           this.cardAsked = this.idToCard(cardToken).english;
