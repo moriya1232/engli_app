@@ -79,7 +79,6 @@ class QuartetsGame extends Game {
 
   /// all the players (except the manager) create the game members
   void createGame() async {
-
     ///all players
     if (!this.againstComputer) {
       this.players = await GameDatabaseService().getPlayersList(this);
@@ -96,7 +95,6 @@ class QuartetsGame extends Game {
       changeScoresOfPlayers();
     }
     if (!this.againstComputer) {
-
       ///listen to changes in specific game.
       FirebaseFirestore.instance
           .collection("games")
@@ -119,13 +117,14 @@ class QuartetsGame extends Game {
         ///update my turn
         dynamic turn = event.data()['turn'];
         if (turn == null) {
-          turn = 0;
+          this.turn = 0;
         }
-        // turn = turn.cast<int>();
-        this.turn = turn;
-
+        if (turn != this.turn) {
+          this.turn = turn;
+          this._turnController.add(this.turn);
+          this._stringsOnDeckController.add(1);
+        }
       });
-
 
       ///listen about changes in players cards and scores
       FirebaseFirestore.instance
@@ -150,8 +149,7 @@ class QuartetsGame extends Game {
           // score = score.cast<int>();
           this.updatePlayerCards(newCards, playerId);
           this.updatePlayerScore(playerId, score);
-          this._turnController.add(this.turn);
-          this._stringsOnDeckController.add(1);
+
           this._otherPlayersCardsController.add(1);
           this._myCardsController.add(1);
           this._myScoreController.add(1);
@@ -159,7 +157,6 @@ class QuartetsGame extends Game {
 //        }
       });
     }
-
   }
 
   // void takeDataOfGame() async {
@@ -226,14 +223,12 @@ class QuartetsGame extends Game {
     await GameDatabaseService().updateTurn(this, this.turn);
     await GameDatabaseService().updateDeck(deckCards, this);
     await GameDatabaseService().updateContinueState(this.gameId);
-
   }
 
   void changeScoresOfPlayers() async {
-    for(Player p in players) {
+    for (Player p in players) {
       GameDatabaseService().updateScore(0, p.uid, this);
     }
-
   }
 
   bool askPlayer(Player player, Subject subject) {
