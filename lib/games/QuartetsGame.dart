@@ -129,6 +129,17 @@ class QuartetsGame extends Game {
         } else {
           this.cardAsked = null;
         }
+        print("FROM LISTEN!:");
+        print("take: ");
+        print(this.playerTakeName);
+        print("token: ");
+        print(this.playerTokenName);
+        print("subjectAsk: ");
+        print(this.subjectAsked);
+        print("cardAsked: ");
+        print(this.cardAsked);
+        this._turnController.add(this.turn);
+
         ///update my deck
         List<dynamic> nDeck = event.data()['deck'];
         //update if deck change
@@ -901,6 +912,7 @@ class QuartetsGame extends Game {
       GameDatabaseService().updateTake(this, this.listTurn.indexOf(player));
       GameDatabaseService().updateTokenFrom(this, -1);
       GameDatabaseService().updateCardToken(this, -1);
+      GameDatabaseService().updateStringAsk(this, "");
 
       //GameDatabaseService().updateDeck(cards, gameId);
       //update view:
@@ -1002,6 +1014,7 @@ class QuartetsGame extends Game {
     GameDatabaseService()
         .updateTokenFrom(this, this.listTurn.indexOf(tokenFrom));
     GameDatabaseService().updateCardToken(this, this.cardsId[card]);
+    GameDatabaseService().updateStringAsk(this, card.subject);
 
     //animations:
     animateCard(getAppropriateController(tokenFrom),

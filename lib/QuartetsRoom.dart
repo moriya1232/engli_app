@@ -350,6 +350,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     String wasAsked = widget.game.playerTokenName;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
+    print("FROM GETASKEDTEST!:");
+    print("take:");
+    print(asked);
+    print("token: ");
+    print(wasAsked);
+    print("subjectAsk: ");
+    print(subjectAsked);
+    print("cardAsked: ");
+    print(cardAsked);
     if (wasAsked != null && cardAsked != null && subjectAsked != null) {
       String textToSpeech = asked +
           " ask " +
@@ -362,6 +371,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       _speak(textToSpeech);
     }
 
+    // ask about spec card
     if (cardAsked != null && wasAsked != null && subjectAsked != null) {
       return RichText(
         textAlign: TextAlign.center,
@@ -394,7 +404,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           ],
         ),
       );
-    } else if (cardAsked == null && wasAsked != null && subjectAsked != null) {
+    }
+    // ask about subject and doesnt have
+    else if (cardAsked == null && wasAsked != null && subjectAsked != null) {
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
