@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'Loading.dart';
 import 'QuartetsGame/Constants.dart';
 import 'QuartetsRoom.dart';
-import 'cards/CardQuartets.dart';
-import 'cards/Subject.dart';
 
 class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
@@ -106,7 +104,7 @@ class _openRoomState extends State<OpenRoom> {
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)),
-                        primary: Colors.pink,
+                        primary: Colors.amberAccent,
                       ),
                       onPressed: () {
                         startGameClicked(true);
@@ -120,11 +118,15 @@ class _openRoomState extends State<OpenRoom> {
                       ),
                     )),
                     SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
                         child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0)),
                         primary: Colors.pink,
+                        padding: EdgeInsets.all(10),
                       ),
                       onPressed: () {
                         startGameClicked(false);
@@ -134,7 +136,7 @@ class _openRoomState extends State<OpenRoom> {
                         style: TextStyle(
                             fontFamily: 'Comix-h',
                             color: Colors.black87,
-                            fontSize: 20),
+                            fontSize: 40),
                       ),
                     )),
                   ],
