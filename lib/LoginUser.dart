@@ -1,20 +1,15 @@
+import 'dart:async';
 
-import 'package:engli_app/RegisterationUser.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
 
-import 'Data.dart';
-
-
 
 class Login extends StatefulWidget {
+  final _error = StreamController<String>.broadcast();
   @override
   _LoginState createState() => _LoginState();
 }
 
-
-//TODO: SHILO: change error according to the appropriate error.
-String error = "";
 final mailControllerLog = TextEditingController();
 final passwordControllerLog = TextEditingController();
 
@@ -91,10 +86,7 @@ class _LoginState extends State<Login> {
                     ],
                   ),
                   SizedBox(height: 30),
-                  Text(error,
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),),
+                  getError(),
                   SizedBox(
                     height: 30,
                   ),
@@ -138,13 +130,27 @@ class _LoginState extends State<Login> {
     print(passwordControllerLog.text);
     dynamic res = await _auth.signInWithEmailAndPassword(
         mailControllerLog.text, passwordControllerLog.text);
-
-    Data().setName(nameControllerReg.text); //TODO : get the name by the database
-    Data().setMail(mailControllerLog.text);
     if (res == null) {
-      setState(() => error = "could not sign in");
-      print(error);
+      this.widget._error.add("אימייל או סיסמא שגויים");
+//      setState(() => error = "could not sign in");
+//      print(error);
     }
+  }
+
+  Widget getError() {
+    return StreamBuilder<String>(
+        stream: this.widget._error.stream,
+        initialData: "",
+        builder: (context, snapshot) {
+          return Text(
+            snapshot.data,
+            style: TextStyle(
+              fontFamily: 'Trashim-h',
+              fontSize: 15,
+              color: Colors.red,
+            ),
+          );
+        });
   }
 
   @override

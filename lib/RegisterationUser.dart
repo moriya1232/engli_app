@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:engli_app/Data.dart';
 import 'package:engli_app/srevices/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -153,7 +151,7 @@ class _RegistrationState extends State<Registration> {
     dynamic res =
         await _auth.registerWithEmailAndPassword(email, pass, nameUser);
     if (res == null) {
-      this.widget._error.add('אימייל או סיסמא שגויים');
+      this.widget._error.add('אימייל או סיסמא לא תקינים');
       print("error mail");
       return;
     }
