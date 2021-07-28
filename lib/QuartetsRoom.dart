@@ -608,7 +608,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   height: 30,
                 ),
                 Text(
-                  ' תור ${widget.game.players[widget.game.turn].name}',
+                  ' תור ${widget.game.listTurn[widget.game.turn].name}',
                   style: TextStyle(
                       color: Colors.red, fontSize: 20, fontFamily: 'Abraham-h'),
                 ),

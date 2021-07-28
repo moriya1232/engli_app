@@ -84,7 +84,7 @@ class QuartetsGame extends Game {
       this.players = await GameDatabaseService().getPlayersList(this);
       print("List turn: ");
       for (Player p in this.listTurn) {
-        print("name" + p.name);
+        print("name " + p.name);
       }
     }
     await createAllSubjects(gameId);
