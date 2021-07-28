@@ -108,9 +108,9 @@ class QuartetsGame extends Game {
         }
 
         //update tokens parameters
-        this.playerTakeName = event.data()['take'];
-        this.playerTokenName = event.data()['tokenFrom'];
-        CardQuartets card = event.data()['cardToken'];
+        this.playerTakeName = this.listTurn[event.data()['take']].name;
+        this.playerTokenName = this.listTurn[event.data()['tokenFrom']].name;
+        CardQuartets card = this.idToCard(event.data()['cardToken']);
         if (card != null) {
           this.subjectAsked = card.subject;
           this.cardAsked = card.english;
