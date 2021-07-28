@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
 import 'package:engli_app/cards/Position.dart';
@@ -18,7 +19,6 @@ class QuartetsGame extends Game {
   bool isManager;
   String gameId;
   bool againstComputer = false;
-  bool initialize = false;
   List<Player> listTurn = [];
   StreamController _gameStart;
   // controllers for animate the view.
@@ -77,11 +77,6 @@ class QuartetsGame extends Game {
     this._otherPlayersCardsController = otherCards;
   }
 
-  void changeInitialize(bool b) {
-    this._gameStart.add(b);
-    this.initialize = b;
-  }
-
   /// all the players (except the manager) create the game members
   void createGame() async {
 
@@ -96,16 +91,74 @@ class QuartetsGame extends Game {
       await reStart();
       changeScoresOfPlayers();
     }
-//    else {
-//      /// all players except manager
-//      for (Player p in this.players) {
-//        p.cards = await GameDatabaseService().getPlayerCards(this, p);
-//      }
-//      this.deck.setCards(await GameDatabaseService().getDeck(this));
-//      this.turn = await GameDatabaseService().getTurn(this);
-//      /// update initialize parameter
-//      //this.changeInitialize(true);
-//    }
+    if (!this.againstComputer) {
+
+      ///listen to changes in specific game.
+      FirebaseFirestore.instance
+          .collection("games")
+          .doc(this.gameId)
+          .snapshots()
+          .listen((event) {
+        print("GET IN!!!!!!!!!!!!!!!!!!!!!!!");
+        if (!this.isManager) {
+          this._gameStart.add(true);
+        }
+
+        ///update my deck
+        List<dynamic> nDeck = event.data()['deck'];
+        //update if deck change
+        if (nDeck == null) {
+          nDeck = [];
+        }
+        List<int> newDeck = nDeck.cast<int>();
+        print("new_deck");
+        print(newDeck);
+        this.deck.setCards(this.updateMyDeck(newDeck));
+
+        ///update my turn
+        dynamic turn = event.data()['turn'];
+        if (turn == null) {
+          turn = 0;
+        }
+        // turn = turn.cast<int>();
+        this.turn = turn;
+
+      });
+
+
+      ///listen about changes in players cards and scores
+      FirebaseFirestore.instance
+          .collection("games")
+          .doc(this.gameId)
+          .collection("players")
+          .snapshots()
+          .listen((event) {
+        event.docChanges.forEach((element) {
+          String playerId = element.doc.reference.id;
+          List<dynamic> nCard = element.doc.data()['cards'];
+          List<int> newCards;
+          if (nCard != null) {
+            newCards = nCard.cast<int>();
+          } else {
+            newCards = [];
+          }
+          dynamic score = element.doc.data()['score'];
+          if (score == null) {
+            score = 0;
+          }
+          // score = score.cast<int>();
+          this.updatePlayerCards(newCards, playerId);
+          this.updatePlayerScore(playerId, score);
+          this._turnController.add(this.turn);
+          this._stringsOnDeckController.add(1);
+          this._otherPlayersCardsController.add(1);
+          this._myCardsController.add(1);
+          this._myScoreController.add(1);
+        });
+//        }
+      });
+    }
+
   }
 
   // void takeDataOfGame() async {
@@ -171,7 +224,6 @@ class QuartetsGame extends Game {
     this._gameStart.add(true);
     await GameDatabaseService().updateTurn(this, this.turn);
     await GameDatabaseService().updateDeck(deckCards, this);
-    await GameDatabaseService().updateInitializeGame(this);
     await GameDatabaseService().updateContinueState(this.gameId);
 
   }

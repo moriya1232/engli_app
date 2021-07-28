@@ -72,83 +72,80 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   void initState() {
     super.initState();
 
-    if (!this.widget.game.againstComputer) {
-
-      ///listen to changes in specific game.
-      FirebaseFirestore.instance
-          .collection("games")
-          .doc(widget.game.gameId)
-          .snapshots()
-          .listen((event) {
-        //update if initialize game
-//        dynamic initData = event['initializeGame'];
-//        if (initData) {
-          print("GET IN!!!!!!!!!!!!!!!!!!!!!!!");
+//    if (!this.widget.game.againstComputer) {
+//
+//      ///listen to changes in specific game.
+//      FirebaseFirestore.instance
+//          .collection("games")
+//          .doc(widget.game.gameId)
+//          .snapshots()
+//          .listen((event) {
+//          print("GET IN!!!!!!!!!!!!!!!!!!!!!!!");
 //          if (!widget.game.isManager) {
-//            this.widget.game.changeInitialize(true);
+//            this.widget._scGameStart.add(true);
 //            //   widget.game.takeDataOfGame();
 //          }
-
-          ///update my deck
-          List<dynamic> nDeck = event.data()['deck'];
-          //update if deck change
-          if (nDeck == null) {
-            nDeck = [];
-          }
-          List<int> newDeck = nDeck.cast<int>();
-          print("new_deck");
-          print(newDeck);
-          widget.game.deck.setCards(widget.game.updateMyDeck(newDeck));
-
-          ///update my turn
-          dynamic turn = event.data()['turn'];
-          if (turn == null) {
-            turn = 0;
-          }
-          // turn = turn.cast<int>();
-          widget.game.turn = turn;
-
-      });
-
-
-      ///listen about changes in players cards and scores
-      FirebaseFirestore.instance
-          .collection("games")
-          .doc(widget.game.gameId)
-          .collection("players")
-          .snapshots()
-          .listen((event) {
-//        if (this.widget.game.initialize) {
-          event.docChanges.forEach((element) {
-            String playerId = element.doc.reference.id;
-            List<dynamic> nCard = element.doc.data()['cards'];
-            List<int> newCards;
-            if (nCard != null) {
-              newCards = nCard.cast<int>();
-            } else {
-              newCards = [];
-            }
-            dynamic score = element.doc.data()['score'];
-            if (score == null) {
-              score = 0;
-            }
-            // score = score.cast<int>();
-            widget.game.updatePlayerCards(newCards, playerId);
-            widget.game.updatePlayerScore(playerId, score);
-            this.widget._streamControllerTurn.add(this.widget.game.turn);
-            this.widget._streamControllerStringsInDeck.add(1);
-            this.widget._streamControllerOtherPlayersCards.add(1);
-            this.widget._streamControllerMyCards.add(1);
-            this.widget._streamControllerMyScore.add(1);
-          });
-//        }
-      });
+//
+//          ///update my deck
+//          List<dynamic> nDeck = event.data()['deck'];
+//          //update if deck change
+//          if (nDeck == null) {
+//            nDeck = [];
+//          }
+//          List<int> newDeck = nDeck.cast<int>();
+//          print("new_deck");
+//          print(newDeck);
+//          widget.game.deck.setCards(widget.game.updateMyDeck(newDeck));
+//
+//          ///update my turn
+//          dynamic turn = event.data()['turn'];
+//          if (turn == null) {
+//            turn = 0;
+//          }
+//          // turn = turn.cast<int>();
+//          widget.game.turn = turn;
+//
+//      });
+//
+//
+//      ///listen about changes in players cards and scores
+//      FirebaseFirestore.instance
+//          .collection("games")
+//          .doc(widget.game.gameId)
+//          .collection("players")
+//          .snapshots()
+//          .listen((event) {
+//          event.docChanges.forEach((element) {
+//            String playerId = element.doc.reference.id;
+//            List<dynamic> nCard = element.doc.data()['cards'];
+//            List<int> newCards;
+//            if (nCard != null) {
+//              newCards = nCard.cast<int>();
+//            } else {
+//              newCards = [];
+//            }
+//            dynamic score = element.doc.data()['score'];
+//            if (score == null) {
+//              score = 0;
+//            }
+//            // score = score.cast<int>();
+//            widget.game.updatePlayerCards(newCards, playerId);
+//            widget.game.updatePlayerScore(playerId, score);
+//            this.widget._streamControllerTurn.add(this.widget.game.turn);
+//            this.widget._streamControllerStringsInDeck.add(1);
+//            this.widget._streamControllerOtherPlayersCards.add(1);
+//            this.widget._streamControllerMyCards.add(1);
+//            this.widget._streamControllerMyScore.add(1);
+//          });
+////        }
+//      });
+//    }
       this.firstCard = getAnimationCard();
       this.secondCard = getAnimationCard();
       this.thirdCard = getAnimationCard();
       this.meCard = getAnimationCard();
       this.deckCard = getAnimationCard();
-    }
+
   }
 
   @override
