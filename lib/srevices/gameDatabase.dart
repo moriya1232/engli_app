@@ -310,6 +310,7 @@ class GameDatabaseService {
   void deleteCardToPlayer(
       Player player, QuartetsGame game, CardQuartets card) async {
     if (!game.againstComputer) {
+      print(card.english);
       await gameCollection
           .doc(game.gameId)
           .collection("players")
