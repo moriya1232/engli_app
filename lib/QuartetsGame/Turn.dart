@@ -282,6 +282,7 @@ class _turnState extends State<Turn> {
         .getSubjects()
         .contains(widget.subjectToAsk.name_subject)) {
       setState(() {
+        this.widget.game.speak(this.widget.game.cardAsked);
         this.chosenPlayerAndCategoryToAsk = true;
       });
     } else {

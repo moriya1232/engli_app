@@ -6,6 +6,7 @@ import 'package:engli_app/cards/Position.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/cards/Subject.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import '../Constants.dart';
 import 'Game.dart';
 
@@ -36,6 +37,8 @@ class QuartetsGame extends Game {
   StreamController _otherPlayersCardsController;
   StreamController _stringsOnDeckController;
 
+  FlutterTts flutterTts = FlutterTts();
+
   QuartetsGame(
       String gameId,
       bool isManager,
@@ -51,6 +54,8 @@ class QuartetsGame extends Game {
       StreamController myScore,
       StreamController otherCards,
       StreamController scStrings) {
+    speak("Maccabi Haifa");
+
     this.isManager = isManager;
     this.gameId = gameId;
     this.subjects = [];
@@ -1101,5 +1106,11 @@ class QuartetsGame extends Game {
         .keys
         .firstWhere((k) => this.cardsId[k] == id, orElse: () => null);
     return iKey;
+  }
+
+  Future speak(String text) async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setPitch(1);
+    await flutterTts.speak(text);
   }
 }
