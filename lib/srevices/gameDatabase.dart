@@ -31,7 +31,8 @@ class GameDatabaseService {
       'initializeGame': false,
       'tokenFrom': null,
       'take': null,
-      'cardToken': null
+      'cardToken': null,
+      'subjectAsk': null,
     });
   }
 
@@ -491,6 +492,12 @@ class GameDatabaseService {
   void updateCardToken(QuartetsGame game, int c) {
     if (!game.againstComputer) {
       gameCollection.doc(game.gameId).update({'cardToken': c});
+    }
+  }
+
+  void updateStringAsk(QuartetsGame game, String sub) {
+    if (!game.againstComputer) {
+      gameCollection.doc(game.gameId).update({'subjectAsk': sub});
     }
   }
 }
