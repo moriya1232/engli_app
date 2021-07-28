@@ -163,7 +163,7 @@ class GameDatabaseService {
           p = VirtualPlayer(cards, value.data()["name"], value.id);
           players.add(p);
         }
-        game.listTurn.add(p);
+        game.addToListTurn(p);
       });
     });
     return Future.value(players);

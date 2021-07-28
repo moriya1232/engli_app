@@ -83,6 +83,10 @@ class QuartetsGame extends Game {
     ///all players
     if (!this.againstComputer) {
       this.players = await GameDatabaseService().getPlayersList(this);
+      print("List turn: ");
+      for (Player p in this.listTurn) {
+        print("name" + p.name);
+      }
     }
     await createAllSubjects(gameId);
 
@@ -99,7 +103,6 @@ class QuartetsGame extends Game {
           .doc(this.gameId)
           .snapshots()
           .listen((event) {
-        print("GET IN!!!!!!!!!!!!!!!!!!!!!!!");
         if (!this.isManager) {
           this._gameStart.add(true);
         }
@@ -111,8 +114,6 @@ class QuartetsGame extends Game {
           nDeck = [];
         }
         List<int> newDeck = nDeck.cast<int>();
-        print("new_deck");
-        print(newDeck);
         this.deck.setCards(this.updateMyDeck(newDeck));
 
         ///update my turn
@@ -368,6 +369,10 @@ class QuartetsGame extends Game {
 
   Player getPlayerNeedTurn() {
     return this.listTurn.elementAt(this.turn);
+  }
+
+  void addToListTurn(Player p) {
+    this.listTurn.add(p);
   }
 
   int getNumPlayers() {
@@ -996,8 +1001,6 @@ class QuartetsGame extends Game {
 
   /// update my deck member from the server.
   List<CardQuartets> updateMyDeck(List<int> nDeck) {
-    print("cards id: ");
-    print(this.cardsId.values);
     List<CardQuartets> newDeckCards = [];
     for (var i in nDeck) {
       var key = this
