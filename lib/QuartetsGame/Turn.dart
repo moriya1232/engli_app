@@ -41,13 +41,13 @@ class _turnState extends State<Turn> {
         context,
         MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
       );
+      // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
     } else if (this.widget.game.turn != null &&
         widget.game.getPlayerNeedTurn() is Me &&
         this.widget.game.getPlayerNeedTurn().cards.length == 0) {
       this.widget.game.deck.giveCardToPlayer(
           this.widget.game.getPlayerNeedTurn(), this.widget.game);
       this.widget.game.doneTurn();
-      //this.widget.game.updateObservers();
     } else {
       this._firstclick = true;
       return getAprropriateAsk();
@@ -55,6 +55,10 @@ class _turnState extends State<Turn> {
   }
 
   Widget getAprropriateAsk() {
+    //subject to ask not in my cards.
+    if (this.widget.game.getMyPlayer().getSubjects().contains(this.widget.subjectToAsk.name_subject)) {
+      this.widget.subjectToAsk = this.widget.game.getSubjectsOfPlayer(this.widget.game.getMyPlayer())[0];
+    }
     if (!this.chosenPlayerAndCategoryToAsk) {
       List<String> names = widget.game.getNamesPlayers();
       names.remove(widget.game.getMyPlayer().name);
