@@ -41,9 +41,17 @@ class _turnState extends State<Turn> {
         context,
         MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
       );
+    } else if (this.widget.game.turn != null &&
+        widget.game.getPlayerNeedTurn() is Me &&
+        this.widget.game.getPlayerNeedTurn().cards.length == 0) {
+      this.widget.game.deck.giveCardToPlayer(
+          this.widget.game.getPlayerNeedTurn(), this.widget.game);
+      this.widget.game.doneTurn();
+      //this.widget.game.updateObservers();
+    } else {
+      this._firstclick = true;
+      return getAprropriateAsk();
     }
-    this._firstclick = true;
-    return getAprropriateAsk();
   }
 
   Widget getAprropriateAsk() {
