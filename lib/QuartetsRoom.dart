@@ -108,38 +108,40 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       if (widget.game.players.length > 2)
-                        RotatedBox(
-                          quarterTurns: 1,
-                          child: getSecondPlayerView(),
-                        ),
-                      Stack(children: [
-                        Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height / 5,
-                            width: MediaQuery.of(context).size.width / 4,
-                            color: Colors.amberAccent,
+                        Expanded(
+                          child: RotatedBox(
+                            quarterTurns: 1,
+                            child: getSecondPlayerView(),
                           ),
                         ),
-                        Positioned.fill(
-                          child: Align(
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 10),
-                              child: getStringsOnDeck(),
+                      Expanded(
+                        child: Stack(children: [
+                          Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height / 5,
+                              width: MediaQuery.of(context).size.width / 4,
+                              color: Colors.amberAccent,
                             ),
                           ),
-                        )
-                      ]),
+                          Positioned.fill(
+                            child: Align(
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 10),
+                                child: getStringsOnDeck(),
+                              ),
+                            ),
+                          )
+                        ]),
+                      ),
                       if (widget.game.players.length > 3)
-                        RotatedBox(
+                        Expanded(child: RotatedBox(
                           quarterTurns: 3,
                           child: getThirdPlayerView(),
-                        ),
+                        )),
                       if (widget.game.players.length == 3)
-                        Container(
-                          width: MediaQuery.of(context).size.width / 3,
-                        )
+                        Expanded(child: Container()),
                     ],
                   ),
                 ),
@@ -563,7 +565,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   height: 30,
                 ),
                 Text(
-                  ' תור ${widget.game.listTurn[widget.game.turn].name}',
+                  "${widget.game.listTurn[widget.game.turn].name}'s turn",
                   style: TextStyle(
                       color: Colors.red, fontSize: 20, fontFamily: 'Abraham-h'),
                 ),

@@ -56,7 +56,7 @@ class _turnState extends State<Turn> {
 
   Widget getAprropriateAsk() {
     //subject to ask not in my cards.
-    if (this.widget.game.getMyPlayer().getSubjects().contains(this.widget.subjectToAsk.name_subject)) {
+    if (!this.widget.game.getMyPlayer().getSubjects().contains(this.widget.subjectToAsk.name_subject)) {
       this.widget.subjectToAsk = this.widget.game.getSubjectsOfPlayer(this.widget.game.getMyPlayer())[0];
     }
     if (!this.chosenPlayerAndCategoryToAsk) {
