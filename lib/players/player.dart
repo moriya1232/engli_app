@@ -22,6 +22,13 @@ abstract class Player {
 //    this.observers = [];
   }
 
+  bool isHaveCards() {
+    if (this.cards.length <= 0) {
+      return false;
+    }
+    return true;
+  }
+
   int raiseScore(int howMuch) {
     this.score += howMuch;
 //    print("raise score!");

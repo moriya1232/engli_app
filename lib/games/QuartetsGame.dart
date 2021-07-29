@@ -22,6 +22,7 @@ class QuartetsGame extends Game {
   String gameId;
   bool againstComputer = false;
   List<Player> listTurn = [];
+  bool isFinished = false;
   StreamController _gameStart;
   // controllers for animate the view.
   StreamController _firstController;
@@ -134,15 +135,7 @@ class QuartetsGame extends Game {
         } else {
           this.cardAsked = null;
         }
-        print("FROM LISTEN!:");
-        print("take: ");
-        print(this.playerTakeName);
-        print("token: ");
-        print(this.playerTokenName);
-        print("subjectAsk: ");
-        print(this.subjectAsked);
-        print("cardAsked: ");
-        print(this.cardAsked);
+
         this._turnController.add(this.turn);
 
         ///update my deck
@@ -190,6 +183,19 @@ class QuartetsGame extends Game {
           this.updatePlayerCards(newCards, playerId);
           this.updatePlayerScore(playerId, score);
 
+          bool everyoneNoHaveCards = false;
+          for (Player player in this.players) {
+            if (player.isHaveCards()) {
+              everyoneNoHaveCards = true;
+              break;
+            }
+          }
+          if (!this.deck.isEmpty()) {
+            everyoneNoHaveCards = true;
+          }
+          if (!everyoneNoHaveCards) {
+            this.isFinished = true;
+          }
           this._otherPlayersCardsController.add(1);
           this._myCardsController.add(1);
           this._myScoreController.add(1);

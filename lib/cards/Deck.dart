@@ -17,6 +17,17 @@ class Deck {
     }
   }
 
+  List<CardQuartets> getCards() {
+    return this.cards;
+  }
+
+  bool isEmpty() {
+    if (this.cards.length <= 0) {
+      return true;
+    }
+    return false;
+  }
+
   void setCards(List<CardQuartets> list) {
     this.cards = list;
   }

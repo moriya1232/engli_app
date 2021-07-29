@@ -12,10 +12,8 @@ class Turn extends StatefulWidget {
   Player playerChosenToAsk;
   Subject subjectToAsk;
   CardQuartets cardToAsk;
-  StreamController streamController;
 
-  Turn(QuartetsGame g, StreamController sc) {
-    this.streamController = sc;
+  Turn(QuartetsGame g) {
     this.game = g;
     this.playerChosenToAsk = g.listTurn[(g.turn + 1) % g.listTurn.length];
     List<String> subjects = g.getMyPlayer().getSubjects();
@@ -34,9 +32,17 @@ class Turn extends StatefulWidget {
 
 class _turnState extends State<Turn> {
   bool chosenPlayerAndCategoryToAsk = false;
+  bool _firstclick;
 
   @override
   Widget build(BuildContext context) {
+    if (this.widget.game.isFinished) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
+      );
+    }
+    this._firstclick = true;
     return getAprropriateAsk();
   }
 
@@ -48,6 +54,7 @@ class _turnState extends State<Turn> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            if(this._firstclick)
             Container(
                 alignment: Alignment.center,
                 child: ElevatedButton(
@@ -57,6 +64,7 @@ class _turnState extends State<Turn> {
                         borderRadius: BorderRadius.circular(15.0)),
                   ),
                   onPressed: () async {
+                    this._firstclick = false;
                     askClicked();
                   },
                   child: Text(

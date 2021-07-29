@@ -1,9 +1,16 @@
+//TODO:
+// 1. באג מצד ימין בטלפון.
+//2. חלון קופץ כשמישהו השיג רביעיה
+// לחיצה פעמיים. --- לבדוק
+// drop down כשמסיימים סרייה
+// winner room רק אצל המנצח
+// limit for 4 players.
+
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'QuartetsGame/Turn.dart';
 import 'cards/CardQuartets.dart';
 import 'cards/Position.dart';
@@ -25,6 +32,7 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerOtherPlayersCards = StreamController<int>.broadcast();
   final _streamControllerStringsInDeck = StreamController<int>.broadcast();
   final _streamControllerMyScore = StreamController<int>.broadcast();
+//  final _streamControllerAchievedQuartet = StreamController<String>.broadcast();
   String stringToSpeak = "";
 
   QuartetsRoom(
@@ -70,75 +78,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   @override
   void initState() {
     super.initState();
-
-//    if (!this.widget.game.againstComputer) {
-//
-//      ///listen to changes in specific game.
-//      FirebaseFirestore.instance
-//          .collection("games")
-//          .doc(widget.game.gameId)
-//          .snapshots()
-//          .listen((event) {
-//          print("GET IN!!!!!!!!!!!!!!!!!!!!!!!");
-//          if (!widget.game.isManager) {
-//            this.widget._scGameStart.add(true);
-//            //   widget.game.takeDataOfGame();
-//          }
-//
-//          ///update my deck
-//          List<dynamic> nDeck = event.data()['deck'];
-//          //update if deck change
-//          if (nDeck == null) {
-//            nDeck = [];
-//          }
-//          List<int> newDeck = nDeck.cast<int>();
-//          print("new_deck");
-//          print(newDeck);
-//          widget.game.deck.setCards(widget.game.updateMyDeck(newDeck));
-//
-//          ///update my turn
-//          dynamic turn = event.data()['turn'];
-//          if (turn == null) {
-//            turn = 0;
-//          }
-//          // turn = turn.cast<int>();
-//          widget.game.turn = turn;
-//
-//      });
-//
-//
-//      ///listen about changes in players cards and scores
-//      FirebaseFirestore.instance
-//          .collection("games")
-//          .doc(widget.game.gameId)
-//          .collection("players")
-//          .snapshots()
-//          .listen((event) {
-//          event.docChanges.forEach((element) {
-//            String playerId = element.doc.reference.id;
-//            List<dynamic> nCard = element.doc.data()['cards'];
-//            List<int> newCards;
-//            if (nCard != null) {
-//              newCards = nCard.cast<int>();
-//            } else {
-//              newCards = [];
-//            }
-//            dynamic score = element.doc.data()['score'];
-//            if (score == null) {
-//              score = 0;
-//            }
-//            // score = score.cast<int>();
-//            widget.game.updatePlayerCards(newCards, playerId);
-//            widget.game.updatePlayerScore(playerId, score);
-//            this.widget._streamControllerTurn.add(this.widget.game.turn);
-//            this.widget._streamControllerStringsInDeck.add(1);
-//            this.widget._streamControllerOtherPlayersCards.add(1);
-//            this.widget._streamControllerMyCards.add(1);
-//            this.widget._streamControllerMyScore.add(1);
-//          });
-////        }
-//      });
-//    }
     this.firstCard = getAnimationCard();
     this.secondCard = getAnimationCard();
     this.thirdCard = getAnimationCard();
@@ -315,6 +254,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           deckPos = new Position(getDeckLeft(), getDeckTop(), null, null);
     }
   }
+//
+//  void showAchievedWidget(String name) async {
+//    this.widget._streamControllerAchievedQuartet.add(name);
+//    await Future.delayed(Duration(seconds: 2));
+//    this.widget._streamControllerAchievedQuartet.add(null);
+//  }
 
   Widget getAppropriateWidgetForTurn() {
     return StreamBuilder<int>(
@@ -322,7 +267,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         initialData: 0,
         builder: (context, snapshot) {
           if (widget.game.getPlayerNeedTurn() is Me) {
-            return Turn(widget.game, this.widget._streamControllerTurn);
+            return Turn(widget.game);
           } else {
             return new Container(
                 alignment: Alignment.center, child: getAskedText());
@@ -658,6 +603,27 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           );
         });
   }
+//
+//  Widget getAchievedText() {
+//
+//    return StreamBuilder<String>(
+//        stream: this.widget._streamControllerAchievedQuartet.stream,
+//        initialData: "",
+//        builder: (context, snapshot) {
+//          String result = "";
+//          if(snapshot.data!= null) {
+//            result = snapshot.data + " get quartet!";
+//          }
+//          return Text(
+//            result,
+//            style: TextStyle(
+//              color: Colors.pink,
+//              fontFamily: 'Carter-e',
+//              fontSize: 60,
+//            ),
+//          );
+//        });
+//  }
 
   Widget getAnimationCard() {
     CardQuartets card = CardQuartets("", "", null, "", "", "", "", false);
