@@ -115,23 +115,44 @@ class QuartetsGame extends Game {
 
         //update tokens parameters
         int take = event.data()['take'];
-        int token = event.data()['tokenFrom'];
-        int cardToken = event.data()['cardToken'];
-        String subject = event.data()['subjectAsk'];
+        String takeName;
         if (take != null) {
-          this.playerTakeName = this.listTurn[take].name;
+          takeName = this.listTurn[take].name;
+        }
+        int token = event.data()['tokenFrom'];
+        String tokenName = null;
+        if (token != null) {
+          tokenName = this.listTurn[token].name;
+        }
+        int cardToken = event.data()['cardToken'];
+        String cardName;
+        if (cardToken != null) {
+          cardName = this.idToCard(cardToken).english;
+        }
+        String subject = event.data()['subjectAsk'];
+        // animate card
+        if ((takeName != null && tokenName != null && cardName != null && this.cardAsked != cardName)
+            && (takeName != this.playerTakeName || this.playerTokenName != tokenName)) {
+          StreamController tokenController = getAppropriateController(this.listTurn[token]);
+          Position takePosition = getApproPosition(this.listTurn[take]);
+          Position tokenPosition = getApproPosition(this.listTurn[token]);
+          animateCard(tokenController, tokenPosition, takePosition);
+        }
+        if (takeName != null) {
+          this.playerTakeName = takeName;
         }
         if (token != null) {
           if (token != -1) {
-            this.playerTokenName = this.listTurn[token].name;
+            this.playerTokenName = tokenName;
           } else {
             this.playerTokenName = "deck";
           }
         }
 
+
         this.subjectAsked = subject;
         if (cardToken != null && cardToken != -1) {
-          this.cardAsked = this.idToCard(cardToken).english;
+          this.cardAsked = cardName;
         } else {
           this.cardAsked = null;
         }
@@ -941,11 +962,15 @@ class QuartetsGame extends Game {
       StreamController sc, Position source, Position target) async {
     Position su = source;
     Position ta = target;
+    // visible
     su.visible = true;
     sc.add(su);
+    //move card
     ta.visible = true;
     sc.add(ta);
     await new Future.delayed(Duration(seconds: 2));
+
+    //back animation to right place
     su.visible = false;
     sc.add(su);
 //    await new Future.delayed(Duration(seconds: 2));
