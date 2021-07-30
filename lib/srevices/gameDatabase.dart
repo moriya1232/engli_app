@@ -36,6 +36,7 @@ class GameDatabaseService {
     });
   }
 
+  // return true if succeed (there is less then 4 players), false otherwise
   Future<bool> addPlayer(String gameId, String name) async {
     User user = FirebaseAuth.instance.currentUser;
     List<int> cards = [];
@@ -62,8 +63,12 @@ class GameDatabaseService {
         } else {
           return Future.value(false);
         }
+      } else {
+        return Future.value(false);
       }
     });
+    //check?
+    return Future.value(true);
   }
 
   Future<List<String>> getSubjectsList(
@@ -482,27 +487,27 @@ class GameDatabaseService {
     return Future.value(tokenFrom);
   }
 
-  void updateTake(QuartetsGame game, int take) {
+  void updateTake(QuartetsGame game, int take, token, String sub, int card) {
     if (!game.againstComputer) {
-      gameCollection.doc(game.gameId).update({'take': take});
+      gameCollection.doc(game.gameId).update({'take': take, 'tokenFrom': token, 'cardToken': card, 'subjectAsk': sub});
     }
   }
 
-  void updateTokenFrom(QuartetsGame game, int t) {
-    if (!game.againstComputer) {
-      gameCollection.doc(game.gameId).update({'tokenFrom': t});
-    }
-  }
-
-  void updateCardToken(QuartetsGame game, int c) {
-    if (!game.againstComputer) {
-      gameCollection.doc(game.gameId).update({'cardToken': c});
-    }
-  }
-
-  void updateStringAsk(QuartetsGame game, String sub) {
-    if (!game.againstComputer) {
-      gameCollection.doc(game.gameId).update({'subjectAsk': sub});
-    }
-  }
+//  void updateTokenFrom(QuartetsGame game, int t) {
+//    if (!game.againstComputer) {
+//      gameCollection.doc(game.gameId).update({'tokenFrom': t});
+//    }
+//  }
+//
+//  void updateCardToken(QuartetsGame game, int c) {
+//    if (!game.againstComputer) {
+//      gameCollection.doc(game.gameId).update({'cardToken': c});
+//    }
+//  }
+//
+//  void updateStringAsk(QuartetsGame game, String sub) {
+//    if (!game.againstComputer) {
+//      gameCollection.doc(game.gameId).update({'subjectAsk': sub});
+//    }
+//  }
 }

@@ -90,10 +90,6 @@ class QuartetsGame extends Game {
     ///all players
     if (!this.againstComputer) {
       this.players = await GameDatabaseService().getPlayersList(this);
-      print("List turn: ");
-      for (Player p in this.listTurn) {
-        print("name " + p.name);
-      }
     }
     await createAllSubjects(gameId);
 
@@ -121,21 +117,40 @@ class QuartetsGame extends Game {
         }
         int token = event.data()['tokenFrom'];
         String tokenName = null;
-        if (token != null) {
+        if (token != null && token >= 0) {
           tokenName = this.listTurn[token].name;
         }
         int cardToken = event.data()['cardToken'];
         String cardName;
-        if (cardToken != null) {
+        if (cardToken != null && cardToken >= 0) {
           cardName = this.idToCard(cardToken).english;
         }
         String subject = event.data()['subjectAsk'];
-        // animate card
-        if ((takeName != null && tokenName != null && cardName != null && this.cardAsked != cardName)
-            && (takeName != this.playerTakeName || this.playerTokenName != tokenName)) {
+        print("FROM LISTEN!:");
+        print("take:");
+        print(takeName);
+        print("token: ");
+        print(tokenName);
+        print("subject: ");
+        print(subject);
+        print("cardToken: ");
+        print(cardToken);
+        print("this values:");
+        print(this.playerTakeName);
+        print(this.playerTokenName);
+        print(this.subjectAsked);
+        print(this.cardAsked);
+
+        // animate card from player to player
+        if ((takeName != null && tokenName != null) && (this.playerTakeName != takeName || this.playerTokenName != tokenName || this.cardAsked != cardName)) {
           StreamController tokenController = getAppropriateController(this.listTurn[token]);
           Position takePosition = getApproPosition(this.listTurn[take]);
           Position tokenPosition = getApproPosition(this.listTurn[token]);
+          animateCard(tokenController, tokenPosition, takePosition);
+        } else if ((takeName != null && tokenName == null && takeName != this.playerTakeName)) {
+          StreamController tokenController = this._deckController;
+          Position takePosition = getApproPosition(this.listTurn[take]);
+          Position tokenPosition = deckPos;
           animateCard(tokenController, tokenPosition, takePosition);
         }
         if (takeName != null) {
@@ -277,7 +292,6 @@ class QuartetsGame extends Game {
 
   /// manager create all the members and update the server.
   void reStart() async {
-    //TODO: initialize cards in players hand.
     Deck deck = createDeck(this.subjects);
     deck.handoutDeck(this.players);
     this.deck = deck;
@@ -410,7 +424,6 @@ class QuartetsGame extends Game {
     Player player = getPlayerNeedTurn();
     removeAllSeriesDone(player);
     if (checkIfGameDone()) {
-      //reStart();
       return true;
     }
     changeToNextPlayerTurn();
@@ -419,8 +432,6 @@ class QuartetsGame extends Game {
     this._stringsOnDeckController.add(1);
     checkComputerPlayerTurn();
     if (checkIfGameDone()) {
-      //reStart();
-
       return true;
     }
     return false;
@@ -942,10 +953,11 @@ class QuartetsGame extends Game {
       await this.deck.giveCardToPlayer(player, this);
 
       // update tokens parameters.
-      GameDatabaseService().updateTake(this, this.listTurn.indexOf(player));
-      GameDatabaseService().updateTokenFrom(this, -1);
-      GameDatabaseService().updateCardToken(this, -1);
-      GameDatabaseService().updateStringAsk(this, "");
+
+      GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), -1, "", -1);
+//      GameDatabaseService().updateTokenFrom(this, -1);
+//      GameDatabaseService().updateCardToken(this, -1);
+//      GameDatabaseService().updateStringAsk(this, "");
 
       //GameDatabaseService().updateDeck(cards, gameId);
       //update view:
@@ -1047,11 +1059,12 @@ class QuartetsGame extends Game {
     GameDatabaseService().transferCard(player, tokenFrom, this, card);
 
     //update takes parameters in server.
-    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player));
-    GameDatabaseService()
-        .updateTokenFrom(this, this.listTurn.indexOf(tokenFrom));
-    GameDatabaseService().updateCardToken(this, this.cardsId[card]);
-    GameDatabaseService().updateStringAsk(this, card.subject);
+    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), this.listTurn.indexOf(tokenFrom), card.subject, this.cardsId[card]);
+//    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player));
+//    GameDatabaseService()
+//        .updateTokenFrom(this, this.listTurn.indexOf(tokenFrom));
+//    GameDatabaseService().updateCardToken(this, this.cardsId[card]);
+//    GameDatabaseService().updateStringAsk(this, card.subject);
 
     //animations:
     animateCard(getAppropriateController(tokenFrom),

@@ -1,6 +1,5 @@
 import 'package:engli_app/players/player.dart';
 import 'package:flutter/material.dart';
-
 import 'games/Game.dart';
 
 class WinnerScreen extends StatefulWidget {
@@ -23,17 +22,44 @@ class _winnerRoomState extends State<WinnerScreen> {
       ),
       body: Center(
         child: SingleChildScrollView(
-          child: Container(
-            child: Text(
-              winnerName(),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
-            ),
+          child: Column(
+            children: [
+              Container(
+                child: Text(
+                  winnerName(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
+                ),
+              ),
+              SizedBox(height: 10,),
+              SizedBox(
+                  height: 140,
+                  width: 330,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(22.0)),
+                      primary: Colors.amberAccent,
+                    ),
+                    onPressed: () {
+                      backClicked();
+                    },
+                    child: Text('חזור למשחק',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.black87,
+                            fontSize: 50)),
+                  )),
+            ],
           ),
         ),
       ),
     );
+  }
+  void backClicked() {
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   String winnerName() {

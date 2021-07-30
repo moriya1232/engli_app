@@ -7,7 +7,7 @@ import 'CardGame.dart';
 class CardQuartets extends CardGame {
   String english = "";
   String hebrew = "";
-  String subject;
+  String subject = "";
   Image image;
   String word1 = "";
   String word2 = "";
@@ -36,10 +36,6 @@ class CardQuartets extends CardGame {
   CardQuartets changeToNotMine() {
     this.myCard = false;
     return this;
-  }
-
-  getImage() {
-    return image;
   }
 
   getEnglish() {

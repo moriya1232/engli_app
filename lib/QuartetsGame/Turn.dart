@@ -107,9 +107,16 @@ class _turnState extends State<Turn> {
                       ),
                       onChanged: (String newValue) {
                         setState(() {
-                          widget.subjectToAsk =
-                              widget.game.getSubjectByString(newValue);
-                          widget.cardToAsk = widget.subjectToAsk.getCards()[0];
+                          Subject sub = widget.game.getSubjectByString(newValue);
+                          if (this.widget.game.getMyPlayer().getSubjects().contains(sub.name_subject)) {
+                            widget.subjectToAsk = sub;
+                            widget.cardToAsk = widget.subjectToAsk
+                                .getCards()[0];
+                          } else {
+                            print("bug");
+                            widget.subjectToAsk = widget.game.getSubjectByString(this.widget.game.getMyPlayer().getSubjects()[0]);
+                            widget.cardToAsk = widget.subjectToAsk.getCards()[0];
+                          }
                         });
                       },
                       items: widget.game
@@ -189,7 +196,12 @@ class _turnState extends State<Turn> {
                         borderRadius: BorderRadius.circular(15.0)),
                   ),
                   onPressed: () async {
-                    this._firstClick2 = false;
+                    if(!this._firstClick2) {return;}
+                    setState(() {
+                      print("firstClick2: ");
+                      print(_firstClick2);
+                      this._firstClick2 = false;
+                    });
                     if (await doTurn()) {
                       print("more turn!");
                       widget.game
@@ -301,7 +313,6 @@ class _turnState extends State<Turn> {
         .getSubjects()
         .contains(widget.subjectToAsk.name_subject)) {
       setState(() {
-        this.widget.game.speak(this.widget.game.cardAsked);
         this.chosenPlayerAndCategoryToAsk = true;
       });
     } else {

@@ -8,8 +8,8 @@ class Triple {
   Triple(String en, String he, String im) {
     this.english = en;
     this.hebrew = he;
-    if (im == null)
-      im = null;
+    if (im == null || im == "")
+      this.image = null;
     else {
       this.image = Image(
         image: AssetImage(im),

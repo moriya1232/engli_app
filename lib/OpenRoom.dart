@@ -11,8 +11,6 @@ class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
   List<CheckBoxTile> series;
   String gameId;
-  // List<Subject> subjects;
-  // final Map<CardQuartets, int> cardsId = {};
   final _sc = StreamController<List<String>>.broadcast();
 
   OpenRoom(String gameId) {

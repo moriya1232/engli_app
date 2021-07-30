@@ -6,16 +6,15 @@
 // להוסיף ולהוריד סריות לרשימה האישית
 // להכניס למשחק זיכרון מהדאטא בייס של האוצר מילים
 // לסדר קוד
-// לוגו לאפליקציה
-// TODO:
-// check:
-//פסים צהובים שחורים בטלפון הרגיל
-// לחיצה פעמיים. --- check
-//  drop down כשמסיימים סרייה --- check!
-// winner room רק אצל המנצח   -- check!
-// limit for 4 players. -- check!!!
+
 // לבדוק על תמונות לcolors ועל תמונות Null
-// // אנימציות כשזה קורה אצל שחקן אחר
+// חיצה פעמיים על שאל2 - firstClick2
+// TODO:
+// לבדוק כשמנצחים אז את הכפתור חזרה.
+// אנימציות אצל שחקן אחר
+// לוגו לאפליקציה
+// limit for 4 players. -- check!!!
+
 
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
@@ -76,6 +75,8 @@ class QuartetsRoom extends StatefulWidget {
 
   @override
   _QuartetsRoomState createState() => _QuartetsRoomState();
+
+
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
@@ -112,7 +113,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             height: otherPlayersHeight,
             child: SingleChildScrollView(
               child: Column(children: [
-                //TODO: remove condition
                 if (widget.game.players.length > 1) getFirstPlayerView(),
                 Container(
                   height: rowHeight,
@@ -290,15 +290,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     String wasAsked = widget.game.playerTokenName;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
-    print("FROM GETASKEDTEST!:");
-    print("take:");
-    print(asked);
-    print("token: ");
-    print(wasAsked);
-    print("subjectAsk: ");
-    print(subjectAsked);
-    print("cardAsked: ");
-    print(cardAsked);
+//    print("FROM GETASKEDTEST!:");
+//    print("take:");
+//    print(asked);
+//    print("token: ");
+//    print(wasAsked);
+//    print("subjectAsk: ");
+//    print(subjectAsked);
+//    print("cardAsked: ");
+//    print(cardAsked);
     // if (cardAsked != null) {
     //   this.widget.game.speak(cardAsked);
     // }

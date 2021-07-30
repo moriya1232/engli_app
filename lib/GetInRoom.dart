@@ -117,6 +117,7 @@ class _GetInRoomState extends State<GetInRoom> {
       name = user.displayName;
     }
     bool succ = await GameDatabaseService().addPlayer(gameId, name);
+
     if (succ) {
       Navigator.push(
         context,
