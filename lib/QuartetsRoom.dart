@@ -1,10 +1,20 @@
 //TODO:
-// 1. באג מצד ימין בטלפון.
-//2. חלון קופץ כשמישהו השיג רביעיה
-// לחיצה פעמיים. --- לבדוק
-// drop down כשמסיימים סרייה
-// winner room רק אצל המנצח
-// limit for 4 players.
+// חלון קופץ כשמישהו השיג רביעיה
+// לבדוק על טרמינולוגיה של כל המשחק באנגלית
+// משחק מול מחשב
+// כמות משתתפים לסדר שיהיה רק למשחק מול מחשב
+// להוסיף ולהוריד סריות לרשימה האישית
+// אנימציות כשזה קורה אצל שחקן אחר
+// להכניס למשחק זיכרון מהדאטא בייס של האוצר מילים
+// לסדר קוד
+// TODO:
+// check:
+//פסים צהובים שחורים בטלפון הרגיל
+// לחיצה פעמיים. --- check
+//  drop down כשמסיימים סרייה --- check!
+// winner room רק אצל המנצח   -- check!
+// limit for 4 players. -- check!!!
+// לבדוק על תמונות לcolors ועל תמונות Null
 
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
@@ -12,6 +22,7 @@ import 'package:engli_app/players/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
+import 'WinnerScreen.dart';
 import 'cards/CardQuartets.dart';
 import 'cards/Position.dart';
 import 'Constants.dart';
@@ -116,21 +127,21 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         ),
                       Expanded(
                         child: Stack(children: [
-                          Padding(
-                            padding: EdgeInsets.all(20),
-                            child: Container(
-                              height: MediaQuery.of(context).size.height / 5,
-                              width: MediaQuery.of(context).size.width / 4,
-                              color: Colors.amberAccent,
+                          Center (
+                            child: Padding(
+                              padding: EdgeInsets.all(20),
+                              child: Container(
+                                height: MediaQuery.of(context).size.height / 5,
+                                width: MediaQuery.of(context).size.width / 4,
+                                color: Colors.amberAccent,
+                              ),
                             ),
                           ),
                           Positioned.fill(
-                            child: Align(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 10),
-                                child: getStringsOnDeck(),
-                              ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 10),
+                              child: getStringsOnDeck(),
                             ),
                           )
                         ]),
@@ -249,7 +260,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         stream: widget._streamControllerTurn.stream,
         initialData: 0,
         builder: (context, snapshot) {
-          if (widget.game.getPlayerNeedTurn() is Me) {
+          if (this.widget.game.isFinished) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
+            );
+            return Container();
+          } else if (widget.game.getPlayerNeedTurn() is Me) {
             return Turn(widget.game);
           } else {
             return new Container(
@@ -431,7 +448,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             Text(
               '${widget.game.getFirstPlayer().name}: ${widget.game.getFirstPlayer().score}',
               style: TextStyle(
-                fontFamily: 'Comix-h',
+                fontFamily: 'Courgette-e',
                 fontSize: fontSizeNames,
               ),
             ),
@@ -443,30 +460,32 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     return StreamBuilder<int>(
         stream: this.widget._streamControllerOtherPlayersCards.stream,
         builder: (context, snapshot) {
-          return Column(children: [
-            Text(
-              '${widget.game.getSecondPlayer().name}: ${widget.game.getSecondPlayer().score}',
-              style: TextStyle(
-                fontFamily: 'Comix-h',
-                fontSize: fontSizeNames,
+          return SingleChildScrollView(
+            child: Column(children: [
+              Text(
+                '${widget.game.getSecondPlayer().name}: ${widget.game.getSecondPlayer().score}',
+                style: TextStyle(
+                  fontFamily: 'Courgette-e',
+                  fontSize: fontSizeNames,
+                ),
               ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: heightCloseCard,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.game.getSecondPlayer().cards.length,
-                  // number of items in your list
-                  itemBuilder: (BuildContext context, int Itemindex) {
-                    return widget.game
-                        .getSecondPlayer()
-                        .cards[Itemindex]; // return your widget
-                  }),
-            ),
-            Text('${widget.game.getSecondPlayer().cards.length}'),
-          ]);
+              Container(
+                alignment: Alignment.center,
+                height: heightCloseCard,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.game.getSecondPlayer().cards.length,
+                    // number of items in your list
+                    itemBuilder: (BuildContext context, int Itemindex) {
+                      return widget.game
+                          .getSecondPlayer()
+                          .cards[Itemindex]; // return your widget
+                    }),
+              ),
+              Text('${widget.game.getSecondPlayer().cards.length}'),
+            ]),
+          );
         });
   }
 
@@ -474,31 +493,33 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     return StreamBuilder<int>(
         stream: this.widget._streamControllerOtherPlayersCards.stream,
         builder: (context, snapshot) {
-          return Column(children: [
-            Text(
-              '${widget.game.getThirdPlayer().name}: ${widget.game.getThirdPlayer().score}',
-              style: TextStyle(
-                fontFamily: 'Comix-h',
-                fontSize: fontSizeNames,
+          return SingleChildScrollView(
+            child: Column(children: [
+              Text(
+                '${widget.game.getThirdPlayer().name}: ${widget.game.getThirdPlayer().score}',
+                style: TextStyle(
+                  fontFamily: 'Courgette-e',
+                  fontSize: fontSizeNames,
+                ),
               ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: heightCloseCard,
+              Container(
+                alignment: Alignment.center,
+                height: heightCloseCard,
 //                        width: 270,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: widget.game.getThirdPlayer().cards.length,
-                  // number of items in your list
-                  itemBuilder: (BuildContext context, int Itemindex) {
-                    return widget.game
-                        .getThirdPlayer()
-                        .cards[Itemindex]; // return your widget
-                  }),
-            ),
-            Text('${widget.game.getThirdPlayer().cards.length}'),
-          ]);
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.game.getThirdPlayer().cards.length,
+                    // number of items in your list
+                    itemBuilder: (BuildContext context, int Itemindex) {
+                      return widget.game
+                          .getThirdPlayer()
+                          .cards[Itemindex]; // return your widget
+                    }),
+              ),
+              Text('${widget.game.getThirdPlayer().cards.length}'),
+            ]),
+          );
         });
   }
 
@@ -562,12 +583,20 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   style: TextStyle(fontFamily: 'Abraham-h'),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 Text(
-                  "${widget.game.listTurn[widget.game.turn].name}'s turn",
+                  "Turn:",
                   style: TextStyle(
-                      color: Colors.red, fontSize: 20, fontFamily: 'Abraham-h'),
+                      color: Colors.red, fontSize: 20, fontFamily: 'PottaOne-e'),
+                ),
+          SizedBox(
+          height: 1,
+          ),
+                Text(
+                  "${widget.game.listTurn[widget.game.turn].name}",
+                  style: TextStyle(
+                      color: Colors.red, fontSize: 20, fontFamily: 'PottaOne-e'),
                 ),
               ]);
         });
@@ -580,7 +609,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           return Text(
             '${widget.game.getMyPlayer().name}: ${widget.game.getMyPlayer().score}',
             style: TextStyle(
-              fontFamily: 'Comix-h',
+              fontFamily: 'Courgette-e',
               fontSize: fontSizeNames,
             ),
           );

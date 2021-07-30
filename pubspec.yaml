@@ -85,6 +85,10 @@ flutter:
     - images/R.jpg
     - images/W.jpg
     - images/F.jpg
+    - images/black.png
+    - images/blue.png
+    - images/green.jpg
+    - images/red.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

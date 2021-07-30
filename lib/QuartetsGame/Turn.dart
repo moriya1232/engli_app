@@ -32,24 +32,21 @@ class Turn extends StatefulWidget {
 
 class _turnState extends State<Turn> {
   bool chosenPlayerAndCategoryToAsk = false;
-  bool _firstclick;
+  bool _firstClick1;
+  bool _firstClick2;
 
   @override
   Widget build(BuildContext context) {
-    if (this.widget.game.isFinished) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
-      );
       // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
-    } else if (this.widget.game.turn != null &&
+     if (this.widget.game.turn != null &&
         widget.game.getPlayerNeedTurn() is Me &&
         this.widget.game.getPlayerNeedTurn().cards.length == 0) {
       this.widget.game.deck.giveCardToPlayer(
           this.widget.game.getPlayerNeedTurn(), this.widget.game);
       this.widget.game.doneTurn();
     } else {
-      this._firstclick = true;
+      this._firstClick1 = true;
+      this._firstClick2 = true;
       return getAprropriateAsk();
     }
   }
@@ -62,11 +59,12 @@ class _turnState extends State<Turn> {
     if (!this.chosenPlayerAndCategoryToAsk) {
       List<String> names = widget.game.getNamesPlayers();
       names.remove(widget.game.getMyPlayer().name);
-      if (widget.subjectToAsk != null && !widget.game.checkIfGameDone()) {
+      if (widget.subjectToAsk != null && !widget.game.checkIfGameDone() && this._firstClick1) {
+
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            if(this._firstclick)
+
             Container(
                 alignment: Alignment.center,
                 child: ElevatedButton(
@@ -76,7 +74,7 @@ class _turnState extends State<Turn> {
                         borderRadius: BorderRadius.circular(15.0)),
                   ),
                   onPressed: () async {
-                    this._firstclick = false;
+                    this._firstClick1 = false;
                     askClicked();
                   },
                   child: Text(
@@ -177,7 +175,7 @@ class _turnState extends State<Turn> {
         return new Container();
       }
     } else {
-      if (widget.subjectToAsk != null) {
+      if (widget.subjectToAsk != null && this._firstClick2) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -191,6 +189,7 @@ class _turnState extends State<Turn> {
                         borderRadius: BorderRadius.circular(15.0)),
                   ),
                   onPressed: () async {
+                    this._firstClick2 = false;
                     if (await doTurn()) {
                       print("more turn!");
                       widget.game

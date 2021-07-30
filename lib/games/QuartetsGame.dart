@@ -195,6 +195,7 @@ class QuartetsGame extends Game {
           }
           if (!everyoneNoHaveCards) {
             this.isFinished = true;
+            print("game need to done!");
           }
           this._otherPlayersCardsController.add(1);
           this._myCardsController.add(1);
@@ -406,7 +407,7 @@ class QuartetsGame extends Game {
 
   bool checkIfGameDone() {
     if (this.deck.cards.length == 0 && !isPlayersHasCards()) {
-//      this.updateObservers();
+      GameDatabaseService().updateTurn(this, this.turn);
       //TODO: dispose everything
       return true;
     }

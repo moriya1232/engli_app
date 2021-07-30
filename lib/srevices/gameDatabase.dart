@@ -36,7 +36,7 @@ class GameDatabaseService {
     });
   }
 
-  Future addPlayer(String gameId, String name) async {
+  Future<bool> addPlayer(String gameId, String name) async {
     User user = FirebaseAuth.instance.currentUser;
     List<int> cards = [];
     await gameCollection
@@ -56,7 +56,12 @@ class GameDatabaseService {
         var x = documentSnapshot.data()['players'];
         List<String> newPlayersList = x.cast<String>();
         newPlayersList.add(name);
-        gameCollection.doc(gameId).update({'players': newPlayersList});
+        if (newPlayersList.length <= 4) {
+          gameCollection.doc(gameId).update({'players': newPlayersList});
+          return Future.value(true);
+        } else {
+          return Future.value(false);
+        }
       }
     });
   }

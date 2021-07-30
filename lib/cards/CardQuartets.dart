@@ -118,11 +118,10 @@ class _CardQuartetsState extends State<CardQuartets>
                 ),
               )),
           ),
-
           // image
           Center(
                 child: Container(
-                    width: width, height: height / 4, child: widget.image)),
+                    width: width, height: height / 4, child: getImage())),
 
           // my english word
           Center(
@@ -194,5 +193,13 @@ class _CardQuartetsState extends State<CardQuartets>
         ),
       ),
     );
+  }
+
+  Widget getImage() {
+    if (widget.image!=null) {
+      return widget.image;
+    } else {
+      return new Container();
+    }
   }
 }
