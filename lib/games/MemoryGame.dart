@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:engli_app/Constants.dart';
 import 'package:engli_app/cards/CardMemory.dart';
+import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Pair.dart';
+import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Game.dart';
@@ -19,6 +21,7 @@ class MemoryGame extends Game {
   MemoryGame(
       bool computerEnemy,
       enemyName,
+      subjects,
       StreamController myScore,
       StreamController enemyScore,
       StreamController moreTurn,
@@ -34,17 +37,17 @@ class MemoryGame extends Game {
     this.pairs = [];
     this.observers = [];
     this.turn = 0;
-    reStart(computerEnemy, meName, enemyName);
+    reStart(computerEnemy, meName, enemyName, subjects);
   }
 
-  void reStart(bool computerEnemy, String meName, String enemyName) {
+  void reStart(bool computerEnemy, String meName, String enemyName, subjects) {
     Me me = createPlayer(true, meName, true);
     Other enemy = createPlayer(false, enemyName, computerEnemy);
     players.add(me);
     this.controllers.add(this._myScoreController);
     players.add(enemy);
     this.controllers.add(this._enemyScoreController);
-    this.pairs = createPairs();
+    this.pairs = createPairs(subjects);
     setGameToPairs(pairs, this);
     this.turn = 0;
   }
@@ -83,24 +86,28 @@ class MemoryGame extends Game {
     }
   }
 
-  List<Pair> createPairs() {
-    // TODO: insert here the cards that we get from the user.
-    List<Pair> pairs = [];
-    pairs.add(createPair("dog", "כלב"));
-    pairs.add(createPair("cat", "חתול"));
-    pairs.add(createPair("fish", "דג"));
-    pairs.add(createPair("elephant", "פיל"));
-    pairs.add(createPair("father", "אבא"));
-    pairs.add(createPair("mother", "אמא"));
-    pairs.add(createPair("brother", "אח"));
-    pairs.add(createPair("Eden", "עדן"));
-    pairs.add(createPair("Hila", "הלה"));
-    pairs.add(createPair("Moriya", "מוריה"));
-    pairs.add(createPair("Judith", "יהודית"));
-    pairs.add(createPair("Hadas", "הדס"));
-    pairs.add(createPair("Ora", "אורה"));
-    pairs.add(createPair("Dvir", "דביר"));
-    pairs.add(createPair("Shilo", "שילה"));
+  List<Pair> createPairs(List<Subject> subjects) {
+  for (Subject sub in subjects) {
+    for (CardQuartets card in sub.getCards()) {
+      pairs.add(createPair(card.english, card.hebrew));
+    }
+  }
+//    List<Pair> pairs = [];
+//    pairs.add(createPair("dog", "כלב"));
+//    pairs.add(createPair("cat", "חתול"));
+//    pairs.add(createPair("fish", "דג"));
+//    pairs.add(createPair("elephant", "פיל"));
+//    pairs.add(createPair("father", "אבא"));
+//    pairs.add(createPair("mother", "אמא"));
+//    pairs.add(createPair("brother", "אח"));
+//    pairs.add(createPair("Eden", "עדן"));
+//    pairs.add(createPair("Hila", "הלה"));
+//    pairs.add(createPair("Moriya", "מוריה"));
+//    pairs.add(createPair("Judith", "יהודית"));
+//    pairs.add(createPair("Hadas", "הדס"));
+//    pairs.add(createPair("Ora", "אורה"));
+//    pairs.add(createPair("Dvir", "דביר"));
+//    pairs.add(createPair("Shilo", "שילה"));
 
     pairs.shuffle();
     return pairs;

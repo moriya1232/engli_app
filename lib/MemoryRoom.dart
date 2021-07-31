@@ -4,6 +4,7 @@ import 'package:engli_app/WinnerScreen.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:flutter/material.dart';
 import 'cards/CardMemory.dart';
+import 'cards/Subject.dart';
 import 'games/MemoryGame.dart';
 
 const int maxCards = 36;
@@ -20,11 +21,12 @@ class MemoryRoom extends StatefulWidget {
   bool computerEnemy;
   String enemyName = "";
 
-  MemoryRoom(bool computerEnemy, String enemyName) {
+  MemoryRoom(bool computerEnemy, String enemyName, List<Subject> subjects) {
     this.computerEnemy = computerEnemy;
     this.game = new MemoryGame(
         computerEnemy,
         enemyName,
+        subjects,
         this._streamControllerMyScore,
         this._streamControllerEnemyScore,
         this._streamControllerMoreTurn,
