@@ -11,12 +11,12 @@ class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
   List<CheckBoxTile> series;
   String gameId;
+  bool visibleSumPlayers = false;
   final _sc = StreamController<List<String>>.broadcast();
 
   OpenRoom(String gameId) {
     this.series = [];
     this.gameId = gameId;
-    // this.subjects = [];
   }
 
   @override
@@ -44,80 +44,32 @@ class _openRoomState extends State<OpenRoom> {
                 child: _buildSubjectsList(widget._sc),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    DropdownButton<String>(
-                      value: widget.dropdownValue,
-                      //hint: new Text("בחר כמות משתתפים"),
-                      icon: Icon(Icons.arrow_downward),
-                      iconSize: 10,
-                      elevation: 16,
-                      style: TextStyle(color: Colors.black87),
-                      underline: Container(
-                        height: 2,
-                        width: 10,
-                        color: Colors.amberAccent,
-                      ),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          widget.dropdownValue = newValue;
-                        });
-                      },
-                      items: <String>['2', '3', '4']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(fontSize: 25),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    Container(
-                      //width: 200,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          ':כמות משתתפים',
-                          style:
-                              TextStyle(fontSize: 25, fontFamily: 'Abraham-h'),
-                        ),
-                      ),
-                    ),
-                  ]),
+            SizedBox(height: 10,),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0)),
+                primary: Colors.amberAccent,
+              ),
+              onPressed: () {
+                againstComputerClicked();
+              },
+              child: Text(
+                'שחק מול המחשב',
+                style: TextStyle(
+                    fontFamily: 'Comix-h',
+                    color: Colors.black87,
+                    fontSize: 20),
+              ),
             ),
+            if (this.widget.visibleSumPlayers) selectNumPlayersWidget(),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: EdgeInsets.all(40),
                 child: Column(
                   children: [
-                    SizedBox(
-                        child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        primary: Colors.amberAccent,
-                      ),
-                      onPressed: () {
-                        startGameClicked(true);
-                      },
-                      child: Text(
-                        'שחק מול המחשב',
-                        style: TextStyle(
-                            fontFamily: 'Comix-h',
-                            color: Colors.black87,
-                            fontSize: 20),
-                      ),
-                    )),
-                    SizedBox(
-                      height: 10,
-                    ),
+
                     SizedBox(
                         child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -145,6 +97,12 @@ class _openRoomState extends State<OpenRoom> {
     );
   }
 
+  void againstComputerClicked() {
+    setState(() {
+      this.widget.visibleSumPlayers = true;
+    });
+  }
+
   void startGameClicked(bool isAgainstComputer) {
     // for (CheckBoxTile cb in this.widget.series) {
     //   print(cb.title + ": " + cb.value.toString());
@@ -167,9 +125,6 @@ class _openRoomState extends State<OpenRoom> {
         createPlayer(players, false,
             optionalsNames[random.nextInt(optionalsNames.length)]);
       }
-
-      //TODO: change it to GetInRoom!
-      //this.widget.gameId = "-1";
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -180,6 +135,54 @@ class _openRoomState extends State<OpenRoom> {
                     true,
                   )));
     }
+  }
+
+  Widget selectNumPlayersWidget() {
+    return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          DropdownButton<String>(
+            value: widget.dropdownValue,
+            //hint: new Text("בחר כמות משתתפים"),
+            icon: Icon(Icons.arrow_downward),
+            iconSize: 10,
+            elevation: 16,
+            style: TextStyle(color: Colors.black87),
+            underline: Container(
+              height: 2,
+              width: 10,
+              color: Colors.amberAccent,
+            ),
+            onChanged: (String newValue) {
+              setState(() {
+                widget.dropdownValue = newValue;
+                startGameClicked(true);
+              });
+            },
+            items: <String>['2', '3', '4']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  style: TextStyle(fontSize: 25),
+                ),
+              );
+            }).toList(),
+          ),
+          Container(
+            //width: 200,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                ':כמות משתתפים',
+                style:
+                TextStyle(fontSize: 25, fontFamily: 'Abraham-h'),
+              ),
+            ),
+          ),
+        ]);
   }
 
   Player createPlayer(List<Player> players, bool isMe, String name) {

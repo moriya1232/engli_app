@@ -1,27 +1,13 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/QuartetsRoom.dart';
-import 'package:engli_app/cards/CardQuartets.dart';
-import 'package:engli_app/players/player.dart';
-import 'package:engli_app/srevices/gameDatabase.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'cards/Subject.dart';
 
 class Loading extends StatefulWidget {
-  bool isBoss;
-  List<Player> usersLogin;
-  String gameId;
-  // List<Subject> subjects;
-  // Map<CardQuartets, int> cardsId = {};
+  final bool isManager;
+  final String gameId;
 
-  Loading(String gameId, bool isBoss) {
-    this.usersLogin = [];
-    this.isBoss = isBoss;
-    this.gameId = gameId;
-    // this.subjects = subs;
-    // this.cardsId = cardsId;
-  }
+  Loading(String gameId, bool isManager) : isManager = isManager, gameId = gameId;
 
   @override
   _LoadingState createState() => _LoadingState();
@@ -30,7 +16,7 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
   final _usersLoginStreamController =
       StreamController<List<String>>.broadcast();
-  StreamSubscription<DocumentSnapshot> _eventsSubscription = null;
+  StreamSubscription<DocumentSnapshot> _eventsSubscription;
 
   @override
   void initState() {
@@ -48,14 +34,12 @@ class _LoadingState extends State<Loading> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => QuartetsRoom(this.widget.usersLogin,
-                  this.widget.gameId, widget.isBoss, false)),
+              builder: (context) => QuartetsRoom([],this.widget.gameId, widget.isManager, false)),
         );
       }
     });
     //listen
     super.initState();
-    //_eventsSubscription.cancel();
   }
 
   @override
@@ -63,8 +47,6 @@ class _LoadingState extends State<Loading> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
-//        title: Text('מחכה לשחקנים נוספים...'),
-//        centerTitle: true,
       ),
       body: Center(
         child: ListView(
@@ -104,7 +86,7 @@ class _LoadingState extends State<Loading> {
                   SizedBox(
                     height: 50,
                   ),
-                  if (widget.isBoss)
+                  if (widget.isManager)
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -135,9 +117,9 @@ class _LoadingState extends State<Loading> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => QuartetsRoom(this.widget.usersLogin,
-              this.widget.gameId, widget.isBoss, false)),
+          builder: (context) => QuartetsRoom([],this.widget.gameId, widget.isManager, false)),
     );
+    this._usersLoginStreamController.close();
     //GameDatabaseService().updateContinueState(this.widget.gameId);
   }
 
@@ -168,17 +150,4 @@ class _LoadingState extends State<Loading> {
               });
         });
   }
-
-  // Widget getUserLogin() {
-  //   return StreamBuilder<List<String>>(
-  //       stream: _usersLoginStreamController.stream,
-  //       builder: (context, snapshot) {
-  //         return Text(
-  //           snapshot.data != null
-  //               ? snapshot.data + " התחבר "
-  //               : "...מחכה להתחברות שחקנים נוספים",
-  //         );
-  //       });
-  // }
-
 }

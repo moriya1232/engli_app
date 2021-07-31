@@ -36,8 +36,10 @@ class GameDatabaseService {
     });
   }
 
-  // return true if succeed (there is less then 4 players), false otherwise
-  Future<bool> addPlayer(String gameId, String name) async {
+  // return 1 if succeed.
+  // 2 - too much players ( more then 4)
+  // 3 no exist this code
+  Future<int> addPlayer(String gameId, String name) async {
     User user = FirebaseAuth.instance.currentUser;
     List<int> cards = [];
     await gameCollection
@@ -49,7 +51,7 @@ class GameDatabaseService {
       'name': name,
       'score': 0,
     });
-    await gameCollection
+    return await gameCollection
         .doc(gameId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
@@ -59,16 +61,17 @@ class GameDatabaseService {
         newPlayersList.add(name);
         if (newPlayersList.length <= 4) {
           gameCollection.doc(gameId).update({'players': newPlayersList});
-          return Future.value(true);
+          return Future.value(1);
         } else {
-          return Future.value(false);
+          return Future.value(2);
         }
       } else {
-        return Future.value(false);
+        return Future.value(3);
       }
     });
     //check?
-    return Future.value(true);
+//    print("4");
+//    return Future.value(1);
   }
 
   Future<List<String>> getSubjectsList(

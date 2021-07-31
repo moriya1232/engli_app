@@ -9,14 +9,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'Game.dart';
 
 class MemoryGame extends Game {
-  List<Pair> pairs;
-  StreamController _myScoreController;
-  StreamController _enemyScoreController;
-  StreamController _moreTurnController;
-  StreamController _turnController;
-  List<StreamController> controllers;
+  final bool computerEnemy;
+  final StreamController _myScoreController;
+  final StreamController _enemyScoreController;
+  final StreamController _moreTurnController;
+  final StreamController _turnController;
+  List<StreamController> scoreControllers;
   List<Function> observers;
-  bool computerEnemy;
+  List<Pair> pairs;
+
 
   MemoryGame(
       bool computerEnemy,
@@ -25,14 +26,10 @@ class MemoryGame extends Game {
       StreamController myScore,
       StreamController enemyScore,
       StreamController moreTurn,
-      StreamController turn) {
+      StreamController turn) : this._myScoreController = myScore, this._enemyScoreController = enemyScore, this._moreTurnController = moreTurn,
+    this._turnController = turn, this.computerEnemy = computerEnemy{
     String meName = FirebaseAuth.instance.currentUser.displayName;
-    this.computerEnemy = computerEnemy;
-    this._myScoreController = myScore;
-    this._enemyScoreController = enemyScore;
-    this._moreTurnController = moreTurn;
-    this._turnController = turn;
-    this.controllers = [];
+    this.scoreControllers = [];
     this.players = [];
     this.pairs = [];
     this.observers = [];
@@ -44,9 +41,9 @@ class MemoryGame extends Game {
     Me me = createPlayer(true, meName, true);
     Other enemy = createPlayer(false, enemyName, computerEnemy);
     players.add(me);
-    this.controllers.add(this._myScoreController);
+    this.scoreControllers.add(this._myScoreController);
     players.add(enemy);
-    this.controllers.add(this._enemyScoreController);
+    this.scoreControllers.add(this._enemyScoreController);
     this.pairs = createPairs(subjects);
     setGameToPairs(pairs, this);
     this.turn = 0;
@@ -237,7 +234,7 @@ class MemoryGame extends Game {
       if (pairChosen != null) {
         removePair(pairChosen);
         this
-            .controllers[this.turn]
+            .scoreControllers[this.turn]
             .add(this.players[this.turn].raiseScore(howMuchScoreForSuccess));
         showMoreTurnWidget();
         return false;
