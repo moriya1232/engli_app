@@ -53,7 +53,7 @@ class _turnState extends State<Turn> {
 
   Widget getAprropriateAsk() {
     //subject to ask not in my cards.
-    if (!this.widget.game.getMyPlayer().getSubjects().contains(this.widget.subjectToAsk.name_subject)) {
+    if (!this.widget.game.getMyPlayer().getSubjects().contains(this.widget.subjectToAsk.nameSubject)) {
       this.widget.subjectToAsk = this.widget.game.getSubjectsOfPlayer(this.widget.game.getMyPlayer())[0];
     }
     if (!this.chosenPlayerAndCategoryToAsk) {
@@ -98,7 +98,7 @@ class _turnState extends State<Turn> {
                       ),
                     ),
                     DropdownButton<String>(
-                      value: widget.subjectToAsk.name_subject,
+                      value: widget.subjectToAsk.nameSubject,
                       style: TextStyle(color: Colors.black87),
                       underline: Container(
                         height: 2,
@@ -108,7 +108,7 @@ class _turnState extends State<Turn> {
                       onChanged: (String newValue) {
                         setState(() {
                           Subject sub = widget.game.getSubjectByString(newValue);
-                          if (this.widget.game.getMyPlayer().getSubjects().contains(sub.name_subject)) {
+                          if (this.widget.game.getMyPlayer().getSubjects().contains(sub.nameSubject)) {
                             widget.subjectToAsk = sub;
                             widget.cardToAsk = widget.subjectToAsk
                                 .getCards()[0];
@@ -287,7 +287,7 @@ class _turnState extends State<Turn> {
 
   Future<bool> doTurn() async {
     print(
-        "ask ${widget.playerChosenToAsk.name}, on subject ${widget.subjectToAsk.name_subject}, on card: ${widget.cardToAsk.english}");
+        "ask ${widget.playerChosenToAsk.name}, on subject ${widget.subjectToAsk.nameSubject}, on card: ${widget.cardToAsk.english}");
     if (widget.game.askPlayerSpecCard(
             widget.playerChosenToAsk, widget.subjectToAsk, widget.cardToAsk) !=
         null) {
@@ -311,7 +311,7 @@ class _turnState extends State<Turn> {
   askClicked() async {
     if (widget.playerChosenToAsk
         .getSubjects()
-        .contains(widget.subjectToAsk.name_subject)) {
+        .contains(widget.subjectToAsk.nameSubject)) {
       setState(() {
         this.chosenPlayerAndCategoryToAsk = true;
       });

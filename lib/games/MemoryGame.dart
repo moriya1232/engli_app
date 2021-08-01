@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:engli_app/Constants.dart';
+import 'package:engli_app/cards/CardGame.dart';
 import 'package:engli_app/cards/CardMemory.dart';
-import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Pair.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/players/player.dart';
@@ -85,7 +85,7 @@ class MemoryGame extends Game {
 
   List<Pair> createPairs(List<Subject> subjects) {
   for (Subject sub in subjects) {
-    for (CardQuartets card in sub.getCards()) {
+    for (CardGame card in sub.getCards()) {
       pairs.add(createPair(card.english, card.hebrew));
     }
   }

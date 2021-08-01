@@ -329,7 +329,7 @@ class QuartetsGame extends Game {
 
   bool askPlayer(Player player, Subject subject) {
     for (CardQuartets card in player.cards) {
-      if (card.getSubject() == subject.name_subject) {
+      if (card.getSubject() == subject.nameSubject) {
         return true;
       }
     }
@@ -340,14 +340,14 @@ class QuartetsGame extends Game {
   Future<bool> askByComputer(
       Player player, Subject subject, CardQuartets card) async {
     //ask card that not in the right subject.
-    if (card.getSubject() != subject.name_subject) {
+    if (card.getSubject() != subject.nameSubject) {
       throw Exception("not appropriate card and subject!");
     }
 
     if (askPlayerSpecCard(player, subject, card) != null) {
       //success take card from another player.
       // this.pl = player.name;
-      this.subjectAsked = subject.name_subject;
+      this.subjectAsked = subject.nameSubject;
       // ask subject that the player has.
       if (askPlayer(player, subject)) {
         this.cardAsked = card.english;
@@ -358,7 +358,7 @@ class QuartetsGame extends Game {
     } else {
       // didn't success take card from another player
       // this.nameAsked = player.name;
-      this.subjectAsked = subject.name_subject;
+      this.subjectAsked = subject.nameSubject;
       this.cardAsked = "";
       await takeCardFromDeck();
 
@@ -369,7 +369,7 @@ class QuartetsGame extends Game {
   CardQuartets askPlayerSpecCard(
       Player player, Subject subject, CardQuartets cardQuartets) {
     for (CardQuartets card in player.cards) {
-      if (card.getSubject() == subject.name_subject && cardQuartets == card) {
+      if (card.getSubject() == subject.nameSubject && cardQuartets == card) {
         return card;
       }
     }
@@ -378,7 +378,7 @@ class QuartetsGame extends Game {
 
   void printSubjects() {
     for (Subject sub in this.subjects) {
-      print("sub: " + sub.name_subject);
+      print("sub: " + sub.nameSubject);
     }
   }
 
@@ -935,7 +935,7 @@ class QuartetsGame extends Game {
 
   Subject getSubjectByString(String sub) {
     for (Subject s in this.deck.getSubjects()) {
-      if (s.name_subject == sub) {
+      if (s.nameSubject == sub) {
         return s;
       }
     }

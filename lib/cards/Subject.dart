@@ -5,11 +5,10 @@ import 'CardGame.dart';
 
 
 class Subject {
-  String name_subject;
+  final String _nameSubject;
   List<CardQuartets> cards;
 
-  Subject(String name, Triple card1, Triple card2, Triple card3, Triple card4) {
-    this.name_subject = name;
+  Subject(String name, Triple card1, Triple card2, Triple card3, Triple card4) : this._nameSubject = name{
     this.cards = [CardQuartets(
     card1.english,
     card1.hebrew,
@@ -48,12 +47,14 @@ class Subject {
           false),];
   }
 
+  String get nameSubject => _nameSubject;
+
   List<CardGame> getCards() {
     return this.cards;
   }
 
   String getSubject() {
-    return this.name_subject;
+    return this.nameSubject;
   }
 
   List<CardQuartets> getRestCards(CardQuartets card) {

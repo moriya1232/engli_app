@@ -70,16 +70,17 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0)),
                             primary: Colors.amberAccent,
+                            padding: EdgeInsets.all(10),
                           ),
                           onPressed: () {
                             startGameClicked(true);
                           },
                           child: Text(
-                            'שחק מול המחשב',
+                            'משחק מול המחשב',
                             style: TextStyle(
                                 fontFamily: 'Comix-h',
                                 color: Colors.black87,
-                                fontSize: 20),
+                                fontSize: 30),
                           ),
                         )),
                         SizedBox(
@@ -97,11 +98,11 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
                             startGameClicked(false);
                           },
                           child: Text(
-                            '!התחל משחק',
+                            'משחק נגד חבר',
                             style: TextStyle(
                                 fontFamily: 'Comix-h',
                                 color: Colors.black87,
-                                fontSize: 40),
+                                fontSize: 30),
                           ),
                         )),
                       ],

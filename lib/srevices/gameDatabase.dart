@@ -7,7 +7,6 @@ import 'package:engli_app/cards/Triple.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class GameDatabaseService {
   final CollectionReference gameCollection =
@@ -144,12 +143,10 @@ class GameDatabaseService {
 
   Future<Triple> createTriple(
       String specCard, CollectionReference document) async {
-    Triple card = Triple(null, null, null);
+    Triple card;
     await document.doc(specCard).get().then((DocumentSnapshot ds) {
       if (ds.exists) {
-        card.english = ds.data()["english"];
-        card.hebrew = ds.data()["hebrew"];
-        card.image = Image(image: AssetImage(ds.data()["image"]));
+        card = Triple(ds.data()["english"], ds.data()["hebrew"], ds.data()["image"]);
       }
     });
     return Future.value(card);
