@@ -9,17 +9,13 @@ import '../cards/CardGame.dart';
 
 abstract class Player {
   List<CardGame> cards;
-  String name;
+  final String name;
   int score;
-  String uid;
-//  List<Function> observers;
+  final String uid;
 
-  Player(List<CardGame> cards, String name, String uid) {
+  Player(List<CardGame> cards, String name, String uid) : this.name = name, this.uid = uid{
     this.cards = cards;
-    this.name = name;
     this.score = 0;
-    this.uid = uid;
-//    this.observers = [];
   }
 
   bool isHaveCards() {
@@ -31,7 +27,6 @@ abstract class Player {
 
   int raiseScore(int howMuch) {
     this.score += howMuch;
-//    print("raise score!");
     return this.score;
   }
 
@@ -46,16 +41,11 @@ abstract class Player {
       this.cards.add(card);
       player.cards.remove(card);
 
-      // TODO: update server about cards of 2 player.
-      //TODO: update server about give "card" from "this" player to "player" player.
       if (this is Me) {
-//        print("give card to my player");
         card.changeStatusCard(true);
       } else {
-//        print("give card to enemy player");
         card.changeStatusCard(false);
       }
-
       return true;
     } else {
       return false;
@@ -170,7 +160,7 @@ class ComputerPlayer extends Other {
         if (game.doneTurn()) {
           return;
         }
-//        print("done computer turn");
+        print("done computer turn");
       }
     }
   }

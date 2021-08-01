@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:engli_app/cards/CardGame.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
@@ -8,12 +9,11 @@ import 'package:engli_app/srevices/gameDatabase.dart';
 
 class Deck {
   List<CardQuartets> cards = [];
-  List<Subject> subjects = [];
+  final List<Subject> subjects;
 
-  Deck(List<Subject> subs) {
-    this.subjects = subs;
+  Deck(List<Subject> subs) : this.subjects = subs{
     for (Subject sub in subs) {
-      this.cards.addAll(sub.getCards());
+      this.cards.addAll(List.castFrom<CardGame,CardQuartets>(sub.getCards()));
     }
   }
 

@@ -1,6 +1,8 @@
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Triple.dart';
 
+import 'CardGame.dart';
+
 
 class Subject {
   String name_subject;
@@ -46,7 +48,7 @@ class Subject {
           false),];
   }
 
-  List<CardQuartets> getCards() {
+  List<CardGame> getCards() {
     return this.cards;
   }
 

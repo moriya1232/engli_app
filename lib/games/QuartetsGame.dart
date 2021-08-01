@@ -1060,11 +1060,6 @@ class QuartetsGame extends Game {
 
     //update takes parameters in server.
     GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), this.listTurn.indexOf(tokenFrom), card.subject, this.cardsId[card]);
-//    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player));
-//    GameDatabaseService()
-//        .updateTokenFrom(this, this.listTurn.indexOf(tokenFrom));
-//    GameDatabaseService().updateCardToken(this, this.cardsId[card]);
-//    GameDatabaseService().updateStringAsk(this, card.subject);
 
     //animations:
     animateCard(getAppropriateController(tokenFrom),

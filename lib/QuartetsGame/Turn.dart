@@ -7,14 +7,14 @@ import 'package:engli_app/WinnerScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Turn extends StatefulWidget {
-  QuartetsGame game;
+  final QuartetsGame game;
   Player playerChosenToAsk;
   Subject subjectToAsk;
   CardQuartets cardToAsk;
 
-  Turn(QuartetsGame g) {
-    this.game = g;
+  Turn(QuartetsGame g) : this.game = g {
     this.playerChosenToAsk = g.listTurn[(g.turn + 1) % g.listTurn.length];
     List<String> subjects = g.getMyPlayer().getSubjects();
     if (subjects.isNotEmpty) {
