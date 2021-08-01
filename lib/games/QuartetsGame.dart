@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Deck.dart';
@@ -43,7 +44,8 @@ class QuartetsGame extends Game {
   QuartetsGame(
       String gameId,
       bool isManager,
-      List<Player> players,
+//      List<Player> players,
+//      List<Subject> subs,
       StreamController gameStart,
       StreamController sc1,
       StreamController sc2,
@@ -55,11 +57,13 @@ class QuartetsGame extends Game {
       StreamController myScore,
       StreamController otherCards,
       StreamController scStrings) {
-    speak("Hello");
+    speak("Welcome to engli game!");
 
+//    this.subjects = subs;
     this.isManager = isManager;
     this.gameId = gameId;
     this.subjects = [];
+    this.listTurn = [];
     this.deck = new Deck(this.subjects);
 
     // this.cardsId = caID;
@@ -85,20 +89,22 @@ class QuartetsGame extends Game {
     this._otherPlayersCardsController = otherCards;
   }
 
-  /// all the players (except the manager) create the game members
   void createGame() async {
     ///all players
-    if (!this.againstComputer) {
+//    if (!this.againstComputer) {
       this.players = await GameDatabaseService().getPlayersList(this);
-    }
+//    } else {
+//      this.listTurn.addAll(this.players);
+//    }
     await createAllSubjects(gameId);
+
 
     /// only manager
     if (this.isManager) {
       await reStart();
       changeScoresOfPlayers();
     }
-    if (!this.againstComputer) {
+
       ///listen to changes in specific game.
       FirebaseFirestore.instance
           .collection("games")
@@ -126,20 +132,6 @@ class QuartetsGame extends Game {
           cardName = this.idToCard(cardToken).english;
         }
         String subject = event.data()['subjectAsk'];
-        print("FROM LISTEN!:");
-        print("take:");
-        print(takeName);
-        print("token: ");
-        print(tokenName);
-        print("subject: ");
-        print(subject);
-        print("cardToken: ");
-        print(cardToken);
-        print("this values:");
-        print(this.playerTakeName);
-        print(this.playerTokenName);
-        print(this.subjectAsked);
-        print(this.cardAsked);
 
         // animate card from player to player
         if ((takeName != null && tokenName != null) && (this.playerTakeName != takeName || this.playerTokenName != tokenName || this.cardAsked != cardName)) {
@@ -234,12 +226,12 @@ class QuartetsGame extends Game {
             print("game need to done!");
           }
           this._otherPlayersCardsController.add(1);
+          this._otherPlayersCardsController.add(1);
           this._myCardsController.add(1);
           this._myScoreController.add(1);
         });
 //        }
       });
-    }
   }
 
   Future<String> getNamePlayerTake() async {
@@ -272,22 +264,36 @@ class QuartetsGame extends Game {
   //   this.deck.cards = await GameDatabaseService().getDeck(this);
   // }
 
-  Future<int> createAllSubjects(String gameId) async {
-    int z = 0;
+  void createAllSubjects(String gameId) async {
+
     List<String> strSub =
         await GameDatabaseService().getGameListSubjects(gameId);
 
+
     // String subjectId = await GameDatabaseService().getSubjectsId(gameId);
-    for (String s in strSub) {
-      Subject sub = await GameDatabaseService()
-          .createSubjectFromDatabase("generic_subjects", s);
-      this.subjects.add(sub);
+    this.subjects.addAll(await getSubjectsFromStrings(strSub));
+    createMap();
+    return;
+  }
+
+  void createMap() {
+    int z = 0;
+    for (Subject sub in this.subjects){
       for (CardQuartets card in sub.getCards()) {
         this.cardsId[card] = z;
         z++;
       }
     }
-    return Future.value(0);
+  }
+
+  Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async{
+    List<Subject> subs = [];
+    for (String s in strSub) {
+      Subject sub = await GameDatabaseService()
+          .createSubjectFromDatabase("generic_subjects", s);
+      subs.add(sub);
+    }
+    return Future.value(subs);
   }
 
   /// manager create all the members and update the server.
@@ -313,8 +319,8 @@ class QuartetsGame extends Game {
       int x = this.cardsId[q];
       deckCards.add(x);
     }
-    //TODO: randomal turn.
-    this.turn = 0;
+    var random = Random();
+    this.turn = random.nextInt(this.listTurn.length);
     this._gameStart.add(true);
     await GameDatabaseService().updateTurn(this, this.turn);
     await GameDatabaseService().updateDeck(deckCards, this);
@@ -343,23 +349,21 @@ class QuartetsGame extends Game {
     if (card.getSubject() != subject.nameSubject) {
       throw Exception("not appropriate card and subject!");
     }
+//    int take = this.listTurn.indexOf(this.getPlayerNeedTurn());
+//    int token = this.listTurn.indexOf(player);
+//    String sub = subject.nameSubject;
+//    int cardId = this.cardsId[card];
 
-    if (askPlayerSpecCard(player, subject, card) != null) {
-      //success take card from another player.
-      // this.pl = player.name;
-      this.subjectAsked = subject.nameSubject;
-      // ask subject that the player has.
-      if (askPlayer(player, subject)) {
-        this.cardAsked = card.english;
+    if (askPlayer(player, subject)) { // ask about a subject
+      if (askPlayerSpecCard(player, subject, card) != null) { // ask about spec card.
+        await takeCardFromPlayer(card, player);
+        return new Future.delayed(const Duration(seconds: 5), () => true);
+      } else {
+        await takeCardFromDeck();
+        return new Future.delayed(const Duration(seconds: 5), () => false);
       }
-      await takeCardFromPlayer(card, player);
-
-      return new Future.delayed(const Duration(seconds: 5), () => true);
     } else {
       // didn't success take card from another player
-      // this.nameAsked = player.name;
-      this.subjectAsked = subject.nameSubject;
-      this.cardAsked = "";
       await takeCardFromDeck();
 
       return new Future.delayed(const Duration(seconds: 5), () => false);
@@ -943,6 +947,8 @@ class QuartetsGame extends Game {
   }
 
   Future takeCardFromDeck() async {
+    print("in deck before:");
+    print(this.deck.getCards().length);
     //if no more cards in deck- enything happen.
     if (this.deck.getCards().length > 0) {
       Player player = getPlayerNeedTurn();
@@ -955,11 +961,7 @@ class QuartetsGame extends Game {
       // update tokens parameters.
 
       GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), -1, "", -1);
-//      GameDatabaseService().updateTokenFrom(this, -1);
-//      GameDatabaseService().updateCardToken(this, -1);
-//      GameDatabaseService().updateStringAsk(this, "");
 
-      //GameDatabaseService().updateDeck(cards, gameId);
       //update view:
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);

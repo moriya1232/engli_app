@@ -104,7 +104,6 @@ class _GetInRoomState extends State<GetInRoom> {
 
   void openRoomClicked() async {
     String gameId = UniqueKey().toString();
-    // print(gameId);
     await createGame(gameId);
     Navigator.push(
       context,
@@ -140,13 +139,13 @@ class _GetInRoomState extends State<GetInRoom> {
   Future<void> createGame(String gameId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    String name = user.displayName;
-    if (user != null) {
-      name = user.displayName;
-    }
+//    String name = user.displayName;
+//    if (user != null) {
+//      name = user.displayName;
+//    }
     await GameDatabaseService()
         .updateGame(false, null, 0, null, gameId, null, user.uid, false);
-    await GameDatabaseService().addPlayer(gameId, name);
+//    await GameDatabaseService().addPlayer(gameId, name);
   }
 
   Widget getError() {

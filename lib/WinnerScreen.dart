@@ -56,25 +56,34 @@ class _winnerRoomState extends State<WinnerScreen> {
     );
   }
   void backClicked() {
+    print("need to go back");
     Navigator.push(context, MaterialPageRoute(builder: (context) => GetInRoom()));
   }
 
   String winnerName() {
-    //todo: if there some winners. (example: 2 players with best score from 4)
+    List<Player> winners = [];
+    int maxScore = 0;
     Player winner = widget.game.players[0];
     for (Player player in widget.game.players) {
       if(player.score > winner.score) {
         winner = player;
+        maxScore = winner.score;
       }
     }
     for (Player player in widget.game.players) {
-      if (player.score == winner.score && player != winner) {
-        winner = null;
-        break;
+      if (player.score == maxScore) {
+          winners.add(player);
       }
     }
-    if(winner == null) {
-      return '!שיוויון';
+    if(winners.length > 1) {
+      String s = winners[0].name;
+      for (Player player in winners) {
+        if (player == winners[0]) {
+          continue;
+        }
+        s +=  ", " +player.name;
+      }
+      return '!שיוויון' + "\n" + s;
     }
     else {
       return ' המנצח הוא  ${winner.name}';

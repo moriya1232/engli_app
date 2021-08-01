@@ -4,13 +4,12 @@
 // לבדוק על טרמינולוגיה של כל המשחק באנגלית
 // shilo - tranfer createGame() mathod from get in room to open room!
 // משחק מול מחשב
-// כמות משתתפים לסדר שיהיה רק למשחק מול מחשב
-// להוסיף ולהוריד סריות לרשימה האישית
-// להכניס למשחק זיכרון מהדאטא בייס של האוצר מילים
+// להוסיף ולהוריד סריות לרשימה האישית-- שילה
+// להכניס למשחק זיכרון מהדאטא בייס של האוצר מילים -- שילה
 // לסדר קוד
-// לבדוק על תמונות לcolors ועל תמונות Null
+//תמונות לcolors -- shilo
 // חיצה פעמיים על שאל2 - firstClick2
-// למחוק קובץ בסוף משחק
+// למחוק קובץ בסוף משחק --דיןךם
 // TODO: check::
 // limit for 4 players. -- check!!!
 // לבדוק כשמנצחים אז את הכפתור חזרה.
@@ -47,7 +46,8 @@ class QuartetsRoom extends StatefulWidget {
   String stringToSpeak = "";
 
   QuartetsRoom(
-    List<Player> players,
+//      List<Subject> subs,
+//    List<Player> players,
     String gameId,
     bool isManager,
     bool againstComputer,
@@ -55,7 +55,8 @@ class QuartetsRoom extends StatefulWidget {
     this.game = new QuartetsGame(
         gameId,
         isManager,
-        players,
+//        players,
+//        subs,
         this._scGameStart,
         this._streamControllerFirst,
         this._streamControllerSecond,
@@ -290,18 +291,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     String wasAsked = widget.game.playerTokenName;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
-//    print("FROM GETASKEDTEST!:");
-//    print("take:");
-//    print(asked);
-//    print("token: ");
-//    print(wasAsked);
-//    print("subjectAsk: ");
-//    print(subjectAsked);
-//    print("cardAsked: ");
-//    print(cardAsked);
-    // if (cardAsked != null) {
-    //   this.widget.game.speak(cardAsked);
-    // }
     //take from the deck
     if (asked != null && wasAsked == "deck") {
       this.widget.stringToSpeak = asked + " take from the deck";

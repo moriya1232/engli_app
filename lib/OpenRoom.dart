@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:engli_app/players/player.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Loading.dart';
 import 'QuartetsGame/Constants.dart';
 import 'QuartetsRoom.dart';
+import 'cards/Subject.dart';
 
 class OpenRoom extends StatefulWidget {
   String dropdownValue = '2';
   List<CheckBoxTile> series;
   String gameId;
-  bool visibleSumPlayers = false;
   final _sc = StreamController<List<String>>.broadcast();
+  final _showSomePlayers = StreamController<bool>.broadcast();
 
   OpenRoom(String gameId) {
     this.series = [];
@@ -24,6 +25,7 @@ class OpenRoom extends StatefulWidget {
 }
 
 class _openRoomState extends State<OpenRoom> {
+
   @override
   Widget build(BuildContext context) {
     getAllSeriesNames();
@@ -62,7 +64,7 @@ class _openRoomState extends State<OpenRoom> {
                     fontSize: 20),
               ),
             ),
-            if (this.widget.visibleSumPlayers) selectNumPlayersWidget(),
+            getSomePlayersWidget(),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
@@ -98,38 +100,42 @@ class _openRoomState extends State<OpenRoom> {
   }
 
   void againstComputerClicked() {
-    setState(() {
-      this.widget.visibleSumPlayers = true;
-    });
+    this.widget._showSomePlayers.add(true);
   }
 
-  void startGameClicked(bool isAgainstComputer) {
-    // for (CheckBoxTile cb in this.widget.series) {
-    //   print(cb.title + ": " + cb.value.toString());
-    // }
-    loadAllMarkedSeries();
+  void startGameClicked(bool isAgainstComputer) async{
+    List<String> subs = getMarkedSeries();
+//    List<Subject> subjects = await getSubjectsFromStrings(subs);
+    await GameDatabaseService().updateSubjectList(widget.gameId, subs);
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    User user = _auth.currentUser;
+    String currName = user.displayName;
     if (!isAgainstComputer) {
+      await GameDatabaseService().addPlayer(widget.gameId, currName); //update the subject list in the game file
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
       );
     } else {
-      List<Player> players = [];
+
+//      List<Player> players = [];
       // create players.
       for (int i = 0; i < int.parse(this.widget.dropdownValue); i++) {
         if (i == 0) {
-          createPlayer(players, true, quartetsMe);
+          await GameDatabaseService().addPlayer(this.widget.gameId, currName);
           continue;
+        } else {
+          var random = Random();
+          await GameDatabaseService().addPlayer(this.widget.gameId,
+              optionalsNames[random.nextInt(optionalsNames.length)]);
         }
-        var random = Random();
-        createPlayer(players, false,
-            optionalsNames[random.nextInt(optionalsNames.length)]);
       }
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => QuartetsRoom(
-                    players,
+//                    subjects,
+//                    players,
                     this.widget.gameId,
                     true,
                     true,
@@ -142,6 +148,19 @@ class _openRoomState extends State<OpenRoom> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: GestureDetector(
+              onTap: () {
+                startGameClicked(true);
+              },
+              child: Text('!שחק',
+                  style: TextStyle(
+                      fontFamily: 'Comix-h',
+                      color: Colors.pink,
+                      fontSize: 20)),
+            ),
+          ),
           DropdownButton<String>(
             value: widget.dropdownValue,
             //hint: new Text("בחר כמות משתתפים"),
@@ -157,7 +176,6 @@ class _openRoomState extends State<OpenRoom> {
             onChanged: (String newValue) {
               setState(() {
                 widget.dropdownValue = newValue;
-                startGameClicked(true);
               });
             },
             items: <String>['2', '3', '4']
@@ -185,16 +203,17 @@ class _openRoomState extends State<OpenRoom> {
         ]);
   }
 
-  Player createPlayer(List<Player> players, bool isMe, String name) {
-    Player player;
-    if (isMe) {
-      player = Me([], name, "");
-    } else {
-      player = ComputerPlayer([], name, "");
-    }
-    players.add(player);
-    return player;
-  }
+//  Player createPlayer(List<Player> players, bool isMe, String name) {
+//    Player player;
+//    if (isMe) {
+//      player = Me([], name, "");
+//    } else {
+//      player = ComputerPlayer([], name, "");
+//    }
+//    GameDatabaseService().addPlayer(this.widget.gameId, name);
+//    players.add(player);
+//    return player;
+//  }
 
   void getAllSeriesNames() async {
     List<String> l =
@@ -223,17 +242,39 @@ class _openRoomState extends State<OpenRoom> {
         });
   }
 
-  void loadAllMarkedSeries() async {
+  Widget getSomePlayersWidget() {
+    return StreamBuilder<bool>(
+        stream: this.widget._showSomePlayers.stream,
+        initialData: false,
+        builder: (context, snapshot) {
+          if (snapshot.data) {
+            return selectNumPlayersWidget();
+          } else {
+            return new Container();
+          }
+        });
+  }
+  List<String> getMarkedSeries() {
     //widget.series
     List<String> list = [];
     for (var k in widget.series) {
       if (k.value != null && k.value != false) {
         list.add(k.title);
+
       }
     }
+    return list;
+  }
 
-//update the subject list in the game file
-    await GameDatabaseService().updateSubjectList(widget.gameId, list);
+
+  Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async{
+    List<Subject> subs=[];
+    for (String s in strSub) {
+      Subject sub = await GameDatabaseService()
+          .createSubjectFromDatabase("generic_subjects", s);
+      subs.add(sub);
+    }
+    return Future.value(subs);
   }
 }
 
@@ -266,7 +307,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
             value: snapshot.data ?? false,
             onChanged: (bool value) {
               widget.value = value;
-              // print("refresh! " + this.widget.title + ": " + value.toString());
+//               print("refresh! " + this.widget.title + ": " + value.toString());
               sc.add(value);
             },
           );

@@ -39,6 +39,8 @@ class GameDatabaseService {
   // 2 - too much players ( more then 4)
   // 3 no exist this code
   Future<int> addPlayer(String gameId, String name) async {
+    print("add player:");
+    print(name);
     User user = FirebaseAuth.instance.currentUser;
     List<int> cards = [];
     await gameCollection
@@ -58,6 +60,8 @@ class GameDatabaseService {
         var x = documentSnapshot.data()['players'];
         List<String> newPlayersList = x.cast<String>();
         newPlayersList.add(name);
+        print("new Player list: ");
+        print(newPlayersList);
         if (newPlayersList.length <= 4) {
           gameCollection.doc(gameId).update({'players': newPlayersList});
           return Future.value(1);
@@ -166,6 +170,7 @@ class GameDatabaseService {
         .get()
         .then((querySnapshot) {
       querySnapshot.docs.forEach((value) {
+
         List<CardGame> cards = [];
         final FirebaseAuth _auth = FirebaseAuth.instance;
         User user = _auth.currentUser;
@@ -175,11 +180,16 @@ class GameDatabaseService {
           players[0] = p;
         } else {
           p = VirtualPlayer(cards, value.data()["name"], value.id);
+          print("here:");
+          print(p.name);
           players.add(p);
         }
         game.addToListTurn(p);
+
       });
     });
+    print("players:");
+    print(players);
     return Future.value(players);
   }
 
@@ -238,19 +248,19 @@ class GameDatabaseService {
 
   void initializePlayerCard(
       List<int> cards, QuartetsGame game, String playerId) async {
-    if (!game.againstComputer) {
+//    if (!game.againstComputer) {
       await gameCollection
           .doc(game.gameId)
           .collection("players")
           .doc(playerId)
           .update({'cards': cards});
-    }
+//    }
   }
 
   void updateDeck(List<int> cards, QuartetsGame game) async {
-    if (!game.againstComputer) {
+//    if (!game.againstComputer) {
       await gameCollection.doc(game.gameId).update({'deck': cards});
-    }
+//    }
   }
 
   // Future<List<int>> getDeck(String gameId) async {
@@ -269,14 +279,14 @@ class GameDatabaseService {
 
   void updateTakeCardFromDeck(
       QuartetsGame game, CardQuartets card, Player player) {
-    if (!game.againstComputer) {
+//    if (!game.againstComputer) {
       deleteCardFromDeck(game, card);
       addCardToPlayer(game, card, player);
-    }
+//    }
   }
 
   void deleteCardFromDeck(QuartetsGame game, CardQuartets card) async {
-    if (!game.againstComputer) {
+//    if (!game.againstComputer) {
       List<int> newDeck = [];
       await gameCollection
           .doc(game.gameId)
@@ -294,12 +304,12 @@ class GameDatabaseService {
           gameCollection.doc(game.gameId).update({'deck': newDeck});
         }
       });
-    }
+//    }
   }
 
   void addCardToPlayer(
       QuartetsGame game, CardQuartets card, Player player) async {
-    if (!game.againstComputer) {
+//    if (!game.againstComputer) {
       await gameCollection
           .doc(game.gameId)
           .collection("players")
@@ -318,13 +328,12 @@ class GameDatabaseService {
               .update({'cards': playerCards});
         }
       });
-    }
+//    }
   }
 
   void deleteCardToPlayer(
       Player player, QuartetsGame game, CardQuartets card) async {
-    if (!game.againstComputer) {
-      print(card.english);
+//    if (!game.againstComputer) {
       await gameCollection
           .doc(game.gameId)
           .collection("players")
@@ -348,31 +357,31 @@ class GameDatabaseService {
               .update({'cards': updateList});
         }
       });
-    }
+//    }
   }
 
   void transferCard(Player takePlayer, Player tokenFrom, QuartetsGame game,
       CardQuartets card) {
-    if (!game.againstComputer) {
+//    if (!game.againstComputer) {
       deleteCardToPlayer(tokenFrom, game, card);
       addCardToPlayer(game, card, takePlayer);
-    }
+//    }
   }
 
   void updateTurn(QuartetsGame game, int turn) {
-    if (!game.againstComputer) {
+//    if (!game.againstComputer) {
       gameCollection.doc(game.gameId).update({'turn': turn});
-    }
+//    }
   }
 
   void updateScore(int score, playerId, QuartetsGame game) async {
-    if (!game.againstComputer) {
+//    if (!game.againstComputer) {
       await gameCollection
           .doc(game.gameId)
           .collection("players")
           .doc(playerId)
           .update({'score': score});
-    }
+//    }
   }
 
   Future<List<CardGame>> getPlayerCards(
@@ -487,10 +496,10 @@ class GameDatabaseService {
     return Future.value(tokenFrom);
   }
 
-  void updateTake(QuartetsGame game, int take, token, String sub, int card) {
-    if (!game.againstComputer) {
+  void updateTake(QuartetsGame game, int take, int token, String sub, int card) {
+//    if (!game.againstComputer) {
       gameCollection.doc(game.gameId).update({'take': take, 'tokenFrom': token, 'cardToken': card, 'subjectAsk': sub});
-    }
+//    }
   }
 
 //  void updateTokenFrom(QuartetsGame game, int t) {

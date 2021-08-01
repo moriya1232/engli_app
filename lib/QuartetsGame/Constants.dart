@@ -1,7 +1,7 @@
 const int howMuchCardsToDivide = 4;
 
-const quartetsMe = "Yochai";
-List<String> playersNames = ["Revital", "Shilo", "Ziv"];
+//const quartetsMe = "Yochai";
+//List<String> playersNames = ["Revital", "Shilo", "Ziv"];
 
 const optionalsNames = [
   "Rachel",
@@ -44,5 +44,37 @@ const optionalsNames = [
   "Shira",
   "Yael",
   "Hodaya",
-  "Adi"
+  "Adi",
+  "Einat",
+  "Ayala",
+  "Hadar",
+  "Bat-Ami",
+  "Yuval",
+  "Maayan",
+  "Michal",
+  "Avia",
+  "Asaf",
+  "Shalom",
+  "Kerem",
+  "Yair",
+  "Noam",
+  "Tamar",
+  "Taliya",
+  "Shaked",
+  "Roni",
+  "Gil",
+  "Shachar",
+  "Mordechai",
+  "Tzipora",
+  "Yocheved",
+  "Israel",
+  "Shachari",
+  "Yedid",
+  "Shir",
+  "Liraz",
+  "Chen",
+  "Liri",
+  "Eli",
+  "Eliyahu",
+  "Tali"
 ];

@@ -113,7 +113,9 @@ class ComputerPlayer extends Other {
 //      print("done computer turn");
 
     } else if (game is QuartetsGame) {
-//      print("computer player turn");
+      print("in deck in make move:");
+      print(game.deck.getCards().length);
+      print("computer player turn");
 
       var random = Random();
       List<CardQuartets> cards =
@@ -124,7 +126,6 @@ class ComputerPlayer extends Other {
         if (game.doneTurn()) {
           return;
         }
-//        updateObservers();
         return;
       }
       //random subject.
@@ -146,11 +147,13 @@ class ComputerPlayer extends Other {
 
       //random card.
       CardQuartets randCard = getCardThatNotHave(randSub);
-//      print("random subject: ${randSub.name_subject}");
-//      print("random card: ${randCard.english}");
+      print("random player: ${randPlayer.name}");
+      print("random subject: ${randSub.nameSubject}");
+      print("random card: ${randCard.english}");
 
       //ask by chooses. if succeed take card, play again!
       if (await game.askByComputer(randPlayer, randSub, randCard)) {
+        print("computer player success take card. more turn!");
         game.removeAllSeriesDone(this);
         if (game.checkIfGameDone()) {
           return;

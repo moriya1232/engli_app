@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/QuartetsRoom.dart';
 import 'package:flutter/material.dart';
-
 class Loading extends StatefulWidget {
   final bool isManager;
   final String gameId;
+//  final List<Subject> subjects;
 
   Loading(String gameId, bool isManager) : isManager = isManager, gameId = gameId;
 
@@ -34,7 +34,7 @@ class _LoadingState extends State<Loading> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => QuartetsRoom([],this.widget.gameId, widget.isManager, false)),
+              builder: (context) => QuartetsRoom(this.widget.gameId, widget.isManager, false)),
         );
       }
     });
@@ -117,7 +117,7 @@ class _LoadingState extends State<Loading> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => QuartetsRoom([],this.widget.gameId, widget.isManager, false)),
+          builder: (context) => QuartetsRoom(this.widget.gameId, widget.isManager, false)),
     );
     this._usersLoginStreamController.close();
     //GameDatabaseService().updateContinueState(this.widget.gameId);
