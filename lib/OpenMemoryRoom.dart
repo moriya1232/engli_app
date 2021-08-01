@@ -6,22 +6,23 @@ import 'package:flutter/services.dart';
 
 import 'cards/Subject.dart';
 
+// ignore: must_be_immutable
 class OpenMemoryRoom extends StatefulWidget {
-  final _error = StreamController<String>.broadcast();
   final _nameEnemy = TextEditingController();
-
   List<CheckBoxTile> series;
-  final _subjectsList = StreamController<List<String>>.broadcast();
 
   OpenMemoryRoom() {
     this.series = [];
   }
 
   @override
-  _openMemoryRoomState createState() => _openMemoryRoomState();
+  _OpenMemoryRoomState createState() => _OpenMemoryRoomState();
 }
 
-class _openMemoryRoomState extends State<OpenMemoryRoom> {
+class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
+  final _error = StreamController<String>.broadcast();
+  final _subjectsList = StreamController<List<String>>.broadcast();
+
   @override
   Widget build(BuildContext context) {
     getAllSeriesNames();
@@ -56,7 +57,7 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
                 child: getError(),),
                 Container(
                   height: 250,
-                  child: _buildSubjectsList(widget._subjectsList),
+                  child: _buildSubjectsList(this._subjectsList),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -117,7 +118,7 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
 
   Widget getError() {
     return StreamBuilder<String>(
-        stream: this.widget._error.stream,
+        stream: this._error.stream,
         initialData: "",
         builder: (context, snapshot) {
           return Text(
@@ -133,7 +134,7 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
 
   void startGameClicked(bool isAgainstComputer) async {
     if (this.widget._nameEnemy.text.length == 0 ) {
-      this.widget._error.add("הכנס שם יריב");
+      this._error.add("הכנס שם יריב");
       return;
     }
     List<Subject> subjects = await loadAllMarkedSeries();
@@ -160,7 +161,7 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
     //TODO: change it!
     List<String> l =
         await GameDatabaseService().getSubjectsList("generic_subjects");
-    this.widget._subjectsList.add(l);
+    this._subjectsList.add(l);
   }
 
   Widget _buildSubjectsList(StreamController sc) {
@@ -204,31 +205,37 @@ class _openMemoryRoomState extends State<OpenMemoryRoom> {
     }
     return Future.value(subjects);
   }
+
+  @override
+  void dispose() {
+    this._error.close();
+    this._subjectsList.close();
+    super.dispose();
+  }
   
 }
 
+// ignore: must_be_immutable
 class CheckBoxTile extends StatefulWidget {
-  final _subjectsList = StreamController<bool>.broadcast();
-  String title = "";
+
+  final String title;
   bool value;
 
-  CheckBoxTile(String title) {
-    this.title = title;
-  }
-
+  CheckBoxTile(String title) : this.title = title;
   @override
   _CheckBoxTileState createState() => _CheckBoxTileState();
 }
 
 class _CheckBoxTileState extends State<CheckBoxTile> {
+  final _subjectsList = StreamController<bool>.broadcast();
   @override
   Widget build(BuildContext context) {
-    return _buildCheckBox(widget._subjectsList);
+    return _buildCheckBox();
   }
 
-  Widget _buildCheckBox(StreamController sc) {
+  Widget _buildCheckBox() {
     return StreamBuilder<bool>(
-        stream: sc.stream,
+        stream: this._subjectsList.stream,
         initialData: false,
         builder: (context, snapshot) {
           return CheckboxListTile(
@@ -237,9 +244,15 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
             onChanged: (bool value) {
               widget.value = value;
               // print("refresh! " + this.widget.title + ": " + value.toString());
-              sc.add(value);
+              this._subjectsList.add(value);
             },
           );
         });
+  }
+
+  @override
+  void dispose() {
+    this._subjectsList.close();
+    super.dispose();
   }
 }

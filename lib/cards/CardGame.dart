@@ -3,15 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'Position.dart';
 
+// ignore: must_be_immutable
 abstract class CardGame extends StatefulWidget {
-  String english = "";
-  String hebrew = "";
+  final String english;
+  final String hebrew;
   List<Function> observers;
   Position position;
 
-  CardGame(String english, String hebrew) {
-    this.english = english;
-    this.hebrew = hebrew;
+  CardGame(String english, String hebrew) : this.english = english, this.hebrew = hebrew{
     this.observers = [];
     this.position = Position(null, null, null, null);
   }

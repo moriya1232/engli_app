@@ -5,21 +5,20 @@ import 'package:flutter/material.dart';
 
 
 class Login extends StatefulWidget {
-  final _error = StreamController<String>.broadcast();
   @override
   _LoginState createState() => _LoginState();
 }
 
-final mailControllerLog = TextEditingController();
-final passwordControllerLog = TextEditingController();
-
 class _LoginState extends State<Login> {
+  final _mailControllerLog = TextEditingController();
+  final _passwordControllerLog = TextEditingController();
+  final _error = StreamController<String>.broadcast();
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    passwordControllerLog.clear();
-    mailControllerLog.clear();
+    _passwordControllerLog.clear();
+    _mailControllerLog.clear();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
@@ -57,7 +56,7 @@ class _LoginState extends State<Login> {
 //                          ),
 //                        hintText: "הכנס כתובת מייל",
                                   ),
-                              controller: mailControllerLog,
+                              controller: _mailControllerLog,
                             )),
                       ),
                       Text(':כתובת מייל '),
@@ -79,7 +78,7 @@ class _LoginState extends State<Login> {
 //                          ),
 //                        hintText: "הכנס כתובת מייל",
                                   ),
-                              controller: passwordControllerLog,
+                              controller: _passwordControllerLog,
                             )),
                       ),
                       Text(':סיסמא '),
@@ -126,20 +125,18 @@ class _LoginState extends State<Login> {
   }
 
   void connectClicked() async {
-    print(mailControllerLog.text);
-    print(passwordControllerLog.text);
+    print(_mailControllerLog.text);
+    print(_passwordControllerLog.text);
     dynamic res = await _auth.signInWithEmailAndPassword(
-        mailControllerLog.text, passwordControllerLog.text);
+        _mailControllerLog.text, _passwordControllerLog.text);
     if (res == null) {
-      this.widget._error.add("אימייל או סיסמא שגויים");
-//      setState(() => error = "could not sign in");
-//      print(error);
+      this._error.add("אימייל או סיסמא שגויים");
     }
   }
 
   Widget getError() {
     return StreamBuilder<String>(
-        stream: this.widget._error.stream,
+        stream: this._error.stream,
         initialData: "",
         builder: (context, snapshot) {
           return Text(
@@ -155,9 +152,9 @@ class _LoginState extends State<Login> {
 
   @override
   void dispose() {
-    //TODO: but cant because after it it cant build again. when i login and exit and again login, the text field disposed yet.
-//    nameController.dispose();
-//    passwordController.dispose();
+    this._error.close();
+    this._mailControllerLog.dispose();
+    this._passwordControllerLog.dispose();
     super.dispose();
   }
 }

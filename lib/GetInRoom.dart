@@ -8,15 +8,20 @@ import 'OpenRoom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class GetInRoom extends StatefulWidget {
-  final _error = StreamController<String>.broadcast();
-  String gameId;
   @override
   _GetInRoomState createState() => _GetInRoomState();
 }
 
-final gameIdController = TextEditingController();
-
 class _GetInRoomState extends State<GetInRoom> {
+  final _gameIdController = TextEditingController();
+  final _error = StreamController<String>.broadcast();
+
+  @override
+  void dispose() {
+    this._gameIdController.dispose();
+    this._error.close();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +65,7 @@ class _GetInRoomState extends State<GetInRoom> {
                     textDirection: TextDirection.rtl,
                     child: TextFormField(
                       textAlign: TextAlign.center,
-                      controller: gameIdController,
+                      controller: _gameIdController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: const BorderRadius.all(
@@ -88,7 +93,7 @@ class _GetInRoomState extends State<GetInRoom> {
                           primary: Colors.pink,
                         ),
                         onPressed: () {
-                          getInToRoomClicked(gameIdController.text);
+                          getInToRoomClicked(_gameIdController.text);
                         },
                         child: Text('כנס לחדר',
                             style: TextStyle(
@@ -130,19 +135,15 @@ class _GetInRoomState extends State<GetInRoom> {
         MaterialPageRoute(builder: (context) => Loading(gameId, false)),
       );
     } else if (succ == 2){
-      this.widget._error.add("לא יכול להתחבר, יש יותר מדי שחקנים");
+      this._error.add("לא יכול להתחבר, יש יותר מדי שחקנים");
     } else if (succ == 3){
-      this.widget._error.add("קוד משחק לא נכון");
+      this._error.add("קוד משחק לא נכון");
     }
   }
 
   Future<void> createGame(String gameId) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-//    String name = user.displayName;
-//    if (user != null) {
-//      name = user.displayName;
-//    }
     await GameDatabaseService()
         .updateGame(false, null, 0, null, gameId, null, user.uid, false);
 //    await GameDatabaseService().addPlayer(gameId, name);
@@ -150,7 +151,7 @@ class _GetInRoomState extends State<GetInRoom> {
 
   Widget getError() {
     return StreamBuilder<String>(
-        stream: this.widget._error.stream,
+        stream: this._error.stream,
         initialData: "",
         builder: (context, snapshot) {
           return Text(

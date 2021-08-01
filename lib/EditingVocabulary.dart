@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:engli_app/ChooseGame.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
@@ -9,28 +8,44 @@ import 'package:flutter/services.dart';
 TODO: dont possible put "," in names cards and subject.
  */
 
-class EditingVocabulaty extends StatefulWidget {
-  // TODO: need to be stream from the server
-  final seriesController = StreamController<List<String>>.broadcast();
+// ignore: must_be_immutable
+class EditingVocabulary extends StatefulWidget {
+
   List<String> series;
 
   @override
-  _EditingVocabulatyState createState() => _EditingVocabulatyState();
+  _EditingVocabularyState createState() => _EditingVocabularyState();
 }
 
-class _EditingVocabulatyState extends State<EditingVocabulaty> {
-  _EditingVocabulatyState();
+class _EditingVocabularyState extends State<EditingVocabulary> {
+  _EditingVocabularyState();
 
-  final nameSer = TextEditingController();
-  final firstEng = TextEditingController();
-  final firstHeb = TextEditingController();
-  final secondEng = TextEditingController();
-  final secondHeb = TextEditingController();
-  final thirdEng = TextEditingController();
-  final thirdHeb = TextEditingController();
-  final forthEng = TextEditingController();
-  final forthHeb = TextEditingController();
+  // TODO: need to be stream from the server
+  final _seriesController = StreamController<List<String>>.broadcast();
+  final _nameSer = TextEditingController();
+  final _firstEng = TextEditingController();
+  final _firstHeb = TextEditingController();
+  final _secondEng = TextEditingController();
+  final _secondHeb = TextEditingController();
+  final _thirdEng = TextEditingController();
+  final _thirdHeb = TextEditingController();
+  final _forthEng = TextEditingController();
+  final _forthHeb = TextEditingController();
 
+  @override
+  void dispose() {
+    this._nameSer.dispose();
+    this._firstEng.dispose();
+    this._firstHeb.dispose();
+    this._secondEng.dispose();
+    this._secondHeb.dispose();
+    this._thirdEng.dispose();
+    this._thirdHeb.dispose();
+    this._forthEng.dispose();
+    this._forthHeb.dispose();
+    this._seriesController.close();
+    super.dispose();
+  }
   @override
   void initState() {
     super.initState();
@@ -46,7 +61,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
       "Cars",
       "Musical Instruments"
     ];
-    this.widget.seriesController.add(this.widget.series);
+    this._seriesController.add(this.widget.series);
   }
 
   @override
@@ -258,7 +273,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
 
   Widget _getListSeries() {
     return StreamBuilder<List<String>>(
-        stream: this.widget.seriesController.stream,
+        stream: this._seriesController.stream,
         initialData: this.widget.series,
         builder: (context, snapshot) {
           return ListView.builder(
@@ -317,7 +332,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
             content: Wrap(
               children: [
                 TextField(
-                  controller: nameSer,
+                  controller: _nameSer,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(hintText: "הכנס שם סרייה"),
                   inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
@@ -338,7 +353,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
-                              controller: this.firstHeb,
+                              controller: this._firstHeb,
                               decoration: InputDecoration(
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
@@ -355,7 +370,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
-                              controller: firstEng,
+                              controller: _firstEng,
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
@@ -382,7 +397,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
-                              controller: this.secondHeb,
+                              controller: this._secondHeb,
                               decoration: InputDecoration(
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
@@ -399,7 +414,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
-                              controller: secondEng,
+                              controller: _secondEng,
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
@@ -426,7 +441,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
-                              controller: this.thirdHeb,
+                              controller: this._thirdHeb,
                               decoration: InputDecoration(
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
@@ -443,7 +458,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
-                              controller: thirdEng,
+                              controller: _thirdEng,
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
@@ -470,7 +485,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
-                              controller: this.forthHeb,
+                              controller: this._forthHeb,
                               decoration: InputDecoration(
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
@@ -487,7 +502,7 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: TextFormField(
-                              controller: forthEng,
+                              controller: _forthEng,
                               decoration: InputDecoration(
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
@@ -510,15 +525,15 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
                   ),
                   onPressed: () {
                     addSer();
-                    this.forthEng.clear();
-                    this.forthHeb.clear();
-                    this.thirdHeb.clear();
-                    this.thirdEng.clear();
-                    this.secondEng.clear();
-                    this.secondHeb.clear();
-                    this.firstEng.clear();
-                    this.firstHeb.clear();
-                    this.nameSer.clear();
+                    this._forthEng.clear();
+                    this._forthHeb.clear();
+                    this._thirdHeb.clear();
+                    this._thirdEng.clear();
+                    this._secondEng.clear();
+                    this._secondHeb.clear();
+                    this._firstEng.clear();
+                    this._firstHeb.clear();
+                    this._nameSer.clear();
                     Navigator.of(context).pop();
                   },
                   child: Padding(
@@ -540,24 +555,24 @@ class _EditingVocabulatyState extends State<EditingVocabulaty> {
 
   removeSer(String ser) {
     this.widget.series.remove(ser);
-    this.widget.seriesController.add(this.widget.series);
+    this._seriesController.add(this.widget.series);
     //TODO: update server - shilo
   }
 
   addSer() async {
-    String nameSer = this.nameSer.text;
-    String firstHeb = this.firstHeb.text;
-    String firstEng = this.firstEng.text;
-    String secondHeb = this.secondHeb.text;
-    String secondEng = this.secondEng.text;
-    String thirdEng = this.thirdEng.text;
-    String thirdHeb = this.thirdHeb.text;
-    String forthHeb = this.forthHeb.text;
-    String forthEng = this.forthEng.text;
+    String nameSer = this._nameSer.text;
+    String firstHeb = this._firstHeb.text;
+    String firstEng = this._firstEng.text;
+    String secondHeb = this._secondHeb.text;
+    String secondEng = this._secondEng.text;
+    String thirdEng = this._thirdEng.text;
+    String thirdHeb = this._thirdHeb.text;
+    String forthHeb = this._forthHeb.text;
+    String forthEng = this._forthEng.text;
     GameDatabaseService().addSeries(nameSer, firstEng, firstHeb, secondEng,
         secondHeb, thirdEng, thirdHeb, forthEng, forthHeb);
     this.widget.series.add(nameSer);
-    this.widget.seriesController.add(this.widget.series);
+    this._seriesController.add(this.widget.series);
     //TODO: update server - shilo!
   }
 }

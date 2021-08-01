@@ -27,10 +27,10 @@ class Turn extends StatefulWidget {
   }
 
   @override
-  _turnState createState() => _turnState();
+  _TurnState createState() => _TurnState();
 }
 
-class _turnState extends State<Turn> {
+class _TurnState extends State<Turn> {
   bool chosenPlayerAndCategoryToAsk = false;
   bool _firstClick1;
   bool _firstClick2;
@@ -44,6 +44,7 @@ class _turnState extends State<Turn> {
       this.widget.game.deck.giveCardToPlayer(
           this.widget.game.getPlayerNeedTurn(), this.widget.game);
       this.widget.game.doneTurn();
+      return new Container();
     } else {
       this._firstClick1 = true;
       this._firstClick2 = true;

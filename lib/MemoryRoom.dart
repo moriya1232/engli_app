@@ -9,20 +9,22 @@ import 'games/MemoryGame.dart';
 
 const int maxCards = 36;
 
-//TODO: play against other virtual players.
-
+// ignore: must_be_immutable
 class MemoryRoom extends StatefulWidget {
+  // ignore: close_sinks
   final _streamControllerMyScore = StreamController<int>.broadcast();
+  // ignore: close_sinks
   final _streamControllerEnemyScore = StreamController<int>.broadcast();
+  // ignore: close_sinks
   final _streamControllerMoreTurn = StreamController<String>.broadcast();
+  // ignore: close_sinks
   final _streamControllerTurn = StreamController<String>.broadcast();
+  final bool computerEnemy;
+  final String enemyName;
 
   MemoryGame game;
-  bool computerEnemy;
-  String enemyName = "";
 
-  MemoryRoom(bool computerEnemy, String enemyName, List<Subject> subjects) {
-    this.computerEnemy = computerEnemy;
+  MemoryRoom(bool computerEnemy, String enemyName, List<Subject> subjects) : this.computerEnemy = computerEnemy, this.enemyName = enemyName {
     this.game = new MemoryGame(
         computerEnemy,
         enemyName,
@@ -31,7 +33,6 @@ class MemoryRoom extends StatefulWidget {
         this._streamControllerEnemyScore,
         this._streamControllerMoreTurn,
         this._streamControllerTurn);
-    this.enemyName = enemyName;
   }
 
   @override
@@ -44,17 +45,10 @@ class _MemoryRoomState extends State<MemoryRoom> {
 
   @override
   Widget build(BuildContext context) {
-//    if (widget.game.pairs.isNotEmpty) {
     return getDesign(context);
-//    } else {
-//      goToWinnerScreen();
-//      widget.game = new MemoryGame(widget.computerEnemy, this.widget.enemyName, this.widget._streamControllerMyScore, this.widget._streamControllerEnemyScore);
-//      return getDesign(context);
-//    }
   }
 
   void _listener() {
-//    setState(() {});
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => WinnerScreen(this.widget.game)),
@@ -65,9 +59,6 @@ class _MemoryRoomState extends State<MemoryRoom> {
   void initState() {
     super.initState();
     widget.game.addListener(_listener);
-//    for (Player player in widget.game.players) {
-//      player.addListener(_listener);
-//    }
     this.howMuchCardsInColumn = sqrt(widget.game.getCards().length).round();
     initializeBoard();
   }
@@ -75,9 +66,6 @@ class _MemoryRoomState extends State<MemoryRoom> {
   @override
   void dispose() {
     widget.game.removeListener(_listener);
-//    for (Player player in widget.game.players) {
-//      player.removeListener(_listener);
-//    }
     this.widget._streamControllerMyScore.close();
     this.widget._streamControllerEnemyScore.close();
     this.widget._streamControllerMoreTurn.close();

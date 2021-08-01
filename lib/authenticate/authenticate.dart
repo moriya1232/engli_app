@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class authenticate extends StatefulWidget {
+class Authenticate extends StatefulWidget {
   @override
-  _authenticateState createState() => _authenticateState();
+  _AuthenticateState createState() => _AuthenticateState();
 }
 
-class _authenticateState extends State<authenticate> {
+class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     return Container();

@@ -8,25 +8,34 @@ import 'QuartetsGame/Constants.dart';
 import 'QuartetsRoom.dart';
 import 'cards/Subject.dart';
 
+// ignore: must_be_immutable
 class OpenRoom extends StatefulWidget {
-  bool generic = false;
-  String dropdownValue = '2';
-  List<CheckBoxTile> series;
-  String gameId;
+  final String gameId;
+  bool _generic = false;
+  String _dropdownValue = '2';
+  List<CheckBoxTile> _series;
+
+
+  OpenRoom(String gameId) : this.gameId = gameId{
+    this._series = [];
+  }
+
+  @override
+  _OpenRoomState createState() => _OpenRoomState();
+}
+
+class _OpenRoomState extends State<OpenRoom> {
   final _sc = StreamController<List<String>>.broadcast();
   final _showSomePlayers = StreamController<bool>.broadcast();
   final _textReplaceData = StreamController<String>.broadcast();
 
-  OpenRoom(String gameId) {
-    this.series = [];
-    this.gameId = gameId;
-  }
-
   @override
-  _openRoomState createState() => _openRoomState();
-}
-
-class _openRoomState extends State<OpenRoom> {
+  void dispose() {
+    this._sc.close();
+    this._showSomePlayers.close();
+    this._textReplaceData.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,7 @@ class _openRoomState extends State<OpenRoom> {
             Expanded(
               child: Container(
                 height: 500,
-                child: _buildSubjectsList(widget._sc),
+                child: _buildSubjectsList(this._sc),
               ),
             ),
             SizedBox(height: 10,),
@@ -105,7 +114,7 @@ class _openRoomState extends State<OpenRoom> {
   Widget getGenericSeriesWidget() {
 
     return StreamBuilder<String>(
-        stream: this.widget._textReplaceData.stream,
+        stream: this._textReplaceData.stream,
         initialData: "להחלפה לסריות גנריות",
         builder: (context, snapshot) {
           return Row(
@@ -120,13 +129,13 @@ class _openRoomState extends State<OpenRoom> {
               RawMaterialButton(
 
                 onPressed: () {
-                  this.widget.generic = !this.widget.generic;
-                  if (this.widget.generic) {
+                  this.widget._generic = !this.widget._generic;
+                  if (this.widget._generic) {
                     getGenericSeriesNames();
-                    this.widget._textReplaceData.add("להחלפה לסריות שלי");
+                    this._textReplaceData.add("להחלפה לסריות שלי");
                   } else {
                     getAllSeriesNames();
-                    this.widget._textReplaceData.add("להחלפה לסריות גנריות");
+                    this._textReplaceData.add("להחלפה לסריות גנריות");
                   }
                 },
                 hoverColor: Colors.black87,
@@ -146,7 +155,7 @@ class _openRoomState extends State<OpenRoom> {
   }
 
   void againstComputerClicked() {
-    this.widget._showSomePlayers.add(true);
+    this._showSomePlayers.add(true);
   }
 
   void startGameClicked(bool isAgainstComputer) async{
@@ -166,7 +175,7 @@ class _openRoomState extends State<OpenRoom> {
 
 //      List<Player> players = [];
       // create players.
-      for (int i = 0; i < int.parse(this.widget.dropdownValue); i++) {
+      for (int i = 0; i < int.parse(this.widget._dropdownValue); i++) {
         if (i == 0) {
           await GameDatabaseService().addPlayer(this.widget.gameId, currName);
           continue;
@@ -208,7 +217,7 @@ class _openRoomState extends State<OpenRoom> {
             ),
           ),
           DropdownButton<String>(
-            value: widget.dropdownValue,
+            value: widget._dropdownValue,
             //hint: new Text("בחר כמות משתתפים"),
             icon: Icon(Icons.arrow_downward),
             iconSize: 10,
@@ -221,7 +230,7 @@ class _openRoomState extends State<OpenRoom> {
             ),
             onChanged: (String newValue) {
               setState(() {
-                widget.dropdownValue = newValue;
+                widget._dropdownValue = newValue;
               });
             },
             items: <String>['2', '3', '4']
@@ -264,13 +273,13 @@ class _openRoomState extends State<OpenRoom> {
   void getAllSeriesNames() async {
     //TODO: shilo!!
     List<String> l = [];
-    this.widget._sc.add(l);
+    this._sc.add(l);
   }
 
   void getGenericSeriesNames() async {
     List<String> l =
     await GameDatabaseService().getSubjectsList("generic_subjects");
-    this.widget._sc.add(l);
+    this._sc.add(l);
   }
 
   Widget _buildSubjectsList(StreamController sc) {
@@ -286,17 +295,17 @@ class _openRoomState extends State<OpenRoom> {
           for (String s in snapshot.data) {
             l.add(new CheckBoxTile(s));
           }
-          widget.series = l;
+          widget._series = l;
           return ListView(
             shrinkWrap: true,
-            children: widget.series,
+            children: widget._series,
           );
         });
   }
 
   Widget getSomePlayersWidget() {
     return StreamBuilder<bool>(
-        stream: this.widget._showSomePlayers.stream,
+        stream: this._showSomePlayers.stream,
         initialData: false,
         builder: (context, snapshot) {
           if (snapshot.data) {
@@ -309,7 +318,7 @@ class _openRoomState extends State<OpenRoom> {
   List<String> getMarkedSeries() {
     //widget.series
     List<String> list = [];
-    for (var k in widget.series) {
+    for (var k in widget._series) {
       if (k.value != null && k.value != false) {
         list.add(k.title);
 
@@ -330,28 +339,33 @@ class _openRoomState extends State<OpenRoom> {
   }
 }
 
+// ignore: must_be_immutable
 class CheckBoxTile extends StatefulWidget {
-  final _sc = StreamController<bool>.broadcast();
-  String title = "";
+  final String title;
   bool value;
 
-  CheckBoxTile(String title) {
-    this.title = title;
-  }
+  CheckBoxTile(String title) : this.title = title;
 
   @override
   _CheckBoxTileState createState() => _CheckBoxTileState();
 }
 
 class _CheckBoxTileState extends State<CheckBoxTile> {
+  final _sc = StreamController<bool>.broadcast();
+
+  @override
+  void dispose() {
+    this._sc.close();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
-    return _buildCheckBox(widget._sc);
+    return _buildCheckBox();
   }
 
-  Widget _buildCheckBox(StreamController sc) {
+  Widget _buildCheckBox() {
     return StreamBuilder<bool>(
-        stream: sc.stream,
+        stream: this._sc.stream,
         initialData: false,
         builder: (context, snapshot) {
           return CheckboxListTile(
@@ -360,7 +374,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
             onChanged: (bool value) {
               widget.value = value;
 //               print("refresh! " + this.widget.title + ": " + value.toString());
-              sc.add(value);
+              this._sc.add(value);
             },
           );
         });

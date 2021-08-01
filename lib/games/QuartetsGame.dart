@@ -122,7 +122,7 @@ class QuartetsGame extends Game {
           takeName = this.listTurn[take].name;
         }
         int token = event.data()['tokenFrom'];
-        String tokenName = null;
+        String tokenName;
         if (token != null && token >= 0) {
           tokenName = this.listTurn[token].name;
         }

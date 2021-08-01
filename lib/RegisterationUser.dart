@@ -4,17 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Registration extends StatefulWidget {
-  final _error = StreamController<String>.broadcast();
   @override
   _RegistrationState createState() => _RegistrationState();
 }
 
-
-final nameControllerReg = TextEditingController();
-final passwordControllerReg = TextEditingController();
-final mailControllerReg = TextEditingController();
-
 class _RegistrationState extends State<Registration> {
+  final nameControllerReg = TextEditingController();
+  final passwordControllerReg = TextEditingController();
+  final mailControllerReg = TextEditingController();
+  final _error = StreamController<String>.broadcast();
   final AuthService _auth = AuthService();
 
   @override
@@ -141,17 +139,17 @@ class _RegistrationState extends State<Registration> {
 
   void registerClicked(String email, String pass, String nameUser) async {
     if (nameUser.length == 0 ) {
-      this.widget._error.add('הכנס שם');
+      this._error.add('הכנס שם');
       return;
     }
     if (pass.length < 6) {
-      this.widget._error.add('הסיסמא צריכה להכיל לפחות 6 תווים');
+      this._error.add('הסיסמא צריכה להכיל לפחות 6 תווים');
       return;
     }
     dynamic res =
         await _auth.registerWithEmailAndPassword(email, pass, nameUser);
     if (res == null) {
-      this.widget._error.add('אימייל או סיסמא לא תקינים');
+      this._error.add('אימייל או סיסמא לא תקינים');
       print("error mail");
       return;
     }
@@ -166,7 +164,7 @@ class _RegistrationState extends State<Registration> {
 
   Widget getError() {
     return StreamBuilder<String>(
-        stream: this.widget._error.stream,
+        stream: this._error.stream,
         initialData: "",
         builder: (context, snapshot) {
           return Text(
@@ -182,10 +180,10 @@ class _RegistrationState extends State<Registration> {
 
   @override
   void dispose() {
-    //TODO: but cant because after it it cant build again. when i register and exit and again register, the text field disposed yet.
-//    nameController.dispose();
-//    passwordController.dispose();
-//    mailController.dispose();
+    this._error.close();
+    this.mailControllerReg.dispose();
+    this.nameControllerReg.dispose();
+    this.passwordControllerReg.dispose();
     super.dispose();
   }
 }

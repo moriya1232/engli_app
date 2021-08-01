@@ -220,7 +220,7 @@ class _ChooseGameState extends State<ChooseGame> {
   void editVocabularyClicked() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => new EditingVocabulaty()),
+      MaterialPageRoute(builder: (context) => new EditingVocabulary()),
     );
   }
 

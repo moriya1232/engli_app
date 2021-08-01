@@ -2,17 +2,23 @@
 // dispose controllers.
 // חלון קופץ כשמישהו השיג רביעיה
 // לבדוק על טרמינולוגיה של כל המשחק באנגלית
-// shilo - tranfer createGame() mathod from get in room to open room!
 // משחק מול מחשב
+// לסדר קוד
+// חיצה פעמיים על שאל2 - firstClick2
+// לבדוק כשמנצחים אז את הכפתור חזרה.
+
+//TODO SHILO:
+// בהרשמה - עושה שלום null
+//// למחוק קובץ בסוף משחק --דיןךם
 // להוסיף ולהוריד סריות לרשימה האישית-- שילה
 // להכניס למשחק זיכרון מהדאטא בייס של האוצר מילים -- שילה
-// לסדר קוד
+// shilo - tranfer createGame() mathod from get in room to open room!
 //תמונות לcolors -- shilo
-// חיצה פעמיים על שאל2 - firstClick2
-// למחוק קובץ בסוף משחק --דיןךם
+// לבדוק את הקבלה של השחקנים מהשרת כשזה משחק נגד מחשב.
+
 // TODO: check::
 // limit for 4 players. -- check!!!
-// לבדוק כשמנצחים אז את הכפתור חזרה.
+
 
 
 import 'dart:async';
@@ -26,21 +32,33 @@ import 'cards/CardQuartets.dart';
 import 'cards/Position.dart';
 import 'Constants.dart';
 
+// ignore: must_be_immutable
 class QuartetsRoom extends StatefulWidget {
   QuartetsGame game;
+  // ignore: close_sinks
   final _scGameStart = StreamController<bool>.broadcast();
+  // ignore: close_sinks
   final _streamControllerFirst = StreamController<Position>.broadcast();
+  // ignore: close_sinks
   final _streamControllerSecond = StreamController<Position>.broadcast();
+  // ignore: close_sinks
   final _streamControllerThird = StreamController<Position>.broadcast();
+  // ignore: close_sinks
   final _streamControllerMe = StreamController<Position>.broadcast();
+  // ignore: close_sinks
   final _streamControllerDeck = StreamController<Position>.broadcast();
 
+  // ignore: close_sinks
   final _streamControllerTurn = StreamController<int>.broadcast();
   // final _streamControllerStringsTurn = StreamController<int>.broadcast();
 
+  // ignore: close_sinks
   final _streamControllerMyCards = StreamController<int>.broadcast();
+  // ignore: close_sinks
   final _streamControllerOtherPlayersCards = StreamController<int>.broadcast();
+  // ignore: close_sinks
   final _streamControllerStringsInDeck = StreamController<int>.broadcast();
+  // ignore: close_sinks
   final _streamControllerMyScore = StreamController<int>.broadcast();
 //  final _streamControllerAchievedQuartet = StreamController<String>.broadcast();
   String stringToSpeak = "";
@@ -431,8 +449,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   itemCount: widget.game.getFirstPlayer().cards.length,
                   // number of items in your list
 
-                  itemBuilder: (BuildContext context, int Itemindex) {
-                    return widget.game.getFirstPlayer().cards[Itemindex];
+                  itemBuilder: (BuildContext context, int itemIndex) {
+                    return widget.game.getFirstPlayer().cards[itemIndex];
                   }),
             ),
             Text(
@@ -467,10 +485,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.game.getSecondPlayer().cards.length,
                     // number of items in your list
-                    itemBuilder: (BuildContext context, int Itemindex) {
+                    itemBuilder: (BuildContext context, int itemIndex) {
                       return widget.game
                           .getSecondPlayer()
-                          .cards[Itemindex]; // return your widget
+                          .cards[itemIndex]; // return your widget
                     }),
               ),
               Text('${widget.game.getSecondPlayer().cards.length}'),
@@ -501,10 +519,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.game.getThirdPlayer().cards.length,
                     // number of items in your list
-                    itemBuilder: (BuildContext context, int Itemindex) {
+                    itemBuilder: (BuildContext context, int itemIndex) {
                       return widget.game
                           .getThirdPlayer()
-                          .cards[Itemindex]; // return your widget
+                          .cards[itemIndex]; // return your widget
                     }),
               ),
               Text('${widget.game.getThirdPlayer().cards.length}'),
@@ -524,10 +542,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               // number of items in your list
 
               //here the implementation of itemBuilder. take a look at flutter docs to see details
-              itemBuilder: (BuildContext context, int Itemindex) {
+              itemBuilder: (BuildContext context, int itemIndex) {
                 return widget.game
                     .getMyPlayer()
-                    .cards[Itemindex]; // return your widget
+                    .cards[itemIndex]; // return your widget
               });
         });
   }
@@ -546,12 +564,11 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     this.widget._streamControllerDeck.close();
 
     this.widget._streamControllerTurn.close();
-
     this.widget._streamControllerMyCards.close();
     this.widget._streamControllerMyScore.close();
     this.widget._streamControllerOtherPlayersCards.close();
     this.widget._streamControllerStringsInDeck.close();
-
+    this.widget._scGameStart.close();
     super.dispose();
   }
 

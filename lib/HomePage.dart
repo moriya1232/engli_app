@@ -183,14 +183,10 @@ padding: EdgeInsets.zero,
 
 }
 class IncDecAnimationWidget extends StatefulWidget {
-  Image _image;
-  double _height;
-  double _width;
-  IncDecAnimationWidget(Image image, double height, double width) {
-    this._image = image;
-    this._height = height;
-    this._width = width;
-  }
+  final Image _image;
+  final double _height;
+  final double _width;
+  IncDecAnimationWidget(Image image, double height, double width) : this._image = image, this._height = height, this._width = width;
   @override
   _IncDecAnimationWidgetState createState() => _IncDecAnimationWidgetState();
 }
@@ -203,7 +199,6 @@ class _IncDecAnimationWidgetState extends State<IncDecAnimationWidget>
     _controller = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
     _controller.repeat(reverse: true);
-    //Tween(begin: 0.0, end: pi).animate(_controller);
   }
   @override
   void dispose() {
@@ -212,27 +207,12 @@ class _IncDecAnimationWidgetState extends State<IncDecAnimationWidget>
   }
   @override
   Widget build(BuildContext context) {
-    // rotation letters:
-//    return AnimatedBuilder(
-//        animation: _controller.view,
-//      child: image,
-//      builder: (context, child) {
-//      return Transform.rotate(
-//        angle: _controller.value * 2.0 * pi,
-//        child: child,
-//      );
-//    },
-//    );
     return AnimatedBuilder(
       animation: this._controller,
       builder: (context, child) {
         return Container(
             height: widget._height,
             width: widget._width,
-//            decoration: ShapeDecoration(
-//              color: Colors.white,
-//              shape: CircleBorder(),
-//            ),
             child: Padding(
                 padding: EdgeInsets.all(
                     widget._height / 10 + this._controller.value * 10),
