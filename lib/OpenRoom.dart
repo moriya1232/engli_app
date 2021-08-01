@@ -9,11 +9,13 @@ import 'QuartetsRoom.dart';
 import 'cards/Subject.dart';
 
 class OpenRoom extends StatefulWidget {
+  bool generic = false;
   String dropdownValue = '2';
   List<CheckBoxTile> series;
   String gameId;
   final _sc = StreamController<List<String>>.broadcast();
   final _showSomePlayers = StreamController<bool>.broadcast();
+  final _textReplaceData = StreamController<String>.broadcast();
 
   OpenRoom(String gameId) {
     this.series = [];
@@ -40,6 +42,7 @@ class _openRoomState extends State<OpenRoom> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            getGenericSeriesWidget(),
             Expanded(
               child: Container(
                 height: 500,
@@ -97,6 +100,49 @@ class _openRoomState extends State<OpenRoom> {
             ),
           ]),
     );
+  }
+
+  Widget getGenericSeriesWidget() {
+
+    return StreamBuilder<String>(
+        stream: this.widget._textReplaceData.stream,
+        initialData: "להחלפה לסריות גנריות",
+        builder: (context, snapshot) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(snapshot.data,
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: "Comix-h"
+              ),),
+              RawMaterialButton(
+
+                onPressed: () {
+                  this.widget.generic = !this.widget.generic;
+                  if (this.widget.generic) {
+                    getGenericSeriesNames();
+                    this.widget._textReplaceData.add("להחלפה לסריות שלי");
+                  } else {
+                    getAllSeriesNames();
+                    this.widget._textReplaceData.add("להחלפה לסריות גנריות");
+                  }
+                },
+                hoverColor: Colors.black87,
+                highlightColor: Colors.lightGreen,
+                shape: CircleBorder(),
+                fillColor: Colors.white,
+                child: Icon(
+                  Icons.refresh,
+                  size: 20,
+                ),
+              ),
+            ],
+          );
+        });
+
+
   }
 
   void againstComputerClicked() {
@@ -216,8 +262,14 @@ class _openRoomState extends State<OpenRoom> {
 //  }
 
   void getAllSeriesNames() async {
+    //TODO: shilo!!
+    List<String> l = [];
+    this.widget._sc.add(l);
+  }
+
+  void getGenericSeriesNames() async {
     List<String> l =
-        await GameDatabaseService().getSubjectsList("generic_subjects");
+    await GameDatabaseService().getSubjectsList("generic_subjects");
     this.widget._sc.add(l);
   }
 
