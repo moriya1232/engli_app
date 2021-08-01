@@ -4,37 +4,36 @@ import 'package:flutter/material.dart';
 import '../Constants.dart';
 import 'CardGame.dart';
 
+// ignore: must_be_immutable
 class CardQuartets extends CardGame {
-  String english = "";
-  String hebrew = "";
-  String subject = "";
-  Image image;
-  String word1 = "";
-  String word2 = "";
-  String word3 = "";
-  bool myCard = true;
+  final String _subject;
+  final Image _image;
+  final String _word1;
+  final String _word2;
+  final String _word3;
+  bool _myCard = true;
 
-  CardQuartets(String english, String hebrew, Image image, String subject, String wo1,
-      String wo2, String wo3, bool myCard)
-      : super(english, hebrew) {
-    this.image = image;
-    this.subject = subject;
-    this.word1 = wo1;
-    this.word2 = wo2;
-    this.word3 = wo3;
-    this.myCard = myCard;
+  CardQuartets(String english, String hebrew, Image image, String subject,
+      String wo1, String wo2, String wo3, bool myCard)
+      : this._image = image,
+        this._subject = subject,
+        this._word1 = wo1,
+        this._word2 = wo2,
+        this._word3 = wo3,
+        super(english, hebrew) {
+    this._myCard = myCard;
   }
 
   @override
   _CardQuartetsState createState() => _CardQuartetsState();
 
   CardQuartets changeToMine() {
-    this.myCard = true;
+    this._myCard = true;
     return this;
   }
 
   CardQuartets changeToNotMine() {
-    this.myCard = false;
+    this._myCard = false;
     return this;
   }
 
@@ -47,12 +46,12 @@ class CardQuartets extends CardGame {
   }
 
   getSubject() {
-    return subject;
+    return _subject;
   }
 
   @override
   Future changeStatusCard(bool b) {
-    this.myCard = b;
+    this._myCard = b;
     return new Future.delayed(const Duration(seconds: 1));
   }
 }
@@ -76,13 +75,12 @@ class _CardQuartetsState extends State<CardQuartets>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.myCard) {
+    if (widget._myCard) {
       return getOpenCard(context);
     } else {
       return getCloseCard(context);
     }
   }
-
 
   Widget getOpenCard(BuildContext context) {
     double height = MediaQuery.of(context).size.height / 4;
@@ -96,31 +94,30 @@ class _CardQuartetsState extends State<CardQuartets>
             side: new BorderSide(color: Colors.black87, width: 1.0),
             borderRadius: BorderRadius.circular(4.0)),
         borderOnForeground: true,
-        child:
-            SingleChildScrollView(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-
-                //subject
-          Container(
+        child: SingleChildScrollView(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            //subject
+            Container(
               decoration: new BoxDecoration(
                   color: Colors.tealAccent,
                   border: Border.all(color: Colors.white70)),
               child: Center(
                   child: Text(
-                widget.subject,
+                widget._subject,
                 style: TextStyle(
                   fontFamily: "AkayaK-e",
                   fontSize: 25,
                 ),
               )),
-          ),
-          // image
-          Center(
+            ),
+            // image
+            Center(
                 child: Container(
                     width: width, height: height / 4, child: getImage())),
 
-          // my english word
-          Center(
+            // my english word
+            Center(
               child: Text(
                 widget.english,
                 style: TextStyle(
@@ -128,51 +125,50 @@ class _CardQuartetsState extends State<CardQuartets>
                     fontSize: fontSizeWords,
                     color: Colors.lightGreen),
               ),
-          ),
-
-          // word 1
-          Center(
-              child: Text(
-                widget.word1,
-                style: TextStyle(
-                  fontFamily: "Carter-e",
-                  fontSize: fontSizeWords,
-                ),
-              ),
-          ),
-
-          // word 2
-          Center(
-              child: Text(
-                widget.word2,
-                style: TextStyle(
-                  fontFamily: "Carter-e",
-                  fontSize: fontSizeWords,
-                ),
-              ),
-          ),
-
-          // word 3
-          Center(
-              child: Text(
-                widget.word3,
-                style: TextStyle(
-                  fontFamily: "Carter-e",
-                  fontSize: fontSizeWords,
-                ),
-              ),
-          ),
-        ]),
             ),
+
+            // word 1
+            Center(
+              child: Text(
+                widget._word1,
+                style: TextStyle(
+                  fontFamily: "Carter-e",
+                  fontSize: fontSizeWords,
+                ),
+              ),
+            ),
+
+            // word 2
+            Center(
+              child: Text(
+                widget._word2,
+                style: TextStyle(
+                  fontFamily: "Carter-e",
+                  fontSize: fontSizeWords,
+                ),
+              ),
+            ),
+
+            // word 3
+            Center(
+              child: Text(
+                widget._word3,
+                style: TextStyle(
+                  fontFamily: "Carter-e",
+                  fontSize: fontSizeWords,
+                ),
+              ),
+            ),
+          ]),
+        ),
       ),
 //        ),
     );
   }
 
-
   Future changeStatusCard(bool isMyCard) async {
     setState(() {
-      widget.myCard = isMyCard;
+      widget._myCard = isMyCard;
     });
     return new Future.delayed(const Duration(seconds: 2));
   }
@@ -185,15 +181,15 @@ class _CardQuartetsState extends State<CardQuartets>
         color: Colors.amberAccent,
         //TODO: remove this! that just for debug.
         child: Text(
-          this.widget.subject + " " + this.widget.english,
+          this.widget._subject + " " + this.widget.english,
         ),
       ),
     );
   }
 
   Widget getImage() {
-    if (widget.image!=null) {
-      return widget.image;
+    if (widget._image != null) {
+      return widget._image;
     } else {
       return new Container();
     }

@@ -309,7 +309,7 @@ class QuartetsGame extends Game {
     }
     //update server about the deck
     List<int> deckCards = [];
-    for (CardQuartets q in deck.cards) {
+    for (CardQuartets q in deck.getCards()) {
       int x = this.cardsId[q];
       deckCards.add(x);
     }
@@ -329,7 +329,7 @@ class QuartetsGame extends Game {
 
   bool askPlayer(Player player, Subject subject) {
     for (CardQuartets card in player.cards) {
-      if (card.subject == subject.name_subject) {
+      if (card.getSubject() == subject.name_subject) {
         return true;
       }
     }
@@ -340,7 +340,7 @@ class QuartetsGame extends Game {
   Future<bool> askByComputer(
       Player player, Subject subject, CardQuartets card) async {
     //ask card that not in the right subject.
-    if (card.subject != subject.name_subject) {
+    if (card.getSubject() != subject.name_subject) {
       throw Exception("not appropriate card and subject!");
     }
 
@@ -369,7 +369,7 @@ class QuartetsGame extends Game {
   CardQuartets askPlayerSpecCard(
       Player player, Subject subject, CardQuartets cardQuartets) {
     for (CardQuartets card in player.cards) {
-      if (card.subject == subject.name_subject && cardQuartets == card) {
+      if (card.getSubject() == subject.name_subject && cardQuartets == card) {
         return card;
       }
     }
@@ -384,7 +384,7 @@ class QuartetsGame extends Game {
 
   void printCardsInTheGame(List<CardQuartets> list) {
     for (CardQuartets card in list) {
-      print("card: " + card.english + " in Subject: " + card.subject);
+      print("card: " + card.english + " in Subject: " + card.getSubject());
     }
   }
 
@@ -438,7 +438,7 @@ class QuartetsGame extends Game {
   }
 
   bool checkIfGameDone() {
-    if (this.deck.cards.length == 0 && !isPlayersHasCards()) {
+    if (this.deck.getCards().length == 0 && !isPlayersHasCards()) {
       GameDatabaseService().updateTurn(this, this.turn);
       //TODO: dispose everything
       return true;
@@ -934,7 +934,7 @@ class QuartetsGame extends Game {
   // }
 
   Subject getSubjectByString(String sub) {
-    for (Subject s in this.deck.subjects) {
+    for (Subject s in this.deck.getSubjects()) {
       if (s.name_subject == sub) {
         return s;
       }
@@ -944,7 +944,7 @@ class QuartetsGame extends Game {
 
   Future takeCardFromDeck() async {
     //if no more cards in deck- enything happen.
-    if (this.deck.cards.length > 0) {
+    if (this.deck.getCards().length > 0) {
       Player player = getPlayerNeedTurn();
       print(player.name + " need to take card from deck!!");
 
@@ -991,7 +991,7 @@ class QuartetsGame extends Game {
   List<Subject> getSubjectsOfPlayer(Player player) {
     List<Subject> subjects = [];
     for (CardQuartets card in player.cards) {
-      Subject subject = getSubjectByString(card.subject);
+      Subject subject = getSubjectByString(card.getSubject());
       if (!subjects.contains(subject)) {
         subjects.add(subject);
       }
@@ -1059,7 +1059,7 @@ class QuartetsGame extends Game {
     GameDatabaseService().transferCard(player, tokenFrom, this, card);
 
     //update takes parameters in server.
-    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), this.listTurn.indexOf(tokenFrom), card.subject, this.cardsId[card]);
+    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), this.listTurn.indexOf(tokenFrom), card.getSubject(), this.cardsId[card]);
 
     //animations:
     animateCard(getAppropriateController(tokenFrom),

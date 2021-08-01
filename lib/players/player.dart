@@ -60,8 +60,8 @@ abstract class Player {
     }
     List<String> subjects = [];
     for (CardQuartets card in this.cards) {
-      if (!subjects.contains(card.subject)) {
-        subjects.add(card.subject);
+      if (!subjects.contains(card.getSubject())) {
+        subjects.add(card.getSubject());
       }
     }
     return subjects;
@@ -129,7 +129,7 @@ class ComputerPlayer extends Other {
       }
       //random subject.
       Subject randSub =
-          game.getSubjectByString(cards[random.nextInt(cards.length)].subject);
+          game.getSubjectByString(cards[random.nextInt(cards.length)].getSubject());
 
       //random player
       List<Player> playersWithCards = game.getPlayersWithCardsWithoutMe(this);

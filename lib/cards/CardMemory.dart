@@ -4,19 +4,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'CardGame.dart';
 
+// ignore: must_be_immutable
 class CardMemory extends CardGame {
-  bool _isEnglishCard;
+  final bool _isEnglishCard;
   bool _isClose;
   MemoryGame _game;
-  bool _computerEnemy;
+  final bool _computerEnemy;
 
-  CardMemory(String english, String hebrew, bool isEnglish, bool computerEnemy)
-      : super(english, hebrew) {
-    print(computerEnemy);
-    this._isEnglishCard = isEnglish;
+  CardMemory(String english, String hebrew, bool isEnglish, bool computerEnemy) :
+        this._computerEnemy = computerEnemy,
+        this._isEnglishCard = isEnglish, super(english, hebrew) {
     this._isClose = true;
     this._game=null;
-    this._computerEnemy = computerEnemy;
   }
 
   bool getIsClose() {

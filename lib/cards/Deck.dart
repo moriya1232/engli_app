@@ -8,50 +8,54 @@ import 'package:engli_app/QuartetsGame/Constants.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 
 class Deck {
-  List<CardQuartets> cards = [];
-  final List<Subject> subjects;
+  List<CardQuartets> _cards = [];
+  final List<Subject> _subjects;
 
-  Deck(List<Subject> subs) : this.subjects = subs{
+  Deck(List<Subject> subs) : this._subjects = subs{
     for (Subject sub in subs) {
-      this.cards.addAll(List.castFrom<CardGame,CardQuartets>(sub.getCards()));
+      this._cards.addAll(List.castFrom<CardGame,CardQuartets>(sub.getCards()));
     }
   }
 
   List<CardQuartets> getCards() {
-    return this.cards;
+    return this._cards;
+  }
+
+  List<Subject> getSubjects() {
+    return this._subjects;
   }
 
   bool isEmpty() {
-    if (this.cards.length <= 0) {
+    if (this._cards.length <= 0) {
       return true;
     }
     return false;
   }
 
   void setCards(List<CardQuartets> list) {
-    this.cards = list;
+    this._cards = list;
   }
 
   List<CardQuartets> shuffle() {
     var random = new Random();
 
     // Go through all elements.
-    for (var i = this.cards.length - 1; i > 0; i--) {
+    for (var i = this._cards.length - 1; i > 0; i--) {
       // Pick a pseudorandom number according to the list length
       var n = random.nextInt(i + 1);
 
-      var temp = this.cards[i];
-      this.cards[i] = this.cards[n];
-      this.cards[n] = temp;
+      var temp = this._cards[i];
+      this._cards[i] = this._cards[n];
+      this._cards[n] = temp;
     }
-    return this.cards;
+    return this._cards;
   }
 
   Future giveCardToPlayer(Player player, QuartetsGame game) async {
-    if (this.cards.isEmpty) {
+    if (this._cards.isEmpty) {
       throw Exception("no more cards in the pile");
     } else {
-      CardQuartets card = cards.removeLast();
+      CardQuartets card = _cards.removeLast();
 //      print(player.name + " has " + card.english + " in " + card.subject);
       if (player is Me) {
         player.addCard(card.changeToMine());
@@ -76,8 +80,8 @@ class Deck {
 
   void printDeck() {
     print("print the cards in the deck!");
-    for (CardQuartets card in this.cards) {
-      print(card.subject + ": " + card.english);
+    for (CardQuartets card in this._cards) {
+      print(card.getSubject() + ": " + card.english);
     }
     print("done print the cards in the deck");
   }

@@ -580,7 +580,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   style: TextStyle(fontFamily: 'Abraham-h'),
                 ),
                 Text(
-                  '${widget.game.deck.cards.length}',
+                  '${widget.game.deck.getCards().length}',
                   style: TextStyle(fontFamily: 'Abraham-h'),
                 ),
                 SizedBox(
