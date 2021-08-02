@@ -1,11 +1,11 @@
 //TODO:
-// dispose controllers.
 // חלון קופץ כשמישהו השיג רביעיה
 // לבדוק על טרמינולוגיה של כל המשחק באנגלית
 // משחק מול מחשב
 // לסדר קוד
 // חיצה פעמיים על שאל2 - firstClick2
 // לבדוק כשמנצחים אז את הכפתור חזרה.
+// winner screen - everyone.
 
 //TODO SHILO:
 // בהרשמה - עושה שלום null
@@ -285,7 +285,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               context,
               MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
             );
-            return Container();
+            return null;
           } else if (widget.game.getPlayerNeedTurn() is Me) {
             return Turn(widget.game);
           } else {
@@ -309,6 +309,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     String wasAsked = widget.game.playerTokenName;
     String subjectAsked = widget.game.subjectAsked;
     String cardAsked = widget.game.cardAsked;
+    bool succ = widget.game.successTakeCard;
+    if (succ == null) {
+      return new Container();
+    }
     //take from the deck
     if (asked != null && wasAsked == "deck") {
       this.widget.stringToSpeak = asked + " take from the deck";
@@ -331,9 +335,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       );
     }
     // ask about spec card
-    else if (cardAsked != null && wasAsked != null && subjectAsked != null) {
+    else if (succ && cardAsked != null && wasAsked != null && subjectAsked != null) {
       this.widget.stringToSpeak =
-          asked + " take from " + wasAsked + " about card " + cardAsked;
+          asked + " take from " + wasAsked + ": " + cardAsked + " in subject: " + subjectAsked;
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -347,12 +351,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 text: '$asked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: 'asked '),
+            new TextSpan(text: 'take from '),
             new TextSpan(
                 text: '$wasAsked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: 'about the card: '),
+            new TextSpan(text: ': '),
             new TextSpan(
                 text: '$cardAsked ',
                 style:
@@ -366,10 +370,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         ),
       );
     }
-    // ask about subject and doesnt have
-    else if (cardAsked == null && wasAsked != null && subjectAsked != null) {
+    // ask about subject and doesnt this subject
+    else if (!succ && cardAsked == null && wasAsked != null && subjectAsked != null) {
       this.widget.stringToSpeak =
-          asked + " take from " + wasAsked + " about subject " + subjectAsked;
+          asked + " asked " + wasAsked + " about subject " + subjectAsked + ", and he does not have this subject";
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -397,7 +401,44 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           ],
         ),
       );
-    } else {
+    }
+    // ask about subject and he doesnt have the card.
+    else if (!succ && cardAsked != null && wasAsked != null && subjectAsked != null) {
+      this.widget.stringToSpeak =
+          asked + " asked " + wasAsked + " about card " + cardAsked + " in subject: " + subjectAsked + "and he doesn't have this card";
+      return RichText(
+        textAlign: TextAlign.center,
+        text: new TextSpan(
+          style: new TextStyle(
+              wordSpacing: 10,
+              fontSize: 20,
+              fontFamily: 'Carter-e',
+              color: Colors.black87),
+          children: [
+            new TextSpan(
+                text: '$asked ',
+                style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'asked '),
+            new TextSpan(
+                text: '$wasAsked ',
+                style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'about the card: '),
+            new TextSpan(
+                text: '$cardAsked ',
+                style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'in subject: '),
+            new TextSpan(
+                text: '$subjectAsked ',
+                style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: "and he doesn't have this card."),
+          ],
+        ),
+      );
+    }else {
       return new Container();
     }
   }

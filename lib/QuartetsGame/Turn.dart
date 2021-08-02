@@ -4,6 +4,7 @@ import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/WinnerScreen.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -48,11 +49,11 @@ class _TurnState extends State<Turn> {
     } else {
       this._firstClick1 = true;
       this._firstClick2 = true;
-      return getAprropriateAsk();
+      return getAppropriateAsk();
     }
   }
 
-  Widget getAprropriateAsk() {
+  Widget getAppropriateAsk() {
     //subject to ask not in my cards.
     if (!this.widget.game.getMyPlayer().getSubjects().contains(this.widget.subjectToAsk.nameSubject)) {
       this.widget.subjectToAsk = this.widget.game.getSubjectsOfPlayer(this.widget.game.getMyPlayer())[0];
@@ -61,11 +62,9 @@ class _TurnState extends State<Turn> {
       List<String> names = widget.game.getNamesPlayers();
       names.remove(widget.game.getMyPlayer().name);
       if (widget.subjectToAsk != null && !widget.game.checkIfGameDone() && this._firstClick1) {
-
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-
             Container(
                 alignment: Alignment.center,
                 child: ElevatedButton(
@@ -296,6 +295,19 @@ class _TurnState extends State<Turn> {
           .takeCardFromPlayer(widget.cardToAsk, widget.playerChosenToAsk);
       return Future.delayed(Duration(seconds: 2)).then((value) => true);
     } else {
+      int take = this.widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn());
+      int token = this.widget.game.listTurn.indexOf(widget.playerChosenToAsk);
+      String sub = this.widget.subjectToAsk.nameSubject;
+      int card = this.widget.game.cardsId[this.widget.cardToAsk];
+      //player has this subject but not the card
+      if (this.widget.game.askPlayer(widget.playerChosenToAsk, widget.subjectToAsk)) {
+        await GameDatabaseService().updateTake(
+            this.widget.game, take, token, sub, card, false);
+        //player doesnt have this subject
+      } else {
+        await GameDatabaseService().updateTake(
+            this.widget.game, take, token, sub, null, false);
+      }
       await widget.game.takeCardFromDeck();
       return Future.delayed(Duration(seconds: 2)).then((value) => false);
     }

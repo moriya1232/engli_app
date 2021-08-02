@@ -17,6 +17,7 @@ class QuartetsGame extends Game {
   String playerTokenName;
   String subjectAsked;
   String cardAsked;
+  bool successTakeCard;
   List<Subject> subjects;
   Map<CardQuartets, int> cardsId = {};
   bool isManager;
@@ -132,14 +133,15 @@ class QuartetsGame extends Game {
           cardName = this.idToCard(cardToken).english;
         }
         String subject = event.data()['subjectAsk'];
+        bool succ = event.data()['success'];
 
         // animate card from player to player
-        if ((takeName != null && tokenName != null) && (this.playerTakeName != takeName || this.playerTokenName != tokenName || this.cardAsked != cardName)) {
+        if ((succ && cardName != null && cardToken != -1 && takeName != null && tokenName != null) && (this.playerTakeName != takeName || this.playerTokenName != tokenName || this.cardAsked != cardName)) {
           StreamController tokenController = getAppropriateController(this.listTurn[token]);
           Position takePosition = getApproPosition(this.listTurn[take]);
           Position tokenPosition = getApproPosition(this.listTurn[token]);
           animateCard(tokenController, tokenPosition, takePosition);
-        } else if ((takeName != null && tokenName == null && takeName != this.playerTakeName)) {
+        } else if ((succ && subject != "-1" && cardName != null && cardToken != -1 && takeName != null && tokenName == null && takeName != this.playerTakeName)) {
           StreamController tokenController = this._deckController;
           Position takePosition = getApproPosition(this.listTurn[take]);
           Position tokenPosition = deckPos;
@@ -155,14 +157,14 @@ class QuartetsGame extends Game {
             this.playerTokenName = "deck";
           }
         }
-
-
+        this.successTakeCard = succ;
         this.subjectAsked = subject;
-        if (cardToken != null && cardToken != -1) {
-          this.cardAsked = cardName;
-        } else {
-          this.cardAsked = null;
-        }
+//        if (cardToken != null && cardToken != -1) {
+//          this.cardAsked = cardName;
+//        } else {
+//          this.cardAsked = null;
+//        }
+        this.cardAsked = cardName;
 
         this._turnController.add(this.turn);
 
@@ -224,6 +226,7 @@ class QuartetsGame extends Game {
           if (!everyoneNoHaveCards) {
             this.isFinished = true;
             print("game need to done!");
+            this._turnController.add(this.turn);
           }
           this._otherPlayersCardsController.add(1);
           this._otherPlayersCardsController.add(1);
@@ -424,6 +427,7 @@ class QuartetsGame extends Game {
     GameDatabaseService().updateTurn(this, this.turn);
   }
 
+  // return true - if game done, false - otherwise.
   bool doneTurn() {
     Player player = getPlayerNeedTurn();
     removeAllSeriesDone(player);
@@ -960,7 +964,7 @@ class QuartetsGame extends Game {
 
       // update tokens parameters.
 
-      GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), -1, "", -1);
+      GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), -1, "", -1, true);
 
       //update view:
       this._myCardsController.add(1);
@@ -1061,7 +1065,7 @@ class QuartetsGame extends Game {
     GameDatabaseService().transferCard(player, tokenFrom, this, card);
 
     //update takes parameters in server.
-    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), this.listTurn.indexOf(tokenFrom), card.getSubject(), this.cardsId[card]);
+    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), this.listTurn.indexOf(tokenFrom), card.getSubject(), this.cardsId[card], true);
 
     //animations:
     animateCard(getAppropriateController(tokenFrom),

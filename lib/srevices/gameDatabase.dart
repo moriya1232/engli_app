@@ -32,6 +32,7 @@ class GameDatabaseService {
       'take': null,
       'cardToken': null,
       'subjectAsk': null,
+      'success': false,
     });
   }
 
@@ -496,9 +497,9 @@ class GameDatabaseService {
     return Future.value(tokenFrom);
   }
 
-  void updateTake(QuartetsGame game, int take, int token, String sub, int card) {
+  void updateTake(QuartetsGame game, int take, int token, String sub, int card, bool succ) {
 //    if (!game.againstComputer) {
-      gameCollection.doc(game.gameId).update({'take': take, 'tokenFrom': token, 'cardToken': card, 'subjectAsk': sub});
+      gameCollection.doc(game.gameId).update({'take': take, 'tokenFrom': token, 'cardToken': card, 'subjectAsk': sub, 'success': succ});
 //    }
   }
 
