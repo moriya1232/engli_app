@@ -5,18 +5,15 @@
 // לסדר קוד
 // חיצה פעמיים על שאל2 - firstClick2
 // לבדוק כשמנצחים אז את הכפתור חזרה.
-// winner screen - everyone.
 
 //TODO SHILO:
 // בהרשמה - עושה שלום null
 //// למחוק קובץ בסוף משחק --דיןךם
-// להוסיף ולהוריד סריות לרשימה האישית-- שילה
-// להכניס למשחק זיכרון מהדאטא בייס של האוצר מילים -- שילה
-// shilo - tranfer createGame() mathod from get in room to open room!
 // לבדוק את הקבלה של השחקנים מהשרת כשזה משחק נגד מחשב.
 
 // TODO: check::
 // limit for 4 players. -- check!!!
+// delete
 
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
