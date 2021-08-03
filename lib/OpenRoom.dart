@@ -48,6 +48,7 @@ class _OpenRoomState extends State<OpenRoom> {
         centerTitle: true,
         shadowColor: Colors.black87,
       ),
+      resizeToAvoidBottomInset: false,
       body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -55,10 +56,7 @@ class _OpenRoomState extends State<OpenRoom> {
             getGenericSeriesWidget(),
             getError(),
             Expanded(
-              child: Container(
-                height: 500,
-                child: _buildSubjectsList(this._subjectList),
-              ),
+              child: _buildSubjectsList(this._subjectList),
             ),
             SizedBox(
               height: 10,

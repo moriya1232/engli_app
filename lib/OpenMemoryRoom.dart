@@ -35,86 +35,89 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
         centerTitle: true,
         shadowColor: Colors.black87,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                getGenericSeriesWidget(),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                  child: TextFormField(
-                    controller: this.widget._nameEnemy,
-                    decoration: InputDecoration(
-                      hintText: "שם יריב",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
+      resizeToAvoidBottomInset: false,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              getGenericSeriesWidget(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                child: TextFormField(
+                  controller: this.widget._nameEnemy,
+                  decoration: InputDecoration(
+                    hintText: "שם יריב",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                    inputFormatters: [
-                      new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
-                    ],
-                    textAlign: TextAlign.center,
                   ),
+                  inputFormatters: [
+                    new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
+                  ],
+                  textAlign: TextAlign.center,
                 ),
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: getError(),
-                ),
-                Container(
-                    height: 220, child: _buildSubjectsList(this._subjectsList)),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                          child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0)),
-                          primary: Colors.amberAccent,
-                          padding: EdgeInsets.all(10),
-                        ),
-                        onPressed: () {
-                          startGameClicked(true);
-                        },
-                        child: Text(
-                          'משחק מול המחשב',
-                          style: TextStyle(
-                              fontFamily: 'Comix-h',
-                              color: Colors.black87,
-                              fontSize: 30),
-                        ),
-                      )),
-                      SizedBox(
-                        height: 10,
+              ),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: getError(),
+              ),
+              Expanded(
+//                    height: 220,
+                  child: _buildSubjectsList(this._subjectsList)),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+
+                  children: [
+                    SizedBox(
+                        child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        primary: Colors.amberAccent,
+                        padding: EdgeInsets.all(10),
                       ),
-                      SizedBox(
-                          child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0)),
-                          primary: Colors.pink,
-                          padding: EdgeInsets.all(10),
-                        ),
-                        onPressed: () {
-                          startGameClicked(false);
-                        },
-                        child: Text(
-                          'משחק נגד חבר',
-                          style: TextStyle(
-                              fontFamily: 'Comix-h',
-                              color: Colors.black87,
-                              fontSize: 30),
-                        ),
-                      )),
-                    ],
-                  ),
+                      onPressed: () {
+                        startGameClicked(true);
+                      },
+                      child: Text(
+                        'משחק מול המחשב',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.black87,
+                            fontSize: 30),
+                      ),
+                    )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                        child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0)),
+                        primary: Colors.pink,
+                        padding: EdgeInsets.all(10),
+                      ),
+                      onPressed: () {
+                        startGameClicked(false);
+                      },
+                      child: Text(
+                        'משחק נגד חבר',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.black87,
+                            fontSize: 30),
+                      ),
+                    )),
+                  ],
                 ),
-              ]),
-        ),
+              ),
+            ]),
       ),
     );
   }
