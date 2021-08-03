@@ -513,7 +513,16 @@ class GameDatabaseService {
 
   void removeSeries(
       String seriesName, String playerId, List<String> newListSub) async {
-    subjectCollection
+    print(seriesName);
+    await subjectCollection.doc(playerId).collection('user_subjects').doc(
+        seriesName).collection('cards').doc('card1').delete();
+    await subjectCollection.doc(playerId).collection('user_subjects').doc(
+        seriesName).collection('cards').doc('card2').delete();
+    await subjectCollection.doc(playerId).collection('user_subjects').doc(
+        seriesName).collection('cards').doc('card3').delete();
+    await subjectCollection.doc(playerId).collection('user_subjects').doc(
+        seriesName).collection('cards').doc('card4').delete();
+    await subjectCollection
         .doc(playerId)
         .collection('user_subjects')
         .doc(seriesName)
