@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:engli_app/ChooseGame.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,7 +11,7 @@ TODO: dont possible put "," in names cards and subject.
 
 // ignore: must_be_immutable
 class EditingVocabulary extends StatefulWidget {
-  List<String> series;
+  List<String> series = [];
 
   @override
   _EditingVocabularyState createState() => _EditingVocabularyState();
@@ -49,23 +50,12 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
   @override
   void initState() {
     super.initState();
-    //TODO: insert here the series from database
-    this.widget.series = [
-      "Pets",
-      "Family",
-      "Body",
-      "Furnitures",
-      "Animals",
-      "Colors",
-      "Food",
-      "Cars",
-      "Musical Instruments"
-    ];
     this._seriesController.add(this.widget.series);
   }
 
   @override
   Widget build(BuildContext context) {
+    getUserSeriesFromDataBase();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -99,130 +89,6 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
             ),
           ],
         ),
-//                SingleChildScrollView(
-//                  child: Column(children:
-//                  <Widget>[
-//                    SizedBox(
-//                      height: 20,
-//                    ),
-////                      Text(
-////                        'הכנסת סרייה חדשה',
-////                        style: TextStyle(
-////                          fontFamily: 'Abraham-h',
-////                          fontSize: 30,
-////                        ),
-////                      ),
-////                      Padding(
-////                        padding: EdgeInsets.symmetric(horizontal: 40),
-////                        child: Row(
-////                          crossAxisAlignment: CrossAxisAlignment.center,
-////                          mainAxisAlignment: MainAxisAlignment.center,
-////                          children: [
-////                            Expanded(
-////                              child: new Container(
-////                                padding: EdgeInsets.symmetric(horizontal: 20),
-////                                child: TextFormField(
-////                                  textAlign: TextAlign.center,
-////                                  //controller: nameController,
-////                                ),
-////                              ),
-////                            ),
-////                            Text(
-////                              ':שם סרייה',
-////                              style: TextStyle(
-////                                fontFamily: 'Abraham-h',
-////                                fontSize: 15,
-////                              ),
-////                            )
-////                          ],
-////                        ),
-////                      ),
-////                      SizedBox(
-////                        height: 20,
-////                      ),
-////                      SizedBox(
-////                        height: 50,
-////                        child: Row(
-////                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-////                            crossAxisAlignment: CrossAxisAlignment.stretch,
-////                            mainAxisSize: MainAxisSize.max,
-////                            children: [
-////                              Text(
-////                                'תמונה',
-////                                style: TextStyle(
-////                                  fontFamily: 'Abraham-h',
-////                                  fontSize: 20,
-////                                ),
-////                              ),
-////                              SizedBox(width: 5),
-////                              Text(
-////                                'עברית',
-////                                style: TextStyle(
-////                                  fontFamily: 'Abraham-h',
-////                                  fontSize: 20,
-////                                ),
-////                              ),
-////                              SizedBox(width: 5),
-////                              Text(
-////                                'אנגלית',
-////                                style: TextStyle(
-////                                  fontFamily: 'Abraham-h',
-////                                  fontSize: 20,
-////                                ),
-////                              ),
-////                            ]),
-////                      ),
-////                      SizedBox(
-////                        height: 50,
-////                        child: Row(
-////                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-////                            crossAxisAlignment: CrossAxisAlignment.stretch,
-////                            mainAxisSize: MainAxisSize.max,
-////                            children: [
-////                              Expanded(
-////                                child: Padding(
-////                                  padding: EdgeInsets.symmetric(
-////                                      horizontal: 10, vertical: 5),
-////                                  child: TextFormField(
-////                                    decoration: InputDecoration(
-////                                        border: OutlineInputBorder(
-////                                      borderRadius:
-////                                          BorderRadius.all(Radius.circular(10)),
-////                                    )),
-////                                    textAlign: TextAlign.center,
-////                                  ),
-////                                ),
-////                              ),
-//                    Expanded(
-//                      child: Padding(
-//                        padding: EdgeInsets.symmetric(
-//                            horizontal: 10, vertical: 5),
-//                        child: TextFormField(
-//                          decoration: InputDecoration(
-//                              border: OutlineInputBorder(
-//                                borderRadius:
-//                                BorderRadius.all(Radius.circular(10)),
-//                              )),
-//                          textAlign: TextAlign.center,
-//                        ),
-//                      ),
-//                    ),
-//                    Expanded(
-//                      child: Padding(
-//                        padding: EdgeInsets.symmetric(
-//                            horizontal: 10, vertical: 5),
-//                        child: TextFormField(
-//                          decoration: InputDecoration(
-//                              border: OutlineInputBorder(
-//                                borderRadius:
-//                                BorderRadius.all(Radius.circular(10)),
-//                              )),
-//                          textAlign: TextAlign.center,
-//                        ),
-//                      ),
-//                    ),
-//                  ]),
-//                ),
         Text(
           'סריות קיימות',
           style: TextStyle(
@@ -579,6 +445,13 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
             ),
           );
         });
+  }
+
+  void getUserSeriesFromDataBase() async {
+    String subjectsId = FirebaseAuth.instance.currentUser.uid;
+    this.widget.series =
+        await GameDatabaseService().getSubjectsList(subjectsId);
+    this._seriesController.add(this.widget.series);
   }
 
   removeSer(String ser) {
