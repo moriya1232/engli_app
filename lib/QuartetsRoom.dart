@@ -13,13 +13,10 @@
 // להוסיף ולהוריד סריות לרשימה האישית-- שילה
 // להכניס למשחק זיכרון מהדאטא בייס של האוצר מילים -- שילה
 // shilo - tranfer createGame() mathod from get in room to open room!
-//תמונות לcolors -- shilo
 // לבדוק את הקבלה של השחקנים מהשרת כשזה משחק נגד מחשב.
 
 // TODO: check::
 // limit for 4 players. -- check!!!
-
-
 
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
@@ -73,8 +70,6 @@ class QuartetsRoom extends StatefulWidget {
     this.game = new QuartetsGame(
         gameId,
         isManager,
-//        players,
-//        subs,
         this._scGameStart,
         this._streamControllerFirst,
         this._streamControllerSecond,
@@ -94,8 +89,6 @@ class QuartetsRoom extends StatefulWidget {
 
   @override
   _QuartetsRoomState createState() => _QuartetsRoomState();
-
-
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
@@ -147,7 +140,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         ),
                       Expanded(
                         child: Stack(children: [
-                          Center (
+                          Center(
                             child: Padding(
                               padding: EdgeInsets.all(20),
                               child: Container(
@@ -167,7 +160,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                         ]),
                       ),
                       if (widget.game.players.length > 3)
-                        Expanded(child: RotatedBox(
+                        Expanded(
+                            child: RotatedBox(
                           quarterTurns: 3,
                           child: getThirdPlayerView(),
                         )),
@@ -283,7 +277,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           if (this.widget.game.isFinished) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
+              MaterialPageRoute(
+                  builder: (context) => WinnerScreen(widget.game)),
             );
             return null;
           } else if (widget.game.getPlayerNeedTurn() is Me) {
@@ -335,9 +330,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       );
     }
     // ask about spec card
-    else if (succ && cardAsked != null && wasAsked != null && subjectAsked != null) {
-      this.widget.stringToSpeak =
-          asked + " take from " + wasAsked + ": " + cardAsked + " in subject: " + subjectAsked;
+    else if (succ &&
+        cardAsked != null &&
+        wasAsked != null &&
+        subjectAsked != null) {
+      this.widget.stringToSpeak = asked +
+          " take from " +
+          wasAsked +
+          ": " +
+          cardAsked +
+          " in subject: " +
+          subjectAsked;
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -371,9 +374,16 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       );
     }
     // ask about subject and doesnt this subject
-    else if (!succ && cardAsked == null && wasAsked != null && subjectAsked != null) {
-      this.widget.stringToSpeak =
-          asked + " asked " + wasAsked + " about subject " + subjectAsked + ", and he does not have this subject";
+    else if (!succ &&
+        cardAsked == null &&
+        wasAsked != null &&
+        subjectAsked != null) {
+      this.widget.stringToSpeak = asked +
+          " asked " +
+          wasAsked +
+          " about subject " +
+          subjectAsked +
+          ", and he does not have this subject";
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -403,9 +413,18 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       );
     }
     // ask about subject and he doesnt have the card.
-    else if (!succ && cardAsked != null && wasAsked != null && subjectAsked != null) {
-      this.widget.stringToSpeak =
-          asked + " asked " + wasAsked + " about card " + cardAsked + " in subject: " + subjectAsked + "and he doesn't have this card";
+    else if (!succ &&
+        cardAsked != null &&
+        wasAsked != null &&
+        subjectAsked != null) {
+      this.widget.stringToSpeak = asked +
+          " asked " +
+          wasAsked +
+          " about card " +
+          cardAsked +
+          " in subject: " +
+          subjectAsked +
+          "and he doesn't have this card";
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -418,27 +437,27 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             new TextSpan(
                 text: '$asked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'asked '),
             new TextSpan(
                 text: '$wasAsked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'about the card: '),
             new TextSpan(
                 text: '$cardAsked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: 'in subject: '),
             new TextSpan(
                 text: '$subjectAsked ',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: "and he doesn't have this card."),
           ],
         ),
       );
-    }else {
+    } else {
       return new Container();
     }
   }
@@ -636,15 +655,19 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 Text(
                   "Turn:",
                   style: TextStyle(
-                      color: Colors.red, fontSize: 20, fontFamily: 'PottaOne-e'),
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontFamily: 'PottaOne-e'),
                 ),
-          SizedBox(
-          height: 1,
-          ),
+                SizedBox(
+                  height: 1,
+                ),
                 Text(
                   "${widget.game.listTurn[widget.game.turn].name}",
                   style: TextStyle(
-                      color: Colors.red, fontSize: 20, fontFamily: 'PottaOne-e'),
+                      color: Colors.red,
+                      fontSize: 20,
+                      fontFamily: 'PottaOne-e'),
                 ),
               ]);
         });

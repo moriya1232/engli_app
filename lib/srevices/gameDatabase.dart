@@ -33,6 +33,7 @@ class GameDatabaseService {
       'cardToken': null,
       'subjectAsk': null,
       'success': false,
+      'generic': false,
     });
   }
 
@@ -123,7 +124,8 @@ class GameDatabaseService {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        var x = documentSnapshot.data()["managerId"];
+        var x = documentSnapshot.data()['managerId'];
+        print("in get managerId");
         subjectsId = x;
       }
     });
@@ -507,5 +509,29 @@ class GameDatabaseService {
       'success': succ
     });
 //    }
+  }
+
+  void removeSeries(
+      String seriesName, String playerId, List<String> newListSub) async {
+    subjectCollection
+        .doc(playerId)
+        .collection('user_subjects')
+        .doc(seriesName)
+        .delete();
+    subjectCollection.doc(playerId).update({'subjects_list': newListSub});
+  }
+
+  void updateGeneric(String gameId, bool gen) {
+    gameCollection.doc(gameId).update({'generic': gen});
+  }
+
+  Future<bool> getGenerics(gameId) async {
+    bool gen;
+    await gameCollection.doc(gameId).get().then((value) {
+      if (value.exists) {
+        gen = value.data()['generic'];
+      }
+    });
+    return Future.value(gen);
   }
 }

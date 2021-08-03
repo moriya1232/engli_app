@@ -457,6 +457,9 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
   removeSer(String ser) {
     this.widget.series.remove(ser);
     this._seriesController.add(this.widget.series);
+    widget.series.remove(ser);
+    String playerId = FirebaseAuth.instance.currentUser.uid;
+    GameDatabaseService().removeSeries(ser, playerId, this.widget.series);
     //TODO: update server - shilo
   }
 
@@ -474,6 +477,5 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
         secondHeb, thirdEng, thirdHeb, forthEng, forthHeb);
     this.widget.series.add(nameSer);
     this._seriesController.add(this.widget.series);
-    //TODO: update server - shilo!
   }
 }

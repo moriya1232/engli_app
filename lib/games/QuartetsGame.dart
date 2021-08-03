@@ -45,8 +45,6 @@ class QuartetsGame extends Game {
   QuartetsGame(
       String gameId,
       bool isManager,
-//      List<Player> players,
-//      List<Subject> subs,
       StreamController gameStart,
       StreamController sc1,
       StreamController sc2,
@@ -93,12 +91,11 @@ class QuartetsGame extends Game {
   void createGame() async {
     ///all players
 //    if (!this.againstComputer) {
-      this.players = await GameDatabaseService().getPlayersList(this);
+    this.players = await GameDatabaseService().getPlayersList(this);
 //    } else {
 //      this.listTurn.addAll(this.players);
 //    }
     await createAllSubjects(gameId);
-
 
     /// only manager
     if (this.isManager) {
@@ -106,135 +103,149 @@ class QuartetsGame extends Game {
       changeScoresOfPlayers();
     }
 
-      ///listen to changes in specific game.
-      FirebaseFirestore.instance
-          .collection("games")
-          .doc(this.gameId)
-          .snapshots()
-          .listen((event) {
-        if (!this.isManager) {
-          this._gameStart.add(true);
-        }
+    ///listen to changes in specific game.
+    FirebaseFirestore.instance
+        .collection("games")
+        .doc(this.gameId)
+        .snapshots()
+        .listen((event) {
+      if (!this.isManager) {
+        this._gameStart.add(true);
+      }
 
-        //update tokens parameters
-        int take = event.data()['take'];
-        String takeName;
-        if (take != null) {
-          takeName = this.listTurn[take].name;
-        }
-        int token = event.data()['tokenFrom'];
-        String tokenName;
-        if (token != null && token >= 0) {
-          tokenName = this.listTurn[token].name;
-        }
-        int cardToken = event.data()['cardToken'];
-        String cardName;
-        if (cardToken != null && cardToken >= 0) {
-          cardName = this.idToCard(cardToken).english;
-        }
-        String subject = event.data()['subjectAsk'];
-        bool succ = event.data()['success'];
+      //update tokens parameters
+      int take = event.data()['take'];
+      String takeName;
+      if (take != null) {
+        takeName = this.listTurn[take].name;
+      }
+      int token = event.data()['tokenFrom'];
+      String tokenName;
+      if (token != null && token >= 0) {
+        tokenName = this.listTurn[token].name;
+      }
+      int cardToken = event.data()['cardToken'];
+      String cardName;
+      if (cardToken != null && cardToken >= 0) {
+        cardName = this.idToCard(cardToken).english;
+      }
+      String subject = event.data()['subjectAsk'];
+      bool succ = event.data()['success'];
 
-        // animate card from player to player
-        if ((succ && cardName != null && cardToken != -1 && takeName != null && tokenName != null) && (this.playerTakeName != takeName || this.playerTokenName != tokenName || this.cardAsked != cardName)) {
-          StreamController tokenController = getAppropriateController(this.listTurn[token]);
-          Position takePosition = getApproPosition(this.listTurn[take]);
-          Position tokenPosition = getApproPosition(this.listTurn[token]);
-          animateCard(tokenController, tokenPosition, takePosition);
-        } else if ((succ && subject != "-1" && cardName != null && cardToken != -1 && takeName != null && tokenName == null && takeName != this.playerTakeName)) {
-          StreamController tokenController = this._deckController;
-          Position takePosition = getApproPosition(this.listTurn[take]);
-          Position tokenPosition = deckPos;
-          animateCard(tokenController, tokenPosition, takePosition);
+      // animate card from player to player
+      if ((succ &&
+              cardName != null &&
+              cardToken != -1 &&
+              takeName != null &&
+              tokenName != null) &&
+          (this.playerTakeName != takeName ||
+              this.playerTokenName != tokenName ||
+              this.cardAsked != cardName)) {
+        StreamController tokenController =
+            getAppropriateController(this.listTurn[token]);
+        Position takePosition = getApproPosition(this.listTurn[take]);
+        Position tokenPosition = getApproPosition(this.listTurn[token]);
+        animateCard(tokenController, tokenPosition, takePosition);
+      } else if ((succ &&
+          subject != "-1" &&
+          cardName != null &&
+          cardToken != -1 &&
+          takeName != null &&
+          tokenName == null &&
+          takeName != this.playerTakeName)) {
+        StreamController tokenController = this._deckController;
+        Position takePosition = getApproPosition(this.listTurn[take]);
+        Position tokenPosition = deckPos;
+        animateCard(tokenController, tokenPosition, takePosition);
+      }
+      if (takeName != null) {
+        this.playerTakeName = takeName;
+      }
+      if (token != null) {
+        if (token != -1) {
+          this.playerTokenName = tokenName;
+        } else {
+          this.playerTokenName = "deck";
         }
-        if (takeName != null) {
-          this.playerTakeName = takeName;
-        }
-        if (token != null) {
-          if (token != -1) {
-            this.playerTokenName = tokenName;
-          } else {
-            this.playerTokenName = "deck";
-          }
-        }
-        this.successTakeCard = succ;
-        this.subjectAsked = subject;
+      }
+      this.successTakeCard = succ;
+      this.subjectAsked = subject;
 //        if (cardToken != null && cardToken != -1) {
 //          this.cardAsked = cardName;
 //        } else {
 //          this.cardAsked = null;
 //        }
-        this.cardAsked = cardName;
+      this.cardAsked = cardName;
 
+      this._turnController.add(this.turn);
+
+      ///update my deck
+      List<dynamic> nDeck = event.data()['deck'];
+      //update if deck change
+      if (nDeck == null) {
+        nDeck = [];
+      }
+      List<int> newDeck = nDeck.cast<int>();
+      this.deck.setCards(this.updateMyDeck(newDeck));
+
+      ///update my turn
+      dynamic turn = event.data()['turn'];
+      if (turn == null) {
+        this.turn = 0;
+      }
+      if (turn != this.turn) {
+        this.turn = turn;
         this._turnController.add(this.turn);
+        this._stringsOnDeckController.add(1);
+      }
+    });
 
-        ///update my deck
-        List<dynamic> nDeck = event.data()['deck'];
-        //update if deck change
-        if (nDeck == null) {
-          nDeck = [];
+    ///listen about changes in players cards and scores
+    FirebaseFirestore.instance
+        .collection("games")
+        .doc(this.gameId)
+        .collection("players")
+        .snapshots()
+        .listen((event) {
+      event.docChanges.forEach((element) {
+        String playerId = element.doc.reference.id;
+        List<dynamic> nCard = element.doc.data()['cards'];
+        List<int> newCards;
+        if (nCard != null) {
+          newCards = nCard.cast<int>();
+        } else {
+          newCards = [];
         }
-        List<int> newDeck = nDeck.cast<int>();
-        this.deck.setCards(this.updateMyDeck(newDeck));
-
-        ///update my turn
-        dynamic turn = event.data()['turn'];
-        if (turn == null) {
-          this.turn = 0;
+        dynamic score = element.doc.data()['score'];
+        if (score == null) {
+          score = 0;
         }
-        if (turn != this.turn) {
-          this.turn = turn;
-          this._turnController.add(this.turn);
-          this._stringsOnDeckController.add(1);
-        }
-      });
+        // score = score.cast<int>();
+        this.updatePlayerCards(newCards, playerId);
+        this.updatePlayerScore(playerId, score);
 
-      ///listen about changes in players cards and scores
-      FirebaseFirestore.instance
-          .collection("games")
-          .doc(this.gameId)
-          .collection("players")
-          .snapshots()
-          .listen((event) {
-        event.docChanges.forEach((element) {
-          String playerId = element.doc.reference.id;
-          List<dynamic> nCard = element.doc.data()['cards'];
-          List<int> newCards;
-          if (nCard != null) {
-            newCards = nCard.cast<int>();
-          } else {
-            newCards = [];
-          }
-          dynamic score = element.doc.data()['score'];
-          if (score == null) {
-            score = 0;
-          }
-          // score = score.cast<int>();
-          this.updatePlayerCards(newCards, playerId);
-          this.updatePlayerScore(playerId, score);
-
-          bool everyoneNoHaveCards = false;
-          for (Player player in this.players) {
-            if (player.isHaveCards()) {
-              everyoneNoHaveCards = true;
-              break;
-            }
-          }
-          if (!this.deck.isEmpty()) {
+        bool everyoneNoHaveCards = false;
+        for (Player player in this.players) {
+          if (player.isHaveCards()) {
             everyoneNoHaveCards = true;
+            break;
           }
-          if (!everyoneNoHaveCards) {
-            this.isFinished = true;
-            print("game need to done!");
-            this._turnController.add(this.turn);
-          }
-          this._otherPlayersCardsController.add(1);
-          this._otherPlayersCardsController.add(1);
-          this._myCardsController.add(1);
-          this._myScoreController.add(1);
-        });
-//        }
+        }
+        if (!this.deck.isEmpty()) {
+          everyoneNoHaveCards = true;
+        }
+        if (!everyoneNoHaveCards) {
+          this.isFinished = true;
+          print("game need to done!");
+          this._turnController.add(this.turn);
+        }
+        this._otherPlayersCardsController.add(1);
+        this._otherPlayersCardsController.add(1);
+        this._myCardsController.add(1);
+        this._myScoreController.add(1);
       });
+//        }
+    });
   }
 
   Future<String> getNamePlayerTake() async {
@@ -268,10 +279,8 @@ class QuartetsGame extends Game {
   // }
 
   void createAllSubjects(String gameId) async {
-
     List<String> strSub =
         await GameDatabaseService().getGameListSubjects(gameId);
-
 
     // String subjectId = await GameDatabaseService().getSubjectsId(gameId);
     this.subjects.addAll(await getSubjectsFromStrings(strSub));
@@ -281,7 +290,7 @@ class QuartetsGame extends Game {
 
   void createMap() {
     int z = 0;
-    for (Subject sub in this.subjects){
+    for (Subject sub in this.subjects) {
       for (CardQuartets card in sub.getCards()) {
         this.cardsId[card] = z;
         z++;
@@ -289,11 +298,19 @@ class QuartetsGame extends Game {
     }
   }
 
-  Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async{
+  Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async {
     List<Subject> subs = [];
+    String subjectId;
+    bool isGenerics = await GameDatabaseService().getGenerics(gameId);
+    if (isGenerics) {
+      subjectId = "generic_subjects";
+      print(subjectId);
+    } else {
+      subjectId = await GameDatabaseService().getManagerId(gameId);
+    }
     for (String s in strSub) {
-      Subject sub = await GameDatabaseService()
-          .createSubjectFromDatabase("generic_subjects", s);
+      Subject sub =
+          await GameDatabaseService().createSubjectFromDatabase(subjectId, s);
       subs.add(sub);
     }
     return Future.value(subs);
@@ -352,13 +369,11 @@ class QuartetsGame extends Game {
     if (card.getSubject() != subject.nameSubject) {
       throw Exception("not appropriate card and subject!");
     }
-//    int take = this.listTurn.indexOf(this.getPlayerNeedTurn());
-//    int token = this.listTurn.indexOf(player);
-//    String sub = subject.nameSubject;
-//    int cardId = this.cardsId[card];
 
-    if (askPlayer(player, subject)) { // ask about a subject
-      if (askPlayerSpecCard(player, subject, card) != null) { // ask about spec card.
+    if (askPlayer(player, subject)) {
+      // ask about a subject
+      if (askPlayerSpecCard(player, subject, card) != null) {
+        // ask about spec card.
         await takeCardFromPlayer(card, player);
         return new Future.delayed(const Duration(seconds: 5), () => true);
       } else {
@@ -930,17 +945,6 @@ class QuartetsGame extends Game {
 //     return subs;
 //   }
 
-  // Player createPlayer(bool isMe, String name) {
-  //   Player player;
-  //   if (isMe) {
-  //     player = Me([], name);
-  //   } else {
-  //     player = VirtualPlayer([], name);
-  //   }
-  //   this.players.add(player);
-  //   return player;
-  // }
-
   Subject getSubjectByString(String sub) {
     for (Subject s in this.deck.getSubjects()) {
       if (s.nameSubject == sub) {
@@ -964,7 +968,8 @@ class QuartetsGame extends Game {
 
       // update tokens parameters.
 
-      GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), -1, "", -1, true);
+      GameDatabaseService()
+          .updateTake(this, this.listTurn.indexOf(player), -1, "", -1, true);
 
       //update view:
       this._myCardsController.add(1);
@@ -1065,7 +1070,13 @@ class QuartetsGame extends Game {
     GameDatabaseService().transferCard(player, tokenFrom, this, card);
 
     //update takes parameters in server.
-    GameDatabaseService().updateTake(this, this.listTurn.indexOf(player), this.listTurn.indexOf(tokenFrom), card.getSubject(), this.cardsId[card], true);
+    GameDatabaseService().updateTake(
+        this,
+        this.listTurn.indexOf(player),
+        this.listTurn.indexOf(tokenFrom),
+        card.getSubject(),
+        this.cardsId[card],
+        true);
 
     //animations:
     animateCard(getAppropriateController(tokenFrom),

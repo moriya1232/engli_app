@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'package:engli_app/MemoryRoom.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'cards/Subject.dart';
 
 // ignore: must_be_immutable
 class OpenMemoryRoom extends StatefulWidget {
+  bool _generic = false;
   final _nameEnemy = TextEditingController();
-  List<CheckBoxTile> series;
+  List<CheckBoxTile> _series;
 
   OpenMemoryRoom() {
-    this.series = [];
+    this._series = [];
   }
 
   @override
@@ -22,6 +23,7 @@ class OpenMemoryRoom extends StatefulWidget {
 class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
   final _error = StreamController<String>.broadcast();
   final _subjectsList = StreamController<List<String>>.broadcast();
+  final _textReplaceData = StreamController<String>.broadcast();
 
   @override
   Widget build(BuildContext context) {
@@ -33,87 +35,133 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
         centerTitle: true,
         shadowColor: Colors.black87,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
+                getGenericSeriesWidget(),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                   child: TextFormField(
                     controller: this.widget._nameEnemy,
                     decoration: InputDecoration(
-                        hintText: "שם יריב",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),),
-                    inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))],
+                      hintText: "שם יריב",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                    ),
+                    inputFormatters: [
+                      new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]"))
+                    ],
                     textAlign: TextAlign.center,
                   ),
                 ),
-                Padding(padding: EdgeInsets.all(20),
-                child: getError(),),
-                Container(
-                  height: 250,
-                  child: _buildSubjectsList(this._subjectsList),
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: getError(),
                 ),
+                Container(
+                    height: 220, child: _buildSubjectsList(this._subjectsList)),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: EdgeInsets.all(40),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                            child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
-                            primary: Colors.amberAccent,
-                            padding: EdgeInsets.all(10),
-                          ),
-                          onPressed: () {
-                            startGameClicked(true);
-                          },
-                          child: Text(
-                            'משחק מול המחשב',
-                            style: TextStyle(
-                                fontFamily: 'Comix-h',
-                                color: Colors.black87,
-                                fontSize: 30),
-                          ),
-                        )),
-                        SizedBox(
-                          height: 10,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                          child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          primary: Colors.amberAccent,
+                          padding: EdgeInsets.all(10),
                         ),
-                        SizedBox(
-                            child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0)),
-                            primary: Colors.pink,
-                            padding: EdgeInsets.all(10),
-                          ),
-                          onPressed: () {
-                            startGameClicked(false);
-                          },
-                          child: Text(
-                            'משחק נגד חבר',
-                            style: TextStyle(
-                                fontFamily: 'Comix-h',
-                                color: Colors.black87,
-                                fontSize: 30),
-                          ),
-                        )),
-                      ],
-                    ),
+                        onPressed: () {
+                          startGameClicked(true);
+                        },
+                        child: Text(
+                          'משחק מול המחשב',
+                          style: TextStyle(
+                              fontFamily: 'Comix-h',
+                              color: Colors.black87,
+                              fontSize: 30),
+                        ),
+                      )),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                          child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          primary: Colors.pink,
+                          padding: EdgeInsets.all(10),
+                        ),
+                        onPressed: () {
+                          startGameClicked(false);
+                        },
+                        child: Text(
+                          'משחק נגד חבר',
+                          style: TextStyle(
+                              fontFamily: 'Comix-h',
+                              color: Colors.black87,
+                              fontSize: 30),
+                        ),
+                      )),
+                    ],
                   ),
                 ),
               ]),
         ),
       ),
     );
+  }
+
+  Widget getGenericSeriesWidget() {
+    return StreamBuilder<String>(
+        stream: this._textReplaceData.stream,
+        initialData: "להחלפה לסריות גנריות",
+        builder: (context, snapshot) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                snapshot.data,
+                style: TextStyle(fontSize: 20, fontFamily: "Comix-h"),
+              ),
+              RawMaterialButton(
+                onPressed: () {
+                  clearCheckboxes();
+                  this.widget._generic = !this.widget._generic;
+                  if (this.widget._generic) {
+                    getGenericSeriesNames();
+                    this._textReplaceData.add("להחלפה לסריות שלי");
+                  } else {
+                    getAllSeriesNames();
+                    this._textReplaceData.add("להחלפה לסריות גנריות");
+                  }
+                },
+                hoverColor: Colors.black87,
+                highlightColor: Colors.lightGreen,
+                shape: CircleBorder(),
+                fillColor: Colors.white,
+                child: Icon(
+                  Icons.refresh,
+                  size: 20,
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  void clearCheckboxes() {
+    for (CheckBoxTile cb in this.widget._series) {
+      cb.value = false;
+    }
   }
 
   Widget getError() {
@@ -133,7 +181,7 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
   }
 
   void startGameClicked(bool isAgainstComputer) async {
-    if (this.widget._nameEnemy.text.length == 0 ) {
+    if (this.widget._nameEnemy.text.length == 0) {
       this._error.add("הכנס שם יריב");
       return;
     }
@@ -141,8 +189,8 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) =>
-              MemoryRoom(isAgainstComputer, this.widget._nameEnemy.text, subjects)),
+          builder: (context) => MemoryRoom(
+              isAgainstComputer, this.widget._nameEnemy.text, subjects)),
     );
   }
 
@@ -158,7 +206,12 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
 //  }
 
   void getAllSeriesNames() async {
-    //TODO: change it!
+    String userId = FirebaseAuth.instance.currentUser.uid;
+    List<String> l = await GameDatabaseService().getSubjectsList(userId);
+    this._subjectsList.add(l);
+  }
+
+  void getGenericSeriesNames() async {
     List<String> l =
         await GameDatabaseService().getSubjectsList("generic_subjects");
     this._subjectsList.add(l);
@@ -177,10 +230,10 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
           for (String s in snapshot.data) {
             l.add(new CheckBoxTile(s));
           }
-          widget.series = l;
+          widget._series = l;
           return ListView(
             shrinkWrap: true,
-            children: widget.series,
+            children: widget._series,
           );
         });
   }
@@ -188,20 +241,29 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
   Future<List<Subject>> loadAllMarkedSeries() async {
     //widget.series
     List<String> list = [];
-    for (var k in widget.series) {
-      if (k.value != null && k.value != false) {
+    for (var k in widget._series) {
+      if (k._value != null && k._value != false) {
         list.add(k.title);
       }
     }
     return await createSubjects(list);
   }
-  
-  Future<List<Subject>> createSubjects(List<String> strSub) async{
+
+  Future<List<Subject>> createSubjects(List<String> strSub) async {
     List<Subject> subjects = [];
-    for (String s in strSub) {
-      Subject sub = await GameDatabaseService()
-          .createSubjectFromDatabase("generic_subjects", s);
-      subjects.add(sub);
+    if (this.widget._generic) {
+      for (String s in strSub) {
+        Subject sub = await GameDatabaseService()
+            .createSubjectFromDatabase("generic_subjects", s);
+        subjects.add(sub);
+      }
+    } else {
+      for (String s in strSub) {
+        String playerId = FirebaseAuth.instance.currentUser.uid;
+        Subject sub =
+            await GameDatabaseService().createSubjectFromDatabase(playerId, s);
+        subjects.add(sub);
+      }
     }
     return Future.value(subjects);
   }
@@ -210,16 +272,23 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
   void dispose() {
     this._error.close();
     this._subjectsList.close();
+    this._textReplaceData.close();
     super.dispose();
   }
-  
 }
 
 // ignore: must_be_immutable
 class CheckBoxTile extends StatefulWidget {
-
+  final _subjectsList = StreamController<bool>.broadcast();
   final String title;
-  bool value;
+  bool _value;
+
+  set value(bool value) {
+    _value = value;
+    this._subjectsList.add(value);
+  }
+
+  bool get value => _value;
 
   CheckBoxTile(String title) : this.title = title;
   @override
@@ -227,7 +296,6 @@ class CheckBoxTile extends StatefulWidget {
 }
 
 class _CheckBoxTileState extends State<CheckBoxTile> {
-  final _subjectsList = StreamController<bool>.broadcast();
   @override
   Widget build(BuildContext context) {
     return _buildCheckBox();
@@ -235,16 +303,16 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
 
   Widget _buildCheckBox() {
     return StreamBuilder<bool>(
-        stream: this._subjectsList.stream,
+        stream: this.widget._subjectsList.stream,
         initialData: false,
         builder: (context, snapshot) {
           return CheckboxListTile(
             title: Text(widget.title),
             value: snapshot.data ?? false,
             onChanged: (bool value) {
-              widget.value = value;
+              widget._value = value;
               // print("refresh! " + this.widget.title + ": " + value.toString());
-              this._subjectsList.add(value);
+              this.widget._subjectsList.add(value);
             },
           );
         });
@@ -252,7 +320,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
 
   @override
   void dispose() {
-    this._subjectsList.close();
+    this.widget._subjectsList.close();
     super.dispose();
   }
 }
