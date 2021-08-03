@@ -5,10 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/*
-TODO: dont possible put "," in names cards and subject.
- */
-
 // ignore: must_be_immutable
 class EditingVocabulary extends StatefulWidget {
   List<String> series = [];
@@ -20,8 +16,8 @@ class EditingVocabulary extends StatefulWidget {
 class _EditingVocabularyState extends State<EditingVocabulary> {
   _EditingVocabularyState();
 
-  // TODO: need to be stream from the server
   final _seriesController = StreamController<List<String>>.broadcast();
+  final _error = StreamController<String>.broadcast();
   final _nameSer = TextEditingController();
   final _firstEng = TextEditingController();
   final _firstHeb = TextEditingController();
@@ -34,6 +30,7 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
 
   @override
   void dispose() {
+    this._error.close();
     this._nameSer.dispose();
     this._firstEng.dispose();
     this._firstHeb.dispose();
@@ -196,8 +193,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(hintText: "הכנס שם סרייה"),
                   inputFormatters: [
-                    new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
-                    LengthLimitingTextInputFormatter(10)
+                    new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z_' -]")),
+                    LengthLimitingTextInputFormatter(12)
                   ],
                 ),
                 SizedBox(
@@ -225,8 +222,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                               textAlign: TextAlign.center,
                               inputFormatters: [
                                 new FilteringTextInputFormatter.allow(
-                                    RegExp("[א-ת]")),
-                                LengthLimitingTextInputFormatter(10)
+                                    RegExp("[א-ת_' -]")),
+                                LengthLimitingTextInputFormatter(12)
                               ],
                             ),
                           ),
@@ -245,8 +242,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                   )),
                               inputFormatters: [
                                 new FilteringTextInputFormatter.allow(
-                                    RegExp("[a-zA-Z]")),
-                                LengthLimitingTextInputFormatter(10)
+                                    RegExp("[a-zA-Z_' -]")),
+                                LengthLimitingTextInputFormatter(12)
                               ],
                               textAlign: TextAlign.center,
                             ),
@@ -276,8 +273,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                   )),
                               inputFormatters: [
                                 new FilteringTextInputFormatter.allow(
-                                    RegExp("[א-ת]")),
-                                LengthLimitingTextInputFormatter(10)
+                                    RegExp("[א-ת_' -]")),
+                                LengthLimitingTextInputFormatter(12)
                               ],
                               textAlign: TextAlign.center,
                             ),
@@ -297,8 +294,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                   )),
                               inputFormatters: [
                                 new FilteringTextInputFormatter.allow(
-                                    RegExp("[a-zA-Z]")),
-                                LengthLimitingTextInputFormatter(10)
+                                    RegExp("[a-zA-Z_' -]")),
+                                LengthLimitingTextInputFormatter(12)
                               ],
                               textAlign: TextAlign.center,
                             ),
@@ -328,8 +325,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                   )),
                               inputFormatters: [
                                 new FilteringTextInputFormatter.allow(
-                                    RegExp("[א-ת]")),
-                                LengthLimitingTextInputFormatter(10)
+                                    RegExp("[א-ת_' -]")),
+                                LengthLimitingTextInputFormatter(12)
                               ],
                               textAlign: TextAlign.center,
                             ),
@@ -349,8 +346,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                   )),
                               inputFormatters: [
                                 new FilteringTextInputFormatter.allow(
-                                    RegExp("[a-zA-Z]")),
-                                LengthLimitingTextInputFormatter(10)
+                                    RegExp("[a-zA-Z -_']")),
+                                LengthLimitingTextInputFormatter(12)
                               ],
                               textAlign: TextAlign.center,
                             ),
@@ -380,8 +377,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                   )),
                               inputFormatters: [
                                 new FilteringTextInputFormatter.allow(
-                                    RegExp("[א-ת]")),
-                                LengthLimitingTextInputFormatter(10)
+                                    RegExp("[א-ת_' -]")),
+                                LengthLimitingTextInputFormatter(12)
                               ],
                               textAlign: TextAlign.center,
                             ),
@@ -401,8 +398,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                   )),
                               inputFormatters: [
                                 new FilteringTextInputFormatter.allow(
-                                    RegExp("[a-zA-Z]")),
-                                LengthLimitingTextInputFormatter(10)
+                                    RegExp("[a-zA-Z_' -]")),
+                                LengthLimitingTextInputFormatter(12)
                               ],
                               textAlign: TextAlign.center,
                             ),
@@ -411,37 +408,73 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                         Text("4"),
                       ]),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    primary: Colors.pink,
-                  ),
-                  onPressed: () {
-                    addSer();
-                    this._forthEng.clear();
-                    this._forthHeb.clear();
-                    this._thirdHeb.clear();
-                    this._thirdEng.clear();
-                    this._secondEng.clear();
-                    this._secondHeb.clear();
-                    this._firstEng.clear();
-                    this._firstHeb.clear();
-                    this._nameSer.clear();
-                    Navigator.of(context).pop();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'הכנס סרייה',
-                      style: TextStyle(
-                          fontFamily: 'Comix-h',
-                          color: Colors.black87,
-                          fontSize: 24),
-                    ),
+                Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      getError(),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0)),
+                          primary: Colors.pink,
+                        ),
+                        onPressed: () {
+                          if (this._nameSer.text == "" || this._nameSer == null) {
+                            this._error.add("הכנס שם סרייה");
+                            return;
+                          } else if (this._firstEng.text.isEmpty || this._firstHeb.text.isEmpty || this._secondHeb.text.isEmpty|| this._secondEng.text.isEmpty
+                          || this._thirdHeb.text.isEmpty || this._thirdEng.text.isEmpty || this._forthHeb.text.isEmpty || this._forthEng.text.isEmpty) {
+                            this._error.add("הכנס ערכים לכל השדות");
+                            return;
+                          } else if (!checkInputs()) {
+                            this._error.add("הכנס ערכים שונים בכל אחד מהשדות");
+                            return;
+                          }
+                          addSer();
+                          this._forthEng.clear();
+                          this._forthHeb.clear();
+                          this._thirdHeb.clear();
+                          this._thirdEng.clear();
+                          this._secondEng.clear();
+                          this._secondHeb.clear();
+                          this._firstEng.clear();
+                          this._firstHeb.clear();
+                          this._nameSer.clear();
+                          Navigator.of(context).pop();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            'הכנס סרייה',
+                            style: TextStyle(
+                                fontFamily: 'Comix-h',
+                                color: Colors.black87,
+                                fontSize: 24),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 )
               ],
+            ),
+          );
+        });
+  }
+
+  Widget getError() {
+    return StreamBuilder<String>(
+        stream: this._error.stream,
+        initialData: "",
+        builder: (context, snapshot) {
+          return Text(
+            snapshot.data,
+            style: TextStyle(
+              fontFamily: 'Trashim-h',
+              fontSize: 15,
+              color: Colors.red,
             ),
           );
         });
@@ -460,7 +493,24 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
     widget.series.remove(ser);
     String playerId = FirebaseAuth.instance.currentUser.uid;
     GameDatabaseService().removeSeries(ser, playerId, this.widget.series);
-    //TODO: update server - shilo
+  }
+
+  //return true if its OK, false-otherwise
+  bool checkInputs(){
+    if (isDiff(this._firstEng, this._secondEng) && isDiff(this._firstEng, this._thirdEng) && isDiff(this._firstEng, this._forthEng)
+    && isDiff(this._thirdEng, this._secondEng) && isDiff(this._forthEng, this._secondEng) && isDiff(this._thirdEng, this._forthEng) &&
+        isDiff(this._firstHeb, this._secondHeb) && isDiff(this._firstHeb, this._thirdHeb) && isDiff(this._firstHeb, this._forthHeb)
+        && isDiff(this._thirdHeb, this._secondHeb) && isDiff(this._forthHeb, this._secondHeb) && isDiff(this._thirdHeb, this._forthHeb)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isDiff(TextEditingController first, TextEditingController second) {
+    if (first.text != second.text) {
+      return true;
+    }
+    return false;
   }
 
   addSer() async {
