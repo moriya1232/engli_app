@@ -27,9 +27,11 @@ class _OpenRoomState extends State<OpenRoom> {
   final _subjectList = StreamController<List<String>>.broadcast();
   final _showSomePlayers = StreamController<bool>.broadcast();
   final _textReplaceData = StreamController<String>.broadcast();
+  final _error = StreamController<String>.broadcast();
 
   @override
   void dispose() {
+    this._error.close();
     this._subjectList.close();
     this._showSomePlayers.close();
     this._textReplaceData.close();
@@ -51,6 +53,7 @@ class _OpenRoomState extends State<OpenRoom> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             getGenericSeriesWidget(),
+            getError(),
             Expanded(
               child: Container(
                 height: 500,
@@ -152,9 +155,29 @@ class _OpenRoomState extends State<OpenRoom> {
     this._showSomePlayers.add(true);
   }
 
+  Widget getError() {
+    return StreamBuilder<String>(
+        stream: this._error.stream,
+        initialData: "",
+        builder: (context, snapshot) {
+          return Text(
+            snapshot.data,
+            style: TextStyle(
+              fontFamily: 'Trashim-h',
+              fontSize: 15,
+              color: Colors.red,
+            ),
+          );
+        });
+  }
+
   void startGameClicked(bool isAgainstComputer) async {
-    GameDatabaseService().updateGeneric(widget.gameId, widget._generic);
     List<String> subs = getMarkedSeries();
+    if (subs.length < 4) {
+      this._error.add("בחר לפחות 4 סריות");
+      return;
+    }
+    GameDatabaseService().updateGeneric(widget.gameId, widget._generic);
 //    List<Subject> subjects = await getSubjectsFromStrings(subs);
     await GameDatabaseService().updateSubjectList(widget.gameId, subs);
     final FirebaseAuth _auth = FirebaseAuth.instance;
