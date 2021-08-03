@@ -15,8 +15,7 @@ class OpenRoom extends StatefulWidget {
   String _dropdownValue = '2';
   List<CheckBoxTile> _series;
 
-
-  OpenRoom(String gameId) : this.gameId = gameId{
+  OpenRoom(String gameId) : this.gameId = gameId {
     this._series = [];
   }
 
@@ -58,7 +57,9 @@ class _OpenRoomState extends State<OpenRoom> {
                 child: _buildSubjectsList(this._sc),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -71,9 +72,7 @@ class _OpenRoomState extends State<OpenRoom> {
               child: Text(
                 'שחק מול המחשב',
                 style: TextStyle(
-                    fontFamily: 'Comix-h',
-                    color: Colors.black87,
-                    fontSize: 20),
+                    fontFamily: 'Comix-h', color: Colors.black87, fontSize: 20),
               ),
             ),
             getSomePlayersWidget(),
@@ -83,7 +82,6 @@ class _OpenRoomState extends State<OpenRoom> {
                 padding: EdgeInsets.all(40),
                 child: Column(
                   children: [
-
                     SizedBox(
                         child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -112,7 +110,6 @@ class _OpenRoomState extends State<OpenRoom> {
   }
 
   Widget getGenericSeriesWidget() {
-
     return StreamBuilder<String>(
         stream: this._textReplaceData.stream,
         initialData: "להחלפה לסריות גנריות",
@@ -121,13 +118,11 @@ class _OpenRoomState extends State<OpenRoom> {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(snapshot.data,
-              style: TextStyle(
-                fontSize: 20,
-                fontFamily: "Comix-h"
-              ),),
+              Text(
+                snapshot.data,
+                style: TextStyle(fontSize: 20, fontFamily: "Comix-h"),
+              ),
               RawMaterialButton(
-
                 onPressed: () {
                   this.widget._generic = !this.widget._generic;
                   if (this.widget._generic) {
@@ -150,15 +145,13 @@ class _OpenRoomState extends State<OpenRoom> {
             ],
           );
         });
-
-
   }
 
   void againstComputerClicked() {
     this._showSomePlayers.add(true);
   }
 
-  void startGameClicked(bool isAgainstComputer) async{
+  void startGameClicked(bool isAgainstComputer) async {
     List<String> subs = getMarkedSeries();
 //    List<Subject> subjects = await getSubjectsFromStrings(subs);
     await GameDatabaseService().updateSubjectList(widget.gameId, subs);
@@ -166,13 +159,13 @@ class _OpenRoomState extends State<OpenRoom> {
     User user = _auth.currentUser;
     String currName = user.displayName;
     if (!isAgainstComputer) {
-      await GameDatabaseService().addPlayer(widget.gameId, currName); //update the subject list in the game file
+      await GameDatabaseService().addPlayer(
+          widget.gameId, currName); //update the subject list in the game file
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
       );
     } else {
-
 //      List<Player> players = [];
       // create players.
       for (int i = 0; i < int.parse(this.widget._dropdownValue); i++) {
@@ -211,9 +204,7 @@ class _OpenRoomState extends State<OpenRoom> {
               },
               child: Text('!שחק',
                   style: TextStyle(
-                      fontFamily: 'Comix-h',
-                      color: Colors.pink,
-                      fontSize: 20)),
+                      fontFamily: 'Comix-h', color: Colors.pink, fontSize: 20)),
             ),
           ),
           DropdownButton<String>(
@@ -250,8 +241,7 @@ class _OpenRoomState extends State<OpenRoom> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 ':כמות משתתפים',
-                style:
-                TextStyle(fontSize: 25, fontFamily: 'Abraham-h'),
+                style: TextStyle(fontSize: 25, fontFamily: 'Abraham-h'),
               ),
             ),
           ),
@@ -272,13 +262,14 @@ class _OpenRoomState extends State<OpenRoom> {
 
   void getAllSeriesNames() async {
     //TODO: shilo!!
-    List<String> l = [];
+    String userId = FirebaseAuth.instance.currentUser.uid;
+    List<String> l = await GameDatabaseService().getSubjectsList(userId);
     this._sc.add(l);
   }
 
   void getGenericSeriesNames() async {
     List<String> l =
-    await GameDatabaseService().getSubjectsList("generic_subjects");
+        await GameDatabaseService().getSubjectsList("generic_subjects");
     this._sc.add(l);
   }
 
@@ -315,21 +306,20 @@ class _OpenRoomState extends State<OpenRoom> {
           }
         });
   }
+
   List<String> getMarkedSeries() {
     //widget.series
     List<String> list = [];
     for (var k in widget._series) {
       if (k.value != null && k.value != false) {
         list.add(k.title);
-
       }
     }
     return list;
   }
 
-
-  Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async{
-    List<Subject> subs=[];
+  Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async {
+    List<Subject> subs = [];
     for (String s in strSub) {
       Subject sub = await GameDatabaseService()
           .createSubjectFromDatabase("generic_subjects", s);
@@ -358,6 +348,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
     this._sc.close();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return _buildCheckBox();

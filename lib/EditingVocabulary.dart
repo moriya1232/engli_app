@@ -10,7 +10,6 @@ TODO: dont possible put "," in names cards and subject.
 
 // ignore: must_be_immutable
 class EditingVocabulary extends StatefulWidget {
-
   List<String> series;
 
   @override
@@ -46,6 +45,7 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
     this._seriesController.close();
     super.dispose();
   }
+
   @override
   void initState() {
     super.initState();
@@ -73,33 +73,32 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
         centerTitle: true,
         title: Text('עריכת אוצר מילים'),
       ),
-      body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    primary: Colors.amberAccent,
-                  ),
-                  onPressed: () {
-                    _showMaterialDialog();
-                  },
-                  child: Text(
-                    'הכנסת סרייה חדשה',
-                    style: TextStyle(
-                        fontFamily: 'Comix-h',
-                        color: Colors.black87,
-                        fontSize: 20),
-                  ),
+      body: Column(children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  primary: Colors.amberAccent,
+                ),
+                onPressed: () {
+                  _showMaterialDialog();
+                },
+                child: Text(
+                  'הכנסת סרייה חדשה',
+                  style: TextStyle(
+                      fontFamily: 'Comix-h',
+                      color: Colors.black87,
+                      fontSize: 20),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
 //                SingleChildScrollView(
 //                  child: Column(children:
 //                  <Widget>[
@@ -224,50 +223,45 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
 //                    ),
 //                  ]),
 //                ),
-          Text(
-            'סריות קיימות',
-            style: TextStyle(
-              fontSize: 30,
-              fontFamily: 'Abraham-h',
+        Text(
+          'סריות קיימות',
+          style: TextStyle(
+            fontSize: 30,
+            fontFamily: 'Abraham-h',
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Expanded(
+          child: Container(
+            child: _getListSeries(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              primary: Colors.pink,
+              padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: Container(
-              child: _getListSeries(),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-                primary: Colors.pink,
-                padding: EdgeInsets.fromLTRB(30, 5, 30, 5),
-              ),
-              onPressed: () {
-                Navigator.push(
+            onPressed: () {
+              Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ChooseGame(),
-                ));
-
-              },
-              child: Text(
-                'סיימתי',
-                style: TextStyle(
-                    fontFamily: 'Comix-h',
-                    color: Colors.black87,
-                    fontSize: 30),
-              ),
+                    builder: (context) => ChooseGame(),
+                  ));
+            },
+            child: Text(
+              'סיימתי',
+              style: TextStyle(
+                  fontFamily: 'Comix-h', color: Colors.black87, fontSize: 30),
             ),
           ),
-        ]),
-      ),
+        ),
+      ]),
     );
   }
 
@@ -335,8 +329,10 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                   controller: _nameSer,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(hintText: "הכנס שם סרייה"),
-                  inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
-
+                  inputFormatters: [
+                    new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")),
+                    LengthLimitingTextInputFormatter(10)
+                  ],
                 ),
                 SizedBox(
                   height: 10,
@@ -361,7 +357,11 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
                               textAlign: TextAlign.center,
-                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[א-ת]")), LengthLimitingTextInputFormatter(10)],
+                              inputFormatters: [
+                                new FilteringTextInputFormatter.allow(
+                                    RegExp("[א-ת]")),
+                                LengthLimitingTextInputFormatter(10)
+                              ],
                             ),
                           ),
                         ),
@@ -377,7 +377,11 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
-                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
+                              inputFormatters: [
+                                new FilteringTextInputFormatter.allow(
+                                    RegExp("[a-zA-Z]")),
+                                LengthLimitingTextInputFormatter(10)
+                              ],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -404,7 +408,11 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
-                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[א-ת]")), LengthLimitingTextInputFormatter(10)],
+                              inputFormatters: [
+                                new FilteringTextInputFormatter.allow(
+                                    RegExp("[א-ת]")),
+                                LengthLimitingTextInputFormatter(10)
+                              ],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -421,7 +429,11 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
-                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
+                              inputFormatters: [
+                                new FilteringTextInputFormatter.allow(
+                                    RegExp("[a-zA-Z]")),
+                                LengthLimitingTextInputFormatter(10)
+                              ],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -448,7 +460,11 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
-                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[א-ת]")), LengthLimitingTextInputFormatter(10)],
+                              inputFormatters: [
+                                new FilteringTextInputFormatter.allow(
+                                    RegExp("[א-ת]")),
+                                LengthLimitingTextInputFormatter(10)
+                              ],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -465,7 +481,11 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
-                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
+                              inputFormatters: [
+                                new FilteringTextInputFormatter.allow(
+                                    RegExp("[a-zA-Z]")),
+                                LengthLimitingTextInputFormatter(10)
+                              ],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -492,7 +512,11 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
-                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[א-ת]")), LengthLimitingTextInputFormatter(10)],
+                              inputFormatters: [
+                                new FilteringTextInputFormatter.allow(
+                                    RegExp("[א-ת]")),
+                                LengthLimitingTextInputFormatter(10)
+                              ],
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -509,7 +533,11 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
-                              inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
+                              inputFormatters: [
+                                new FilteringTextInputFormatter.allow(
+                                    RegExp("[a-zA-Z]")),
+                                LengthLimitingTextInputFormatter(10)
+                              ],
                               textAlign: TextAlign.center,
                             ),
                           ),
