@@ -186,6 +186,13 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
       return;
     }
     List<Subject> subjects = await loadAllMarkedSeries();
+    if (subjects.length < 1) {
+      this._error.add("בחר לפחות סרייה אחת");
+      return;
+    } else if (subjects.length > 5) {
+      this._error.add("בחר עד 5 סריות");
+      return;
+    }
     Navigator.push(
       context,
       MaterialPageRoute(
