@@ -266,7 +266,7 @@ class _OpenRoomState extends State<OpenRoom> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 ':כמות משתתפים',
-                style: TextStyle(fontSize: 25, fontFamily: 'Abraham-h'),
+                style: TextStyle(fontSize: 25, fontFamily: 'Comix-h'),
               ),
             ),
           ),
