@@ -7,7 +7,6 @@ class AuthService {
   Stream<User> get user {
     return _auth.authStateChanges();
   }
-
   //sign in anonymously
   Future signInAnon() async {
     try {
