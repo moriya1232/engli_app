@@ -54,7 +54,9 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerStringsInDeck = StreamController<int>.broadcast();
   // ignore: close_sinks
   final _streamControllerMyScore = StreamController<int>.broadcast();
+  final _getQuartet = StreamController<String>.broadcast();
   final _isFinish = StreamController<bool>.broadcast();
+
 //  final _streamControllerAchievedQuartet = StreamController<String>.broadcast();
   String stringToSpeak = "";
 
@@ -77,6 +79,7 @@ class QuartetsRoom extends StatefulWidget {
         this._streamControllerMyScore,
         this._streamControllerOtherPlayersCards,
         this._streamControllerStringsInDeck,
+        this._getQuartet,
         this._isFinish);
     if (againstComputer) {
       game.againstComputer = againstComputer;
@@ -222,8 +225,31 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             this.meCard, this.meCard.position, widget._streamControllerMe),
         _buildAnimatedPos(this.deckCard, this.deckCard.position,
             widget._streamControllerDeck),
+        Center(child: getQuartetWidget()),
       ]),
     );
+  }
+
+
+  Widget getQuartetWidget() {
+    return StreamBuilder<String>(
+        stream: this.widget._getQuartet.stream,
+        builder: (context, snapshot) {
+          if (snapshot.data == null) {
+            return new Container();
+          }
+            return getQuartetText(snapshot.data);
+
+        });
+  }
+
+  Widget getQuartetText(String string) {
+    return Text(string + " achieved quartet!",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+            backgroundColor: Colors.white,
+            decorationStyle: TextDecorationStyle.double,
+            color: Colors.pink, fontSize: 40, fontFamily: 'Courgette-e'));
   }
 
   Widget getUpdatedView() {

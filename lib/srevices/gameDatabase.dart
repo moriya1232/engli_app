@@ -34,6 +34,7 @@ class GameDatabaseService {
       'subjectAsk': null,
       'success': false,
       'generic': false,
+      'getQuartet': null,
     });
   }
 
@@ -550,6 +551,24 @@ class GameDatabaseService {
 
   void updateGeneric(String gameId, bool gen) {
     gameCollection.doc(gameId).update({'generic': gen});
+  }
+
+  void updateGetQuartet(String gameId, String name) async {
+    // "update my name in get quartet"
+    gameCollection.doc(gameId).update({'getQuartet': name});
+    await Future.delayed(new Duration(seconds: 2));
+    // update null in get quartet
+    gameCollection.doc(gameId).update({'getQuartet': null});
+  }
+
+  Future<String> getGetQuartetName(String gameId) async{
+    String name;
+    await gameCollection.doc(gameId).get().then((value) {
+      if (value.exists) {
+        name = value.data()['getQuartet'].cast<String>();
+      }
+    });
+    return Future.value(name);
   }
 
   Future<bool> getGenerics(gameId) async {

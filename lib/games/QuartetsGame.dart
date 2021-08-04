@@ -39,6 +39,7 @@ class QuartetsGame extends Game {
   StreamController _myScoreController;
   StreamController _otherPlayersCardsController;
   StreamController _stringsOnDeckController;
+  StreamController _getQuartet;
   StreamController _isFinish;
 
   FlutterTts flutterTts = FlutterTts();
@@ -57,6 +58,7 @@ class QuartetsGame extends Game {
       StreamController myScore,
       StreamController otherCards,
       StreamController scStrings,
+      StreamController getQuartet,
       StreamController isFinish)
       : this._gameStart = gameStart,
         this._firstController = sc1,
@@ -69,6 +71,7 @@ class QuartetsGame extends Game {
         this._myCardsController = myCards,
         this._myScoreController = myScore,
         this._otherPlayersCardsController = otherCards,
+        this._getQuartet = getQuartet,
         this._isFinish = isFinish {
     speak("Welcome to engli game!");
 
@@ -115,6 +118,9 @@ class QuartetsGame extends Game {
       if (finished) {
         _isFinish.add(true);
       }
+      String getQuartet =  event.data()['getQuartet'];
+      this._getQuartet.add(getQuartet);
+
       //update tokens parameters
       int take = event.data()['take'];
       String takeName;
@@ -465,7 +471,6 @@ class QuartetsGame extends Game {
   bool checkIfGameDone() {
     if (this.deck.getCards().length == 0 && !isPlayersHasCards()) {
       GameDatabaseService().updateTurn(this, this.turn);
-      //TODO: dispose everything
       return true;
     }
     return false;
@@ -957,8 +962,6 @@ class QuartetsGame extends Game {
   }
 
   Future takeCardFromDeck() async {
-    print("in deck before:");
-    print(this.deck.getCards().length);
     //if no more cards in deck- enything happen.
     if (this.deck.getCards().length > 0) {
       Player player = getPlayerNeedTurn();
@@ -1039,6 +1042,9 @@ class QuartetsGame extends Game {
     List<Subject> series = seriesDone(player);
     for (Subject subject in series) {
       GameDatabaseService().deleteQuartet(subject, this, player);
+      GameDatabaseService().updateGetQuartet(gameId, player.name);
+      this._getQuartet.add(player.name);
+      Future.delayed(Duration(seconds: 2), () => this._getQuartet.add(null));
       player.raiseScore(10);
       GameDatabaseService().updateScore(player.score, player.uid, this);
       this._myScoreController.add(10);

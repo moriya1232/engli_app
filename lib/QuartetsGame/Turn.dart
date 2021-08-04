@@ -219,6 +219,7 @@ class _TurnState extends State<Turn> {
                   ),
                   onPressed: () async {
                     if (!this._firstClick2) {
+                      print("seccess double click");
                       return;
                     }
                     setState(() {
@@ -226,6 +227,7 @@ class _TurnState extends State<Turn> {
                       print(_firstClick2);
                       this._firstClick2 = false;
                     });
+                    await Future.delayed(new Duration(milliseconds: 500));
                     if (await doTurn()) {
                       print("more turn!");
                       widget.game
