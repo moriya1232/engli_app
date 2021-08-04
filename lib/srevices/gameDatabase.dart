@@ -41,16 +41,11 @@ class GameDatabaseService {
   // return 1 if succeed.
   // 2 - too much players ( more then 4)
   // 3 no exist this code
-  Future<int> addPlayer(String gameId, String name) async {
+  Future<int> addPlayer(String gameId, String name, String id) async {
     print("add player:");
     print(name);
-    User user = FirebaseAuth.instance.currentUser;
     List<int> cards = [];
-    await gameCollection
-        .doc(gameId)
-        .collection("players")
-        .doc(user.uid.toString())
-        .set({
+    await gameCollection.doc(gameId).collection("players").doc(id).set({
       'cards': cards,
       'name': name,
       'score': 0,
@@ -561,7 +556,7 @@ class GameDatabaseService {
     gameCollection.doc(gameId).update({'getQuartet': null});
   }
 
-  Future<String> getGetQuartetName(String gameId) async{
+  Future<String> getGetQuartetName(String gameId) async {
     String name;
     await gameCollection.doc(gameId).get().then((value) {
       if (value.exists) {

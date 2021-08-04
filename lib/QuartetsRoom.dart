@@ -230,7 +230,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     );
   }
 
-
   Widget getQuartetWidget() {
     return StreamBuilder<String>(
         stream: this.widget._getQuartet.stream,
@@ -238,8 +237,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           if (snapshot.data == null) {
             return new Container();
           }
-            return getQuartetText(snapshot.data);
-
+          return getQuartetText(snapshot.data);
         });
   }
 
@@ -249,7 +247,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         style: TextStyle(
             backgroundColor: Colors.white,
             decorationStyle: TextDecorationStyle.double,
-            color: Colors.pink, fontSize: 40, fontFamily: 'Courgette-e'));
+            color: Colors.pink,
+            fontSize: 40,
+            fontFamily: 'Courgette-e'));
   }
 
   Widget getUpdatedView() {
@@ -666,6 +666,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     this.widget._streamControllerOtherPlayersCards.close();
     this.widget._streamControllerStringsInDeck.close();
     this.widget._scGameStart.close();
+    print("in dispose");
     GameDatabaseService().updateFinished(this.widget.game.gameId, true);
     //GameDatabaseService().deleteGame(this.widget.game.gameId);
     super.dispose();

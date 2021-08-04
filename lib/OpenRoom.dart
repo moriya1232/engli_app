@@ -161,8 +161,8 @@ class _OpenRoomState extends State<OpenRoom> {
     User user = _auth.currentUser;
     String currName = user.displayName;
     if (!isAgainstComputer) {
-      await GameDatabaseService().addPlayer(
-          widget.gameId, currName); //update the subject list in the game file
+      await GameDatabaseService().addPlayer(widget.gameId, currName,
+          user.uid); //update the subject list in the game file
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
@@ -172,12 +172,18 @@ class _OpenRoomState extends State<OpenRoom> {
       // create players.
       for (int i = 0; i < int.parse(this.widget._dropdownValue); i++) {
         if (i == 0) {
-          await GameDatabaseService().addPlayer(this.widget.gameId, currName);
+          print("in ADDD!!!!!");
+          print(this.widget.gameId);
+          String id = _auth.currentUser.uid;
+          await GameDatabaseService()
+              .addPlayer(this.widget.gameId, currName, id);
           continue;
         } else {
           var random = Random();
-          await GameDatabaseService().addPlayer(this.widget.gameId,
-              optionalsNames[random.nextInt(optionalsNames.length)]);
+          await GameDatabaseService().addPlayer(
+              this.widget.gameId,
+              optionalsNames[random.nextInt(optionalsNames.length)],
+              i.toString());
         }
       }
       Navigator.push(

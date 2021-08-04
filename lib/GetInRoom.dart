@@ -22,6 +22,7 @@ class _GetInRoomState extends State<GetInRoom> {
     this._error.close();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +34,10 @@ class _GetInRoomState extends State<GetInRoom> {
       ),
       body: Center(
           child: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
               ButtonTheme(
                   buttonColor: Colors.black87,
                   child: SizedBox(
@@ -77,10 +78,10 @@ class _GetInRoomState extends State<GetInRoom> {
                     ),
                     //controller: nameController,
                   )),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: getError(),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: getError(),
+              ),
               ButtonTheme(
                   buttonColor: Colors.black87,
                   child: SizedBox(
@@ -101,9 +102,8 @@ class _GetInRoomState extends State<GetInRoom> {
                                 color: Colors.black87,
                                 fontSize: 15)),
                       ))),
-
             ]),
-          )),
+      )),
     );
   }
 
@@ -127,16 +127,16 @@ class _GetInRoomState extends State<GetInRoom> {
     // 1- if success
     // 2- if too much players.
     // 3 - if no exist this code.
-    int succ = await GameDatabaseService().addPlayer(gameId, name);
+    int succ = await GameDatabaseService().addPlayer(gameId, name, user.uid);
 
     if (succ == 1) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => Loading(gameId, false)),
       );
-    } else if (succ == 2){
+    } else if (succ == 2) {
       this._error.add("לא יכול להתחבר, יש יותר מדי שחקנים");
-    } else if (succ == 3){
+    } else if (succ == 3) {
       this._error.add("קוד משחק לא נכון");
     }
   }
