@@ -40,7 +40,9 @@ class GameDatabaseService {
   }
 
   void updateAgainstComputer(String gameId, bool ac) async {
-    await gameCollection.doc(gameId).update({'gainstComputer': ac});
+    print("against computer");
+    print(ac);
+    await gameCollection.doc(gameId).update({'againstComputer': ac});
   }
 
   // return 1 if succeed.
