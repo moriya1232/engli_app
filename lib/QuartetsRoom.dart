@@ -54,12 +54,11 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerStringsInDeck = StreamController<int>.broadcast();
   // ignore: close_sinks
   final _streamControllerMyScore = StreamController<int>.broadcast();
+  final _isFinish = StreamController<bool>.broadcast();
 //  final _streamControllerAchievedQuartet = StreamController<String>.broadcast();
   String stringToSpeak = "";
 
   QuartetsRoom(
-//      List<Subject> subs,
-//    List<Player> players,
     String gameId,
     bool isManager,
     bool againstComputer,
@@ -77,7 +76,8 @@ class QuartetsRoom extends StatefulWidget {
         this._streamControllerMyCards,
         this._streamControllerMyScore,
         this._streamControllerOtherPlayersCards,
-        this._streamControllerStringsInDeck);
+        this._streamControllerStringsInDeck,
+        this._isFinish);
     if (againstComputer) {
       game.againstComputer = againstComputer;
     }
@@ -117,6 +117,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   Widget getView() {
     return Scaffold(
       body: Stack(children: [
+        isGameFinish(),
         Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Container(
             height: otherPlayersHeight,
@@ -381,7 +382,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           wasAsked +
           " about the subject " +
           subjectAsked +
-          ", but " + wasAsked + " didn't have that subject";
+          ", but " +
+          wasAsked +
+          " didn't have that subject";
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -409,7 +412,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             new TextSpan(
                 text: '$wasAsked',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             new TextSpan(text: " didn't have that subject"),
           ],
         ),
@@ -427,7 +430,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           cardAsked +
           ", but " +
           wasAsked +
-          "didn't have the card. subject " + subjectAsked;
+          "didn't have the card. subject " +
+          subjectAsked;
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -460,7 +464,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             new TextSpan(
                 text: '$subjectAsked',
                 style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
           ],
         ),
       );
@@ -636,7 +640,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     this.widget._streamControllerOtherPlayersCards.close();
     this.widget._streamControllerStringsInDeck.close();
     this.widget._scGameStart.close();
-    GameDatabaseService().deleteGame(this.widget.game.gameId);
+    GameDatabaseService().updateFinished(this.widget.game.gameId, true);
+    //GameDatabaseService().deleteGame(this.widget.game.gameId);
     super.dispose();
   }
 
@@ -692,6 +697,23 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               fontSize: fontSizeNames,
             ),
           );
+        });
+  }
+
+  Widget isGameFinish() {
+    return StreamBuilder<bool>(
+        stream: this.widget._isFinish.stream,
+        initialData: false,
+        builder: (context, snapshot) {
+          if (snapshot.data) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      WinnerScreen(widget.game, widget.game.gameId)),
+            );
+          }
+          return new Container();
         });
   }
 //

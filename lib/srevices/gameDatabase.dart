@@ -19,7 +19,7 @@ class GameDatabaseService {
       String id, List<String> subjects, subjectsId, con) async {
     players = [];
     return await gameCollection.doc(id).set({
-      'finished': finished,
+      'finished': false,
       'players': players,
       'turn': turn,
       'deck': deck,
@@ -569,5 +569,9 @@ class GameDatabaseService {
       });
     });
     await gameCollection.doc(gameId).delete();
+  }
+
+  void updateFinished(String gameId, bool isFinished) {
+    gameCollection.doc(gameId).update({'finished': isFinished});
   }
 }

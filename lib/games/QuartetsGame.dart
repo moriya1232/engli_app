@@ -39,6 +39,7 @@ class QuartetsGame extends Game {
   StreamController _myScoreController;
   StreamController _otherPlayersCardsController;
   StreamController _stringsOnDeckController;
+  StreamController _isFinish;
 
   FlutterTts flutterTts = FlutterTts();
 
@@ -55,7 +56,20 @@ class QuartetsGame extends Game {
       StreamController myCards,
       StreamController myScore,
       StreamController otherCards,
-      StreamController scStrings) {
+      StreamController scStrings,
+      StreamController isFinish)
+      : this._gameStart = gameStart,
+        this._firstController = sc1,
+        this._secondController = sc2,
+        this._thirdController = sc3,
+        this._meController = scMe,
+        this._deckController = scDeck,
+        this._turnController = scTurn,
+        this._stringsOnDeckController = scStrings,
+        this._myCardsController = myCards,
+        this._myScoreController = myScore,
+        this._otherPlayersCardsController = otherCards,
+        this._isFinish = isFinish {
     speak("Welcome to engli game!");
 
 //    this.subjects = subs;
@@ -71,21 +85,6 @@ class QuartetsGame extends Game {
     this.subjectAsked = null;
     this.cardAsked = null;
     this.players = players;
-
-    this._gameStart = gameStart;
-    // controllers for animations.
-    this._firstController = sc1;
-    this._secondController = sc2;
-    this._thirdController = sc3;
-    this._meController = scMe;
-    this._deckController = scDeck;
-
-    this._turnController = scTurn;
-    this._stringsOnDeckController = scStrings;
-
-    this._myCardsController = myCards;
-    this._myScoreController = myScore;
-    this._otherPlayersCardsController = otherCards;
   }
 
   void createGame() async {
@@ -112,7 +111,10 @@ class QuartetsGame extends Game {
       if (!this.isManager) {
         this._gameStart.add(true);
       }
-
+      bool finished = event.data()['finished'];
+      if (finished) {
+        _isFinish.add(true);
+      }
       //update tokens parameters
       int take = event.data()['take'];
       String takeName;
