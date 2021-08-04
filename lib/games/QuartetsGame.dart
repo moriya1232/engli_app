@@ -387,18 +387,33 @@ class QuartetsGame extends Game {
       throw Exception("not appropriate card and subject!");
     }
 
+    // ask about a subject
     if (askPlayer(player, subject)) {
-      // ask about a subject
+      // ask about spec card.
       if (askPlayerSpecCard(player, subject, card) != null) {
-        // ask about spec card.
         await takeCardFromPlayer(card, player);
         return new Future.delayed(const Duration(seconds: 5), () => true);
       } else {
+        // there is the subject to the enemy but not the card.
+        GameDatabaseService().updateTake(
+            this,
+            this.listTurn.indexOf(this.getPlayerNeedTurn()),
+            this.listTurn.indexOf(player),
+            card.getSubject(),
+            this.cardsId[card],
+            false);
         await takeCardFromDeck();
         return new Future.delayed(const Duration(seconds: 5), () => false);
       }
     } else {
-      // didn't success take card from another player
+      // didn't success ask subject from another player
+      GameDatabaseService().updateTake(
+          this,
+          this.listTurn.indexOf(this.getPlayerNeedTurn()),
+          this.listTurn.indexOf(player),
+          card.getSubject(),
+          null,
+          false);
       await takeCardFromDeck();
 
       return new Future.delayed(const Duration(seconds: 5), () => false);
@@ -982,8 +997,8 @@ class QuartetsGame extends Game {
 
       // update tokens parameters.
 
-      GameDatabaseService()
-          .updateTake(this, this.listTurn.indexOf(player), -1, "", -1, true);
+//      GameDatabaseService()
+//          .updateTake(this, this.listTurn.indexOf(player), -1, "", -1, true);
 
       //update view:
       this._myCardsController.add(1);
@@ -1047,11 +1062,11 @@ class QuartetsGame extends Game {
     return series;
   }
 
-  int removeAllSeriesDone(Player player) {
+  void removeAllSeriesDone(Player player) async{
     List<Subject> series = seriesDone(player);
     for (Subject subject in series) {
-      GameDatabaseService().deleteQuartet(subject, this, player);
-      GameDatabaseService().updateGetQuartet(gameId, player.name);
+      await GameDatabaseService().deleteQuartet(subject, this, player);
+      await GameDatabaseService().updateGetQuartet(gameId, player.name);
       this._getQuartet.add(player.name);
       Future.delayed(Duration(seconds: 2), () => this._getQuartet.add(null));
       player.raiseScore(10);
@@ -1061,7 +1076,7 @@ class QuartetsGame extends Game {
       this._otherPlayersCardsController.add(1);
       this._turnController.add(1);
     }
-    return series.length;
+    return;
   }
 
   StreamController getAppropriateController(Player p) {

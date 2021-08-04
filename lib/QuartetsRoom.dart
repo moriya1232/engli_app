@@ -1,18 +1,13 @@
 //TODO:
-// חלון קופץ כשמישהו השיג רביעיה
-// משחק מול מחשב
 // לסדר קוד
 // חיצה פעמיים על שאל2 - firstClick2
 // לבדוק כשמנצחים אז את הכפתור חזרה.
+// set state in open room
+// words- against computer.
 
-//TODO SHILO:
-// בהרשמה - עושה שלום null
-//// למחוק קובץ בסוף משחק --דיןךם
-// לבדוק את הקבלה של השחקנים מהשרת כשזה משחק נגד מחשב.
 
 // TODO: check::
 // limit for 4 players. -- check!!!
-// delete
 
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';

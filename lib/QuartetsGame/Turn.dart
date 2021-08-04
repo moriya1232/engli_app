@@ -42,8 +42,10 @@ class _TurnState extends State<Turn> {
     if (this.widget.game.turn != null &&
         widget.game.getPlayerNeedTurn() is Me &&
         this.widget.game.getPlayerNeedTurn().cards.length == 0) {
-      this.widget.game.deck.giveCardToPlayer(
-          this.widget.game.getPlayerNeedTurn(), this.widget.game);
+      this.widget.game.takeCardFromDeck();
+      GameDatabaseService().updateTake(this.widget.game, widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn()), -1, "", -1, true);
+//      this.widget.game.deck.giveCardToPlayer(
+//          this.widget.game.getPlayerNeedTurn(), this.widget.game);
       this.widget.game.doneTurn();
       return new Container();
     } else {
@@ -316,13 +318,17 @@ class _TurnState extends State<Turn> {
   Future<bool> doTurn() async {
     print(
         "ask ${widget.playerChosenToAsk.name}, on subject ${widget.subjectToAsk.nameSubject}, on card: ${widget.cardToAsk.english}");
+
+    // success ask about card.
     if (widget.game.askPlayerSpecCard(
             widget.playerChosenToAsk, widget.subjectToAsk, widget.cardToAsk) !=
         null) {
       await widget.game
           .takeCardFromPlayer(widget.cardToAsk, widget.playerChosenToAsk);
       return Future.delayed(Duration(seconds: 2)).then((value) => true);
-    } else {
+    }
+    // dont success take card.
+    else {
       int take =
           this.widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn());
       int token = this.widget.game.listTurn.indexOf(widget.playerChosenToAsk);
@@ -335,8 +341,9 @@ class _TurnState extends State<Turn> {
           .askPlayer(widget.playerChosenToAsk, widget.subjectToAsk)) {
         await GameDatabaseService()
             .updateTake(this.widget.game, take, token, sub, card, false);
-        //player doesnt have this subject
-      } else {
+      }
+      //player doesn't have this subject
+      else {
         await GameDatabaseService()
             .updateTake(this.widget.game, take, token, sub, null, false);
       }
@@ -354,13 +361,24 @@ class _TurnState extends State<Turn> {
   }
 
   askClicked() async {
+    // success in chosen subject.
     if (widget.playerChosenToAsk
         .getSubjects()
         .contains(widget.subjectToAsk.nameSubject)) {
       setState(() {
         this.chosenPlayerAndCategoryToAsk = true;
       });
-    } else {
+    }
+    // didn't success asking this subject.
+    else {
+      //update takes parameters in server.
+      GameDatabaseService().updateTake(
+          widget.game,
+          widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn()),
+          widget.game.listTurn.indexOf(widget.playerChosenToAsk),
+          widget.subjectToAsk.nameSubject,
+          null,
+          false);
       await widget.game.takeCardFromDeck();
 
       doneTurn();

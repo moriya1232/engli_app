@@ -24,12 +24,16 @@ class OpenRoom extends StatefulWidget {
 }
 
 class _OpenRoomState extends State<OpenRoom> {
+  final _error = StreamController<String>.broadcast();
   final _subjectList = StreamController<List<String>>.broadcast();
   final _showSomePlayers = StreamController<bool>.broadcast();
   final _textReplaceData = StreamController<String>.broadcast();
+  final _scDropDownValue = StreamController<String>.broadcast();
 
   @override
   void dispose() {
+    this._scDropDownValue.close();
+    this._error.close();
     this._subjectList.close();
     this._showSomePlayers.close();
     this._textReplaceData.close();
@@ -51,6 +55,7 @@ class _OpenRoomState extends State<OpenRoom> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             getGenericSeriesWidget(),
+            getError(),
             Expanded(
               child: Container(
                 height: 500,
@@ -94,11 +99,12 @@ class _OpenRoomState extends State<OpenRoom> {
                         startGameClicked(false);
                       },
                       child: Text(
-                        '!התחל משחק',
+                        '!התחל משחק ברשת',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontFamily: 'Comix-h',
                             color: Colors.black87,
-                            fontSize: 40),
+                            fontSize: 30),
                       ),
                     )),
                   ],
@@ -153,8 +159,13 @@ class _OpenRoomState extends State<OpenRoom> {
   }
 
   void startGameClicked(bool isAgainstComputer) async {
-    GameDatabaseService().updateGeneric(widget.gameId, widget._generic);
     List<String> subs = getMarkedSeries();
+    if (subs.length < 4) {
+      this._error.add("בחר לפחות 4 סריות");
+      return;
+    }
+    GameDatabaseService().updateGeneric(widget.gameId, widget._generic);
+
 //    List<Subject> subjects = await getSubjectsFromStrings(subs);
     await GameDatabaseService().updateSubjectList(widget.gameId, subs);
     final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -173,7 +184,6 @@ class _OpenRoomState extends State<OpenRoom> {
       GameDatabaseService().updateAgainstComputer(this.widget.gameId, true);
       for (int i = 0; i < int.parse(this.widget._dropdownValue); i++) {
         if (i == 0) {
-          print("in ADDD!!!!!");
           print(this.widget.gameId);
           String id = _auth.currentUser.uid;
           await GameDatabaseService()
@@ -216,61 +226,57 @@ class _OpenRoomState extends State<OpenRoom> {
                       fontFamily: 'Comix-h', color: Colors.pink, fontSize: 20)),
             ),
           ),
-          DropdownButton<String>(
-            value: widget._dropdownValue,
-            //hint: new Text("בחר כמות משתתפים"),
-            icon: Icon(Icons.arrow_downward),
-            iconSize: 10,
-            elevation: 16,
-            style: TextStyle(color: Colors.black87),
-            underline: Container(
-              height: 2,
-              width: 10,
-              color: Colors.amberAccent,
-            ),
-            onChanged: (String newValue) {
-              setState(() {
-                widget._dropdownValue = newValue;
-              });
-            },
-            items: <String>['2', '3', '4']
-                .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(
-                  value,
-                  style: TextStyle(fontSize: 25),
-                ),
-              );
-            }).toList(),
-          ),
+          getDropDown(),
           Container(
             //width: 200,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 ':כמות משתתפים',
-                style: TextStyle(fontSize: 25, fontFamily: 'Abraham-h'),
+                style: TextStyle(fontSize: 25, fontFamily: 'Comix-h'),
               ),
             ),
           ),
         ]);
   }
 
-//  Player createPlayer(List<Player> players, bool isMe, String name) {
-//    Player player;
-//    if (isMe) {
-//      player = Me([], name, "");
-//    } else {
-//      player = ComputerPlayer([], name, "");
-//    }
-//    GameDatabaseService().addPlayer(this.widget.gameId, name);
-//    players.add(player);
-//    return player;
-//  }
+
+  Widget getDropDown() {
+    return StreamBuilder<String>(
+        stream: this._scDropDownValue.stream,
+        initialData: '2',
+        builder: (context, snapshot) {
+      return DropdownButton<String>(
+        value: snapshot.data ?? '2',
+        //hint: new Text("בחר כמות משתתפים"),
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 10,
+        elevation: 16,
+        style: TextStyle(color: Colors.black87),
+        underline: Container(
+          height: 2,
+          width: 10,
+          color: Colors.amberAccent,
+        ),
+        onChanged: (String newValue) {
+          this._scDropDownValue.add(newValue);
+          this.widget._dropdownValue = newValue;
+        },
+        items: <String>['2', '3', '4']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 22),
+            ),
+          );
+        }).toList(),
+      );
+    });
+  }
 
   void getAllSeriesNames() async {
-    //TODO: shilo!!
     String userId = FirebaseAuth.instance.currentUser.uid;
     List<String> l = await GameDatabaseService().getSubjectsList(userId);
     this._subjectList.add(l);
@@ -335,6 +341,22 @@ class _OpenRoomState extends State<OpenRoom> {
       subs.add(sub);
     }
     return Future.value(subs);
+  }
+
+  Widget getError() {
+    return StreamBuilder<String>(
+        stream: this._error.stream,
+        initialData: "",
+        builder: (context, snapshot) {
+          return Text(
+            snapshot.data,
+            style: TextStyle(
+              fontFamily: 'Trashim-h',
+              fontSize: 15,
+              color: Colors.red,
+            ),
+          );
+        });
   }
 
   void clearCheckboxes() {

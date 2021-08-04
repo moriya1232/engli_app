@@ -40,8 +40,6 @@ class GameDatabaseService {
   }
 
   void updateAgainstComputer(String gameId, bool ac) async {
-    print("against computer");
-    print(ac);
     await gameCollection.doc(gameId).update({'againstComputer': ac});
   }
 
@@ -49,8 +47,6 @@ class GameDatabaseService {
   // 2 - too much players ( more then 4)
   // 3 no exist this code
   Future<int> addPlayer(String gameId, String name, String id) async {
-    print("add player:");
-    print(name);
     List<int> cards = [];
     await gameCollection.doc(gameId).collection("players").doc(id).set({
       'cards': cards,
@@ -65,8 +61,6 @@ class GameDatabaseService {
         var x = documentSnapshot.data()['players'];
         List<String> newPlayersList = x.cast<String>();
         newPlayersList.add(name);
-        print("new Player list: ");
-        print(newPlayersList);
         if (newPlayersList.length <= 4) {
           gameCollection.doc(gameId).update({'players': newPlayersList});
           return Future.value(1);
@@ -77,9 +71,6 @@ class GameDatabaseService {
         return Future.value(3);
       }
     });
-    //check?
-//    print("4");
-//    return Future.value(1);
   }
 
   Future<List<String>> getSubjectsList(
@@ -195,20 +186,14 @@ class GameDatabaseService {
         } else {
           if (!againstComputer) {
             p = VirtualPlayer(cards, value.data()["name"], value.id);
-            print("here:");
-            print(p.name);
           } else {
             p = ComputerPlayer(cards, value.data()["name"], value.id);
-            print("here:");
-            print(p.name);
           }
           players.add(p);
         }
         game.addToListTurn(p);
       });
     });
-    print("players:");
-    print(players);
     return Future.value(players);
   }
 
@@ -572,10 +557,10 @@ class GameDatabaseService {
 
   void updateGetQuartet(String gameId, String name) async {
     // "update my name in get quartet"
-    gameCollection.doc(gameId).update({'getQuartet': name});
+    await gameCollection.doc(gameId).update({'getQuartet': name});
     await Future.delayed(new Duration(seconds: 2));
     // update null in get quartet
-    gameCollection.doc(gameId).update({'getQuartet': null});
+    await gameCollection.doc(gameId).update({'getQuartet': null});
   }
 
   Future<String> getGetQuartetName(String gameId) async {

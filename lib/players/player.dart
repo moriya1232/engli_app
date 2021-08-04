@@ -5,6 +5,7 @@ import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/Game.dart';
 import 'package:engli_app/games/MemoryGame.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import '../cards/CardGame.dart';
 
 abstract class Player {
@@ -75,7 +76,9 @@ abstract class Player {
         cardsThatNotHave.add(card);
       }
     }
-    return cardsThatNotHave[random.nextInt(cardsThatNotHave.length)];
+    int len = cardsThatNotHave.length;
+    if (len <= 0) {return null;}
+    return cardsThatNotHave[random.nextInt(len)];
   }
 }
 
@@ -123,6 +126,9 @@ class ComputerPlayer extends Other {
       // no cards! so take card from the deck.
       if (cards.length == 0) {
         await game.takeCardFromDeck();
+        // update tokens parameters.
+      GameDatabaseService()
+          .updateTake(game, game.listTurn.indexOf(this), -1, "", -1, true);
         if (game.doneTurn()) {
           return;
         }
