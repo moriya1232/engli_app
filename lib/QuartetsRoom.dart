@@ -1,6 +1,5 @@
 //TODO:
 // חלון קופץ כשמישהו השיג רביעיה
-// לבדוק על טרמינולוגיה של כל המשחק באנגלית
 // משחק מול מחשב
 // לסדר קוד
 // חיצה פעמיים על שאל2 - firstClick2
@@ -372,7 +371,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         ),
       );
     }
-    // ask about subject and doesnt this subject
+    // ask about subject and doesnt have this subject
     else if (!succ &&
         cardAsked == null &&
         wasAsked != null &&
@@ -380,9 +379,9 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       this.widget.stringToSpeak = asked +
           " asked " +
           wasAsked +
-          " about subject " +
+          " about the subject " +
           subjectAsked +
-          ", and he does not have this subject";
+          ", but " + wasAsked + " didn't have that subject";
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -401,17 +400,22 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 text: '$wasAsked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: 'about subject: '),
+            new TextSpan(text: 'about the subject '),
             new TextSpan(
                 text: '$subjectAsked',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: ', and he does not have this subject'),
+            new TextSpan(text: ', but '),
+            new TextSpan(
+                text: '$wasAsked',
+                style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: " didn't have that subject"),
           ],
         ),
       );
     }
-    // ask about subject and he doesnt have the card.
+    // ask about subject and he doesn't have the card.
     else if (!succ &&
         cardAsked != null &&
         wasAsked != null &&
@@ -419,11 +423,11 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
       this.widget.stringToSpeak = asked +
           " asked " +
           wasAsked +
-          " about card " +
+          " for a " +
           cardAsked +
-          " in subject: " +
-          subjectAsked +
-          "and he doesn't have this card";
+          ", but " +
+          wasAsked +
+          "didn't have the card. subject " + subjectAsked;
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -442,17 +446,21 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 text: '$wasAsked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: 'about the card: '),
+            new TextSpan(text: 'for a '),
             new TextSpan(
                 text: '$cardAsked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: 'in subject: '),
+            new TextSpan(text: 'but '),
             new TextSpan(
-                text: '$subjectAsked ',
+                text: '$wasAsked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: "and he doesn't have this card."),
+            new TextSpan(text: "didn't have the card.\nsubject: "),
+            new TextSpan(
+                text: '$subjectAsked',
+                style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
           ],
         ),
       );

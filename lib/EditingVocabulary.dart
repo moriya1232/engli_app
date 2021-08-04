@@ -215,6 +215,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                             child: TextFormField(
                               controller: this._firstHeb,
                               decoration: InputDecoration(
+                                isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
                                     borderRadius:
@@ -236,6 +238,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                             child: TextFormField(
                               controller: _firstEng,
                               decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
                                     borderRadius:
@@ -267,6 +271,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                             child: TextFormField(
                               controller: this._secondHeb,
                               decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
                                     borderRadius:
@@ -288,6 +294,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                             child: TextFormField(
                               controller: _secondEng,
                               decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
                                     borderRadius:
@@ -319,6 +327,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                             child: TextFormField(
                               controller: this._thirdHeb,
                               decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
                                     borderRadius:
@@ -340,6 +350,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                             child: TextFormField(
                               controller: _thirdEng,
                               decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
                                     borderRadius:
@@ -371,6 +383,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                             child: TextFormField(
                               controller: this._forthHeb,
                               decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                   hintText: "עברית",
                                   border: OutlineInputBorder(
                                     borderRadius:
@@ -392,6 +406,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                             child: TextFormField(
                               controller: _forthEng,
                               decoration: InputDecoration(
+                                  isDense: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                                   hintText: "אנגלית",
                                   border: OutlineInputBorder(
                                     borderRadius:
