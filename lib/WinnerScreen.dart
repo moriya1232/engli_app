@@ -1,12 +1,16 @@
 import 'package:engli_app/GetInRoom.dart';
 import 'package:engli_app/players/player.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
 import 'games/Game.dart';
 
 class WinnerScreen extends StatefulWidget {
   final Game game;
+  final String gameId;
 
-  WinnerScreen(Game g) : this.game = g;
+  WinnerScreen(Game g, String gameId)
+      : this.game = g,
+        this.gameId = gameId;
 
   @override
   _WinnerRoomState createState() => _WinnerRoomState();
@@ -31,7 +35,9 @@ class _WinnerRoomState extends State<WinnerScreen> {
                       color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
                 ),
               ),
-              SizedBox(height: 30,),
+              SizedBox(
+                height: 30,
+              ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -53,9 +59,14 @@ class _WinnerRoomState extends State<WinnerScreen> {
       ),
     );
   }
+
   void backClicked() {
     print("need to go back");
-    Navigator.push(context, MaterialPageRoute(builder: (context) => GetInRoom()));
+    if (this.widget.gameId != null) {
+      GameDatabaseService().deleteGame(this.widget.gameId);
+    }
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => GetInRoom()));
   }
 
   String winnerName() {
@@ -63,27 +74,26 @@ class _WinnerRoomState extends State<WinnerScreen> {
     int maxScore = 0;
     Player winner = widget.game.players[0];
     for (Player player in widget.game.players) {
-      if(player.score > winner.score) {
+      if (player.score > winner.score) {
         winner = player;
         maxScore = winner.score;
       }
     }
     for (Player player in widget.game.players) {
       if (player.score == maxScore) {
-          winners.add(player);
+        winners.add(player);
       }
     }
-    if(winners.length > 1) {
+    if (winners.length > 1) {
       String s = winners[0].name;
       for (Player player in winners) {
         if (player == winners[0]) {
           continue;
         }
-        s +=  ", " +player.name;
+        s += ", " + player.name;
       }
       return '!שיוויון' + "\n" + s;
-    }
-    else {
+    } else {
       return ' המנצח הוא  ${winner.name}';
     }
   }

@@ -160,7 +160,7 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                       IconButton(
                           icon: Icon(Icons.clear),
                           onPressed: () {
-                            removeSer(snapshot.data[index]);
+                            deleteSer(snapshot.data[index]);
                           })
 //                          Image(
 //                            image: AssetImage('icons/pencil.jpg'),
@@ -454,12 +454,12 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
     this._seriesController.add(this.widget.series);
   }
 
-  removeSer(String ser) {
+  deleteSer(String ser) {
     this.widget.series.remove(ser);
     this._seriesController.add(this.widget.series);
     widget.series.remove(ser);
     String playerId = FirebaseAuth.instance.currentUser.uid;
-    GameDatabaseService().removeSeries(ser, playerId, this.widget.series);
+    GameDatabaseService().deleteSeries(ser, playerId, this.widget.series);
     //TODO: update server - shilo
   }
 

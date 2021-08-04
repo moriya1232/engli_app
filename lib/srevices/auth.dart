@@ -1,4 +1,3 @@
-
 import 'package:engli_app/srevices/usersDatabase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -16,7 +15,8 @@ class AuthService {
       User user = result.user;
       print("IM HERE!!!!");
       //TODO: BUG: if I logout and after that login as anonymous user - name get NULL
-      await user.updateProfile(displayName: "GUEST_" + user.uid.substring(0,3), photoURL: null);
+      await user.updateProfile(
+          displayName: "GUEST_" + user.uid.substring(0, 3), photoURL: null);
       return user;
     } catch (e) {
       print(e.toString());
@@ -32,10 +32,10 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: pass);
       User user = result.user;
-      user.updateProfile(displayName: name, photoURL: null);
-
+      await user.updateProfile(displayName: name);
+      print(_auth.currentUser.displayName);
       //create new a document for the user
-      await UsersDatabase(uid: user.uid).updateData(name);
+      // await UsersDatabase(uid: user.uid).updateData(name);
       return user;
     } catch (e) {
       print(e.toString());

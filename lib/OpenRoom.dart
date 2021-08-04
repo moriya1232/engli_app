@@ -30,6 +30,7 @@ class _OpenRoomState extends State<OpenRoom> {
 
   @override
   void dispose() {
+    GameDatabaseService().deleteGame(this.widget.gameId);
     this._subjectList.close();
     this._showSomePlayers.close();
     this._textReplaceData.close();

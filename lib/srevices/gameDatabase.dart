@@ -125,7 +125,6 @@ class GameDatabaseService {
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         var x = documentSnapshot.data()['managerId'];
-        print("in get managerId");
         subjectsId = x;
       }
     });
@@ -511,17 +510,36 @@ class GameDatabaseService {
 //    }
   }
 
-  void removeSeries(
+  void deleteSeries(
       String seriesName, String playerId, List<String> newListSub) async {
-    print(seriesName);
-    await subjectCollection.doc(playerId).collection('user_subjects').doc(
-        seriesName).collection('cards').doc('card1').delete();
-    await subjectCollection.doc(playerId).collection('user_subjects').doc(
-        seriesName).collection('cards').doc('card2').delete();
-    await subjectCollection.doc(playerId).collection('user_subjects').doc(
-        seriesName).collection('cards').doc('card3').delete();
-    await subjectCollection.doc(playerId).collection('user_subjects').doc(
-        seriesName).collection('cards').doc('card4').delete();
+    await subjectCollection
+        .doc(playerId)
+        .collection('user_subjects')
+        .doc(seriesName)
+        .collection('cards')
+        .doc('card1')
+        .delete();
+    await subjectCollection
+        .doc(playerId)
+        .collection('user_subjects')
+        .doc(seriesName)
+        .collection('cards')
+        .doc('card2')
+        .delete();
+    await subjectCollection
+        .doc(playerId)
+        .collection('user_subjects')
+        .doc(seriesName)
+        .collection('cards')
+        .doc('card3')
+        .delete();
+    await subjectCollection
+        .doc(playerId)
+        .collection('user_subjects')
+        .doc(seriesName)
+        .collection('cards')
+        .doc('card4')
+        .delete();
     await subjectCollection
         .doc(playerId)
         .collection('user_subjects')
@@ -542,5 +560,14 @@ class GameDatabaseService {
       }
     });
     return Future.value(gen);
+  }
+
+  void deleteGame(String gameId) async {
+    await gameCollection.doc(gameId).collection('players').get().then((value) {
+      value.docs.forEach((element) {
+        element.reference.delete();
+      });
+    });
+    await gameCollection.doc(gameId).delete();
   }
 }

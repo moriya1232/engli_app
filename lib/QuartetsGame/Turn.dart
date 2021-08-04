@@ -38,8 +38,8 @@ class _TurnState extends State<Turn> {
 
   @override
   Widget build(BuildContext context) {
-      // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
-     if (this.widget.game.turn != null &&
+    // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
+    if (this.widget.game.turn != null &&
         widget.game.getPlayerNeedTurn() is Me &&
         this.widget.game.getPlayerNeedTurn().cards.length == 0) {
       this.widget.game.deck.giveCardToPlayer(
@@ -55,13 +55,23 @@ class _TurnState extends State<Turn> {
 
   Widget getAppropriateAsk() {
     //subject to ask not in my cards.
-    if (!this.widget.game.getMyPlayer().getSubjects().contains(this.widget.subjectToAsk.nameSubject)) {
-      this.widget.subjectToAsk = this.widget.game.getSubjectsOfPlayer(this.widget.game.getMyPlayer())[0];
+    if (!this
+        .widget
+        .game
+        .getMyPlayer()
+        .getSubjects()
+        .contains(this.widget.subjectToAsk.nameSubject)) {
+      this.widget.subjectToAsk = this
+          .widget
+          .game
+          .getSubjectsOfPlayer(this.widget.game.getMyPlayer())[0];
     }
     if (!this.chosenPlayerAndCategoryToAsk) {
       List<String> names = widget.game.getNamesPlayers();
       names.remove(widget.game.getMyPlayer().name);
-      if (widget.subjectToAsk != null && !widget.game.checkIfGameDone() && this._firstClick1) {
+      if (widget.subjectToAsk != null &&
+          !widget.game.checkIfGameDone() &&
+          this._firstClick1) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -107,15 +117,27 @@ class _TurnState extends State<Turn> {
                       ),
                       onChanged: (String newValue) {
                         setState(() {
-                          Subject sub = widget.game.getSubjectByString(newValue);
-                          if (this.widget.game.getMyPlayer().getSubjects().contains(sub.nameSubject)) {
+                          Subject sub =
+                              widget.game.getSubjectByString(newValue);
+                          if (this
+                              .widget
+                              .game
+                              .getMyPlayer()
+                              .getSubjects()
+                              .contains(sub.nameSubject)) {
                             widget.subjectToAsk = sub;
-                            widget.cardToAsk = widget.subjectToAsk
-                                .getCards()[0];
+                            widget.cardToAsk =
+                                widget.subjectToAsk.getCards()[0];
                           } else {
                             print("bug");
-                            widget.subjectToAsk = widget.game.getSubjectByString(this.widget.game.getMyPlayer().getSubjects()[0]);
-                            widget.cardToAsk = widget.subjectToAsk.getCards()[0];
+                            widget.subjectToAsk = widget.game
+                                .getSubjectByString(this
+                                    .widget
+                                    .game
+                                    .getMyPlayer()
+                                    .getSubjects()[0]);
+                            widget.cardToAsk =
+                                widget.subjectToAsk.getCards()[0];
                           }
                         });
                       },
@@ -196,7 +218,9 @@ class _TurnState extends State<Turn> {
                         borderRadius: BorderRadius.circular(15.0)),
                   ),
                   onPressed: () async {
-                    if(!this._firstClick2) {return;}
+                    if (!this._firstClick2) {
+                      return;
+                    }
                     setState(() {
                       print("firstClick2: ");
                       print(_firstClick2);
@@ -280,7 +304,9 @@ class _TurnState extends State<Turn> {
     if (widget.game.doneTurn()) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => WinnerScreen(widget.game)),
+        MaterialPageRoute(
+            builder: (context) =>
+                WinnerScreen(widget.game, widget.game.gameId)),
       );
     }
   }
@@ -295,18 +321,22 @@ class _TurnState extends State<Turn> {
           .takeCardFromPlayer(widget.cardToAsk, widget.playerChosenToAsk);
       return Future.delayed(Duration(seconds: 2)).then((value) => true);
     } else {
-      int take = this.widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn());
+      int take =
+          this.widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn());
       int token = this.widget.game.listTurn.indexOf(widget.playerChosenToAsk);
       String sub = this.widget.subjectToAsk.nameSubject;
       int card = this.widget.game.cardsId[this.widget.cardToAsk];
       //player has this subject but not the card
-      if (this.widget.game.askPlayer(widget.playerChosenToAsk, widget.subjectToAsk)) {
-        await GameDatabaseService().updateTake(
-            this.widget.game, take, token, sub, card, false);
+      if (this
+          .widget
+          .game
+          .askPlayer(widget.playerChosenToAsk, widget.subjectToAsk)) {
+        await GameDatabaseService()
+            .updateTake(this.widget.game, take, token, sub, card, false);
         //player doesnt have this subject
       } else {
-        await GameDatabaseService().updateTake(
-            this.widget.game, take, token, sub, null, false);
+        await GameDatabaseService()
+            .updateTake(this.widget.game, take, token, sub, null, false);
       }
       await widget.game.takeCardFromDeck();
       return Future.delayed(Duration(seconds: 2)).then((value) => false);

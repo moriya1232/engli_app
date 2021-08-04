@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:engli_app/EditingVocabulary.dart';
 import 'package:engli_app/QuartetsInstructions.dart';
 import 'package:engli_app/srevices/auth.dart';
@@ -14,7 +16,17 @@ class ChooseGame extends StatefulWidget {
 }
 
 class _ChooseGameState extends State<ChooseGame> {
+  final _userName = StreamController<String>.broadcast();
   AuthService _auth = AuthService();
+  @override
+  void initState() {
+    _auth.user.listen((event) {
+      if (event != null && event.displayName != null) {
+        this._userName.add(event.displayName);
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,45 +40,38 @@ class _ChooseGameState extends State<ChooseGame> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(15),
-                      child: GestureDetector(
-                        onTap: () {
-                          print("instructions");
-                          instructionsClicked();
-                        },
-                        child: Text('הוראות',
-                            style: TextStyle(
-                                fontFamily: 'Comix-h',
-                                color: Colors.teal,
-                                fontSize: 20)),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(15),
-                      child: GestureDetector(
-                        onTap: () {
-                          logoutClicked();
-                        },
-                        child: Text('התנתק',
-                            style: TextStyle(
-                                fontFamily: 'Comix-h',
-                                color: Colors.teal,
-                                fontSize: 20)),
-                      ),
-                    ),
-                  ]),
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 60, 0, 20),
-                child: Text(
-                  ' Hello ${FirebaseAuth.instance.currentUser.displayName} !',
-                  style: TextStyle(
-                    fontFamily: 'AkayaK-e',
-                    fontSize: 40,
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("instructions");
+                      instructionsClicked();
+                    },
+                    child: Text('הוראות',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.teal,
+                            fontSize: 20)),
                   ),
                 ),
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: GestureDetector(
+                    onTap: () {
+                      logoutClicked();
+                    },
+                    child: Text('התנתק',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.teal,
+                            fontSize: 20)),
+                  ),
+                ),
+              ]),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 60, 0, 20),
+                child: getUserName(),
               ),
               SingleChildScrollView(
                   child: Column(
@@ -161,6 +166,21 @@ class _ChooseGameState extends State<ChooseGame> {
     _showMaterialDialog();
   }
 
+  Widget getUserName() {
+    return StreamBuilder<String>(
+        stream: this._userName.stream,
+        initialData: "",
+        builder: (context, snapshot) {
+          return Text(
+            'Hello ' + snapshot.data,
+            style: TextStyle(
+              fontFamily: 'AkayaK-e',
+              fontSize: 40,
+            ),
+          );
+        });
+  }
+
   _showMaterialDialog() {
     showDialog(
         context: context,
@@ -207,8 +227,7 @@ class _ChooseGameState extends State<ChooseGame> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: Text('סגור',
-                  textDirection: TextDirection.rtl),
+                  child: Text('סגור', textDirection: TextDirection.rtl),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -237,8 +256,6 @@ class _ChooseGameState extends State<ChooseGame> {
       MaterialPageRoute(builder: (context) => new QuartetsInstructions()),
     );
   }
-
-
 
   void logoutClicked() async {
     await _auth.signOut();

@@ -24,7 +24,9 @@ class MemoryRoom extends StatefulWidget {
 
   MemoryGame game;
 
-  MemoryRoom(bool computerEnemy, String enemyName, List<Subject> subjects) : this.computerEnemy = computerEnemy, this.enemyName = enemyName {
+  MemoryRoom(bool computerEnemy, String enemyName, List<Subject> subjects)
+      : this.computerEnemy = computerEnemy,
+        this.enemyName = enemyName {
     this.game = new MemoryGame(
         computerEnemy,
         enemyName,
@@ -51,7 +53,8 @@ class _MemoryRoomState extends State<MemoryRoom> {
   void _listener() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => WinnerScreen(this.widget.game)),
+      MaterialPageRoute(
+          builder: (context) => WinnerScreen(this.widget.game, null)),
     );
   }
 
@@ -171,14 +174,13 @@ class _MemoryRoomState extends State<MemoryRoom> {
       rotated = 2;
     }
     return RotatedBox(
-        quarterTurns: rotated,
-        child:  Text(
-      ' ${widget.game.getEnemy().name}',
-      style: TextStyle(
-          color: Colors.lightGreen,
-          fontSize: fontSize,
-          fontFamily: 'Gan-h'),
-    ),);
+      quarterTurns: rotated,
+      child: Text(
+        ' ${widget.game.getEnemy().name}',
+        style: TextStyle(
+            color: Colors.lightGreen, fontSize: fontSize, fontFamily: 'Gan-h'),
+      ),
+    );
   }
 
   Widget moreTurnWidget() {
@@ -186,28 +188,28 @@ class _MemoryRoomState extends State<MemoryRoom> {
         stream: this.widget._streamControllerMoreTurn.stream,
         builder: (context, snapshot) {
           String string = snapshot.data ?? "";
-          if (!this.widget.computerEnemy && !(this.widget.game.getPlayerNeedTurn() is Me)) {
+          if (!this.widget.computerEnemy &&
+              !(this.widget.game.getPlayerNeedTurn() is Me)) {
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                RotatedBox(
-                  quarterTurns: 2,
-                  child: textMoreTurn(string),
-                ),
-              ]
-            );
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RotatedBox(
+                    quarterTurns: 2,
+                    child: textMoreTurn(string),
+                  ),
+                ]);
+          } else {
+            return textMoreTurn(string);
           }
-          else {return textMoreTurn(string);}
         });
   }
 
   Widget textMoreTurn(String string) {
-    return Text(
-        string,
-        style: TextStyle(
-        color: Colors.pink, fontSize: 40, fontFamily: 'Gan-h'));
+    return Text(string,
+        style:
+            TextStyle(color: Colors.pink, fontSize: 40, fontFamily: 'Gan-h'));
   }
 
   Widget turnWidget(double fontSize) {

@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:engli_app/QuartetsRoom.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
+
 class Loading extends StatefulWidget {
   final bool isManager;
   final String gameId;
 //  final List<Subject> subjects;
 
-  Loading(String gameId, bool isManager) : isManager = isManager, gameId = gameId;
+  Loading(String gameId, bool isManager)
+      : isManager = isManager,
+        gameId = gameId;
 
   @override
   _LoadingState createState() => _LoadingState();
@@ -34,7 +38,8 @@ class _LoadingState extends State<Loading> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => QuartetsRoom(this.widget.gameId, widget.isManager, false)),
+              builder: (context) =>
+                  QuartetsRoom(this.widget.gameId, widget.isManager, false)),
         );
       }
     });
@@ -117,7 +122,8 @@ class _LoadingState extends State<Loading> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => QuartetsRoom(this.widget.gameId, widget.isManager, false)),
+          builder: (context) =>
+              QuartetsRoom(this.widget.gameId, widget.isManager, false)),
     );
     this._usersLoginStreamController.close();
     //GameDatabaseService().updateContinueState(this.widget.gameId);
@@ -149,5 +155,13 @@ class _LoadingState extends State<Loading> {
                 );
               });
         });
+  }
+
+  @override
+  void dispose() {
+    if (this.widget.isManager) {
+      GameDatabaseService().deleteGame(this.widget.gameId);
+    }
+    super.dispose();
   }
 }

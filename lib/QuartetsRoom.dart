@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
+import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
@@ -276,7 +277,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => WinnerScreen(widget.game)),
+                  builder: (context) =>
+                      WinnerScreen(widget.game, widget.game.gameId)),
             );
             return null;
           } else if (widget.game.getPlayerNeedTurn() is Me) {
@@ -627,6 +629,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     this.widget._streamControllerOtherPlayersCards.close();
     this.widget._streamControllerStringsInDeck.close();
     this.widget._scGameStart.close();
+    GameDatabaseService().deleteGame(this.widget.game.gameId);
     super.dispose();
   }
 
