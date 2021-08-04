@@ -118,7 +118,7 @@ class QuartetsGame extends Game {
       if (finished) {
         _isFinish.add(true);
       }
-      String getQuartet =  event.data()['getQuartet'];
+      String getQuartet = event.data()['getQuartet'];
       this._getQuartet.add(getQuartet);
 
       //update tokens parameters
@@ -329,9 +329,19 @@ class QuartetsGame extends Game {
     Deck deck = createDeck(this.subjects);
     deck.handoutDeck(this.players);
     this.deck = deck;
+
+    var random = Random();
+    bool isAgainstComputer =
+        await GameDatabaseService().getAgainstComputer(gameId);
+    if (!isAgainstComputer) {
+      this.turn = random.nextInt(this.listTurn.length);
+    }
     //initialize arrays with all the id cards to every player in the game.
     Map<String, List<int>> playersCards = {};
     for (Player p in players) {
+      if (isAgainstComputer && p is Me) {
+        this.turn = listTurn.indexOf(p);
+      }
       playersCards[p.uid] = [];
       for (CardQuartets q in p.cards) {
         int x = this.cardsId[q];
@@ -347,8 +357,7 @@ class QuartetsGame extends Game {
       int x = this.cardsId[q];
       deckCards.add(x);
     }
-    var random = Random();
-    this.turn = random.nextInt(this.listTurn.length);
+
     this._gameStart.add(true);
     await GameDatabaseService().updateTurn(this, this.turn);
     await GameDatabaseService().updateDeck(deckCards, this);

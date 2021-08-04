@@ -598,6 +598,16 @@ class GameDatabaseService {
     return Future.value(gen);
   }
 
+  Future<bool> getAgainstComputer(gameId) async {
+    bool aga;
+    await gameCollection.doc(gameId).get().then((value) {
+      if (value.exists) {
+        aga = value.data()['againstComputer'];
+      }
+    });
+    return Future.value(aga);
+  }
+
   void deleteGame(String gameId) async {
     await gameCollection.doc(gameId).collection('players').get().then((value) {
       value.docs.forEach((element) {

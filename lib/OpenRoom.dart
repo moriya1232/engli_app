@@ -354,7 +354,9 @@ class CheckBoxTile extends StatefulWidget {
 
   set value(bool value) {
     _value = value;
-    this._subjectList.add(value);
+    if (value) {
+      this._subjectList.add(value);
+    }
   }
 
   CheckBoxTile(String title) : this.title = title;
