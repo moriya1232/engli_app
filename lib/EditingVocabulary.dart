@@ -193,7 +193,8 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(hintText: "הכנס שם סרייה"),
                   inputFormatters: [
-                    new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z_' -]")),
+                    new FilteringTextInputFormatter.allow(
+                        RegExp("[a-zA-Z_' -]")),
                     LengthLimitingTextInputFormatter(12)
                   ],
                 ),
@@ -421,11 +422,18 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
                           primary: Colors.pink,
                         ),
                         onPressed: () {
-                          if (this._nameSer.text == "" || this._nameSer == null) {
+                          if (this._nameSer.text == "" ||
+                              this._nameSer == null) {
                             this._error.add("הכנס שם סרייה");
                             return;
-                          } else if (this._firstEng.text.isEmpty || this._firstHeb.text.isEmpty || this._secondHeb.text.isEmpty|| this._secondEng.text.isEmpty
-                          || this._thirdHeb.text.isEmpty || this._thirdEng.text.isEmpty || this._forthHeb.text.isEmpty || this._forthEng.text.isEmpty) {
+                          } else if (this._firstEng.text.isEmpty ||
+                              this._firstHeb.text.isEmpty ||
+                              this._secondHeb.text.isEmpty ||
+                              this._secondEng.text.isEmpty ||
+                              this._thirdHeb.text.isEmpty ||
+                              this._thirdEng.text.isEmpty ||
+                              this._forthHeb.text.isEmpty ||
+                              this._forthEng.text.isEmpty) {
                             this._error.add("הכנס ערכים לכל השדות");
                             return;
                           } else if (!checkInputs()) {
@@ -492,15 +500,23 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
     this._seriesController.add(this.widget.series);
     widget.series.remove(ser);
     String playerId = FirebaseAuth.instance.currentUser.uid;
-    GameDatabaseService().removeSeries(ser, playerId, this.widget.series);
+    GameDatabaseService().deleteSeries(ser, playerId, this.widget.series);
   }
 
   //return true if its OK, false-otherwise
-  bool checkInputs(){
-    if (isDiff(this._firstEng, this._secondEng) && isDiff(this._firstEng, this._thirdEng) && isDiff(this._firstEng, this._forthEng)
-    && isDiff(this._thirdEng, this._secondEng) && isDiff(this._forthEng, this._secondEng) && isDiff(this._thirdEng, this._forthEng) &&
-        isDiff(this._firstHeb, this._secondHeb) && isDiff(this._firstHeb, this._thirdHeb) && isDiff(this._firstHeb, this._forthHeb)
-        && isDiff(this._thirdHeb, this._secondHeb) && isDiff(this._forthHeb, this._secondHeb) && isDiff(this._thirdHeb, this._forthHeb)) {
+  bool checkInputs() {
+    if (isDiff(this._firstEng, this._secondEng) &&
+        isDiff(this._firstEng, this._thirdEng) &&
+        isDiff(this._firstEng, this._forthEng) &&
+        isDiff(this._thirdEng, this._secondEng) &&
+        isDiff(this._forthEng, this._secondEng) &&
+        isDiff(this._thirdEng, this._forthEng) &&
+        isDiff(this._firstHeb, this._secondHeb) &&
+        isDiff(this._firstHeb, this._thirdHeb) &&
+        isDiff(this._firstHeb, this._forthHeb) &&
+        isDiff(this._thirdHeb, this._secondHeb) &&
+        isDiff(this._forthHeb, this._secondHeb) &&
+        isDiff(this._thirdHeb, this._forthHeb)) {
       return true;
     }
     return false;
