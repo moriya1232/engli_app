@@ -170,6 +170,7 @@ class _OpenRoomState extends State<OpenRoom> {
     } else {
 //      List<Player> players = [];
       // create players.
+      GameDatabaseService().updateAgainstComputer(this.widget.gameId, true);
       for (int i = 0; i < int.parse(this.widget._dropdownValue); i++) {
         if (i == 0) {
           print("in ADDD!!!!!");

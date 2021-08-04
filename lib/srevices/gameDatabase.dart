@@ -35,7 +35,12 @@ class GameDatabaseService {
       'success': false,
       'generic': false,
       'getQuartet': null,
+      'againstComputer': false
     });
+  }
+
+  void updateAgainstComputer(String gameId, bool ac) async {
+    await gameCollection.doc(gameId).update({'gainstComputer': ac});
   }
 
   // return 1 if succeed.
@@ -163,6 +168,15 @@ class GameDatabaseService {
 
   Future<List<Player>> getPlayersList(QuartetsGame game) async {
     List<Player> players = [null];
+    bool againstComputer = false;
+    await gameCollection.doc(game.gameId).get().then((value) {
+      if (value.exists) {
+        var ac = value.data()['againstComputer'];
+        if (ac) {
+          againstComputer = true;
+        }
+      }
+    });
     await gameCollection
         .doc(game.gameId)
         .collection("players")
@@ -177,9 +191,15 @@ class GameDatabaseService {
           p = Me(cards, value.data()["name"], value.id);
           players[0] = p;
         } else {
-          p = VirtualPlayer(cards, value.data()["name"], value.id);
-          print("here:");
-          print(p.name);
+          if (!againstComputer) {
+            p = VirtualPlayer(cards, value.data()["name"], value.id);
+            print("here:");
+            print(p.name);
+          } else {
+            p = ComputerPlayer(cards, value.data()["name"], value.id);
+            print("here:");
+            print(p.name);
+          }
           players.add(p);
         }
         game.addToListTurn(p);
