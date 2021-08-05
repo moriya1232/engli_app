@@ -45,6 +45,11 @@ class QuartetsGame extends Game {
 
   StreamController get csIssFinish => _csIsFinish;
   FlutterTts flutterTts = FlutterTts();
+  StreamSubscription<QuerySnapshot> _listenToPlayersInGame;
+
+  StreamSubscription<QuerySnapshot> get listenToPlayersInGame =>
+      _listenToPlayersInGame;
+  StreamSubscription<DocumentSnapshot> _listenToSpecGame;
 
   QuartetsGame(
       String gameId,
@@ -108,7 +113,7 @@ class QuartetsGame extends Game {
     }
 
     ///listen to changes in specific game.
-    FirebaseFirestore.instance
+    this._listenToSpecGame = FirebaseFirestore.instance
         .collection("games")
         .doc(this.gameId)
         .snapshots()
@@ -198,7 +203,7 @@ class QuartetsGame extends Game {
     });
 
     ///listen about changes in players cards and scores
-    FirebaseFirestore.instance
+    this._listenToPlayersInGame = FirebaseFirestore.instance
         .collection("games")
         .doc(this.gameId)
         .collection("players")
@@ -785,4 +790,7 @@ class QuartetsGame extends Game {
     await flutterTts.setPitch(1);
     await flutterTts.speak(text);
   }
+
+  StreamSubscription<DocumentSnapshot> get listenToSpecGame =>
+      _listenToSpecGame;
 }

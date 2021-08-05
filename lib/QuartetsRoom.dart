@@ -651,6 +651,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   void dispose() {
+    this.widget.game.listenToPlayersInGame.cancel();
+    this.widget.game.listenToSpecGame.cancel();
     //dispose all the controlles.
     this.widget._streamControllerFirst.close();
     this.widget._streamControllerSecond.close();
