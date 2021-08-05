@@ -72,7 +72,7 @@ class _TurnState extends State<Turn> {
       List<String> names = widget.game.getNamesPlayers();
       names.remove(widget.game.getMyPlayer().name);
       if (widget.subjectToAsk != null &&
-          !widget.game.checkIfGameDone() &&
+//          !widget.game.checkIfGameDone() &&
           this._firstClick1) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -304,8 +304,8 @@ class _TurnState extends State<Turn> {
     return Future.delayed(Duration(seconds: 1));
   }
 
-  void doneTurn() {
-    if (widget.game.doneTurn()) {
+  void doneTurn() async{
+    if (await widget.game.doneTurn()) {
       Navigator.push(
         context,
         MaterialPageRoute(

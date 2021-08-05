@@ -198,7 +198,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     shape: CircleBorder(),
                     fillColor: Colors.white,
                     child: Icon(
-                      Icons.mic,
+                      Icons.hearing,
                       size: 35,
                     ),
                   ),

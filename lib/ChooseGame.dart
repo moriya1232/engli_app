@@ -170,7 +170,7 @@ class _ChooseGameState extends State<ChooseGame> {
         initialData: "",
         builder: (context, snapshot) {
           return Text(
-            'Hello ' + snapshot.data,
+            'Hello ' + snapshot.data+"!",
             style: TextStyle(
               fontFamily: 'AkayaK-e',
               fontSize: 40,

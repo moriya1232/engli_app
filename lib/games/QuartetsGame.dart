@@ -475,10 +475,10 @@ class QuartetsGame extends Game {
   }
 
   // return true - if game done, false - otherwise.
-  bool doneTurn() {
+  Future<bool> doneTurn() async{
     Player player = getPlayerNeedTurn();
     removeAllSeriesDone(player);
-    if (checkIfGameDone()) {
+    if (await checkIfGameDone()) {
       return true;
     }
     changeToNextPlayerTurn();
@@ -486,15 +486,15 @@ class QuartetsGame extends Game {
     //update the text on the deck - view.
     this._stringsOnDeckController.add(1);
     checkComputerPlayerTurn();
-    if (checkIfGameDone()) {
+    if (await checkIfGameDone()) {
       return true;
     }
     return false;
   }
 
-  bool checkIfGameDone() {
+  Future<bool> checkIfGameDone() async{
     if (this.deck.getCards().length == 0 && !isPlayersHasCards()) {
-      GameDatabaseService().updateTurn(this, this.turn);
+      await GameDatabaseService().updateTurn(this, this.turn);
       return true;
     }
     return false;
@@ -1070,7 +1070,7 @@ class QuartetsGame extends Game {
 //      this._getQuartet.add(player.name);
 //      Future.delayed(Duration(seconds: 2), () => this._getQuartet.add(null));
       player.raiseScore(10);
-      GameDatabaseService().updateScore(player.score, player.uid, this);
+      await GameDatabaseService().updateScore(player.score, player.uid, this);
       this._myScoreController.add(10);
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);

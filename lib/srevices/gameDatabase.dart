@@ -377,13 +377,11 @@ class GameDatabaseService {
   }
 
   void updateScore(int score, playerId, QuartetsGame game) async {
-//    if (!game.againstComputer) {
     await gameCollection
         .doc(game.gameId)
         .collection("players")
         .doc(playerId)
         .update({'score': score});
-//    }
   }
 
   Future<List<CardGame>> getPlayerCards(
