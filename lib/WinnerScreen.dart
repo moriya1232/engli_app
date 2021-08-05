@@ -1,7 +1,7 @@
-import 'package:engli_app/GetInRoom.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
+import 'ChooseGame.dart';
 import 'games/Game.dart';
 
 class WinnerScreen extends StatefulWidget {
@@ -114,7 +114,7 @@ class _WinnerRoomState extends State<WinnerScreen> {
       GameDatabaseService().deleteGame(this.widget.gameId);
     }
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => GetInRoom()));
+        context, MaterialPageRoute(builder: (context) => ChooseGame()));
   }
 
   List<Player> getWinners() {

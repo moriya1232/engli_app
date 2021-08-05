@@ -11,6 +11,7 @@ class OpenMemoryRoom extends StatefulWidget {
   bool _generic = false;
   final _nameEnemy = TextEditingController();
   List<CheckBoxTile> _series;
+  bool _startGameFirstClick = true;
 
   OpenMemoryRoom() {
     this._series = [];
@@ -196,12 +197,16 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
       this._error.add("בחר עד 5 סריות");
       return;
     }
+    if (!this.widget._startGameFirstClick) {return;}
+    this.widget._startGameFirstClick = false;
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => MemoryRoom(
               isAgainstComputer, this.widget._nameEnemy.text, subjects)),
     );
+    await Future.delayed(Duration(seconds: 1));
+    this.widget._startGameFirstClick = true;
   }
 
 //  Player createPlayer(List<Player> players, bool isMe, String name) {

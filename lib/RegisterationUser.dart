@@ -14,13 +14,10 @@ class _RegistrationState extends State<Registration> {
   final mailControllerReg = TextEditingController();
   final _error = StreamController<String>.broadcast();
   final AuthService _auth = AuthService();
+  bool _firstClickRegister = true;
 
   @override
   Widget build(BuildContext context) {
-    /*print("i clear");
-    passwordControllerReg.clear();
-    nameControllerReg.clear();
-    mailControllerReg.clear();*/
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -141,25 +138,18 @@ class _RegistrationState extends State<Registration> {
     if (nameUser.length == 0 ) {
       this._error.add('הכנס שם');
       return;
-    }
-    if (pass.length < 6) {
+    } else if (pass.length < 6) {
       this._error.add('הסיסמא צריכה להכיל לפחות 6 תווים');
       return;
-    }
+    } else if (!_firstClickRegister) {return;}
+    _firstClickRegister = false;
     dynamic res =
         await _auth.registerWithEmailAndPassword(email, pass, nameUser);
     if (res == null) {
       this._error.add('אימייל או סיסמא לא תקינים');
-      print("error mail");
+      _firstClickRegister = true;
       return;
     }
-//    else {
-//      //name = nameUser;
-//      //mail = email;
-//      Data().setName(nameUser);
-//      Data().setMail(email);
-//      print("good mail");
-//    }
   }
 
   Widget getError() {

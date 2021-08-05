@@ -506,8 +506,10 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
 
   void getUserSeriesFromDataBase() async {
     String subjectsId = FirebaseAuth.instance.currentUser.uid;
-    this.widget.series =
-        await GameDatabaseService().getSubjectsList(subjectsId);
+    this.widget.series = await GameDatabaseService().getSubjectsList(subjectsId);
+    if (this.widget.series == null) {
+      this.widget.series = [];
+    }
     this._seriesController.add(this.widget.series);
   }
 

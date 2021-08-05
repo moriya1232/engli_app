@@ -50,9 +50,6 @@ class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.lightGreen,
-      ),
       body: Center(
         child: ListView(
           shrinkWrap: true,

@@ -14,6 +14,7 @@ class _LoginState extends State<Login> {
   final _passwordControllerLog = TextEditingController();
   final _error = StreamController<String>.broadcast();
   final AuthService _auth = AuthService();
+  bool _firstClickRegister = true;
 
   @override
   Widget build(BuildContext context) {
@@ -125,11 +126,12 @@ class _LoginState extends State<Login> {
   }
 
   void connectClicked() async {
-    print(_mailControllerLog.text);
-    print(_passwordControllerLog.text);
+    if (!_firstClickRegister) {return;}
+    _firstClickRegister = false;
     dynamic res = await _auth.signInWithEmailAndPassword(
         _mailControllerLog.text, _passwordControllerLog.text);
     if (res == null) {
+      _firstClickRegister = true;
       this._error.add("אימייל או סיסמא שגויים");
     }
   }

@@ -179,6 +179,8 @@ class _OpenRoomState extends State<OpenRoom> {
         context,
         MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
       );
+      await Future.delayed(Duration(seconds: 1));
+      this.widget._startGameFirstClick = true;
     } else {
 //      List<Player> players = [];
       // create players.
@@ -207,6 +209,8 @@ class _OpenRoomState extends State<OpenRoom> {
                     true,
                     true,
                   )));
+
+      await Future.delayed(Duration(seconds: 1));
       this.widget._startGameFirstClick = true;
     }
   }
