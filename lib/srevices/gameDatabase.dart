@@ -56,7 +56,7 @@ class GameDatabaseService {
     return await gameCollection
         .doc(gameId)
         .get()
-        .then((DocumentSnapshot documentSnapshot) async{
+        .then((DocumentSnapshot documentSnapshot) async {
       if (documentSnapshot.exists) {
         var x = documentSnapshot.data()['players'];
         List<String> newPlayersList = x.cast<String>();
@@ -83,6 +83,9 @@ class GameDatabaseService {
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         var x = documentSnapshot.data()["subjects_list"];
+        if (x == null) {
+          return null;
+        }
         List<String> strList = x.cast<String>();
         subjectsList = strList;
       }
@@ -210,8 +213,16 @@ class GameDatabaseService {
     return Future.value(players);
   }
 
-  void addSeriesToDataBase(String nameSeries, String eng1, String heb1, String eng2,
-      String heb2, String eng3, String heb3, String eng4, String heb4) async {
+  void addSeriesToDataBase(
+      String nameSeries,
+      String eng1,
+      String heb1,
+      String eng2,
+      String heb2,
+      String eng3,
+      String heb3,
+      String eng4,
+      String heb4) async {
     //update the subjects list
     List<String> sub = [];
     await subjectCollection
@@ -276,8 +287,8 @@ class GameDatabaseService {
     await gameCollection.doc(game.gameId).update({'deck': cards});
   }
 
-  void updateTakeCardFromDeck (
-      QuartetsGame game, CardQuartets card, Player player) async{
+  void updateTakeCardFromDeck(
+      QuartetsGame game, CardQuartets card, Player player) async {
     await deleteCardFromDeck(game, card);
     await addCardToPlayer(game, card, player);
   }
@@ -287,7 +298,7 @@ class GameDatabaseService {
     await gameCollection
         .doc(game.gameId)
         .get()
-        .then((DocumentSnapshot documentSnapshot) async{
+        .then((DocumentSnapshot documentSnapshot) async {
       if (documentSnapshot.exists) {
         var x = documentSnapshot.data()["deck"];
         List<int> deck = x.cast<int>();
@@ -331,7 +342,7 @@ class GameDatabaseService {
         .collection("players")
         .doc(player.uid)
         .get()
-        .then((DocumentSnapshot documentSnapshot) async{
+        .then((DocumentSnapshot documentSnapshot) async {
       if (documentSnapshot.exists) {
         List<int> updateList = [];
         var x = documentSnapshot.data()['cards'];
@@ -357,7 +368,7 @@ class GameDatabaseService {
     await addCardToPlayer(game, card, takePlayer);
   }
 
-  void updateTurn(QuartetsGame game, int turn) async{
+  void updateTurn(QuartetsGame game, int turn) async {
     await gameCollection.doc(game.gameId).update({'turn': turn});
   }
 
@@ -402,7 +413,7 @@ class GameDatabaseService {
     await gameCollection.doc(game.gameId).update({'initializeGame': true});
   }
 
-  Future<List<CardQuartets>> getDeck(QuartetsGame game) async{
+  Future<List<CardQuartets>> getDeck(QuartetsGame game) async {
     List<CardQuartets> deck = [];
     await gameCollection
         .doc(game.gameId)
@@ -482,8 +493,8 @@ class GameDatabaseService {
     return Future.value(tokenFrom);
   }
 
-  void updateTake (
-      QuartetsGame game, int take, int token, String sub, int card, bool succ) async {
+  void updateTake(QuartetsGame game, int take, int token, String sub, int card,
+      bool succ) async {
     await gameCollection.doc(game.gameId).update({
       'take': take,
       'tokenFrom': token,
@@ -531,7 +542,7 @@ class GameDatabaseService {
     subjectCollection.doc(playerId).update({'subjects_list': newListSub});
   }
 
-  void updateGeneric(String gameId, bool gen) async{
+  void updateGeneric(String gameId, bool gen) async {
     await gameCollection.doc(gameId).update({'generic': gen});
   }
 
@@ -582,7 +593,7 @@ class GameDatabaseService {
     await gameCollection.doc(gameId).delete();
   }
 
-  void updateFinished(String gameId, bool isFinished) async{
+  void updateFinished(String gameId, bool isFinished) async {
     await gameCollection.doc(gameId).update({'finished': isFinished});
   }
 }
