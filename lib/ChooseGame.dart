@@ -16,6 +16,13 @@ class ChooseGame extends StatefulWidget {
 class _ChooseGameState extends State<ChooseGame> {
   final _userName = StreamController<String>.broadcast();
   AuthService _auth = AuthService();
+
+  @override
+  void dispose() {
+    this._userName.close();
+    super.dispose();
+  }
+
   @override
   void initState() {
     _auth.user.listen((event) {

@@ -289,6 +289,7 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
 
 // ignore: must_be_immutable
 class CheckBoxTile extends StatefulWidget {
+  // ignore: close_sinks
   final _subjectsList = StreamController<bool>.broadcast();
   final String title;
   bool _value;

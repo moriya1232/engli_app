@@ -1,8 +1,6 @@
 //TODO:
 // arrange code
 // double click.
-// button in winner screen
-// widget before winnerscreen
 
 // TODO: check::
 // limit for 4 players. -- check!!!
@@ -10,7 +8,6 @@
 import 'dart:async';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
-import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'QuartetsGame/Turn.dart';
@@ -47,7 +44,9 @@ class QuartetsRoom extends StatefulWidget {
   final _streamControllerStringsInDeck = StreamController<int>.broadcast();
   // ignore: close_sinks
   final _streamControllerMyScore = StreamController<int>.broadcast();
+  // ignore: close_sinks
   final _getQuartet = StreamController<String>.broadcast();
+  // ignore: close_sinks
   final _isFinish = StreamController<bool>.broadcast();
 
 //  final _streamControllerAchievedQuartet = StreamController<String>.broadcast();
@@ -107,7 +106,20 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   Widget build(BuildContext context) {
     setConstants();
     firstBuild = false;
-    return getUpdatedView();
+    return _isFinishScreen();
+  }
+
+  Widget _isFinishScreen() {
+    return StreamBuilder<bool>(
+        stream: this.widget._isFinish.stream,
+        initialData: false,
+        builder: (context, snapshot) {
+          if (snapshot.data) {
+            return WinnerScreen(this.widget.game, this.widget.game.gameId);
+          } else {
+            return getUpdatedView();
+          }
+        });
   }
 
   Widget getView() {
@@ -292,15 +304,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         initialData: 0,
         builder: (context, snapshot) {
           if (this.widget.game.isFinished) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      WinnerScreen(widget.game, widget.game.gameId)),
-            );
-            return null;
-          } else if (widget.game.getPlayerNeedTurn() is Me) {
-            return Turn(widget.game);
+            return Container();
+          } else if (widget.game.getPlayerNeedTurn() is Me && !this.widget.game.isFinished) {
+            Turn t = Turn(widget.game);
+            return t;
           } else {
             return new Container(
                 alignment: Alignment.center, child: getAskedText());
@@ -524,6 +531,8 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         });
   }
 
+
+
   Widget getFirstPlayerView() {
     return StreamBuilder<int>(
         stream: this.widget._streamControllerOtherPlayersCards.stream,
@@ -642,26 +651,21 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   void dispose() {
-//    widget.game.removeListener(_listener);
-//    for (Player player in widget.game.players) {
-//      player.removeListener(_listener);
-//    }
     //dispose all the controlles.
     this.widget._streamControllerFirst.close();
     this.widget._streamControllerSecond.close();
     this.widget._streamControllerThird.close();
     this.widget._streamControllerMe.close();
     this.widget._streamControllerDeck.close();
-
     this.widget._streamControllerTurn.close();
     this.widget._streamControllerMyCards.close();
     this.widget._streamControllerMyScore.close();
     this.widget._streamControllerOtherPlayersCards.close();
     this.widget._streamControllerStringsInDeck.close();
     this.widget._scGameStart.close();
+    this.widget._isFinish.close();
+    this.widget._getQuartet.close();
     print("in dispose");
-    GameDatabaseService().updateFinished(this.widget.game.gameId, true);
-    //GameDatabaseService().deleteGame(this.widget.game.gameId);
     super.dispose();
   }
 

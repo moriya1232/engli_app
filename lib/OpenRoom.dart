@@ -160,7 +160,8 @@ class _OpenRoomState extends State<OpenRoom> {
 
   void startGameClicked(bool isAgainstComputer) async {
     List<String> subs = getMarkedSeries();
-    if (subs.length < 4) {
+    //TODO: change it to 4
+    if (subs.length < 1) {
       this._error.add("בחר לפחות 4 סריות");
       return;
     }
@@ -368,6 +369,7 @@ class _OpenRoomState extends State<OpenRoom> {
 
 // ignore: must_be_immutable
 class CheckBoxTile extends StatefulWidget {
+  // ignore: close_sinks
   final _subjectList = StreamController<bool>.broadcast();
   final String title;
   bool _value;

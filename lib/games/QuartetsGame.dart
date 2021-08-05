@@ -35,13 +35,15 @@ class QuartetsGame extends Game {
 
   StreamController _turnController;
 
+  StreamController get turnController => _turnController;
   StreamController _myCardsController;
   StreamController _myScoreController;
   StreamController _otherPlayersCardsController;
   StreamController _stringsOnDeckController;
   StreamController _getQuartet;
-  StreamController _isFinish;
+  StreamController _csIsFinish;
 
+  StreamController get csIssFinish => _csIsFinish;
   FlutterTts flutterTts = FlutterTts();
 
   QuartetsGame(
@@ -72,7 +74,7 @@ class QuartetsGame extends Game {
         this._myScoreController = myScore,
         this._otherPlayersCardsController = otherCards,
         this._getQuartet = getQuartet,
-        this._isFinish = isFinish {
+        this._csIsFinish = isFinish {
     speak("Welcome to engli game!");
 
 //    this.subjects = subs;
@@ -114,10 +116,7 @@ class QuartetsGame extends Game {
       if (!this.isManager) {
         this._gameStart.add(true);
       }
-      bool finished = event.data()['finished'];
-      if (finished) {
-        _isFinish.add(true);
-      }
+
       String getQuartet = event.data()['getQuartet'];
       this._getQuartet.add(getQuartet);
 
@@ -178,14 +177,7 @@ class QuartetsGame extends Game {
       }
       this.successTakeCard = succ;
       this.subjectAsked = subject;
-//        if (cardToken != null && cardToken != -1) {
-//          this.cardAsked = cardName;
-//        } else {
-//          this.cardAsked = null;
-//        }
       this.cardAsked = cardName;
-
-      this._turnController.add(this.turn);
 
       ///update my deck
       List<dynamic> nDeck = event.data()['deck'];
@@ -196,16 +188,14 @@ class QuartetsGame extends Game {
       List<int> newDeck = nDeck.cast<int>();
       this.deck.setCards(this.updateMyDeck(newDeck));
 
+
       ///update my turn
       dynamic turn = event.data()['turn'];
-      if (turn == null) {
-        this.turn = 0;
-      }
-      this._stringsOnDeckController.add(1);
-      if (turn != this.turn) {
+        this._stringsOnDeckController.add(1);
         this.turn = turn;
         this._turnController.add(this.turn);
-      }
+//        print("update turn");
+//        print(turn);
     });
 
     ///listen about changes in players cards and scores
@@ -242,18 +232,25 @@ class QuartetsGame extends Game {
         if (!this.deck.isEmpty()) {
           everyoneNoHaveCards = true;
         }
+
         if (!everyoneNoHaveCards) {
           this.isFinished = true;
           print("game need to done!");
-          this._turnController.add(this.turn);
+          this._csIsFinish.add(true);
+          return;
         }
+
         this._otherPlayersCardsController.add(1);
         this._otherPlayersCardsController.add(1);
         this._myCardsController.add(1);
         this._myScoreController.add(1);
+
       });
 //        }
     });
+    if (!this.isManager && await GameDatabaseService().getContinueState(this.gameId)) {
+      await GameDatabaseService().updateTurn(this, this.turn);
+    }
   }
 
   Future<String> getNamePlayerTake() async {
@@ -357,11 +354,11 @@ class QuartetsGame extends Game {
       int x = this.cardsId[q];
       deckCards.add(x);
     }
-
     this._gameStart.add(true);
     await GameDatabaseService().updateTurn(this, this.turn);
     await GameDatabaseService().updateDeck(deckCards, this);
     await GameDatabaseService().updateContinueState(this.gameId);
+
   }
 
   void changeScoresOfPlayers() async {
@@ -479,6 +476,7 @@ class QuartetsGame extends Game {
     Player player = getPlayerNeedTurn();
     removeAllSeriesDone(player);
     if (await checkIfGameDone()) {
+
       return true;
     }
     changeToNextPlayerTurn();
@@ -486,15 +484,15 @@ class QuartetsGame extends Game {
     //update the text on the deck - view.
     this._stringsOnDeckController.add(1);
     checkComputerPlayerTurn();
-    if (await checkIfGameDone()) {
+    if (checkIfGameDone()) {
       return true;
     }
     return false;
   }
 
-  Future<bool> checkIfGameDone() async{
+  bool checkIfGameDone() {
     if (this.deck.getCards().length == 0 && !isPlayersHasCards()) {
-      await GameDatabaseService().updateTurn(this, this.turn);
+//      await GameDatabaseService().updateTurn(this, this.turn);
       return true;
     }
     return false;

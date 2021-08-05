@@ -14,6 +14,8 @@ class Turn extends StatefulWidget {
   Player playerChosenToAsk;
   Subject subjectToAsk;
   CardQuartets cardToAsk;
+  // ignore: close_sinks
+  final _changeState = StreamController<int>.broadcast();
 
   Turn(QuartetsGame g) : this.game = g {
     this.playerChosenToAsk = g.listTurn[(g.turn + 1) % g.listTurn.length];
@@ -27,35 +29,408 @@ class Turn extends StatefulWidget {
     }
   }
 
+  void initScState() {
+    this._changeState.add(1);
+  }
+
   @override
   _TurnState createState() => _TurnState();
 }
 
 class _TurnState extends State<Turn> {
+
+  final _scPlayerChosen = StreamController<Player>.broadcast();
+  final _scSubjectChosen = StreamController<Subject>.broadcast();
+  final _scCardChosen = StreamController<CardQuartets>.broadcast();
   bool chosenPlayerAndCategoryToAsk = false;
-  bool _firstClick1;
-  bool _firstClick2;
+//  bool _firstClick1;
+//  bool _firstClick2;
 
   @override
   Widget build(BuildContext context) {
-    // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
-    if (this.widget.game.turn != null &&
-        widget.game.getPlayerNeedTurn() is Me &&
-        this.widget.game.getPlayerNeedTurn().cards.length == 0) {
-      this.widget.game.takeCardFromDeck();
-      GameDatabaseService().updateTake(this.widget.game, widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn()), -1, "", -1, true);
-//      this.widget.game.deck.giveCardToPlayer(
-//          this.widget.game.getPlayerNeedTurn(), this.widget.game);
-      this.widget.game.doneTurn();
-      return new Container();
-    } else {
-      this._firstClick1 = true;
-      this._firstClick2 = true;
-      return getAppropriateAsk();
-    }
+//    // if my turn and i have no cards, I need to take card from the deck and my turn pass over.
+//    if (this.widget.game.turn != null &&
+//        widget.game.getPlayerNeedTurn() is Me &&
+//        this.widget.game.getPlayerNeedTurn().cards.length == 0) {
+//      this.widget.game.takeCardFromDeck();
+//      GameDatabaseService().updateTake(this.widget.game, widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn()), -1, "", -1, true);
+////      this.widget.game.deck.giveCardToPlayer(
+////          this.widget.game.getPlayerNeedTurn(), this.widget.game);
+//      this.widget.game.doneTurn();
+//      return new Container();
+//    } else {
+//      this._firstClick1 = true;
+//      this._firstClick2 = true;
+//    getAppropriateAsk();
+    return _buildChangeState();
+//    }
   }
 
-  Widget getAppropriateAsk() {
+  @override
+  void dispose() {
+    this._scCardChosen.close();
+    this._scPlayerChosen.close();
+    this._scSubjectChosen.close();
+    this.widget._changeState.close();
+    super.dispose();
+  }
+
+  // returns
+  // 1- ask subject
+  // 2- ask spec card
+  Widget _buildChangeState() {
+
+    return StreamBuilder<int>(
+        stream: this.widget.game.turnController.stream,
+        initialData: this.widget.game.turn,
+        builder: (context, snapshot) {
+          if (this.widget.game.isFinished) {
+            return Container();
+          }
+          if (snapshot.data != null) {
+            int isMe=0;
+            Player p = this.widget.game.listTurn[snapshot.data];
+            Player needMove = this.widget.game.getPlayerNeedTurn();
+            if ( p == needMove) {
+              isMe = 1;
+            }
+            return StreamBuilder<int>(
+        stream: this.widget._changeState.stream,
+        initialData: isMe,
+        builder: (context, snapshot) {
+          if (this.widget.game.turn != null &&
+              widget.game.getPlayerNeedTurn() is Me &&
+              this.widget.game.getPlayerNeedTurn().cards.length == 0) {
+            this.widget.game.takeCardFromDeck();
+            GameDatabaseService().updateTake(this.widget.game, widget.game.listTurn.indexOf(widget.game.getPlayerNeedTurn()), -1, "", -1, true);
+            this.widget.game.doneTurn();
+            return new Container();
+          }
+
+          else if (snapshot.data == 1) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.pink,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                      ),
+                      onPressed: () async {
+//                        this._firstClick1 = false;
+                        askClicked();
+                      },
+                      child: Text(
+                        '!שאל',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.black87,
+                            fontSize: 15),
+                      ),
+                    )),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'בחר קטגוריה',
+                          style: TextStyle(
+                            fontFamily: 'Abraham-h',
+                          ),
+                        ),
+                        getDropDownSubject(),
+                      ]),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'בחר יריב',
+                          style: TextStyle(
+                            fontFamily: 'Abraham-h',
+                          ),
+                        ),
+                        getDropDownPlayer(),
+                      ]),
+                ),
+              ],
+            );
+          }
+          else if (snapshot.data == 2) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.pink,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0)),
+                      ),
+                      onPressed: () async {
+                      this.widget._changeState.add(0);
+                        //await Future.delayed(new Duration(milliseconds: 500));
+                        if (await doTurn()) {
+                          print("more turn!");
+                          widget.game
+                              .removeAllSeriesDone(widget.game.getPlayerNeedTurn());
+                          await updateMoreTurn();
+                          if (widget.game.getPlayerNeedTurn().cards.length == 0) {
+                            this.widget.game.doneTurn();
+                            return;
+                          }
+                        } else {
+                          this.widget.game.doneTurn();
+                          return;
+                        }
+                      },
+                      child: Text(
+                        '!שאל',
+                        style: TextStyle(
+                            fontFamily: 'Comix-h',
+                            color: Colors.black87,
+                            fontSize: 15),
+                      ),
+                    )),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'בחר קלף',
+                        style: TextStyle(
+                          fontFamily: 'Abraham-h',
+                        ),
+                      ),
+                      getDropDownCard(),
+                    ]),
+              ],
+            );
+          } else {
+            return new Container();
+          }
+        });}
+        else {
+        return new Container();
+        }
+        });
+  }
+
+  Widget getDropDownSubject (){
+    return StreamBuilder<int>(
+        stream: this.widget.game.turnController.stream,
+        initialData: this.widget.game.turn,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            bool isMe = false;
+            Player p = this.widget.game.listTurn[snapshot.data];
+            Player needMove = this.widget.game.getPlayerNeedTurn();
+            if ( p == needMove) {
+              isMe = true;
+            }
+            Subject sub;
+            if (isMe) {
+              sub = widget.game.getSubjectByString(p.getSubjects()[0]);
+            }
+    return StreamBuilder<Subject>(
+      stream: this._scSubjectChosen.stream,
+      initialData: sub,
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          this.widget.subjectToAsk = snapshot.data;
+          String sub = snapshot.data.nameSubject;
+
+          return DropdownButton<String>(
+            value: sub,
+            style: TextStyle(color: Colors.black87),
+            underline: Container(
+              height: 2,
+              width: 10,
+              color: Colors.amberAccent,
+            ),
+            onChanged: (String newValue) {
+              Subject sub =
+              widget.game.getSubjectByString(newValue);
+
+              if (this
+                  .widget
+                  .game
+                  .getMyPlayer()
+                  .getSubjects()
+                  .contains(sub.nameSubject)) {
+                widget.subjectToAsk = sub;
+                widget.cardToAsk =
+                widget.subjectToAsk.getCards()[0];
+                this._scSubjectChosen.add(this.widget.subjectToAsk);
+                this._scCardChosen.add(this.widget.cardToAsk);
+              }
+//              else {
+//                widget.subjectToAsk = widget.game
+//                    .getSubjectByString(this
+//                    .widget
+//                    .game
+//                    .getMyPlayer()
+//                    .getSubjects()[0]);
+//                widget.cardToAsk =
+//                widget.subjectToAsk.getCards()[0];
+//                this._scSubjectChosen.add(this.widget.subjectToAsk);
+//                this._scCardChosen.add(this.widget.cardToAsk);
+//                throw Exception("choose subject that no in my cards.");
+//              }
+            },
+            items: widget.game
+                .getMyPlayer()
+                .getSubjects()
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  style: TextStyle(
+                      fontSize: 18, fontFamily: 'Courgette-e'),
+                ),
+              );
+            }).toList(),
+          );
+        } else {
+          return new Container();
+        }
+      }
+    ); } else {
+          return new Container();}
+        });
+  }
+
+
+  Widget getDropDownCard() {
+    return StreamBuilder<int>(
+        stream: this.widget.game.turnController.stream,
+        initialData: this.widget.game.turn,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            bool isMe = false;
+            Player p = this.widget.game.listTurn[snapshot.data];
+            Player needMove = this.widget.game.getPlayerNeedTurn();
+            if ( p == needMove) {
+              isMe = true;
+            }
+            CardQuartets iniCard;
+            if (isMe) {
+              iniCard = this.widget.subjectToAsk.getCards()[0];
+            }
+    return StreamBuilder<CardQuartets>(
+        stream: this._scCardChosen.stream,
+        initialData: iniCard,
+        builder: (context, snapshot) {
+      if (snapshot.data != null) {
+        String ca = snapshot.data.english;
+        return DropdownButton<String>(
+          value: ca,
+          style: TextStyle(color: Colors.black87),
+          underline: Container(
+            height: 2,
+            width: 10,
+            color: Colors.amberAccent,
+          ),
+          onChanged: (String newValue) {
+            widget.cardToAsk =
+                widget.subjectToAsk.getCardByString(newValue);
+            this._scCardChosen.add(this.widget.cardToAsk);
+          },
+          items: widget.subjectToAsk
+              .getNamesCards()
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: TextStyle(
+                    fontSize: 18, fontFamily: 'Courgette-e'),
+              ),
+            );
+          }).toList(),
+        );
+      } else {
+        return new Container();
+      }
+  }); } else {
+          return new Container();}
+        });
+  }
+
+  Widget getDropDownPlayer() {
+    List<String> names = widget.game.getNamesPlayers();
+    names.remove(widget.game
+        .getMyPlayer()
+        .name);
+    return StreamBuilder<int>(
+        stream: this.widget.game.turnController.stream,
+        initialData: this.widget.game.turn,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            bool isMe = false;
+            Player p = this.widget.game.listTurn[snapshot.data];
+            Player needMove = this.widget.game.getPlayerNeedTurn();
+            if ( p == needMove) {
+              isMe = true;
+            }
+            Player player;
+            if (isMe) {
+              player = this.widget.game.listTurn[(snapshot.data + 1) % this.widget.game.listTurn.length];
+            }
+    return StreamBuilder<Player>(
+        stream: this._scPlayerChosen.stream,
+        initialData: player,
+        builder: (context, snapshot) {
+          if (snapshot.data != null) {
+            String name = snapshot.data.name;
+            return DropdownButton<String>(
+              value: name,
+              style: TextStyle(color: Colors.black87),
+              underline: Container(
+                height: 2,
+                width: 10,
+                color: Colors.amberAccent,
+              ),
+              onChanged: (String newValue) {
+                widget.playerChosenToAsk =
+                    widget.game.getPlayerByName(newValue);
+                this._scPlayerChosen.add(widget.playerChosenToAsk);
+              },
+              items:
+              names.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                    style:
+                    TextStyle(fontSize: 15, fontFamily: 'Miri-h'),
+                  ),
+                );
+              }).toList(),
+            );
+          } else {
+            return new Container();
+          }
+  }); }
+        else {
+          return new Container();
+          }});
+  }
+
+
+
+  void getAppropriateAsk() {
     //subject to ask not in my cards.
     if (!this
         .widget
@@ -68,252 +443,47 @@ class _TurnState extends State<Turn> {
           .game
           .getSubjectsOfPlayer(this.widget.game.getMyPlayer())[0];
     }
+
+    //ask player and subject.
     if (!this.chosenPlayerAndCategoryToAsk) {
-      List<String> names = widget.game.getNamesPlayers();
-      names.remove(widget.game.getMyPlayer().name);
-      if (widget.subjectToAsk != null &&
-//          !widget.game.checkIfGameDone() &&
-          this._firstClick1) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.pink,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)),
-                  ),
-                  onPressed: () async {
-                    this._firstClick1 = false;
-                    askClicked();
-                  },
-                  child: Text(
-                    '!שאל',
-                    style: TextStyle(
-                        fontFamily: 'Comix-h',
-                        color: Colors.black87,
-                        fontSize: 15),
-                  ),
-                )),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'בחר קטגוריה',
-                      style: TextStyle(
-                        fontFamily: 'Abraham-h',
-                      ),
-                    ),
-                    DropdownButton<String>(
-                      value: widget.subjectToAsk.nameSubject,
-                      style: TextStyle(color: Colors.black87),
-                      underline: Container(
-                        height: 2,
-                        width: 10,
-                        color: Colors.amberAccent,
-                      ),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          Subject sub =
-                              widget.game.getSubjectByString(newValue);
-                          if (this
-                              .widget
-                              .game
-                              .getMyPlayer()
-                              .getSubjects()
-                              .contains(sub.nameSubject)) {
-                            widget.subjectToAsk = sub;
-                            widget.cardToAsk =
-                                widget.subjectToAsk.getCards()[0];
-                          } else {
-                            print("bug");
-                            widget.subjectToAsk = widget.game
-                                .getSubjectByString(this
-                                    .widget
-                                    .game
-                                    .getMyPlayer()
-                                    .getSubjects()[0]);
-                            widget.cardToAsk =
-                                widget.subjectToAsk.getCards()[0];
-                          }
-                        });
-                      },
-                      items: widget.game
-                          .getMyPlayer()
-                          .getSubjects()
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(
-                                fontSize: 18, fontFamily: 'Courgette-e'),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ]),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'בחר יריב',
-                      style: TextStyle(
-                        fontFamily: 'Abraham-h',
-                      ),
-                    ),
-                    DropdownButton<String>(
-                      value: widget.playerChosenToAsk.name,
-                      //hint: new Text("בחר כמות משתתפים"),
-                      style: TextStyle(color: Colors.black87),
-                      underline: Container(
-                        height: 2,
-                        width: 10,
-                        color: Colors.amberAccent,
-                      ),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          widget.playerChosenToAsk =
-                              widget.game.getPlayerByName(newValue);
-                        });
-                      },
-                      items:
-                          names.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style:
-                                TextStyle(fontSize: 15, fontFamily: 'Miri-h'),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ]),
-            ),
-          ],
-        );
+
+      if (widget.subjectToAsk != null
+//      && !widget.game.checkIfGameDone()
+//          && this._firstClick1
+      ) {
+        this.widget._changeState.add(1);
+        /////// pass from here!!! 1 ;
       } else {
-        return new Container();
+        this.widget._changeState.add(0);
       }
-    } else {
-      if (widget.subjectToAsk != null && this._firstClick2) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.pink,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)),
-                  ),
-                  onPressed: () async {
-                    if (!this._firstClick2) {
-                      print("seccess double click");
-                      return;
-                    }
-                    setState(() {
-                      print("firstClick2: ");
-                      print(_firstClick2);
-                      this._firstClick2 = false;
-                    });
-                    await Future.delayed(new Duration(milliseconds: 500));
-                    if (await doTurn()) {
-                      print("more turn!");
-                      widget.game
-                          .removeAllSeriesDone(widget.game.getPlayerNeedTurn());
-                      await updateMoreTurn();
-                      if (widget.game.getPlayerNeedTurn().cards.length == 0) {
-                        doneTurn();
-                      }
-                    } else {
-                      doneTurn();
-                    }
-                  },
-                  child: Text(
-                    '!שאל',
-                    style: TextStyle(
-                        fontFamily: 'Comix-h',
-                        color: Colors.black87,
-                        fontSize: 15),
-                  ),
-                )),
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'בחר קלף',
-                    style: TextStyle(
-                      fontFamily: 'Abraham-h',
-                    ),
-                  ),
-                  DropdownButton<String>(
-                    value: widget.cardToAsk.english,
-                    style: TextStyle(color: Colors.black87),
-                    underline: Container(
-                      height: 2,
-                      width: 10,
-                      color: Colors.amberAccent,
-                    ),
-                    onChanged: (String newValue) {
-                      setState(() {
-                        widget.cardToAsk =
-                            widget.subjectToAsk.getCardByString(newValue);
-                      });
-                    },
-                    items: widget.subjectToAsk
-                        .getNamesCards()
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                              fontSize: 18, fontFamily: 'Courgette-e'),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ]),
-          ],
-        );
+    } else { // ask spec card.
+      if (widget.subjectToAsk != null) {
+        this.widget._changeState.add(2);
+        // pass from here!!!! 2
       } else {
-        return new Container();
+        this.widget._changeState.add(0);
       }
     }
   }
 
   Future updateMoreTurn() {
-    setState(() {
+
       chosenPlayerAndCategoryToAsk = false;
       //widget.game.updateObservers();
-    });
+      this.widget._changeState.add(1);
     return Future.delayed(Duration(seconds: 1));
   }
 
-  void doneTurn() async{
-    if (await widget.game.doneTurn()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                WinnerScreen(widget.game, widget.game.gameId)),
-      );
-    }
-  }
+//  void doneTurn() async{
+//    if (await widget.game.doneTurn()) {
+//      Navigator.push(
+//        context,
+//        MaterialPageRoute(
+//            builder: (context) =>
+//                WinnerScreen(widget.game, widget.game.gameId)),
+//      );
+//    }
+//  }
 
   Future<bool> doTurn() async {
     print(
@@ -365,9 +535,8 @@ class _TurnState extends State<Turn> {
     if (widget.playerChosenToAsk
         .getSubjects()
         .contains(widget.subjectToAsk.nameSubject)) {
-      setState(() {
         this.chosenPlayerAndCategoryToAsk = true;
-      });
+        this.widget._changeState.add(2);
     }
     // didn't success asking this subject.
     else {
@@ -381,9 +550,10 @@ class _TurnState extends State<Turn> {
           false);
       await widget.game.takeCardFromDeck();
 
-      doneTurn();
+
       print(
           "${widget.playerChosenToAsk} don't have subject: ${widget.subjectToAsk}, so player dont ask about spec card.");
+      this.widget.game.doneTurn();
     }
   }
 }

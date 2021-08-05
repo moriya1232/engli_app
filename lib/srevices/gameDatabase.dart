@@ -159,6 +159,19 @@ class GameDatabaseService {
     });
   }
 
+  Future<bool> getContinueState(gameId) async {
+    bool x;
+    await gameCollection
+        .doc(gameId)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        x = documentSnapshot.data()['continueToGame'];
+      }
+    });
+    return Future.value(x);
+  }
+
   Future<List<Player>> getPlayersList(QuartetsGame game) async {
     List<Player> players = [null];
     bool againstComputer = false;
