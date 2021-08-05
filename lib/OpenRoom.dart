@@ -14,6 +14,7 @@ class OpenRoom extends StatefulWidget {
   bool _generic = false;
   String _dropdownValue = '2';
   List<CheckBoxTile> _series;
+  bool _startGameFirstClick = true;
 
   OpenRoom(String gameId) : this.gameId = gameId {
     this._series = [];
@@ -164,9 +165,9 @@ class _OpenRoomState extends State<OpenRoom> {
       this._error.add("בחר לפחות 4 סריות");
       return;
     }
+    if (!this.widget._startGameFirstClick) {return;}
+    this.widget._startGameFirstClick = false;
     GameDatabaseService().updateGeneric(widget.gameId, widget._generic);
-
-//    List<Subject> subjects = await getSubjectsFromStrings(subs);
     await GameDatabaseService().updateSubjectList(widget.gameId, subs);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
@@ -206,6 +207,7 @@ class _OpenRoomState extends State<OpenRoom> {
                     true,
                     true,
                   )));
+      this.widget._startGameFirstClick = true;
     }
   }
 
