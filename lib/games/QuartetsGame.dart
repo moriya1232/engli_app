@@ -122,6 +122,9 @@ class QuartetsGame extends Game {
         this._gameStart.add(true);
       }
 
+      if(!event.exists) {
+        return;
+      }
       String getQuartet = event.data()['getQuartet'];
       this._getQuartet.add(getQuartet);
 
