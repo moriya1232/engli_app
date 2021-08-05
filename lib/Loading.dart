@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class Loading extends StatefulWidget {
   final bool isManager;
   final String gameId;
-//  final List<Subject> subjects;
+  List<String> usersLogin = [];
 
   Loading(String gameId, bool isManager)
       : isManager = isManager,
@@ -116,8 +116,9 @@ class _LoadingState extends State<Loading> {
   }
 
   void continueToGameClicked() async {
-    // this.widget.usersLogin =
-    //     await GameDatabaseService().getPlayersList(this.widget.gameId);
+     if (this.widget.usersLogin.length <= 1) {
+      return;
+    }
     _eventsSubscription.cancel();
     Navigator.push(
       context,
@@ -138,6 +139,7 @@ class _LoadingState extends State<Loading> {
         stream: _usersLoginStreamController.stream,
         initialData: [],
         builder: (context, snapshot) {
+          this.widget.usersLogin = snapshot.data;
           return ListView.builder(
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(vertical: 7),

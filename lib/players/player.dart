@@ -125,7 +125,7 @@ class ComputerPlayer extends Other {
       if (cards.length == 0) {
         await game.takeCardFromDeck();
         // update tokens parameters.
-      GameDatabaseService()
+      await GameDatabaseService()
           .updateTake(game, game.listTurn.indexOf(this), -1, "", -1, true);
         if (await game.doneTurn()) {
           return;
@@ -159,7 +159,7 @@ class ComputerPlayer extends Other {
       if (await game.askByComputer(randPlayer, randSub, randCard)) {
         print("computer player success take card. more turn!");
         game.removeAllSeriesDone(this);
-        if (await game.checkIfGameDone()) {
+        if (game.checkIfGameDone()) {
           return;
         }
         makeMove(game);

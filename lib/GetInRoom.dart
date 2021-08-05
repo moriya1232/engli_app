@@ -15,6 +15,7 @@ class GetInRoom extends StatefulWidget {
 class _GetInRoomState extends State<GetInRoom> {
   final _gameIdController = TextEditingController();
   final _error = StreamController<String>.broadcast();
+  bool firstClick = true;
 
   @override
   void dispose() {
@@ -25,6 +26,7 @@ class _GetInRoomState extends State<GetInRoom> {
 
   @override
   Widget build(BuildContext context) {
+    this.firstClick = true;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
@@ -108,12 +110,16 @@ class _GetInRoomState extends State<GetInRoom> {
   }
 
   void openRoomClicked() async {
-    String gameId = UniqueKey().toString();
-    await createGame(gameId);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
-    );
+    if (firstClick) {
+      this.firstClick = false;
+      String gameId = UniqueKey().toString();
+      await createGame(gameId);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
+      );
+      this.firstClick = true;
+    }
   }
 
   void getInToRoomClicked(String gameId) async {

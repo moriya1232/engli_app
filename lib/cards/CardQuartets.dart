@@ -202,10 +202,9 @@ class _CardQuartetsState extends State<CardQuartets>
       width: widthCloseCard,
       child: Card(
         color: Colors.amberAccent,
-        //TODO: remove this! that just for debug.
-        child: Text(
-          this.widget._subject + " " + this.widget.english,
-        ),
+//        child: Text(
+//          this.widget._subject + " " + this.widget.english,
+//        ),
       ),
     );
   }

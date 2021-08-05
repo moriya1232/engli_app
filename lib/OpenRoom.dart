@@ -160,8 +160,7 @@ class _OpenRoomState extends State<OpenRoom> {
 
   void startGameClicked(bool isAgainstComputer) async {
     List<String> subs = getMarkedSeries();
-    //TODO: change it to 4
-    if (subs.length < 1) {
+    if (subs.length < 4) {
       this._error.add("בחר לפחות 4 סריות");
       return;
     }

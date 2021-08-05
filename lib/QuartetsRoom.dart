@@ -10,6 +10,7 @@ import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'QuartetsGame/Turn.dart';
 import 'WinnerScreen.dart';
 import 'cards/CardQuartets.dart';
@@ -101,6 +102,10 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     setConstants();
     firstBuild = false;
     return _isFinishScreen();
