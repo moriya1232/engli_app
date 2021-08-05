@@ -173,7 +173,7 @@ class _OpenRoomState extends State<OpenRoom> {
     User user = _auth.currentUser;
     String currName = user.displayName;
     if (!isAgainstComputer) {
-      await GameDatabaseService().addPlayer(widget.gameId, currName,
+      await GameDatabaseService().addPlayerToDataBase(widget.gameId, currName,
           user.uid); //update the subject list in the game file
       Navigator.push(
         context,
@@ -185,14 +185,13 @@ class _OpenRoomState extends State<OpenRoom> {
       GameDatabaseService().updateAgainstComputer(this.widget.gameId, true);
       for (int i = 0; i < int.parse(this.widget._dropdownValue); i++) {
         if (i == 0) {
-          print(this.widget.gameId);
           String id = _auth.currentUser.uid;
           await GameDatabaseService()
-              .addPlayer(this.widget.gameId, currName, id);
+              .addPlayerToDataBase(this.widget.gameId, currName, id);
           continue;
         } else {
           var random = Random();
-          await GameDatabaseService().addPlayer(
+          await GameDatabaseService().addPlayerToDataBase(
               this.widget.gameId,
               optionalsNames[random.nextInt(optionalsNames.length)],
               i.toString());
@@ -294,7 +293,6 @@ class _OpenRoomState extends State<OpenRoom> {
         stream: sc.stream,
         initialData: [],
         builder: (context, snapshot) {
-          // print("stream come! - subjects from database");
           if (snapshot.data == null) {
             return Container();
           }
@@ -411,7 +409,6 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
             value: snapshot.data ?? false,
             onChanged: (bool value) {
               widget.value = value;
-//               print("refresh! " + this.widget.title + ": " + value.toString());
               this.widget._subjectList.add(value);
             },
           );

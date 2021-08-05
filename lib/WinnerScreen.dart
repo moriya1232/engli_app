@@ -110,7 +110,6 @@ class _WinnerRoomState extends State<WinnerScreen> {
   }
 
   void backClicked() {
-    print("need to go back");
     if (this.widget.gameId != null) {
       GameDatabaseService().deleteGame(this.widget.gameId);
     }
@@ -121,22 +120,17 @@ class _WinnerRoomState extends State<WinnerScreen> {
   List<Player> getWinners() {
     List<Player> winners = [];
     int maxScore = 0;
-//    Player winner = widget.game.players[0];
     for (Player player in widget.game.players) {
       if (player.score > maxScore) {
 //        winner = player;
         maxScore = player.score;
       }
     }
-    print("max score:" + maxScore.toString());
     for (Player player in widget.game.players) {
       if (player.score == maxScore) {
-        print("add winner: " + player.name);
         winners.add(player);
       }
     }
-    print("winners:");
-    print(winners);
     return winners;
   }
 

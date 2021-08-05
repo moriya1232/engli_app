@@ -127,7 +127,7 @@ class _GetInRoomState extends State<GetInRoom> {
     // 1- if success
     // 2- if too much players.
     // 3 - if no exist this code.
-    int succ = await GameDatabaseService().addPlayer(gameId, name, user.uid);
+    int succ = await GameDatabaseService().addPlayerToDataBase(gameId, name, user.uid);
 
     if (succ == 1) {
       Navigator.push(

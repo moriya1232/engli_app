@@ -56,7 +56,6 @@ class Deck {
       throw Exception("no more cards in the pile");
     } else {
       CardQuartets card = _cards.removeLast();
-//      print(player.name + " has " + card.english + " in " + card.subject);
       if (player is Me) {
         player.addCard(card.changeToMine());
       } else {

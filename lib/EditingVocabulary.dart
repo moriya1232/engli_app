@@ -516,7 +516,7 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
     this._seriesController.add(this.widget.series);
     widget.series.remove(ser);
     String playerId = FirebaseAuth.instance.currentUser.uid;
-    GameDatabaseService().deleteSeries(ser, playerId, this.widget.series);
+    GameDatabaseService().deleteSubjectFromDataBase(ser, playerId, this.widget.series);
   }
 
   //return true if its OK, false-otherwise
@@ -555,7 +555,7 @@ class _EditingVocabularyState extends State<EditingVocabulary> {
     String thirdHeb = this._thirdHeb.text;
     String forthHeb = this._forthHeb.text;
     String forthEng = this._forthEng.text;
-    GameDatabaseService().addSeries(nameSer, firstEng, firstHeb, secondEng,
+    GameDatabaseService().addSeriesToDataBase(nameSer, firstEng, firstHeb, secondEng,
         secondHeb, thirdEng, thirdHeb, forthEng, forthHeb);
     this.widget.series.add(nameSer);
     this._seriesController.add(this.widget.series);

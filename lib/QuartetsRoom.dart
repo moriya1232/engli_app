@@ -48,8 +48,6 @@ class QuartetsRoom extends StatefulWidget {
   final _getQuartet = StreamController<String>.broadcast();
   // ignore: close_sinks
   final _isFinish = StreamController<bool>.broadcast();
-
-//  final _streamControllerAchievedQuartet = StreamController<String>.broadcast();
   String stringToSpeak = "";
 
   QuartetsRoom(
@@ -89,7 +87,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
   CardQuartets thirdCard;
   CardQuartets meCard;
   CardQuartets deckCard;
-
   bool firstBuild = true;
 
   @override
@@ -196,8 +193,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: getMyText(),
                 ),
-//                  Expanded(
-//                    child:
                 Container(
                   width: 100,
                   child: RawMaterialButton(
@@ -215,7 +210,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     ),
                   ),
                 ),
-//                  ),
               ],
             ),
           ),
@@ -291,12 +285,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           deckPos = new Position(getDeckLeft(), getDeckTop(), null, null);
     }
   }
-//
-//  void showAchievedWidget(String name) async {
-//    this.widget._streamControllerAchievedQuartet.add(name);
-//    await Future.delayed(Duration(seconds: 2));
-//    this.widget._streamControllerAchievedQuartet.add(null);
-//  }
 
   Widget getAppropriateWidgetForTurn() {
     return StreamBuilder<int>(
@@ -314,15 +302,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           }
         });
   }
-
-  // Widget getStringsToTurn() {
-  //   return StreamBuilder<int>(
-  //       stream: widget._streamControllerStringsTurn.stream,
-  //       initialData: 0,
-  //       builder: (context, snapshot) {
-  //
-  //       });
-  // }
 
   Widget getAskedText() {
     String asked = widget.game.playerTakeName;
@@ -499,14 +478,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
   }
 
-//  void _listener() {
-//    //setState(() {});
-//    Navigator.push(
-//      context,
-//      MaterialPageRoute(builder: (context) => WinnerScreen(this.widget.game)),
-//    );
-//  }
-
   Widget _buildAnimatedPos(
       Widget card, Position position, StreamController sc) {
     position.visible = false;
@@ -514,16 +485,12 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         stream: sc.stream,
         initialData: position,
         builder: (context, snapshot) {
-          ///snapshot.data?? "first" == snapshot.data != null ? snapshot.data : "first"
-//          if (snapshot.data == null || snapshot.data == position) {
           if (snapshot.data == null) {
             return SizedBox();
           }
           return AnimatedPositioned(
             left: snapshot.data.getLeft(),
-//            right: snapshot.data.getRight(),
             top: snapshot.data.getTop(),
-//            bottom: snapshot.data.getBottom(),
             child: snapshot.data.getVisible() ? card : SizedBox(),
             duration: Duration(seconds: 1, milliseconds: 300),
             curve: Curves.fastOutSlowIn,
@@ -546,8 +513,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.game.getFirstPlayer().cards.length,
-                  // number of items in your list
-
                   itemBuilder: (BuildContext context, int itemIndex) {
                     return widget.game.getFirstPlayer().cards[itemIndex];
                   }),
@@ -583,7 +548,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.game.getSecondPlayer().cards.length,
-                    // number of items in your list
                     itemBuilder: (BuildContext context, int itemIndex) {
                       return widget.game
                           .getSecondPlayer()
@@ -617,7 +581,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: widget.game.getThirdPlayer().cards.length,
-                    // number of items in your list
                     itemBuilder: (BuildContext context, int itemIndex) {
                       return widget.game
                           .getThirdPlayer()
@@ -638,9 +601,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemCount: widget.game.getMyPlayer().cards.length,
-              // number of items in your list
-
-              //here the implementation of itemBuilder. take a look at flutter docs to see details
               itemBuilder: (BuildContext context, int itemIndex) {
                 return widget.game
                     .getMyPlayer()
@@ -651,6 +611,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
 
   @override
   void dispose() {
+    //dispose listens.
     this.widget.game.listenToPlayersInGame.cancel();
     this.widget.game.listenToSpecGame.cancel();
     //dispose all the controlles.
@@ -742,27 +703,6 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
           return new Container();
         });
   }
-//
-//  Widget getAchievedText() {
-//
-//    return StreamBuilder<String>(
-//        stream: this.widget._streamControllerAchievedQuartet.stream,
-//        initialData: "",
-//        builder: (context, snapshot) {
-//          String result = "";
-//          if(snapshot.data!= null) {
-//            result = snapshot.data + " get quartet!";
-//          }
-//          return Text(
-//            result,
-//            style: TextStyle(
-//              color: Colors.pink,
-//              fontFamily: 'Carter-e',
-//              fontSize: 60,
-//            ),
-//          );
-//        });
-//  }
 
   Widget getAnimationCard() {
     CardQuartets card = CardQuartets("", "", null, "", "", "", "", false);

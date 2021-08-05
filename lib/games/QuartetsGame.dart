@@ -20,36 +20,41 @@ class QuartetsGame extends Game {
   bool successTakeCard;
   List<Subject> subjects;
   Map<CardQuartets, int> cardsId = {};
-  bool isManager;
-  String gameId;
+  final bool isManager;
+  final String gameId;
   bool againstComputer = false;
   List<Player> listTurn = [];
   bool isFinished = false;
-  StreamController _gameStart;
+  final StreamController _gameStart;
+
   // controllers for animate the view.
-  StreamController _firstController;
-  StreamController _secondController;
-  StreamController _thirdController;
-  StreamController _meController;
-  StreamController _deckController;
+  final StreamController _firstController;
+  final StreamController _secondController;
+  final StreamController _thirdController;
+  final StreamController _meController;
+  final StreamController _deckController;
 
-  StreamController _turnController;
+  final StreamController _turnController;
+  final StreamController _myCardsController;
+  final StreamController _myScoreController;
+  final StreamController _otherPlayersCardsController;
+  final StreamController _stringsOnDeckController;
+  final StreamController _getQuartet;
+  final StreamController _csIsFinish;
 
-  StreamController get turnController => _turnController;
-  StreamController _myCardsController;
-  StreamController _myScoreController;
-  StreamController _otherPlayersCardsController;
-  StreamController _stringsOnDeckController;
-  StreamController _getQuartet;
-  StreamController _csIsFinish;
+  final FlutterTts flutterTts = FlutterTts();
 
-  StreamController get csIssFinish => _csIsFinish;
-  FlutterTts flutterTts = FlutterTts();
+  // ignore: cancel_subscriptions
+  StreamSubscription<DocumentSnapshot> _listenToSpecGame;
+  // ignore: cancel_subscriptions
   StreamSubscription<QuerySnapshot> _listenToPlayersInGame;
 
+  StreamController get csIssFinish => _csIsFinish;
+  StreamController get turnController => _turnController;
   StreamSubscription<QuerySnapshot> get listenToPlayersInGame =>
       _listenToPlayersInGame;
-  StreamSubscription<DocumentSnapshot> _listenToSpecGame;
+  StreamSubscription<DocumentSnapshot> get listenToSpecGame =>
+      _listenToSpecGame;
 
   QuartetsGame(
       String gameId,
@@ -79,17 +84,12 @@ class QuartetsGame extends Game {
         this._myScoreController = myScore,
         this._otherPlayersCardsController = otherCards,
         this._getQuartet = getQuartet,
-        this._csIsFinish = isFinish {
+        this._csIsFinish = isFinish, this.isManager = isManager, this.gameId = gameId {
     speak("Welcome to engli game!");
 
-//    this.subjects = subs;
-    this.isManager = isManager;
-    this.gameId = gameId;
     this.subjects = [];
     this.listTurn = [];
     this.deck = new Deck(this.subjects);
-
-    // this.cardsId = caID;
     this.playerTakeName = null;
     this.playerTokenName = null;
     this.subjectAsked = null;
@@ -99,20 +99,16 @@ class QuartetsGame extends Game {
 
   void createGame() async {
     ///all players
-//    if (!this.againstComputer) {
     this.players = await GameDatabaseService().getPlayersList(this);
-//    } else {
-//      this.listTurn.addAll(this.players);
-//    }
     await createAllSubjects(gameId);
 
     /// only manager
     if (this.isManager) {
       await reStart();
-      changeScoresOfPlayers();
+      initializePlayersScore();
     }
 
-    ///listen to changes in specific game.
+    //listen to changes in specific game.
     this._listenToSpecGame = FirebaseFirestore.instance
         .collection("games")
         .doc(this.gameId)
@@ -201,8 +197,6 @@ class QuartetsGame extends Game {
       this._stringsOnDeckController.add(1);
       this.turn = turn;
       this._turnController.add(this.turn);
-//        print("update turn");
-//        print(turn);
     });
 
     ///listen about changes in players cards and scores
@@ -225,7 +219,6 @@ class QuartetsGame extends Game {
         if (score == null) {
           score = 0;
         }
-        // score = score.cast<int>();
         this.updatePlayerCards(newCards, playerId);
         this.updatePlayerScore(playerId, score);
 
@@ -242,7 +235,6 @@ class QuartetsGame extends Game {
 
         if (!everyoneNoHaveCards) {
           this.isFinished = true;
-          print("game need to done!");
           this._csIsFinish.add(true);
           return;
         }
@@ -268,39 +260,24 @@ class QuartetsGame extends Game {
     return this.listTurn[await GameDatabaseService().getTokenFrom(this)].name;
   }
 
-  Future<String> getStringCardToken() async {
+  Future<String> getCardTokenString() async {
     return this
         .idToCard(await GameDatabaseService().getCardToken(this))
         .english;
   }
 
-  // void takeDataOfGame() async {
-  //   Map<String, List<int>> playersCards = {};
-  //   for (Player p in players) {
-  //     playersCards[p.uid] = [];
-  //     for (CardQuartets q in p.cards) {
-  //       int x = this.cardsId[q];
-  //       playersCards[p.uid].add(x);
-  //     }
-  //     //update server about the cards of the players
-  //     print(p.uid);
-  //     GameDatabaseService()
-  //         .initializePlayerCard(playersCards[p.uid], this, p.uid);
-  //   }
-  //   this.deck.cards = await GameDatabaseService().getDeck(this);
-  // }
-
+  // in beginning of game every player need to create all subjects in his phone.
   void createAllSubjects(String gameId) async {
     List<String> strSub =
         await GameDatabaseService().getGameListSubjects(gameId);
 
-    // String subjectId = await GameDatabaseService().getSubjectsId(gameId);
     this.subjects.addAll(await getSubjectsFromStrings(strSub));
-    createMap();
+    createMapCardsToInt();
     return;
   }
 
-  void createMap() {
+  // this map is for map between cards and how they save in the server (int)
+  void createMapCardsToInt() {
     int z = 0;
     for (Subject sub in this.subjects) {
       for (CardQuartets card in sub.getCards()) {
@@ -316,7 +293,6 @@ class QuartetsGame extends Game {
     bool isGenerics = await GameDatabaseService().getGenerics(gameId);
     if (isGenerics) {
       subjectId = "generic_subjects";
-      print(subjectId);
     } else {
       subjectId = await GameDatabaseService().getManagerId(gameId);
     }
@@ -353,7 +329,7 @@ class QuartetsGame extends Game {
       }
       //update server about the cards of the players
       await GameDatabaseService()
-          .initializePlayerCard(playersCards[p.uid], this, p.uid);
+          .updatePlayerCards(playersCards[p.uid], this, p.uid);
     }
     //update server about the deck
     List<int> deckCards = [];
@@ -367,13 +343,13 @@ class QuartetsGame extends Game {
     await GameDatabaseService().updateContinueState(this.gameId);
   }
 
-  void changeScoresOfPlayers() async {
+  void initializePlayersScore() async {
     for (Player p in players) {
       GameDatabaseService().updateScore(0, p.uid, this);
     }
   }
 
-  bool askPlayer(Player player, Subject subject) {
+  bool askPlayerAboutSubject(Player player, Subject subject) {
     for (CardQuartets card in player.cards) {
       if (card.getSubject() == subject.nameSubject) {
         return true;
@@ -391,7 +367,7 @@ class QuartetsGame extends Game {
     }
 
     // ask about a subject
-    if (askPlayer(player, subject)) {
+    if (askPlayerAboutSubject(player, subject)) {
       // ask about spec card.
       if (askPlayerSpecCard(player, subject, card) != null) {
         await takeCardFromPlayer(card, player);
@@ -454,7 +430,6 @@ class QuartetsGame extends Game {
   }
 
   Player getPlayerByName(String name) {
-    //TODO: if there are some players? I think that when they get in to check it and to add number, like shilo1 and shilo2.
     for (Player player in this.players) {
       if (name == player.name) {
         return player;
@@ -497,7 +472,6 @@ class QuartetsGame extends Game {
 
   bool checkIfGameDone() {
     if (this.deck.getCards().length == 0 && !isPlayersHasCards()) {
-//      await GameDatabaseService().updateTurn(this, this.turn);
       return true;
     }
     return false;
@@ -586,11 +560,6 @@ class QuartetsGame extends Game {
       animateCard(this._deckController, deckPos, getApproPosition(player));
       await this.deck.giveCardToPlayer(player, this);
 
-      // update tokens parameters.
-
-//      GameDatabaseService()
-//          .updateTake(this, this.listTurn.indexOf(player), -1, "", -1, true);
-
       //update view:
       this._myCardsController.add(1);
       this._otherPlayersCardsController.add(1);
@@ -605,7 +574,7 @@ class QuartetsGame extends Game {
       StreamController sc, Position source, Position target) async {
     Position su = source;
     Position ta = target;
-    // visible
+    // visible animated card
     su.visible = true;
     sc.add(su);
     //move card
@@ -616,7 +585,6 @@ class QuartetsGame extends Game {
     //back animation to right place
     su.visible = false;
     sc.add(su);
-//    await new Future.delayed(Duration(seconds: 2));
   }
 
   List<Subject> getSubjectsOfPlayer(Player player) {
@@ -736,7 +704,7 @@ class QuartetsGame extends Game {
     }
   }
 
-  /// update my deck member from the server.
+  // update my deck member from the server.
   List<CardQuartets> updateMyDeck(List<int> nDeck) {
     List<CardQuartets> newDeckCards = [];
     for (var i in nDeck) {
@@ -749,9 +717,10 @@ class QuartetsGame extends Game {
     return newDeckCards;
   }
 
+  // update player's cards from int (from the server)
   void updatePlayerCards(List<int> cards, String id) {
     List<CardQuartets> newCardsList = [];
-    for (var i in cards) {
+    for (int i in cards) {
       var key = this
           .cardsId
           .keys
@@ -772,6 +741,7 @@ class QuartetsGame extends Game {
     }
   }
 
+  // update player's score (like it called from the server)
   void updatePlayerScore(String playerId, int score) {
     for (var i in this.players) {
       if (i.uid == playerId) {
@@ -780,6 +750,7 @@ class QuartetsGame extends Game {
     }
   }
 
+  // get card by the appropriate int
   CardQuartets idToCard(int id) {
     CardQuartets iKey = this
         .cardsId
@@ -788,12 +759,10 @@ class QuartetsGame extends Game {
     return iKey;
   }
 
+  // TTS
   Future speak(String text) async {
     await flutterTts.setLanguage("en-US");
     await flutterTts.setPitch(1);
     await flutterTts.speak(text);
   }
-
-  StreamSubscription<DocumentSnapshot> get listenToSpecGame =>
-      _listenToSpecGame;
 }

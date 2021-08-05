@@ -3,7 +3,6 @@ import 'package:engli_app/cards/CardQuartets.dart';
 import 'package:engli_app/cards/Subject.dart';
 import 'package:engli_app/games/QuartetsGame.dart';
 import 'package:engli_app/players/player.dart';
-import 'package:engli_app/WinnerScreen.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -508,7 +507,7 @@ class _TurnState extends State<Turn> {
       if (this
           .widget
           .game
-          .askPlayer(widget.playerChosenToAsk, widget.subjectToAsk)) {
+          .askPlayerAboutSubject(widget.playerChosenToAsk, widget.subjectToAsk)) {
         await GameDatabaseService()
             .updateTake(this.widget.game, take, token, sub, card, false);
       }
