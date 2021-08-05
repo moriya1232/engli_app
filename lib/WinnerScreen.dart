@@ -17,24 +17,73 @@ class WinnerScreen extends StatefulWidget {
 }
 
 class _WinnerRoomState extends State<WinnerScreen> {
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    List<Player> winners = getWinners();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen,
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
+      body: Stack(
+        children: [
+          Center(child: Image(image: AssetImage("images/fireworks.gif"))),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                child: Text(
-                  winnerName(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.pink, fontSize: 60, fontFamily: 'Gan-h'),
+                if (winners.length == 1)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "The Winner:",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black87, fontSize: 30, fontFamily: 'Carter-e'),
+                      ),
+                      Container(
+                        width: width,
+                        height: height/2,
+                        child: FittedBox(
+                          child: Text(
+                            getWinnersString(winners),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.pink, fontFamily: 'Carter-e'),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                if (winners.length > 1)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "The Winners:",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.black87, fontSize: 30, fontFamily: 'Carter-e'),
+                    ),
+                    Container(
+                      width: width,
+                      height: height/2,
+                      child: FittedBox(
+                        child: Text(
+                          getWinnersString(winners),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.pink, fontFamily: 'Carter-e'),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
               SizedBox(
                 height: 30,
               ),
@@ -55,7 +104,7 @@ class _WinnerRoomState extends State<WinnerScreen> {
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
@@ -69,32 +118,42 @@ class _WinnerRoomState extends State<WinnerScreen> {
         context, MaterialPageRoute(builder: (context) => GetInRoom()));
   }
 
-  String winnerName() {
+  List<Player> getWinners() {
     List<Player> winners = [];
     int maxScore = 0;
-    Player winner = widget.game.players[0];
+//    Player winner = widget.game.players[0];
     for (Player player in widget.game.players) {
-      if (player.score > winner.score) {
-        winner = player;
-        maxScore = winner.score;
+      if (player.score > maxScore) {
+//        winner = player;
+        maxScore = player.score;
       }
     }
+    print("max score:" + maxScore.toString());
     for (Player player in widget.game.players) {
       if (player.score == maxScore) {
+        print("add winner: " + player.name);
         winners.add(player);
       }
     }
+    print("winners:");
+    print(winners);
+    return winners;
+  }
+
+  String getWinnersString(List<Player> winners) {
+    if(winners.length <= 0) {return "";}
+    Player winner = winners[0];
     if (winners.length > 1) {
       String s = winners[0].name;
       for (Player player in winners) {
         if (player == winners[0]) {
           continue;
         }
-        s += ", " + player.name;
+        s += ",\n" + player.name;
       }
-      return '!שיוויון' + "\n" + s;
+      return s;
     } else {
-      return ' המנצח הוא  ${winner.name}';
+      return winner.name;
     }
   }
 }

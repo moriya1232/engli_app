@@ -116,11 +116,9 @@ class ComputerPlayer extends Other {
 //      print("done computer turn");
 
     } else if (game is QuartetsGame) {
-      print("in deck in make move:");
-      print(game.deck.getCards().length);
       print("computer player turn");
-
       var random = Random();
+//      List<CardQuartets> cards = await GameDatabaseService().getPlayerCards(game, game.getPlayerNeedTurn());
       List<CardQuartets> cards =
           game.getPlayerNeedTurn().cards.cast<CardQuartets>();
       // no cards! so take card from the deck.

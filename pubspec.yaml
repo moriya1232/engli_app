@@ -90,6 +90,7 @@ flutter:
     - images/blue.png
     - images/green.jpg
     - images/red.png
+    - images/fireworks.gif
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

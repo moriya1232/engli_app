@@ -1,7 +1,7 @@
-
-
 import 'cards/Position.dart';
 
+final Duration delayForComputerMove = Duration(seconds: 8);
+final Duration delayForAnimation = Duration(seconds: 3);
 //String mail = "engli@gmail.com";
 //String name = "אברהם";
 

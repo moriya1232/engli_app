@@ -1,10 +1,8 @@
 //TODO:
-// לסדר קוד
-// חיצה פעמיים על שאל2 - firstClick2
-// לבדוק כשמנצחים אז את הכפתור חזרה.
-// set state in open room
-// words- against computer.
-
+// arrange code
+// double click.
+// button in winner screen
+// widget before winnerscreen
 
 // TODO: check::
 // limit for 4 players. -- check!!!

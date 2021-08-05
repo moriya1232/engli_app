@@ -56,13 +56,13 @@ class GameDatabaseService {
     return await gameCollection
         .doc(gameId)
         .get()
-        .then((DocumentSnapshot documentSnapshot) {
+        .then((DocumentSnapshot documentSnapshot) async{
       if (documentSnapshot.exists) {
         var x = documentSnapshot.data()['players'];
         List<String> newPlayersList = x.cast<String>();
         newPlayersList.add(name);
         if (newPlayersList.length <= 4) {
-          gameCollection.doc(gameId).update({'players': newPlayersList});
+          await gameCollection.doc(gameId).update({'players': newPlayersList});
           return Future.value(1);
         } else {
           return Future.value(2);
@@ -281,12 +281,10 @@ class GameDatabaseService {
   //   return Future.value(d);
   // }
 
-  void updateTakeCardFromDeck(
-      QuartetsGame game, CardQuartets card, Player player) {
-//    if (!game.againstComputer) {
-    deleteCardFromDeck(game, card);
-    addCardToPlayer(game, card, player);
-//    }
+  void updateTakeCardFromDeck (
+      QuartetsGame game, CardQuartets card, Player player) async{
+    await deleteCardFromDeck(game, card);
+    await addCardToPlayer(game, card, player);
   }
 
   void deleteCardFromDeck(QuartetsGame game, CardQuartets card) async {
@@ -295,7 +293,7 @@ class GameDatabaseService {
     await gameCollection
         .doc(game.gameId)
         .get()
-        .then((DocumentSnapshot documentSnapshot) {
+        .then((DocumentSnapshot documentSnapshot) async{
       if (documentSnapshot.exists) {
         var x = documentSnapshot.data()["deck"];
         List<int> deck = x.cast<int>();
@@ -305,7 +303,7 @@ class GameDatabaseService {
             newDeck.add(c);
           }
         }
-        gameCollection.doc(game.gameId).update({'deck': newDeck});
+        await gameCollection.doc(game.gameId).update({'deck': newDeck});
       }
     });
 //    }
@@ -319,13 +317,13 @@ class GameDatabaseService {
         .collection("players")
         .doc(player.uid)
         .get()
-        .then((DocumentSnapshot documentSnapshot) {
+        .then((DocumentSnapshot documentSnapshot) async {
       if (documentSnapshot.exists) {
         var x = documentSnapshot.data()['cards'];
         List<int> playerCards = x.cast<int>();
         int cardId = game.cardsId[card];
         playerCards.add(cardId);
-        gameCollection
+        await gameCollection
             .doc(game.gameId)
             .collection("players")
             .doc(player.uid)
@@ -343,7 +341,7 @@ class GameDatabaseService {
         .collection("players")
         .doc(player.uid)
         .get()
-        .then((DocumentSnapshot documentSnapshot) {
+        .then((DocumentSnapshot documentSnapshot) async{
       if (documentSnapshot.exists) {
         List<int> updateList = [];
         var x = documentSnapshot.data()['cards'];
@@ -354,7 +352,7 @@ class GameDatabaseService {
             updateList.add(c);
           }
         }
-        gameCollection
+        await gameCollection
             .doc(game.gameId)
             .collection("players")
             .doc(player.uid)
@@ -365,16 +363,16 @@ class GameDatabaseService {
   }
 
   void transferCard(Player takePlayer, Player tokenFrom, QuartetsGame game,
-      CardQuartets card) {
+      CardQuartets card) async{
 //    if (!game.againstComputer) {
-    deleteCardToPlayer(tokenFrom, game, card);
-    addCardToPlayer(game, card, takePlayer);
+    await deleteCardToPlayer(tokenFrom, game, card);
+    await addCardToPlayer(game, card, takePlayer);
 //    }
   }
 
-  void updateTurn(QuartetsGame game, int turn) {
+  void updateTurn(QuartetsGame game, int turn) async{
 //    if (!game.againstComputer) {
-    gameCollection.doc(game.gameId).update({'turn': turn});
+    await gameCollection.doc(game.gameId).update({'turn': turn});
 //    }
   }
 
@@ -421,9 +419,9 @@ class GameDatabaseService {
     await gameCollection.doc(game.gameId).update({'initializeGame': true});
   }
 
-  Future<List<CardQuartets>> getDeck(QuartetsGame game) {
+  Future<List<CardQuartets>> getDeck(QuartetsGame game) async{
     List<CardQuartets> deck = [];
-    gameCollection
+    await gameCollection
         .doc(game.gameId)
         .get()
         .then((DocumentSnapshot documentSnapshot) {
@@ -442,7 +440,7 @@ class GameDatabaseService {
 
   Future<int> getTurn(QuartetsGame game) async {
     int newTurn;
-    gameCollection.doc(game.gameId).get().then((value) {
+    await gameCollection.doc(game.gameId).get().then((value) {
       if (value.exists) {
         var turn = value.data()['turn'];
         newTurn = turn.cast<int>();
@@ -458,6 +456,7 @@ class GameDatabaseService {
       newCardsList.add(game.cardsId[i]);
     }
     for (CardQuartets c in subjectToDelete.cards) {
+      player.cards.remove(c);
       newCardsList.remove(game.cardsId[c]);
     }
     await gameCollection
@@ -469,7 +468,7 @@ class GameDatabaseService {
 
   Future<int> getCardToken(QuartetsGame game) async {
     int cardToken;
-    gameCollection.doc(game.gameId).get().then((value) {
+    await gameCollection.doc(game.gameId).get().then((value) {
       if (value.exists) {
         var cToken = value.data()['cardToken'];
         cardToken = cToken.cast<int>();
@@ -480,7 +479,7 @@ class GameDatabaseService {
 
   Future<int> getTake(QuartetsGame game) async {
     int take;
-    gameCollection.doc(game.gameId).get().then((value) {
+    await gameCollection.doc(game.gameId).get().then((value) {
       if (value.exists) {
         var cTake = value.data()['take'];
         take = cTake.cast<int>();
@@ -491,7 +490,7 @@ class GameDatabaseService {
 
   Future<int> getTokenFrom(QuartetsGame game) async {
     int tokenFrom;
-    gameCollection.doc(game.gameId).get().then((value) {
+    await gameCollection.doc(game.gameId).get().then((value) {
       if (value.exists) {
         var tokenF = value.data()['tokenFrom'];
         tokenFrom = tokenF.cast<int>();
@@ -500,10 +499,10 @@ class GameDatabaseService {
     return Future.value(tokenFrom);
   }
 
-  void updateTake(
-      QuartetsGame game, int take, int token, String sub, int card, bool succ) {
+  void updateTake (
+      QuartetsGame game, int take, int token, String sub, int card, bool succ) async {
 //    if (!game.againstComputer) {
-    gameCollection.doc(game.gameId).update({
+    await gameCollection.doc(game.gameId).update({
       'take': take,
       'tokenFrom': token,
       'cardToken': card,
@@ -551,8 +550,8 @@ class GameDatabaseService {
     subjectCollection.doc(playerId).update({'subjects_list': newListSub});
   }
 
-  void updateGeneric(String gameId, bool gen) {
-    gameCollection.doc(gameId).update({'generic': gen});
+  void updateGeneric(String gameId, bool gen) async{
+    await gameCollection.doc(gameId).update({'generic': gen});
   }
 
   void updateGetQuartet(String gameId, String name) async {
@@ -602,7 +601,7 @@ class GameDatabaseService {
     await gameCollection.doc(gameId).delete();
   }
 
-  void updateFinished(String gameId, bool isFinished) {
-    gameCollection.doc(gameId).update({'finished': isFinished});
+  void updateFinished(String gameId, bool isFinished) async{
+    await gameCollection.doc(gameId).update({'finished': isFinished});
   }
 }

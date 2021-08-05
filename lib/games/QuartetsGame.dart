@@ -201,10 +201,10 @@ class QuartetsGame extends Game {
       if (turn == null) {
         this.turn = 0;
       }
+      this._stringsOnDeckController.add(1);
       if (turn != this.turn) {
         this.turn = turn;
         this._turnController.add(this.turn);
-        this._stringsOnDeckController.add(1);
       }
     });
 
@@ -392,10 +392,10 @@ class QuartetsGame extends Game {
       // ask about spec card.
       if (askPlayerSpecCard(player, subject, card) != null) {
         await takeCardFromPlayer(card, player);
-        return new Future.delayed(const Duration(seconds: 5), () => true);
+        return new Future.delayed(delayForComputerMove, () => true);
       } else {
         // there is the subject to the enemy but not the card.
-        GameDatabaseService().updateTake(
+        await GameDatabaseService().updateTake(
             this,
             this.listTurn.indexOf(this.getPlayerNeedTurn()),
             this.listTurn.indexOf(player),
@@ -403,7 +403,7 @@ class QuartetsGame extends Game {
             this.cardsId[card],
             false);
         await takeCardFromDeck();
-        return new Future.delayed(const Duration(seconds: 5), () => false);
+        return new Future.delayed(delayForComputerMove, () => false);
       }
     } else {
       // didn't success ask subject from another player
@@ -416,7 +416,7 @@ class QuartetsGame extends Game {
           false);
       await takeCardFromDeck();
 
-      return new Future.delayed(const Duration(seconds: 5), () => false);
+      return new Future.delayed(delayForComputerMove, () => false);
     }
   }
 
@@ -1005,7 +1005,7 @@ class QuartetsGame extends Game {
       this._otherPlayersCardsController.add(1);
       this._stringsOnDeckController.add(1);
 
-      return Future.delayed(const Duration(seconds: 2));
+      return Future.delayed(delayForAnimation);
     }
   }
 
@@ -1020,7 +1020,7 @@ class QuartetsGame extends Game {
     //move card
     ta.visible = true;
     sc.add(ta);
-    await new Future.delayed(Duration(seconds: 2));
+    await new Future.delayed(delayForAnimation);
 
     //back animation to right place
     su.visible = false;
@@ -1067,8 +1067,8 @@ class QuartetsGame extends Game {
     for (Subject subject in series) {
       await GameDatabaseService().deleteQuartet(subject, this, player);
       await GameDatabaseService().updateGetQuartet(gameId, player.name);
-      this._getQuartet.add(player.name);
-      Future.delayed(Duration(seconds: 2), () => this._getQuartet.add(null));
+//      this._getQuartet.add(player.name);
+//      Future.delayed(Duration(seconds: 2), () => this._getQuartet.add(null));
       player.raiseScore(10);
       GameDatabaseService().updateScore(player.score, player.uid, this);
       this._myScoreController.add(10);
@@ -1116,7 +1116,7 @@ class QuartetsGame extends Game {
     this._myCardsController.add(1);
     this._otherPlayersCardsController.add(1);
 
-    return new Future.delayed(const Duration(seconds: 2));
+    return new Future.delayed(delayForAnimation);
   }
 
   //this method is for asking someone in this return value.

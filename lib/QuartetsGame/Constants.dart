@@ -64,7 +64,7 @@ const optionalsNames = [
   "Roni",
   "Gil",
   "Shachar",
-  "Mordechai",
+  "Mordehai",
   "Tzipora",
   "Yocheved",
   "Israel",

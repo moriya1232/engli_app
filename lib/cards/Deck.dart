@@ -63,7 +63,7 @@ class Deck {
         player.addCard(card.changeToNotMine());
       }
       if (game != null) {
-        GameDatabaseService().updateTakeCardFromDeck(game, card, player);
+        await GameDatabaseService().updateTakeCardFromDeck(game, card, player);
       }
     }
     return new Future.delayed(const Duration(seconds: 1));
