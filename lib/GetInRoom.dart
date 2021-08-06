@@ -40,26 +40,22 @@ class _GetInRoomState extends State<GetInRoom> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              ButtonTheme(
-                  buttonColor: Colors.black87,
-                  child: SizedBox(
-                      height: 120,
-                      width: 240,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(22.0)),
-                          primary: Colors.amberAccent,
-                        ),
-                        onPressed: () {
-                          openRoomClicked();
-                        },
-                        child: Text('פתיחת חדר',
-                            style: TextStyle(
-                                fontFamily: 'Comix-h',
-                                color: Colors.black87,
-                                fontSize: 30)),
-                      ))),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.all(30),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(22.0)),
+                  primary: Colors.amberAccent,
+                ),
+                onPressed: () {
+                  openRoomClicked();
+                },
+                child: Text('פתיחת חדר',
+                    style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        color: Colors.black87,
+                        fontSize: MediaQuery.of(context).size.width/13)),
+              ),
               SizedBox(height: 80),
               Container(
                   height: 80,
@@ -74,6 +70,9 @@ class _GetInRoomState extends State<GetInRoom> {
                             borderRadius: const BorderRadius.all(
                                 const Radius.circular(20))),
                         labelText: "הכנס קוד משחק",
+                        labelStyle: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width/30,
+                        )
 
                         //hintText: "הכנס קוד משחק",
                       ),
@@ -84,26 +83,22 @@ class _GetInRoomState extends State<GetInRoom> {
                 padding: const EdgeInsets.all(8.0),
                 child: getError(),
               ),
-              ButtonTheme(
-                  buttonColor: Colors.black87,
-                  child: SizedBox(
-                      height: 40,
-                      width: 100,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(22.0)),
-                          primary: Colors.pink,
-                        ),
-                        onPressed: () {
-                          getInToRoomClicked(_gameIdController.text);
-                        },
-                        child: Text('כנס לחדר',
-                            style: TextStyle(
-                                fontFamily: 'Comix-h',
-                                color: Colors.black87,
-                                fontSize: 15)),
-                      ))),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(22.0)),
+                  primary: Colors.pink,
+                ),
+                onPressed: () {
+                  getInToRoomClicked(_gameIdController.text);
+                },
+                child: Text('כנס לחדר',
+                    style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        color: Colors.black87,
+                        fontSize: MediaQuery.of(context).size.width/25)),
+              ),
             ]),
       )),
     );

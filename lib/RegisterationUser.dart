@@ -15,9 +15,13 @@ class _RegistrationState extends State<Registration> {
   final _error = StreamController<String>.broadcast();
   final AuthService _auth = AuthService();
   bool _firstClickRegister = true;
+  double widthScreen;
+  double heightScreen;
 
   @override
   Widget build(BuildContext context) {
+    widthScreen = MediaQuery.of(context).size.width;
+    heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -28,107 +32,95 @@ class _RegistrationState extends State<Registration> {
       body: SingleChildScrollView(
         child: Column(children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(MediaQuery.of(context).size.height / 10),
+            padding: EdgeInsets.all(heightScreen / 10),
             child: Text(
               'הרשמה',
               style: TextStyle(
                 fontFamily: 'Abraham-h',
-                fontSize: 40,
+                fontSize: widthScreen/12,
               ),
             ),
           ),
-          SingleChildScrollView(
-            child: Column(children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: new Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: TextFormField(
-                          controller: nameControllerReg,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            //hintText: "הכנס שם",
-                          ),
-                          inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
-                        )),
-                  ),
-                  Text(':שם '),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: new Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: TextFormField(
-                          controller: mailControllerReg,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                              //hintText: "הכנס כתובת מייל",
-                              ),
-                        )),
-                  ),
-                  Text(':כתובת מייל '),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: new Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: TextFormField(
-                          obscureText: true,
-                          controller: passwordControllerReg,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                              //hintText: "הכנס כתובת מייל",
-                              ),
-                            inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-z0-9A-Z]")), LengthLimitingTextInputFormatter(10)],
-                        )),
-                  ),
-                  Text(':סיסמא '),
-                ],
-              ),
-              SizedBox(height: 20),
-              getError(),
-              SizedBox(height: 20),
-              ButtonTheme(
-                  padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                  minWidth: 100,
-                  buttonColor: Colors.black87,
-                  child: SizedBox(
-                      height: 50,
-                      width: 100,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(22.0)),
-                          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-                          primary: Colors.amberAccent,
+          Column(children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: TextFormField(
+                        controller: nameControllerReg,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          //hintText: "הכנס שם",
                         ),
-                        onPressed: () {
-                          registerClicked(
-                              mailControllerReg.text,
-                              passwordControllerReg.text,
-                              nameControllerReg.text);
-                        },
-                        child: Text('הירשם',
-                            style: TextStyle(
-                                fontFamily: 'Comix-h',
-                                color: Colors.black87,
-                                fontSize: 20)),
-                      ))),
-            ]),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Image(
-              image: AssetImage('images/kids-read.jpg'),
+                        inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-zA-Z]")), LengthLimitingTextInputFormatter(10)],
+                      )),
+                ),
+                Text(':שם '),
+              ],
             ),
-          ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: TextFormField(
+                        controller: mailControllerReg,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                            //hintText: "הכנס כתובת מייל",
+                            ),
+                      )),
+                ),
+                Text(':כתובת מייל '),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: new Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: TextFormField(
+                        obscureText: true,
+                        controller: passwordControllerReg,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                            //hintText: "הכנס כתובת מייל",
+                            ),
+                          inputFormatters: [new FilteringTextInputFormatter.allow(RegExp("[a-z0-9A-Z]")), LengthLimitingTextInputFormatter(10)],
+                      )),
+                ),
+                Text(':סיסמא '),
+              ],
+            ),
+            SizedBox(height: 20),
+            getError(),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22.0)),
+                padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+                primary: Colors.amberAccent,
+              ),
+              onPressed: () {
+                registerClicked(
+                    mailControllerReg.text,
+                    passwordControllerReg.text,
+                    nameControllerReg.text);
+              },
+              child: Text('הירשם',
+                  style: TextStyle(
+                      fontFamily: 'Comix-h',
+                      color: Colors.black87,
+                      fontSize: widthScreen/22)),
+            ),
+            SizedBox(height: 20),
+            Image(
+                image: AssetImage('images/kids-read.jpg'),),
+          ]),
         ]),
       ),
     );

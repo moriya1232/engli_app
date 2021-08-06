@@ -51,6 +51,9 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
                   controller: this.widget._nameEnemy,
                   decoration: InputDecoration(
                     hintText: "שם יריב",
+                    hintStyle: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width/30,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
@@ -62,7 +65,7 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.all(3),
                 child: getError(),
               ),
               Expanded(
@@ -90,7 +93,7 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
                         style: TextStyle(
                             fontFamily: 'Comix-h',
                             color: Colors.black87,
-                            fontSize: 30),
+                            fontSize: MediaQuery.of(context).size.width/17),
                       ),
                     )),
                     SizedBox(
@@ -112,7 +115,7 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
                         style: TextStyle(
                             fontFamily: 'Comix-h',
                             color: Colors.black87,
-                            fontSize: 30),
+                            fontSize: MediaQuery.of(context).size.width/15),
                       ),
                     )),
                   ],
@@ -134,7 +137,7 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
             children: [
               Text(
                 snapshot.data,
-                style: TextStyle(fontSize: 20, fontFamily: "Comix-h"),
+                style: TextStyle(fontSize: MediaQuery.of(context).size.width/20, fontFamily: "Comix-h"),
               ),
               RawMaterialButton(
                 onPressed: () {
@@ -177,7 +180,7 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
             snapshot.data,
             style: TextStyle(
               fontFamily: 'Trashim-h',
-              fontSize: 15,
+              fontSize: MediaQuery.of(context).size.width/30,
               color: Colors.red,
             ),
           );
@@ -301,7 +304,9 @@ class CheckBoxTile extends StatefulWidget {
 
   set value(bool value) {
     _value = value;
-    this._subjectsList.add(value);
+    if (value) {
+      this._subjectsList.add(value);
+    }
   }
 
   bool get value => _value;
@@ -323,7 +328,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
         initialData: false,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            title: Text(widget.title),
+            title: Text(widget.title, style: TextStyle(fontSize: MediaQuery.of(context).size.width/26),),
             value: snapshot.data ?? false,
             onChanged: (bool value) {
               widget._value = value;

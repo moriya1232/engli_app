@@ -57,7 +57,7 @@ class _ChooseGameState extends State<ChooseGame> {
                         style: TextStyle(
                             fontFamily: 'Comix-h',
                             color: Colors.teal,
-                            fontSize: 20)),
+                            fontSize: MediaQuery.of(context).size.width/20)),
                   ),
                 ),
                 Padding(
@@ -70,7 +70,7 @@ class _ChooseGameState extends State<ChooseGame> {
                         style: TextStyle(
                             fontFamily: 'Comix-h',
                             color: Colors.teal,
-                            fontSize: 20)),
+                            fontSize: MediaQuery.of(context).size.width/20)),
                   ),
                 ),
               ]),
@@ -84,31 +84,30 @@ class _ChooseGameState extends State<ChooseGame> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                     SizedBox(
-                        height: 140,
-                        width: 330,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(22.0)),
-                            primary: Colors.amberAccent,
-                          ),
-                          onPressed: () {
-                            quartetsClicked();
-                          },
-                          child: Text('רביעיות',
-                              style: TextStyle(
-                                  fontFamily: 'Comix-h',
-                                  color: Colors.black87,
-                                  fontSize: 50)),
-                        )),
-                    SizedBox(height: 20),
-                    SizedBox(
-                      height: 140,
-                      width: 330,
+                      height: MediaQuery.of(context).size.height/6,
+                      width: MediaQuery.of(context).size.width*(3/4),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 100, vertical: 40),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(22.0)),
+                          primary: Colors.amberAccent,
+                        ),
+                        onPressed: () {
+                          quartetsClicked();
+                        },
+                        child: Text('רביעיות',
+                            style: TextStyle(
+                                fontFamily: 'Comix-h',
+                                color: Colors.black87,
+                                fontSize: MediaQuery.of(context).size.width/10)),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height/6,
+                      width: MediaQuery.of(context).size.width*(3/4),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20.0)),
                             primary: Colors.amberAccent),
@@ -120,31 +119,28 @@ class _ChooseGameState extends State<ChooseGame> {
                           style: TextStyle(
                               fontFamily: 'Comix-h',
                               color: Colors.black87,
-                              fontSize: 50),
+                              fontSize: MediaQuery.of(context).size.width/10),
                         ),
                       ),
                     ),
                   ])),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.all(20),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        primary: Colors.pink),
-                    onPressed: () {
-                      editVocabularyClicked();
-                    },
-                    child: Text(
-                      'עריכת אוצר מילים',
-                      style: TextStyle(
-                          fontFamily: 'Comix-h',
-                          color: Colors.black87,
-                          fontSize: 20),
-                    ),
+              Padding(
+                padding: EdgeInsets.all(30),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(20),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0)),
+                      primary: Colors.pink),
+                  onPressed: () {
+                    editVocabularyClicked();
+                  },
+                  child: Text(
+                    'עריכת אוצר מילים',
+                    style: TextStyle(
+                        fontFamily: 'Comix-h',
+                        color: Colors.black87,
+                        fontSize: MediaQuery.of(context).size.width/22),
                   ),
                 ),
               ),
@@ -180,7 +176,7 @@ class _ChooseGameState extends State<ChooseGame> {
             'Hello ' + snapshot.data+"!",
             style: TextStyle(
               fontFamily: 'AkayaK-e',
-              fontSize: 40,
+              fontSize: MediaQuery.of(context).size.width/10,
             ),
           );
         });

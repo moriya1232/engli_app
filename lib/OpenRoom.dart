@@ -78,40 +78,33 @@ class _OpenRoomState extends State<OpenRoom> {
               child: Text(
                 'שחק מול המחשב',
                 style: TextStyle(
-                    fontFamily: 'Comix-h', color: Colors.black87, fontSize: 20),
+                    fontFamily: 'Comix-h', color: Colors.black87, fontSize: MediaQuery.of(context).size.width/17,),
               ),
             ),
             getSomePlayersWidget(),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.all(40),
-                child: Column(
-                  children: [
-                    SizedBox(
-                        child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0)),
-                        primary: Colors.pink,
-                        padding: EdgeInsets.all(10),
-                      ),
-                      onPressed: () {
-                        startGameClicked(false);
-                      },
-                      child: Text(
-                        '!התחל משחק ברשת',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: 'Comix-h',
-                            color: Colors.black87,
-                            fontSize: 30),
-                      ),
-                    )),
-                  ],
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0)),
+              primary: Colors.pink,
+              padding: EdgeInsets.all(10),
+                ),
+                onPressed: () {
+              startGameClicked(false);
+                },
+                child: Text(
+              '!התחל משחק ברשת',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontFamily: 'Comix-h',
+                  color: Colors.black87,
+                  fontSize: MediaQuery.of(context).size.width/13),
                 ),
               ),
             ),
+            SizedBox(height: MediaQuery.of(context).size.height/20),
           ]),
     );
   }
@@ -127,7 +120,7 @@ class _OpenRoomState extends State<OpenRoom> {
             children: [
               Text(
                 snapshot.data,
-                style: TextStyle(fontSize: 20, fontFamily: "Comix-h"),
+                style: TextStyle(fontSize: MediaQuery.of(context).size.width/20, fontFamily: "Comix-h"),
               ),
               RawMaterialButton(
                 onPressed: () {
@@ -228,7 +221,7 @@ class _OpenRoomState extends State<OpenRoom> {
               },
               child: Text('!שחק',
                   style: TextStyle(
-                      fontFamily: 'Comix-h', color: Colors.pink, fontSize: 20)),
+                      fontFamily: 'Comix-h', color: Colors.pink, fontSize: MediaQuery.of(context).size.width/30)),
             ),
           ),
           getDropDown(),
@@ -238,7 +231,7 @@ class _OpenRoomState extends State<OpenRoom> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 ':כמות משתתפים',
-                style: TextStyle(fontSize: 25, fontFamily: 'Comix-h'),
+                style: TextStyle(fontSize: MediaQuery.of(context).size.width/25, fontFamily: 'Comix-h'),
               ),
             ),
           ),
@@ -273,7 +266,7 @@ class _OpenRoomState extends State<OpenRoom> {
             value: value,
             child: Text(
               value,
-              style: TextStyle(fontSize: 22),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.width/22),
             ),
           );
         }).toList(),
@@ -356,7 +349,7 @@ class _OpenRoomState extends State<OpenRoom> {
             snapshot.data,
             style: TextStyle(
               fontFamily: 'Trashim-h',
-              fontSize: 15,
+              fontSize: MediaQuery.of(context).size.width/30,
               color: Colors.red,
             ),
           );
@@ -410,7 +403,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
         initialData: false,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            title: Text(widget.title),
+            title: Text(widget.title, style: TextStyle(fontSize: MediaQuery.of(context).size.width/26),),
             value: snapshot.data ?? false,
             onChanged: (bool value) {
               widget.value = value;
