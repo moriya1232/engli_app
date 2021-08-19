@@ -539,6 +539,7 @@ class _TurnState extends State<Turn> {
     }
     // didn't success asking this subject.
     else {
+      this.widget._changeState.add(0);
       //update takes parameters in server.
       GameDatabaseService().updateTake(
           widget.game,
