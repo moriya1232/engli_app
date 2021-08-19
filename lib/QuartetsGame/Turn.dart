@@ -14,7 +14,7 @@ class Turn extends StatefulWidget {
   Subject subjectToAsk;
   CardQuartets cardToAsk;
   // ignore: close_sinks
-  final _changeState = StreamController<int>.broadcast();
+  final _changeState = StreamController<int>.broadcast(); // 1- for choose enemy and subject. 2- for choose specific card. 0- for empty Turn widget.
 
   Turn(QuartetsGame g) : this.game = g {
     this.playerChosenToAsk = g.listTurn[(g.turn + 1) % g.listTurn.length];

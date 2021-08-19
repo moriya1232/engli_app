@@ -129,41 +129,46 @@ class QuartetsGame extends Game {
       String takeName;
       if (take != null) {
         takeName = this.listTurn[take].name;
+        print("take name: " + takeName);
       }
       int token = event.data()['tokenFrom'];
       String tokenName;
       if (token != null && token >= 0) {
         tokenName = this.listTurn[token].name;
+        print("tokenName: " + tokenName);
       }
       int cardToken = event.data()['cardToken'];
       String cardName;
       if (cardToken != null && cardToken >= 0) {
         cardName = this.idToCard(cardToken).english;
+        print("cardName: " + cardName);
       }
       String subject = event.data()['subjectAsk'];
+      if (subject != null) {
+        print("subject: " + subject);
+      }
       bool succ = event.data()['success'];
+      print("succ: "+ succ.toString());
 
       // animate card from player to player
       if ((succ &&
               cardName != null &&
-              cardToken != -1 &&
               takeName != null &&
               tokenName != null) &&
           (this.playerTakeName != takeName ||
               this.playerTokenName != tokenName ||
-              this.cardAsked != cardName)) {
+              this.cardAsked != cardName || this.successTakeCard != succ)) {
         StreamController tokenController =
             getAppropriateController(this.listTurn[token]);
         Position takePosition = getApproPosition(this.listTurn[take]);
         Position tokenPosition = getApproPosition(this.listTurn[token]);
         animateCard(tokenController, tokenPosition, takePosition);
-      } else if ((succ &&
-          subject != "-1" &&
-          cardName != null &&
-          cardToken != -1 &&
+      } else if (!succ &&  // animate - take from the deck
           takeName != null &&
-          tokenName == null &&
-          takeName != this.playerTakeName)) {
+          (this.playerTakeName != takeName ||
+              this.playerTokenName != tokenName ||
+              this.cardAsked != cardName || this.successTakeCard != succ)) {
+        print("animate card form deck to player!!!!");
         StreamController tokenController = this._deckController;
         Position takePosition = getApproPosition(this.listTurn[take]);
         Position tokenPosition = deckPos;
