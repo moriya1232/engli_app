@@ -413,7 +413,7 @@ class _TurnState extends State<Turn> {
                   child: Text(
                     value,
                     style:
-                    TextStyle(fontSize: 15, fontFamily: 'Miri-h'),
+                    TextStyle(fontSize: 15, fontFamily: 'Courgette-e'),
                   ),
                 );
               }).toList(),
