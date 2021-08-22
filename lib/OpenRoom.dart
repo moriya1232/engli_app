@@ -366,7 +366,7 @@ class _OpenRoomState extends State<OpenRoom> {
 // ignore: must_be_immutable
 class CheckBoxTile extends StatefulWidget {
   // ignore: close_sinks
-  final _subjectList = StreamController<bool>.broadcast();
+  final _subjectTile = StreamController<bool>.broadcast();
   final String title;
   bool _value;
 
@@ -374,9 +374,9 @@ class CheckBoxTile extends StatefulWidget {
 
   set value(bool value) {
     _value = value;
-    if (value) {
-      this._subjectList.add(value);
-    }
+//    if (value) {
+      this._subjectTile.add(value);
+//    }
   }
 
   CheckBoxTile(String title) : this.title = title;
@@ -388,7 +388,7 @@ class CheckBoxTile extends StatefulWidget {
 class _CheckBoxTileState extends State<CheckBoxTile> {
   @override
   void dispose() {
-    this.widget._subjectList.close();
+    this.widget._subjectTile.close();
     super.dispose();
   }
 
@@ -399,7 +399,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
 
   Widget _buildCheckBox() {
     return StreamBuilder<bool>(
-        stream: this.widget._subjectList.stream,
+        stream: this.widget._subjectTile.stream,
         initialData: false,
         builder: (context, snapshot) {
           return CheckboxListTile(
@@ -407,7 +407,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
             value: snapshot.data ?? false,
             onChanged: (bool value) {
               widget.value = value;
-              this.widget._subjectList.add(value);
+              this.widget._subjectTile.add(value);
             },
           );
         });

@@ -17,9 +17,13 @@ class _LoginState extends State<Login> {
   bool _firstClickRegister = true;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     _passwordControllerLog.clear();
     _mailControllerLog.clear();
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(

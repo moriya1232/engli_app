@@ -298,15 +298,15 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
 // ignore: must_be_immutable
 class CheckBoxTile extends StatefulWidget {
   // ignore: close_sinks
-  final _subjectsList = StreamController<bool>.broadcast();
+  final _subjectsTile = StreamController<bool>.broadcast();
   final String title;
   bool _value;
 
   set value(bool value) {
     _value = value;
-    if (value) {
-      this._subjectsList.add(value);
-    }
+//    if (value) {
+      this._subjectsTile.add(value);
+//    }
   }
 
   bool get value => _value;
@@ -324,7 +324,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
 
   Widget _buildCheckBox() {
     return StreamBuilder<bool>(
-        stream: this.widget._subjectsList.stream,
+        stream: this.widget._subjectsTile.stream,
         initialData: false,
         builder: (context, snapshot) {
           return CheckboxListTile(
@@ -333,7 +333,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
             onChanged: (bool value) {
               widget._value = value;
               // print("refresh! " + this.widget.title + ": " + value.toString());
-              this.widget._subjectsList.add(value);
+              this.widget._subjectsTile.add(value);
             },
           );
         });
@@ -341,7 +341,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
 
   @override
   void dispose() {
-    this.widget._subjectsList.close();
+    this.widget._subjectsTile.close();
     super.dispose();
   }
 }
