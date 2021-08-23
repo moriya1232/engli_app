@@ -142,6 +142,7 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
               RawMaterialButton(
                 onPressed: () {
                   clearCheckboxes();
+                  this._error.add("");
                   this.widget._generic = !this.widget._generic;
                   if (this.widget._generic) {
                     getGenericSeriesNames();
@@ -341,7 +342,7 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
 
   @override
   void dispose() {
-    this.widget._subjectsTile.close();
+//    this.widget._subjectsTile.close();
     super.dispose();
   }
 }

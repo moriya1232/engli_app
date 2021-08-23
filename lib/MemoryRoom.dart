@@ -110,7 +110,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
                         style: TextStyle(
                             color: Colors.lightGreen,
                             fontSize: fontSize,
-                            fontFamily: 'Gan-h'),
+                            fontFamily: 'Courgette-e'),
                       ),
                     ),
                   ),
@@ -178,7 +178,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
       child: Text(
         ' ${widget.game.getEnemy().name}',
         style: TextStyle(
-            color: Colors.lightGreen, fontSize: fontSize, fontFamily: 'Gan-h'),
+            color: Colors.lightGreen, fontSize: fontSize, fontFamily: 'Courgette-e'),
       ),
     );
   }
@@ -221,7 +221,7 @@ class _MemoryRoomState extends State<MemoryRoom> {
             style: TextStyle(
                 color: Colors.pink,
                 fontSize: fontSize,
-                fontFamily: 'Abraham-h'),
+                fontFamily: 'PottaOne-e'),
           );
         });
   }

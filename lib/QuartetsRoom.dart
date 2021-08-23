@@ -80,6 +80,49 @@ class QuartetsRoom extends StatefulWidget {
 
   @override
   _QuartetsRoomState createState() => _QuartetsRoomState();
+
+  String stringTakeCardFromDeck() {
+    return this.game.playerTakeName + " drew a card from the deck";
+  }
+  String stringSuccessTakeCard() {
+    return this.game.playerTakeName +
+        " took a " +
+        this.game.cardAsked +
+        " card from " +
+        this.game.playerTokenName +
+        "subject: " +
+        this.game.subjectAsked;
+  }
+
+  String stringDontHaveSubject() {
+    String asked = this.game.playerTakeName;
+    String wasAsked = this.game.playerTokenName;
+    String subjectAsked = this.game.subjectAsked;
+    return asked +
+        " asked " +
+        wasAsked +
+        " about the subject " +
+        subjectAsked +
+        ", but " +
+        wasAsked +
+        " didn't have that subject";
+  }
+
+  String stringHaveSubjectButNoCard() {
+    String asked = this.game.playerTakeName;
+    String wasAsked = this.game.playerTokenName;
+    String subjectAsked = this.game.subjectAsked;
+    String cardAsked = this.game.cardAsked;
+    return asked +
+        " asked " +
+        wasAsked +
+        " for a " +
+        cardAsked +
+        ", but " +
+        wasAsked +
+        "didn't have the card. subject " +
+        subjectAsked;
+  }
 }
 
 class _QuartetsRoomState extends State<QuartetsRoom> {
@@ -308,6 +351,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         });
   }
 
+
   Widget getAskedText() {
     String asked = widget.game.playerTakeName;
     String wasAsked = widget.game.playerTokenName;
@@ -319,7 +363,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
     //take from the deck
     if (asked != null && wasAsked == "deck") {
-      this.widget.stringToSpeak = asked + " drew a card from the deck";
+      this.widget.stringToSpeak = widget.stringTakeCardFromDeck();
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -343,13 +387,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         cardAsked != null &&
         wasAsked != null &&
         subjectAsked != null) {
-      this.widget.stringToSpeak = asked +
-          " took a " +
-          cardAsked +
-          " card from " +
-          wasAsked +
-          "subject: " +
-          subjectAsked;
+      this.widget.stringToSpeak = widget.stringSuccessTakeCard();
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -387,14 +425,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         cardAsked == null &&
         wasAsked != null &&
         subjectAsked != null) {
-      this.widget.stringToSpeak = asked +
-          " asked " +
-          wasAsked +
-          " about the subject " +
-          subjectAsked +
-          ", but " +
-          wasAsked +
-          " didn't have that subject";
+      this.widget.stringToSpeak = widget.stringDontHaveSubject();
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -433,15 +464,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         cardAsked != null &&
         wasAsked != null &&
         subjectAsked != null) {
-      this.widget.stringToSpeak = asked +
-          " asked " +
-          wasAsked +
-          " for a " +
-          cardAsked +
-          ", but " +
-          wasAsked +
-          "didn't have the card. subject " +
-          subjectAsked;
+      this.widget.stringToSpeak = widget.stringHaveSubjectButNoCard();
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -667,12 +690,15 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 SizedBox(
                   height: 1,
                 ),
-                Text(
-                  "${widget.game.listTurn[widget.game.turn].name}",
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 20,
-                      fontFamily: 'PottaOne-e'),
+                FittedBox(
+                  child: Center(
+                    child: Text(
+                      "${widget.game.listTurn[widget.game.turn].name}",
+                      style: TextStyle(
+                          color: Colors.red,
+                          fontFamily: 'PottaOne-e'),
+                    ),
+                  ),
                 ),
               ]);
         });

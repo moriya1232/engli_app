@@ -4,6 +4,7 @@ import 'package:engli_app/QuartetsRoom.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Loading extends StatefulWidget {
   final bool isManager;
   final String gameId;

@@ -123,9 +123,10 @@ class _OpenRoomState extends State<OpenRoom> {
                 style: TextStyle(fontSize: MediaQuery.of(context).size.width/20, fontFamily: "Comix-h"),
               ),
               RawMaterialButton(
-                onPressed: () {
-                  clearCheckboxes();
+                onPressed: () async{
                   this.widget._generic = !this.widget._generic;
+                  print("replace!");
+                  this._error.add("");
                   if (this.widget._generic) {
                     getGenericSeriesNames();
                     this._textReplaceData.add("להחלפה לסריות שלי");
@@ -133,6 +134,7 @@ class _OpenRoomState extends State<OpenRoom> {
                     getAllSeriesNames();
                     this._textReplaceData.add("להחלפה לסריות גנריות");
                   }
+                  clearCheckboxes();
                 },
                 hoverColor: Colors.black87,
                 highlightColor: Colors.lightGreen,
@@ -276,14 +278,24 @@ class _OpenRoomState extends State<OpenRoom> {
 
   void getAllSeriesNames() async {
     String userId = FirebaseAuth.instance.currentUser.uid;
-    List<String> l = await GameDatabaseService().getSubjectsList(userId);
-    this._subjectList.add(l);
+    List<String> strings = await GameDatabaseService().getSubjectsList(userId);
+//    List<CheckBoxTile> checkboxes = [];
+//    for (String s in strings) {
+//      checkboxes.add(new CheckBoxTile(s));
+//    }
+//    widget._series = checkboxes;
+    this._subjectList.add(strings);
   }
 
   void getGenericSeriesNames() async {
-    List<String> l =
+    List<String> strings =
         await GameDatabaseService().getSubjectsList("generic_subjects");
-    this._subjectList.add(l);
+//    List<CheckBoxTile> checkboxes = [];
+//    for (String s in strings) {
+//      checkboxes.add(new CheckBoxTile(s));
+//    }
+//    widget._series = checkboxes;
+    this._subjectList.add(strings);
   }
 
   Widget _buildSubjectsList(StreamController sc) {
@@ -388,7 +400,7 @@ class CheckBoxTile extends StatefulWidget {
 class _CheckBoxTileState extends State<CheckBoxTile> {
   @override
   void dispose() {
-    this.widget._subjectTile.close();
+//    this.widget._subjectTile.close();
     super.dispose();
   }
 
