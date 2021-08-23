@@ -319,7 +319,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
     }
     //take from the deck
     if (asked != null && wasAsked == "deck") {
-      this.widget.stringToSpeak = asked + " take from the deck";
+      this.widget.stringToSpeak = asked + " drew a card from the deck";
       return RichText(
         textAlign: TextAlign.center,
         text: new TextSpan(
@@ -333,7 +333,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 text: '$asked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: 'take from the deck '),
+            new TextSpan(text: 'drew a card from the deck'),
           ],
         ),
       );
@@ -344,11 +344,11 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         wasAsked != null &&
         subjectAsked != null) {
       this.widget.stringToSpeak = asked +
-          " take from " +
-          wasAsked +
-          ": " +
+          " took a " +
           cardAsked +
-          " in subject: " +
+          " card from " +
+          wasAsked +
+          "subject: " +
           subjectAsked;
       return RichText(
         textAlign: TextAlign.center,
@@ -363,17 +363,17 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                 text: '$asked ',
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: 'take from '),
-            new TextSpan(
-                text: '$wasAsked ',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: ': '),
+            new TextSpan(text: 'took a '),
             new TextSpan(
                 text: '$cardAsked ',
                 style:
+                TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
+            new TextSpan(text: 'card from '),
+            new TextSpan(
+                text: '$wasAsked\n',
+                style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
-            new TextSpan(text: 'in subject: '),
+            new TextSpan(text: 'Subject: '),
             new TextSpan(
                 text: '$subjectAsked ',
                 style:
