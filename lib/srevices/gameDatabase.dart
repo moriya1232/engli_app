@@ -16,9 +16,9 @@ class GameDatabaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future updateGame(bool finished, List<String> players, int turn, Deck deck,
-      String id, List<String> subjects, subjectsId, con) async {
+      String id, List<String> subjects, subjectsId, con) {
     players = [];
-    return await gameCollection.doc(id).set({
+    return gameCollection.doc(id).set({
       'finished': false,
       'players': players,
       'turn': turn,
@@ -40,61 +40,54 @@ class GameDatabaseService {
   }
 
   void updateAgainstComputer(String gameId, bool ac) async {
-    await gameCollection.doc(gameId).update({'againstComputer': ac});
+    try {
+      await gameCollection.doc(gameId).update({'againstComputer': ac});
+    } catch (e) {
+      print("ERROR updateAgainstComputer: $e");
+    }
   }
 
   // return 1 if succeed.
   // 2 - too much players ( more then 4)
   // 3 no exist this code
-  Future<int> addPlayerToDataBase(String gameId, String name, String id) async {
+  Future<int> addPlayerToDataBase(String gameId, String name, String id) {
     List<int> cards = [];
-    await gameCollection.doc(gameId).collection("players").doc(id).set({
+    return gameCollection.doc(gameId).collection("players").doc(id).set({
       'cards': cards,
       'name': name,
       'score': 0,
-    });
-    return await gameCollection
-        .doc(gameId)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      if (documentSnapshot.exists) {
-        var x = documentSnapshot.data()['players'];
-        List<String> newPlayersList = x.cast<String>();
-        newPlayersList.add(name);
-        if (newPlayersList.length <= 4) {
-          await gameCollection.doc(gameId).update({'players': newPlayersList});
-          return Future.value(1);
-        } else {
-          return Future.value(2);
-        }
-      } else {
-        return Future.value(3);
-      }
-    });
+    }).then((_) => gameCollection
+            .doc(gameId)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) async {
+              if (documentSnapshot.exists) {
+                var x = documentSnapshot.data()['players'];
+                List<String> newPlayersList = x.cast<String>();
+                newPlayersList.add(name);
+                if (newPlayersList.length <= 4) {
+                  await gameCollection.doc(gameId).update({'players': newPlayersList});
+                  return 1;
+                } else {
+                  return 2;
+            }
+          } else {
+            return 3;
+          }
+        }));
   }
 
   Future<List<String>> getSubjectsList(
     String subjectsId,
   ) async {
-    List<String> subjectsList;
-    await subjectCollection
-        .doc(subjectsId)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        var x = documentSnapshot.data()["subjects_list"];
-        if (x == null) {
-          return null;
-        }
-        List<String> strList = x.cast<String>();
-        subjectsList = strList;
-      }
-    });
-    return Future.value(subjectsList);
+    final docSnap = await subjectCollection.doc(subjectsId).get();
+    if(!docSnap.exists) return null;
+    final x = docSnap.data()["subjects_list"];
+    final subjectsList = x.cast<String>();
+    return subjectsList;
   }
 
-  Future updateSubjectList(String gameId, List<String> subList) async {
-    return await gameCollection.doc(gameId).update({
+  Future updateSubjectList(String gameId, List<String> subList) {
+    return gameCollection.doc(gameId).update({
       'subjects': subList,
     });
   }

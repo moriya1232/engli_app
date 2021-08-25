@@ -85,7 +85,7 @@ class QuartetsGame extends Game {
         this._otherPlayersCardsController = otherCards,
         this._getQuartet = getQuartet,
         this._csIsFinish = isFinish, this.isManager = isManager, this.gameId = gameId {
-    speak("Welcome to engli game!");
+//    speak("Welcome to engli game!");
 
     this.subjects = [];
     this.listTurn = [];
