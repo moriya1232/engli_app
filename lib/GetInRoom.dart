@@ -112,10 +112,10 @@ class _GetInRoomState extends State<GetInRoom> {
       String gameId = uuid.v1().substring(0,5);
       try {
         await createGame(gameId);
-//      Navigator.push(
-//        context,
-//        MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
-//      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
+      );
       this.firstClick = true;
       } catch (e){
         print("ERROR openRoonCLicked $e");
