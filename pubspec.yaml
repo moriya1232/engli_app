@@ -60,39 +60,6 @@ flutter:
   assets:
     - images/
     - icons/
-#    - images/kids-read.jpg
-#    - images/table.jpg
-#    - images/chair.jpg
-#    - images/bed.jpg
-#    - images/cupboard.jpg
-#    - images/hamster.jpg
-#    - images/dog.jpg
-#    - images/cat.jpg
-#    - images/fish.jpg
-#    - images/logo.jpg
-#    - icons/pencil.jpg
-#    - icons/microphone.png
-#    - images/brother.jpg
-#    - images/father.png
-#    - images/friday.png
-#    - images/meat.jpg
-#    - images/monday.png
-#    - images/mother.jpg
-#    - images/pizza.jpg
-#    - images/rice.jpg
-#    - images/saturday.png
-#    - images/sister.jpg
-#    - images/soup.png
-#    - images/sunday.png
-#    - images/A.jpg
-#    - images/R.jpg
-#    - images/W.jpg
-#    - images/F.jpg
-#    - images/black.png
-#    - images/blue.png
-#    - images/green.jpg
-#    - images/red.png
-#    - images/fireworks.gif
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

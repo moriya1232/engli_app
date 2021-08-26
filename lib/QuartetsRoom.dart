@@ -246,7 +246,7 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
                   child: RawMaterialButton(
                     padding: EdgeInsets.all(10.0),
                     onPressed: () {
-//                      this.widget.game.speak(this.widget.stringToSpeak);
+                      this.widget.game.speak(this.widget.stringToSpeak);
                     },
                     hoverColor: Colors.black87,
                     highlightColor: Colors.lightGreen,
