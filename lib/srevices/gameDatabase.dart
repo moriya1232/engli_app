@@ -64,7 +64,7 @@ class GameDatabaseService {
               .get()
               .then((DocumentSnapshot documentSnapshot) async {
             if (documentSnapshot.exists) {
-              var x = documentSnapshot.data()['players'];
+              var x = (documentSnapshot.data() as Map<String, dynamic>)['players'];
               List<String> newPlayersList = x.cast<String>();
               newPlayersList.add(name);
               if (newPlayersList.length <= 4) {
@@ -91,7 +91,7 @@ class GameDatabaseService {
     try {
       final docSnap = await subjectCollection.doc(subjectsId).get();
       if (!docSnap.exists) return null;
-      final x = docSnap.data()["subjects_list"];
+      final x = (docSnap.data() as Map<String, dynamic>)["subjects_list"];
       final subjectsList = x.cast<String>();
       return subjectsList;
     } catch (e){
@@ -118,7 +118,7 @@ class GameDatabaseService {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
-          var x = documentSnapshot.data()["subjects"];
+          var x = (documentSnapshot.data() as Map<String, dynamic>)["subjects"];
           List<String> strList = x.cast<String>();
           subjectsList = strList;
           subjectsList = strList;
@@ -137,7 +137,7 @@ class GameDatabaseService {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (!documentSnapshot.exists) return null;
-      return documentSnapshot.data()['managerId'];
+      return (documentSnapshot.data() as Map<String, dynamic>)['managerId'];
     });
   }
 
@@ -168,7 +168,7 @@ class GameDatabaseService {
     return document.doc(specCard).get().then((DocumentSnapshot ds) {
       if (ds.exists) {
         card = Triple(
-            ds.data()["english"], ds.data()["hebrew"], ds.data()["image"]);
+            (ds.data() as Map<String, dynamic>)["english"], (ds.data()as Map<String, dynamic>)["hebrew"], (ds.data()as Map<String, dynamic>)["image"]);
             return card;
       }
       return null;
@@ -192,7 +192,7 @@ class GameDatabaseService {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        return documentSnapshot.data()['continueToGame'];
+        return (documentSnapshot.data() as Map<String, dynamic>)['continueToGame'];
       }
       return null;
     });
@@ -204,7 +204,7 @@ class GameDatabaseService {
     try {
       await gameCollection.doc(game.gameId).get().then((value) {
         if (value.exists) {
-          var ac = value.data()['againstComputer'];
+          var ac = (value.data() as Map<String, dynamic>)['againstComputer'];
           if (ac) {
             againstComputer = true;
           }
@@ -259,7 +259,7 @@ class GameDatabaseService {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
-          var x = documentSnapshot.data()["subjects_list"];
+          var x = (documentSnapshot.data() as Map<String, dynamic>)["subjects_list"];
           sub = x.cast<String>();
         }
       });
@@ -351,7 +351,7 @@ class GameDatabaseService {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
-          var x = documentSnapshot.data()["deck"];
+          var x = (documentSnapshot.data() as Map<String, dynamic>)["deck"];
           List<int> deck = x.cast<int>();
           int cardId = game.cardsId[card];
           for (int c in deck) {
@@ -377,7 +377,7 @@ class GameDatabaseService {
           .get()
           .then((DocumentSnapshot documentSnapshot) async {
         if (documentSnapshot.exists) {
-          var x = documentSnapshot.data()['cards'];
+          var x = (documentSnapshot.data() as Map<String, dynamic>)['cards'];
           List<int> playerCards = x.cast<int>();
           int cardId = game.cardsId[card];
           playerCards.add(cardId);
@@ -404,7 +404,7 @@ class GameDatabaseService {
           .then((DocumentSnapshot documentSnapshot) async {
         if (documentSnapshot.exists) {
           List<int> updateList = [];
-          var x = documentSnapshot.data()['cards'];
+          var x = (documentSnapshot.data() as Map<String, dynamic>)['cards'];
           List<int> playerCards = x.cast<int>();
           int cardId = game.cardsId[card];
           for (int c in playerCards) {
@@ -461,7 +461,7 @@ class GameDatabaseService {
           .get()
           .then((DocumentSnapshot documentSnapshot) {
         if (documentSnapshot.exists) {
-          var x = documentSnapshot.data()['cards'];
+          var x = (documentSnapshot.data() as Map<String, dynamic>)['cards'];
           List<int> intArrayCards = x.cast<int>();
           for (int i in intArrayCards) {
             CardQuartets iKey = game.cardsId.keys
@@ -669,7 +669,7 @@ class GameDatabaseService {
   Future<bool> getGenerics(gameId) {
     return gameCollection.doc(gameId).get().then((value) {
       if (value.exists) {
-        return value.data()['generic'];
+        return (value.data() as Map<String, dynamic>)['generic'];
       }
       return null;
     });
@@ -678,7 +678,7 @@ class GameDatabaseService {
   Future<bool> getAgainstComputer(gameId) {
     return gameCollection.doc(gameId).get().then((value) {
       if (value.exists) {
-        return value.data()['againstComputer'];
+        return (value.data() as Map<String, dynamic>)['againstComputer'];
       }
       return null;
     });

@@ -4,6 +4,7 @@ import 'package:engli_app/Loading.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'OpenRoom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -107,13 +108,18 @@ class _GetInRoomState extends State<GetInRoom> {
   void openRoomClicked() async {
     if (firstClick) {
       this.firstClick = false;
-      String gameId = UniqueKey().toString();
-      await createGame(gameId);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
-      );
+      var uuid = Uuid();
+      String gameId = uuid.v1().substring(0,5);
+      try {
+        await createGame(gameId);
+//      Navigator.push(
+//        context,
+//        MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
+//      );
       this.firstClick = true;
+      } catch (e){
+        print("ERROR openRoonCLicked $e");
+      }
     }
   }
 
@@ -142,10 +148,10 @@ class _GetInRoomState extends State<GetInRoom> {
     }
   }
 
-  Future<void> createGame(String gameId) async {
+  Future<void> createGame(String gameId) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    await GameDatabaseService()
+    return GameDatabaseService()
         .updateGame(false, null, 0, null, gameId, null, user.uid, false);
 //    await GameDatabaseService().addPlayer(gameId, name);
   }
