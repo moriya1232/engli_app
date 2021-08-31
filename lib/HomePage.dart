@@ -28,8 +28,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     widthScreen = MediaQuery.of(context).size.width;
     heightScreen = MediaQuery.of(context).size.height;
-    print(widthScreen);
-    print(heightScreen);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
