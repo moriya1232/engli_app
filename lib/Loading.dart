@@ -65,7 +65,8 @@ class _LoadingState extends State<Loading> {
                     style: TextStyle(fontSize: 30, fontFamily: 'Comix-h'),
                   ),
                   Text(
-                    cleanGameId(this.widget.gameId),
+                    //cleanGameId(this.widget.gameId),
+                    this.widget.gameId,
                     style: TextStyle(
                       fontSize: 60,
                     ),
@@ -114,7 +115,7 @@ class _LoadingState extends State<Loading> {
   }
 
   void continueToGameClicked() async {
-     if (this.widget.usersLogin.length <= 1) {
+    if (this.widget.usersLogin.length <= 1) {
       return;
     }
     _eventsSubscription.cancel();

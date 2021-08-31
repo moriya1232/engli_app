@@ -4,6 +4,7 @@ import 'package:engli_app/Loading.dart';
 import 'package:engli_app/srevices/gameDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'OpenRoom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -54,7 +55,7 @@ class _GetInRoomState extends State<GetInRoom> {
                     style: TextStyle(
                         fontFamily: 'Comix-h',
                         color: Colors.black87,
-                        fontSize: MediaQuery.of(context).size.width/13)),
+                        fontSize: MediaQuery.of(context).size.width / 13)),
               ),
               SizedBox(height: 80),
               Container(
@@ -66,16 +67,16 @@ class _GetInRoomState extends State<GetInRoom> {
                       textAlign: TextAlign.center,
                       controller: _gameIdController,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                                const Radius.circular(20))),
-                        labelText: "הכנס קוד משחק",
-                        labelStyle: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width/30,
-                        )
+                          border: OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                  const Radius.circular(20))),
+                          labelText: "הכנס קוד משחק",
+                          labelStyle: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width / 30,
+                          )
 
-                        //hintText: "הכנס קוד משחק",
-                      ),
+                          //hintText: "הכנס קוד משחק",
+                          ),
                     ),
                     //controller: nameController,
                   )),
@@ -97,7 +98,7 @@ class _GetInRoomState extends State<GetInRoom> {
                     style: TextStyle(
                         fontFamily: 'Comix-h',
                         color: Colors.black87,
-                        fontSize: MediaQuery.of(context).size.width/25)),
+                        fontSize: MediaQuery.of(context).size.width / 25)),
               ),
             ]),
       )),
@@ -107,18 +108,23 @@ class _GetInRoomState extends State<GetInRoom> {
   void openRoomClicked() async {
     if (firstClick) {
       this.firstClick = false;
-      String gameId = UniqueKey().toString();
-      await createGame(gameId);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
-      );
-      this.firstClick = true;
+      var uuid = Uuid();
+      String gameId = uuid.v1().substring(0, 5);
+      try {
+        await createGame(gameId);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
+        );
+        this.firstClick = true;
+      } catch (e) {
+        print("ERROR openRoonCLicked $e");
+      }
     }
   }
 
   void getInToRoomClicked(String gameId) async {
-    gameId = "[#" + gameId + "]";
+    //gameId = "[#" + gameId + "]";
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     String name = "";
@@ -128,7 +134,8 @@ class _GetInRoomState extends State<GetInRoom> {
     // 1- if success
     // 2- if too much players.
     // 3 - if no exist this code.
-    int succ = await GameDatabaseService().addPlayerToDataBase(gameId, name, user.uid);
+    int succ =
+        await GameDatabaseService().addPlayerToDataBase(gameId, name, user.uid);
 
     if (succ == 1) {
       Navigator.push(
@@ -142,10 +149,10 @@ class _GetInRoomState extends State<GetInRoom> {
     }
   }
 
-  Future<void> createGame(String gameId) async {
+  Future<void> createGame(String gameId) {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
-    await GameDatabaseService()
+    return GameDatabaseService()
         .updateGame(false, null, 0, null, gameId, null, user.uid, false);
 //    await GameDatabaseService().addPlayer(gameId, name);
   }

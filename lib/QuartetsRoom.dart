@@ -513,13 +513,13 @@ class _QuartetsRoomState extends State<QuartetsRoom> {
         stream: sc.stream,
         initialData: position,
         builder: (context, snapshot) {
-          if (snapshot.data == null) {
+          if (snapshot.data == null || snapshot.data?.getVisible() == false) {
             return SizedBox();
           }
           return AnimatedPositioned(
             left: snapshot.data.getLeft(),
             top: snapshot.data.getTop(),
-            child: snapshot.data.getVisible() ? card : SizedBox(),
+            child: card,
             duration: Duration(seconds: 1, milliseconds: 300),
             curve: Curves.fastOutSlowIn,
           );

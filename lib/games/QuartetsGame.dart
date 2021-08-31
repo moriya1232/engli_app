@@ -257,19 +257,19 @@ class QuartetsGame extends Game {
     }
   }
 
-  Future<String> getNamePlayerTake() async {
-    return this.listTurn[await GameDatabaseService().getTake(this)].name;
-  }
+//  Future<String> getNamePlayerTake() async {
+//    return this.listTurn[await GameDatabaseService().getTake(this)].name;
+//  }
 
-  Future<String> getNamePlayerTokenFrom() async {
-    return this.listTurn[await GameDatabaseService().getTokenFrom(this)].name;
-  }
+//  Future<String> getNamePlayerTokenFrom() async {
+//    return this.listTurn[await GameDatabaseService().getTokenFrom(this)].name;
+//  }
 
-  Future<String> getCardTokenString() async {
-    return this
-        .idToCard(await GameDatabaseService().getCardToken(this))
-        .english;
-  }
+//  Future<String> getCardTokenString() async {
+//    return this
+//        .idToCard(await GameDatabaseService().getCardToken(this))
+//        .english;
+//  }
 
   // in beginning of game every player need to create all subjects in his phone.
   void createAllSubjects(String gameId) async {
@@ -299,7 +299,11 @@ class QuartetsGame extends Game {
     if (isGenerics) {
       subjectId = "generic_subjects";
     } else {
-      subjectId = await GameDatabaseService().getManagerId(gameId);
+      try {
+        subjectId = await GameDatabaseService().getManagerId(gameId);
+      } catch (e) {
+        print ("ERROR getManagerId $e");
+      }
     }
     for (String s in strSub) {
       Subject sub =

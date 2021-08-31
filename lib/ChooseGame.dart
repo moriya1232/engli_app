@@ -19,7 +19,7 @@ class _ChooseGameState extends State<ChooseGame> {
 
   @override
   void dispose() {
-    this._userName.close();
+    // this._userName.close();
     super.dispose();
   }
 
@@ -57,7 +57,7 @@ class _ChooseGameState extends State<ChooseGame> {
                         style: TextStyle(
                             fontFamily: 'Comix-h',
                             color: Colors.teal,
-                            fontSize: MediaQuery.of(context).size.width/20)),
+                            fontSize: MediaQuery.of(context).size.width / 20)),
                   ),
                 ),
                 Padding(
@@ -70,7 +70,7 @@ class _ChooseGameState extends State<ChooseGame> {
                         style: TextStyle(
                             fontFamily: 'Comix-h',
                             color: Colors.teal,
-                            fontSize: MediaQuery.of(context).size.width/20)),
+                            fontSize: MediaQuery.of(context).size.width / 20)),
                   ),
                 ),
               ]),
@@ -84,8 +84,8 @@ class _ChooseGameState extends State<ChooseGame> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                     SizedBox(
-                      height: MediaQuery.of(context).size.height/6,
-                      width: MediaQuery.of(context).size.width*(3/4),
+                      height: MediaQuery.of(context).size.height / 6,
+                      width: MediaQuery.of(context).size.width * (3 / 4),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -99,13 +99,14 @@ class _ChooseGameState extends State<ChooseGame> {
                             style: TextStyle(
                                 fontFamily: 'Comix-h',
                                 color: Colors.black87,
-                                fontSize: MediaQuery.of(context).size.width/10)),
+                                fontSize:
+                                    MediaQuery.of(context).size.width / 10)),
                       ),
                     ),
                     SizedBox(height: 20),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height/6,
-                      width: MediaQuery.of(context).size.width*(3/4),
+                      height: MediaQuery.of(context).size.height / 6,
+                      width: MediaQuery.of(context).size.width * (3 / 4),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
@@ -119,7 +120,7 @@ class _ChooseGameState extends State<ChooseGame> {
                           style: TextStyle(
                               fontFamily: 'Comix-h',
                               color: Colors.black87,
-                              fontSize: MediaQuery.of(context).size.width/10),
+                              fontSize: MediaQuery.of(context).size.width / 10),
                         ),
                       ),
                     ),
@@ -140,7 +141,7 @@ class _ChooseGameState extends State<ChooseGame> {
                     style: TextStyle(
                         fontFamily: 'Comix-h',
                         color: Colors.black87,
-                        fontSize: MediaQuery.of(context).size.width/22),
+                        fontSize: MediaQuery.of(context).size.width / 22),
                   ),
                 ),
               ),
@@ -173,10 +174,10 @@ class _ChooseGameState extends State<ChooseGame> {
         initialData: "",
         builder: (context, snapshot) {
           return Text(
-            'Hello ' + snapshot.data+"!",
+            'Hello ' + snapshot.data + "!",
             style: TextStyle(
               fontFamily: 'AkayaK-e',
-              fontSize: MediaQuery.of(context).size.width/10,
+              fontSize: MediaQuery.of(context).size.width / 10,
             ),
           );
         });
