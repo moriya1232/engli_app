@@ -55,7 +55,7 @@ class _GetInRoomState extends State<GetInRoom> {
                     style: TextStyle(
                         fontFamily: 'Comix-h',
                         color: Colors.black87,
-                        fontSize: MediaQuery.of(context).size.width/13)),
+                        fontSize: MediaQuery.of(context).size.width / 13)),
               ),
               SizedBox(height: 80),
               Container(
@@ -67,16 +67,16 @@ class _GetInRoomState extends State<GetInRoom> {
                       textAlign: TextAlign.center,
                       controller: _gameIdController,
                       decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                                const Radius.circular(20))),
-                        labelText: "הכנס קוד משחק",
-                        labelStyle: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width/30,
-                        )
+                          border: OutlineInputBorder(
+                              borderRadius: const BorderRadius.all(
+                                  const Radius.circular(20))),
+                          labelText: "הכנס קוד משחק",
+                          labelStyle: TextStyle(
+                            fontSize: MediaQuery.of(context).size.width / 30,
+                          )
 
-                        //hintText: "הכנס קוד משחק",
-                      ),
+                          //hintText: "הכנס קוד משחק",
+                          ),
                     ),
                     //controller: nameController,
                   )),
@@ -98,7 +98,7 @@ class _GetInRoomState extends State<GetInRoom> {
                     style: TextStyle(
                         fontFamily: 'Comix-h',
                         color: Colors.black87,
-                        fontSize: MediaQuery.of(context).size.width/25)),
+                        fontSize: MediaQuery.of(context).size.width / 25)),
               ),
             ]),
       )),
@@ -109,22 +109,22 @@ class _GetInRoomState extends State<GetInRoom> {
     if (firstClick) {
       this.firstClick = false;
       var uuid = Uuid();
-      String gameId = uuid.v1().substring(0,5);
+      String gameId = uuid.v1().substring(0, 5);
       try {
         await createGame(gameId);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
-      );
-      this.firstClick = true;
-      } catch (e){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => OpenRoom(gameId)),
+        );
+        this.firstClick = true;
+      } catch (e) {
         print("ERROR openRoonCLicked $e");
       }
     }
   }
 
   void getInToRoomClicked(String gameId) async {
-    gameId = "[#" + gameId + "]";
+    //gameId = "[#" + gameId + "]";
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     String name = "";
@@ -134,7 +134,8 @@ class _GetInRoomState extends State<GetInRoom> {
     // 1- if success
     // 2- if too much players.
     // 3 - if no exist this code.
-    int succ = await GameDatabaseService().addPlayerToDataBase(gameId, name, user.uid);
+    int succ =
+        await GameDatabaseService().addPlayerToDataBase(gameId, name, user.uid);
 
     if (succ == 1) {
       Navigator.push(

@@ -78,7 +78,10 @@ class _OpenRoomState extends State<OpenRoom> {
               child: Text(
                 'שחק מול המחשב',
                 style: TextStyle(
-                    fontFamily: 'Comix-h', color: Colors.black87, fontSize: MediaQuery.of(context).size.width/17,),
+                  fontFamily: 'Comix-h',
+                  color: Colors.black87,
+                  fontSize: MediaQuery.of(context).size.width / 17,
+                ),
               ),
             ),
             getSomePlayersWidget(),
@@ -86,25 +89,25 @@ class _OpenRoomState extends State<OpenRoom> {
               padding: const EdgeInsets.all(20.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)),
-              primary: Colors.pink,
-              padding: EdgeInsets.all(10),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0)),
+                  primary: Colors.pink,
+                  padding: EdgeInsets.all(10),
                 ),
                 onPressed: () {
-              startGameClicked(false);
+                  startGameClicked(false);
                 },
                 child: Text(
-              '!התחל משחק ברשת',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontFamily: 'Comix-h',
-                  color: Colors.black87,
-                  fontSize: MediaQuery.of(context).size.width/13),
+                  '!התחל משחק ברשת',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontFamily: 'Comix-h',
+                      color: Colors.black87,
+                      fontSize: MediaQuery.of(context).size.width / 13),
                 ),
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height/20),
+            SizedBox(height: MediaQuery.of(context).size.height / 20),
           ]),
     );
   }
@@ -120,12 +123,14 @@ class _OpenRoomState extends State<OpenRoom> {
             children: [
               Text(
                 snapshot.data,
-                style: TextStyle(fontSize: MediaQuery.of(context).size.width/20, fontFamily: "Comix-h"),
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width / 20,
+                    fontFamily: "Comix-h"),
               ),
               RawMaterialButton(
-                onPressed: () async{
+                onPressed: () async {
                   this.widget._generic = !this.widget._generic;
-                  print("replace!");
+                  // print("replace!");
                   this._error.add("");
                   if (this.widget._generic) {
                     getGenericSeriesNames();
@@ -160,7 +165,9 @@ class _OpenRoomState extends State<OpenRoom> {
       this._error.add("בחר לפחות 4 סריות");
       return;
     }
-    if (!this.widget._startGameFirstClick) {return;}
+    if (!this.widget._startGameFirstClick) {
+      return;
+    }
     this.widget._startGameFirstClick = false;
     GameDatabaseService().updateGeneric(widget.gameId, widget._generic);
     await GameDatabaseService().updateSubjectList(widget.gameId, subs);
@@ -223,7 +230,9 @@ class _OpenRoomState extends State<OpenRoom> {
               },
               child: Text('!שחק',
                   style: TextStyle(
-                      fontFamily: 'Comix-h', color: Colors.pink, fontSize: MediaQuery.of(context).size.width/30)),
+                      fontFamily: 'Comix-h',
+                      color: Colors.pink,
+                      fontSize: MediaQuery.of(context).size.width / 30)),
             ),
           ),
           getDropDown(),
@@ -233,47 +242,49 @@ class _OpenRoomState extends State<OpenRoom> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 ':כמות משתתפים',
-                style: TextStyle(fontSize: MediaQuery.of(context).size.width/25, fontFamily: 'Comix-h'),
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width / 25,
+                    fontFamily: 'Comix-h'),
               ),
             ),
           ),
         ]);
   }
 
-
   Widget getDropDown() {
     return StreamBuilder<String>(
         stream: this._scDropDownValue.stream,
         initialData: '2',
         builder: (context, snapshot) {
-      return DropdownButton<String>(
-        value: snapshot.data ?? '2',
-        //hint: new Text("בחר כמות משתתפים"),
-        icon: Icon(Icons.arrow_downward),
-        iconSize: 10,
-        elevation: 16,
-        style: TextStyle(color: Colors.black87),
-        underline: Container(
-          height: 2,
-          width: 10,
-          color: Colors.amberAccent,
-        ),
-        onChanged: (String newValue) {
-          this._scDropDownValue.add(newValue);
-          this.widget._dropdownValue = newValue;
-        },
-        items: <String>['2', '3', '4']
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(
-              value,
-              style: TextStyle(fontSize: MediaQuery.of(context).size.width/22),
+          return DropdownButton<String>(
+            value: snapshot.data ?? '2',
+            //hint: new Text("בחר כמות משתתפים"),
+            icon: Icon(Icons.arrow_downward),
+            iconSize: 10,
+            elevation: 16,
+            style: TextStyle(color: Colors.black87),
+            underline: Container(
+              height: 2,
+              width: 10,
+              color: Colors.amberAccent,
             ),
+            onChanged: (String newValue) {
+              this._scDropDownValue.add(newValue);
+              this.widget._dropdownValue = newValue;
+            },
+            items: <String>['2', '3', '4']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(
+                  value,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width / 22),
+                ),
+              );
+            }).toList(),
           );
-        }).toList(),
-      );
-    });
+        });
   }
 
   void getAllSeriesNames() async {
@@ -361,7 +372,7 @@ class _OpenRoomState extends State<OpenRoom> {
             snapshot.data,
             style: TextStyle(
               fontFamily: 'Trashim-h',
-              fontSize: MediaQuery.of(context).size.width/30,
+              fontSize: MediaQuery.of(context).size.width / 30,
               color: Colors.red,
             ),
           );
@@ -387,7 +398,7 @@ class CheckBoxTile extends StatefulWidget {
   set value(bool value) {
     _value = value;
 //    if (value) {
-      this._subjectTile.add(value);
+    this._subjectTile.add(value);
 //    }
   }
 
@@ -415,7 +426,11 @@ class _CheckBoxTileState extends State<CheckBoxTile> {
         initialData: false,
         builder: (context, snapshot) {
           return CheckboxListTile(
-            title: Text(widget.title, style: TextStyle(fontSize: MediaQuery.of(context).size.width/26),),
+            title: Text(
+              widget.title,
+              style:
+                  TextStyle(fontSize: MediaQuery.of(context).size.width / 26),
+            ),
             value: snapshot.data ?? false,
             onChanged: (bool value) {
               widget.value = value;
