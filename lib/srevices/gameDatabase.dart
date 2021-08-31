@@ -157,7 +157,7 @@ class GameDatabaseService {
       Subject sub1 = Subject(subName, card1, card2, card3, card4);
       return sub1;
     } catch (e) {
-      print("ERROR createSubjectFromDatabase: $e");
+        print("ERROR createSubjectFromDatabase: $e");
       return null;
     }
   }
