@@ -99,16 +99,12 @@ class QuartetsGame extends Game {
 
   void createGame() async {
     ///all players
-    try {
       this.players = await GameDatabaseService().getPlayersList(this);
-    } catch (e) {
-      print("ERROR getPlayersList $e");
-    }
-    createAllSubjects(gameId);
+    await createAllSubjects(gameId);
 
     /// only manager
     if (this.isManager) {
-      reStart();
+      await reStart();
       initializePlayersScore();
     }
 
@@ -255,14 +251,12 @@ class QuartetsGame extends Game {
       });
 //        }
     });
-    try {
+
       if (!this.isManager &&
           await GameDatabaseService().getContinueState(this.gameId)) {
         GameDatabaseService().updateTurn(this, this.turn);
       }
-    } catch (e) {
-      print("ERROR getContinueState $e");
-    }
+
   }
 
 //  Future<String> getNamePlayerTake() async {
@@ -281,15 +275,12 @@ class QuartetsGame extends Game {
 
   // in beginning of game every player need to create all subjects in his phone.
   void createAllSubjects(String gameId) async {
-    try {
+
       List<String> strSub =
       await GameDatabaseService().getGameListSubjects(gameId);
       this.subjects.addAll(await getSubjectsFromStrings(strSub));
       createMapCardsToInt();
       return;
-    } catch (e) {
-      print("ERROR createAllSubjects $e");
-    }
   }
 
   // this map is for map between cards and how they save in the server (int)
@@ -306,28 +297,18 @@ class QuartetsGame extends Game {
   Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async {
     List<Subject> subs = [];
     String subjectId;
-    try {
+
       bool isGenerics = await GameDatabaseService().getGenerics(gameId);
       if (isGenerics) {
         subjectId = "generic_subjects";
       } else {
-        try {
           subjectId = await GameDatabaseService().getManagerId(gameId);
-        } catch (e) {
-          print("ERROR getManagerId $e");
-        }
       }
-    } catch (e) {
-      print("ERROR getGeneric $e");
-    }
     for (String s in strSub) {
-      try {
         Subject sub =
         await GameDatabaseService().createSubjectFromDatabase(subjectId, s);
         subs.add(sub);
-      } catch (e) {
-        print("ERROR createSubjectFromDatabase $e");
-      }
+
     }
     return Future.value(subs);
   }
@@ -339,7 +320,6 @@ class QuartetsGame extends Game {
     this.deck = deck;
 
     var random = Random();
-    try {
       bool isAgainstComputer =
       await GameDatabaseService().getAgainstComputer(gameId);
       if (!isAgainstComputer) {
@@ -370,9 +350,6 @@ class QuartetsGame extends Game {
       await GameDatabaseService().updateTurn(this, this.turn);
       await GameDatabaseService().updateDeck(deckCards, this);
       await GameDatabaseService().updateContinueState(this.gameId);
-    } catch (e) {
-  print("ERROR getAgainstComputer $e");
-  }
   }
 
   void initializePlayersScore() async {
