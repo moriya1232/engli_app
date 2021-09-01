@@ -170,19 +170,27 @@ class _OpenRoomState extends State<OpenRoom> {
     }
     this.widget._startGameFirstClick = false;
     GameDatabaseService().updateGeneric(widget.gameId, widget._generic);
-    await GameDatabaseService().updateSubjectList(widget.gameId, subs);
+    try {
+      await GameDatabaseService().updateSubjectList(widget.gameId, subs);
+    } catch (e) {
+      print("ERROR updateSubjectList $e");
+    }
     final FirebaseAuth _auth = FirebaseAuth.instance;
     User user = _auth.currentUser;
     String currName = user.displayName;
     if (!isAgainstComputer) {
-      await GameDatabaseService().addPlayerToDataBase(widget.gameId, currName,
-          user.uid); //update the subject list in the game file
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
-      );
-      await Future.delayed(Duration(seconds: 1));
-      this.widget._startGameFirstClick = true;
+      try {
+        await GameDatabaseService().addPlayerToDataBase(widget.gameId, currName,
+            user.uid); //update the subject list in the game file
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Loading(widget.gameId, true)),
+        );
+        await Future.delayed(Duration(seconds: 1));
+        this.widget._startGameFirstClick = true;
+      } catch (e) {
+        print("ERROR addPlayerToDataBase $e");
+      }
     } else {
 //      List<Player> players = [];
       // create players.
@@ -190,15 +198,23 @@ class _OpenRoomState extends State<OpenRoom> {
       for (int i = 0; i < int.parse(this.widget._dropdownValue); i++) {
         if (i == 0) {
           String id = _auth.currentUser.uid;
-          await GameDatabaseService()
-              .addPlayerToDataBase(this.widget.gameId, currName, id);
+          try {
+            await GameDatabaseService()
+                .addPlayerToDataBase(this.widget.gameId, currName, id);
+          } catch (e) {
+            print("ERROR addPlayerToDataBase $e");
+          }
           continue;
         } else {
           var random = Random();
-          await GameDatabaseService().addPlayerToDataBase(
-              this.widget.gameId,
-              optionalsNames[random.nextInt(optionalsNames.length)],
-              i.toString());
+          try {
+            await GameDatabaseService().addPlayerToDataBase(
+                this.widget.gameId,
+                optionalsNames[random.nextInt(optionalsNames.length)],
+                i.toString());
+          } catch(e) {
+            print("ERROR addPlayerToDataBase $e");
+          }
         }
       }
       Navigator.push(
@@ -289,24 +305,23 @@ class _OpenRoomState extends State<OpenRoom> {
 
   void getAllSeriesNames() async {
     String userId = FirebaseAuth.instance.currentUser.uid;
-    List<String> strings = await GameDatabaseService().getSubjectsList(userId);
-//    List<CheckBoxTile> checkboxes = [];
-//    for (String s in strings) {
-//      checkboxes.add(new CheckBoxTile(s));
-//    }
-//    widget._series = checkboxes;
-    this._subjectList.add(strings);
+    try {
+      List<String> strings = await GameDatabaseService().getSubjectsList(
+          userId);
+      this._subjectList.add(strings);
+    } catch (e) {
+      print("ERROR getSubjectsList $e");
+    }
   }
 
   void getGenericSeriesNames() async {
-    List<String> strings =
-        await GameDatabaseService().getSubjectsList("generic_subjects");
-//    List<CheckBoxTile> checkboxes = [];
-//    for (String s in strings) {
-//      checkboxes.add(new CheckBoxTile(s));
-//    }
-//    widget._series = checkboxes;
-    this._subjectList.add(strings);
+    try {
+      List<String> strings =
+      await GameDatabaseService().getSubjectsList("generic_subjects");
+      this._subjectList.add(strings);
+    } catch (e) {
+      print("ERROR getSubjectsList $e");
+    }
   }
 
   Widget _buildSubjectsList(StreamController sc) {
@@ -356,9 +371,13 @@ class _OpenRoomState extends State<OpenRoom> {
   Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async {
     List<Subject> subs = [];
     for (String s in strSub) {
-      Subject sub = await GameDatabaseService()
-          .createSubjectFromDatabase("generic_subjects", s);
-      subs.add(sub);
+      try {
+        Subject sub = await GameDatabaseService()
+            .createSubjectFromDatabase("generic_subjects", s);
+        subs.add(sub);
+      } catch (e) {
+        print("ERROR createSubjectFromDatabase $e");
+      }
     }
     return Future.value(subs);
   }

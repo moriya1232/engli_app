@@ -140,12 +140,16 @@ class GameDatabaseService {
         .collection("user_subjects")
         .doc(subName)
         .collection("cards");
-    Triple card1 = await createTripleFromDataBase("card1", document);
-    Triple card2 = await createTripleFromDataBase("card2", document);
-    Triple card3 = await createTripleFromDataBase("card3", document);
-    Triple card4 = await createTripleFromDataBase("card4", document);
-    Subject sub1 = Subject(subName, card1, card2, card3, card4);
-    return Future.value(sub1);
+    try {
+      Triple card1 = await createTripleFromDataBase("card1", document);
+      Triple card2 = await createTripleFromDataBase("card2", document);
+      Triple card3 = await createTripleFromDataBase("card3", document);
+      Triple card4 = await createTripleFromDataBase("card4", document);
+      Subject sub1 = Subject(subName, card1, card2, card3, card4);
+      return Future.value(sub1);
+    } catch (e) {
+      print("ERROR createTripleFromDatabase $e");
+    }
   }
 
   Future<Triple> createTripleFromDataBase(
@@ -161,9 +165,13 @@ class GameDatabaseService {
   }
 
   void updateContinueState(gameId) async {
-    await gameCollection.doc(gameId).update({
-      'continueToGame': true,
-    });
+    try {
+      await gameCollection.doc(gameId).update({
+        'continueToGame': true,
+      });
+    } catch (e) {
+      print("ERROR updateContinueState $e");
+    }
   }
 
   Future<bool> getContinueState(gameId) async {
@@ -227,345 +235,307 @@ class GameDatabaseService {
       String heb3,
       String eng4,
       String heb4) async {
-    //update the subjects list
-    List<String> sub = [];
-    await subjectCollection
-        .doc(_auth.currentUser.uid.toString())
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        var x = documentSnapshot.data()["subjects_list"];
-        sub = x.cast<String>();
-      }
-    });
-    sub.add(nameSeries);
-    await subjectCollection
-        .doc(_auth.currentUser.uid.toString())
-        .set({'subjects_list': sub});
+    try {
+      //update the subjects list
+      List<String> sub = [];
+      await subjectCollection
+          .doc(_auth.currentUser.uid.toString())
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          var x = documentSnapshot.data()["subjects_list"];
+          sub = x.cast<String>();
+        }
+      });
+      sub.add(nameSeries);
+      await subjectCollection
+          .doc(_auth.currentUser.uid.toString())
+          .set({'subjects_list': sub});
 
-    //save the quarters
-    await FirebaseFirestore.instance
-        .collection("subjects")
-        .doc(this._auth.currentUser.uid.toString())
-        .collection("user_subjects")
-        .doc(nameSeries)
-        .collection("cards")
-        .doc("card1")
-        .set({'english': eng1, 'hebrew': heb1, 'image': null});
-    await FirebaseFirestore.instance
-        .collection("subjects")
-        .doc(this._auth.currentUser.uid.toString())
-        .collection("user_subjects")
-        .doc(nameSeries)
-        .collection("cards")
-        .doc("card2")
-        .set({'english': eng2, 'hebrew': heb2, 'image': null});
-    await FirebaseFirestore.instance
-        .collection("subjects")
-        .doc(this._auth.currentUser.uid.toString())
-        .collection("user_subjects")
-        .doc(nameSeries)
-        .collection("cards")
-        .doc("card3")
-        .set({'english': eng3, 'hebrew': heb3, 'image': null});
-    await FirebaseFirestore.instance
-        .collection("subjects")
-        .doc(this._auth.currentUser.uid.toString())
-        .collection("user_subjects")
-        .doc(nameSeries)
-        .collection("cards")
-        .doc("card4")
-        .set({'english': eng4, 'hebrew': heb4, 'image': null});
+      //save the quarters
+      await FirebaseFirestore.instance
+          .collection("subjects")
+          .doc(this._auth.currentUser.uid.toString())
+          .collection("user_subjects")
+          .doc(nameSeries)
+          .collection("cards")
+          .doc("card1")
+          .set({'english': eng1, 'hebrew': heb1, 'image': null});
+      await FirebaseFirestore.instance
+          .collection("subjects")
+          .doc(this._auth.currentUser.uid.toString())
+          .collection("user_subjects")
+          .doc(nameSeries)
+          .collection("cards")
+          .doc("card2")
+          .set({'english': eng2, 'hebrew': heb2, 'image': null});
+      await FirebaseFirestore.instance
+          .collection("subjects")
+          .doc(this._auth.currentUser.uid.toString())
+          .collection("user_subjects")
+          .doc(nameSeries)
+          .collection("cards")
+          .doc("card3")
+          .set({'english': eng3, 'hebrew': heb3, 'image': null});
+      await FirebaseFirestore.instance
+          .collection("subjects")
+          .doc(this._auth.currentUser.uid.toString())
+          .collection("user_subjects")
+          .doc(nameSeries)
+          .collection("cards")
+          .doc("card4")
+          .set({'english': eng4, 'hebrew': heb4, 'image': null});
+    } catch (e) {
+      print("ERROR addSeriesToDataBase $e");
+    }
   }
 
   void updatePlayerCards(
       List<int> cards, QuartetsGame game, String playerId) async {
-    await gameCollection
-        .doc(game.gameId)
-        .collection("players")
-        .doc(playerId)
-        .update({'cards': cards});
+    try {
+      await gameCollection
+          .doc(game.gameId)
+          .collection("players")
+          .doc(playerId)
+          .update({'cards': cards});
+    } catch (e) {
+      print("ERROR updatePlayerCards $e");
+    }
   }
 
   void updateDeck(List<int> cards, QuartetsGame game) async {
-    await gameCollection.doc(game.gameId).update({'deck': cards});
+    try {
+      await gameCollection.doc(game.gameId).update({'deck': cards});
+    } catch (e) {
+      print("ERROR updateDeck $e");
+    }
   }
 
   void updateTakeCardFromDeck(
       QuartetsGame game, CardQuartets card, Player player) async {
-    await deleteCardFromDeck(game, card);
-    await addCardToPlayer(game, card, player);
+    try {
+      await deleteCardFromDeck(game, card);
+      await addCardToPlayer(game, card, player);
+    } catch (e) {
+      print("ERROR updateTakeCardFromDeck $e");
+    }
   }
 
   void deleteCardFromDeck(QuartetsGame game, CardQuartets card) async {
-    List<int> newDeck = [];
-    await gameCollection
-        .doc(game.gameId)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      if (documentSnapshot.exists) {
-        var x = documentSnapshot.data()["deck"];
-        List<int> deck = x.cast<int>();
-        int cardId = game.cardsId[card];
-        for (int c in deck) {
-          if (c != cardId) {
-            newDeck.add(c);
+    try {
+      List<int> newDeck = [];
+      await gameCollection
+          .doc(game.gameId)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          var x = documentSnapshot.data()["deck"];
+          List<int> deck = x.cast<int>();
+          int cardId = game.cardsId[card];
+          for (int c in deck) {
+            if (c != cardId) {
+              newDeck.add(c);
+            }
           }
+          await gameCollection.doc(game.gameId).update({'deck': newDeck});
         }
-        await gameCollection.doc(game.gameId).update({'deck': newDeck});
-      }
-    });
+      });
+    } catch (e) {
+      print("ERROR deleteCadFromDeck $e");
+    }
   }
 
   void addCardToPlayer(
       QuartetsGame game, CardQuartets card, Player player) async {
-    await gameCollection
-        .doc(game.gameId)
-        .collection("players")
-        .doc(player.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      if (documentSnapshot.exists) {
-        var x = documentSnapshot.data()['cards'];
-        List<int> playerCards = x.cast<int>();
-        int cardId = game.cardsId[card];
-        playerCards.add(cardId);
-        await gameCollection
-            .doc(game.gameId)
-            .collection("players")
-            .doc(player.uid)
-            .update({'cards': playerCards});
-      }
-    });
+    try {
+      await gameCollection
+          .doc(game.gameId)
+          .collection("players")
+          .doc(player.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          var x = documentSnapshot.data()['cards'];
+          List<int> playerCards = x.cast<int>();
+          int cardId = game.cardsId[card];
+          playerCards.add(cardId);
+          await gameCollection
+              .doc(game.gameId)
+              .collection("players")
+              .doc(player.uid)
+              .update({'cards': playerCards});
+        }
+      });
+    } catch (e) {
+      print("ERROR addCardToPlayer $e");
+    }
   }
 
   void deleteCardToPlayer(
       Player player, QuartetsGame game, CardQuartets card) async {
-    await gameCollection
-        .doc(game.gameId)
-        .collection("players")
-        .doc(player.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) async {
-      if (documentSnapshot.exists) {
-        List<int> updateList = [];
-        var x = documentSnapshot.data()['cards'];
-        List<int> playerCards = x.cast<int>();
-        int cardId = game.cardsId[card];
-        for (int c in playerCards) {
-          if (c != cardId) {
-            updateList.add(c);
+    try {
+      await gameCollection
+          .doc(game.gameId)
+          .collection("players")
+          .doc(player.uid)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) async {
+        if (documentSnapshot.exists) {
+          List<int> updateList = [];
+          var x = documentSnapshot.data()['cards'];
+          List<int> playerCards = x.cast<int>();
+          int cardId = game.cardsId[card];
+          for (int c in playerCards) {
+            if (c != cardId) {
+              updateList.add(c);
+            }
           }
+          await gameCollection
+              .doc(game.gameId)
+              .collection("players")
+              .doc(player.uid)
+              .update({'cards': updateList});
         }
-        await gameCollection
-            .doc(game.gameId)
-            .collection("players")
-            .doc(player.uid)
-            .update({'cards': updateList});
-      }
-    });
+      });
+    } catch (e) {
+      print("ERROR deleteCardToPlayer $e");
+    }
   }
 
   void transferCard(Player takePlayer, Player tokenFrom, QuartetsGame game,
       CardQuartets card) async {
-    await deleteCardToPlayer(tokenFrom, game, card);
-    await addCardToPlayer(game, card, takePlayer);
+    try {
+      await deleteCardToPlayer(tokenFrom, game, card);
+      await addCardToPlayer(game, card, takePlayer);
+    } catch (e) {
+      print("ERROR transferCard $e");
+    }
   }
 
   void updateTurn(QuartetsGame game, int turn) async {
-    await gameCollection.doc(game.gameId).update({'turn': turn});
+    try {
+      await gameCollection.doc(game.gameId).update({'turn': turn});
+    } catch (e) {
+      print("ERROR updateTurn $e");
+    }
   }
 
   void updateScore(int score, playerId, QuartetsGame game) async {
-    await gameCollection
-        .doc(game.gameId)
-        .collection("players")
-        .doc(playerId)
-        .update({'score': score});
-  }
-
-  Future<List<CardGame>> getPlayerCards(
-      QuartetsGame game, Player player) async {
-    List<CardGame> cardsPlayer = [];
-    await gameCollection
-        .doc(game.gameId)
-        .collection('players')
-        .doc(player.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        var x = documentSnapshot.data()['cards'];
-        List<int> intArrayCards = x.cast<int>();
-        for (int i in intArrayCards) {
-          CardQuartets iKey = game.cardsId.keys
-              .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
-          cardsPlayer.add(iKey);
-        }
-      }
-    });
-    for (CardQuartets c in cardsPlayer) {
-      if (player is Me) {
-        c.changeToMine();
-      } else {
-        c.changeToNotMine();
-      }
+    try {
+      await gameCollection
+          .doc(game.gameId)
+          .collection("players")
+          .doc(playerId)
+          .update({'score': score});
+    } catch (e) {
+      print("ERROR updateScore $e");
     }
-    return Future.value(cardsPlayer);
   }
 
   void updateInitializeGame(QuartetsGame game) async {
-    await gameCollection.doc(game.gameId).update({'initializeGame': true});
-  }
-
-  Future<List<CardQuartets>> getDeck(QuartetsGame game) async {
-    List<CardQuartets> deck = [];
-    await gameCollection
-        .doc(game.gameId)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        var simpleDeck = documentSnapshot.data()['deck'];
-        simpleDeck = simpleDeck.cast<int>();
-        for (int i in simpleDeck) {
-          CardQuartets iKey = game.cardsId.keys
-              .firstWhere((k) => game.cardsId[k] == i, orElse: () => null);
-          deck.add(iKey);
-        }
-      }
-    });
-    return Future.value(deck);
-  }
-
-  Future<int> getTurn(QuartetsGame game) async {
-    int newTurn;
-    await gameCollection.doc(game.gameId).get().then((value) {
-      if (value.exists) {
-        var turn = value.data()['turn'];
-        newTurn = turn.cast<int>();
-      }
-    });
-    return Future.value(newTurn);
+    try {
+      await gameCollection.doc(game.gameId).update({'initializeGame': true});
+    } catch (e) {
+      print("ERROR updateInitializeGame $e");
+    }
   }
 
   void deleteQuartet(
       Subject subjectToDelete, QuartetsGame game, Player player) async {
-    List<int> newCardsList = [];
-    for (CardQuartets i in player.cards) {
-      newCardsList.add(game.cardsId[i]);
+    try {
+      List<int> newCardsList = [];
+      for (CardQuartets i in player.cards) {
+        newCardsList.add(game.cardsId[i]);
+      }
+      for (CardQuartets c in subjectToDelete.cards) {
+        player.cards.remove(c);
+        newCardsList.remove(game.cardsId[c]);
+      }
+      await gameCollection
+          .doc(game.gameId)
+          .collection('players')
+          .doc(player.uid)
+          .update({'cards': newCardsList});
+    } catch (e) {
+      print("ERROR deleteQuartet $e");
     }
-    for (CardQuartets c in subjectToDelete.cards) {
-      player.cards.remove(c);
-      newCardsList.remove(game.cardsId[c]);
-    }
-    await gameCollection
-        .doc(game.gameId)
-        .collection('players')
-        .doc(player.uid)
-        .update({'cards': newCardsList});
-  }
-
-  Future<int> getCardToken(QuartetsGame game) async {
-    int cardToken;
-    await gameCollection.doc(game.gameId).get().then((value) {
-      if (value.exists) {
-        var cToken = value.data()['cardToken'];
-        cardToken = cToken.cast<int>();
-      }
-    });
-    return Future.value(cardToken);
-  }
-
-  Future<int> getTake(QuartetsGame game) async {
-    int take;
-    await gameCollection.doc(game.gameId).get().then((value) {
-      if (value.exists) {
-        var cTake = value.data()['take'];
-        take = cTake.cast<int>();
-      }
-    });
-    return Future.value(take);
-  }
-
-  Future<int> getTokenFrom(QuartetsGame game) async {
-    int tokenFrom;
-    await gameCollection.doc(game.gameId).get().then((value) {
-      if (value.exists) {
-        var tokenF = value.data()['tokenFrom'];
-        tokenFrom = tokenF.cast<int>();
-      }
-    });
-    return Future.value(tokenFrom);
   }
 
   void updateTake(QuartetsGame game, int take, int token, String sub, int card,
       bool succ) async {
-    await gameCollection.doc(game.gameId).update({
-      'take': take,
-      'tokenFrom': token,
-      'cardToken': card,
-      'subjectAsk': sub,
-      'success': succ
-    });
+    try {
+      await gameCollection.doc(game.gameId).update({
+        'take': take,
+        'tokenFrom': token,
+        'cardToken': card,
+        'subjectAsk': sub,
+        'success': succ
+      });
+    } catch (e) {
+      print("ERROR updateTake $e");
+    }
   }
 
   void deleteSubjectFromDataBase(
       String seriesName, String playerId, List<String> newListSub) async {
-    await subjectCollection
-        .doc(playerId)
-        .collection('user_subjects')
-        .doc(seriesName)
-        .collection('cards')
-        .doc('card1')
-        .delete();
-    await subjectCollection
-        .doc(playerId)
-        .collection('user_subjects')
-        .doc(seriesName)
-        .collection('cards')
-        .doc('card2')
-        .delete();
-    await subjectCollection
-        .doc(playerId)
-        .collection('user_subjects')
-        .doc(seriesName)
-        .collection('cards')
-        .doc('card3')
-        .delete();
-    await subjectCollection
-        .doc(playerId)
-        .collection('user_subjects')
-        .doc(seriesName)
-        .collection('cards')
-        .doc('card4')
-        .delete();
-    await subjectCollection
-        .doc(playerId)
-        .collection('user_subjects')
-        .doc(seriesName)
-        .delete();
-    subjectCollection.doc(playerId).update({'subjects_list': newListSub});
+    try {
+      await subjectCollection
+          .doc(playerId)
+          .collection('user_subjects')
+          .doc(seriesName)
+          .collection('cards')
+          .doc('card1')
+          .delete();
+      await subjectCollection
+          .doc(playerId)
+          .collection('user_subjects')
+          .doc(seriesName)
+          .collection('cards')
+          .doc('card2')
+          .delete();
+      await subjectCollection
+          .doc(playerId)
+          .collection('user_subjects')
+          .doc(seriesName)
+          .collection('cards')
+          .doc('card3')
+          .delete();
+      await subjectCollection
+          .doc(playerId)
+          .collection('user_subjects')
+          .doc(seriesName)
+          .collection('cards')
+          .doc('card4')
+          .delete();
+      await subjectCollection
+          .doc(playerId)
+          .collection('user_subjects')
+          .doc(seriesName)
+          .delete();
+      subjectCollection.doc(playerId).update({'subjects_list': newListSub});
+    } catch (e) {
+      print("ERROR deleteSubjectFromDataBase $e");
+    }
   }
 
   void updateGeneric(String gameId, bool gen) async {
-    await gameCollection.doc(gameId).update({'generic': gen});
+    try {
+      await gameCollection.doc(gameId).update({'generic': gen});
+    } catch (e) {
+      print("ERROR updateeneric $e");
+    }
   }
 
   void updateGetQuartet(String gameId, String name) async {
-    // "update my name in get quartet"
-    await gameCollection.doc(gameId).update({'getQuartet': name});
-    await Future.delayed(new Duration(seconds: 2));
-    // update null in get quartet
-    await gameCollection.doc(gameId).update({'getQuartet': null});
-  }
-
-  Future<String> getGetQuartetName(String gameId) async {
-    String name;
-    await gameCollection.doc(gameId).get().then((value) {
-      if (value.exists) {
-        name = value.data()['getQuartet'].cast<String>();
-      }
-    });
-    return Future.value(name);
+    try {
+      // "update my name in get quartet"
+      await gameCollection.doc(gameId).update({'getQuartet': name});
+      await Future.delayed(new Duration(seconds: 2));
+      // update null in get quartet
+      await gameCollection.doc(gameId).update({'getQuartet': null});
+    } catch (e) {
+      print("ERROR updateGetQuartet $e");
+    }
   }
 
   Future<bool> getGenerics(gameId) async {
@@ -589,15 +559,23 @@ class GameDatabaseService {
   }
 
   void deleteGame(String gameId) async {
+    try {
     await gameCollection.doc(gameId).collection('players').get().then((value) {
       value.docs.forEach((element) {
         element.reference.delete();
       });
     });
     await gameCollection.doc(gameId).delete();
+    } catch (e) {
+      print("ERROR deleteGame $e");
+    }
   }
 
   void updateFinished(String gameId, bool isFinished) async {
+    try {
     await gameCollection.doc(gameId).update({'finished': isFinished});
+    } catch (e) {
+      print("ERROR updateFinished $e");
+    }
   }
 }

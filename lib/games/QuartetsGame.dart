@@ -99,12 +99,16 @@ class QuartetsGame extends Game {
 
   void createGame() async {
     ///all players
-    this.players = await GameDatabaseService().getPlayersList(this);
-    await createAllSubjects(gameId);
+    try {
+      this.players = await GameDatabaseService().getPlayersList(this);
+    } catch (e) {
+      print("ERROR getPlayersList $e");
+    }
+    createAllSubjects(gameId);
 
     /// only manager
     if (this.isManager) {
-      await reStart();
+      reStart();
       initializePlayersScore();
     }
 
@@ -251,9 +255,13 @@ class QuartetsGame extends Game {
       });
 //        }
     });
-    if (!this.isManager &&
-        await GameDatabaseService().getContinueState(this.gameId)) {
-      await GameDatabaseService().updateTurn(this, this.turn);
+    try {
+      if (!this.isManager &&
+          await GameDatabaseService().getContinueState(this.gameId)) {
+        GameDatabaseService().updateTurn(this, this.turn);
+      }
+    } catch (e) {
+      print("ERROR getContinueState $e");
     }
   }
 
@@ -273,12 +281,15 @@ class QuartetsGame extends Game {
 
   // in beginning of game every player need to create all subjects in his phone.
   void createAllSubjects(String gameId) async {
-    List<String> strSub =
-        await GameDatabaseService().getGameListSubjects(gameId);
-
-    this.subjects.addAll(await getSubjectsFromStrings(strSub));
-    createMapCardsToInt();
-    return;
+    try {
+      List<String> strSub =
+      await GameDatabaseService().getGameListSubjects(gameId);
+      this.subjects.addAll(await getSubjectsFromStrings(strSub));
+      createMapCardsToInt();
+      return;
+    } catch (e) {
+      print("ERROR createAllSubjects $e");
+    }
   }
 
   // this map is for map between cards and how they save in the server (int)
@@ -295,20 +306,28 @@ class QuartetsGame extends Game {
   Future<List<Subject>> getSubjectsFromStrings(List<String> strSub) async {
     List<Subject> subs = [];
     String subjectId;
-    bool isGenerics = await GameDatabaseService().getGenerics(gameId);
-    if (isGenerics) {
-      subjectId = "generic_subjects";
-    } else {
-      try {
-        subjectId = await GameDatabaseService().getManagerId(gameId);
-      } catch (e) {
-        print ("ERROR getManagerId $e");
+    try {
+      bool isGenerics = await GameDatabaseService().getGenerics(gameId);
+      if (isGenerics) {
+        subjectId = "generic_subjects";
+      } else {
+        try {
+          subjectId = await GameDatabaseService().getManagerId(gameId);
+        } catch (e) {
+          print("ERROR getManagerId $e");
+        }
       }
+    } catch (e) {
+      print("ERROR getGeneric $e");
     }
     for (String s in strSub) {
-      Subject sub =
-          await GameDatabaseService().createSubjectFromDatabase(subjectId, s);
-      subs.add(sub);
+      try {
+        Subject sub =
+        await GameDatabaseService().createSubjectFromDatabase(subjectId, s);
+        subs.add(sub);
+      } catch (e) {
+        print("ERROR createSubjectFromDatabase $e");
+      }
     }
     return Future.value(subs);
   }
@@ -320,36 +339,40 @@ class QuartetsGame extends Game {
     this.deck = deck;
 
     var random = Random();
-    bool isAgainstComputer =
-        await GameDatabaseService().getAgainstComputer(gameId);
-    if (!isAgainstComputer) {
-      this.turn = random.nextInt(this.listTurn.length);
-    }
-    //initialize arrays with all the id cards to every player in the game.
-    Map<String, List<int>> playersCards = {};
-    for (Player p in players) {
-      if (isAgainstComputer && p is Me) {
-        this.turn = listTurn.indexOf(p);
+    try {
+      bool isAgainstComputer =
+      await GameDatabaseService().getAgainstComputer(gameId);
+      if (!isAgainstComputer) {
+        this.turn = random.nextInt(this.listTurn.length);
       }
-      playersCards[p.uid] = [];
-      for (CardQuartets q in p.cards) {
+      //initialize arrays with all the id cards to every player in the game.
+      Map<String, List<int>> playersCards = {};
+      for (Player p in players) {
+        if (isAgainstComputer && p is Me) {
+          this.turn = listTurn.indexOf(p);
+        }
+        playersCards[p.uid] = [];
+        for (CardQuartets q in p.cards) {
+          int x = this.cardsId[q];
+          playersCards[p.uid].add(x);
+        }
+        //update server about the cards of the players
+        await GameDatabaseService()
+            .updatePlayerCards(playersCards[p.uid], this, p.uid);
+      }
+      //update server about the deck
+      List<int> deckCards = [];
+      for (CardQuartets q in deck.getCards()) {
         int x = this.cardsId[q];
-        playersCards[p.uid].add(x);
+        deckCards.add(x);
       }
-      //update server about the cards of the players
-      await GameDatabaseService()
-          .updatePlayerCards(playersCards[p.uid], this, p.uid);
-    }
-    //update server about the deck
-    List<int> deckCards = [];
-    for (CardQuartets q in deck.getCards()) {
-      int x = this.cardsId[q];
-      deckCards.add(x);
-    }
-    this._gameStart.add(true);
-    await GameDatabaseService().updateTurn(this, this.turn);
-    await GameDatabaseService().updateDeck(deckCards, this);
-    await GameDatabaseService().updateContinueState(this.gameId);
+      this._gameStart.add(true);
+      await GameDatabaseService().updateTurn(this, this.turn);
+      await GameDatabaseService().updateDeck(deckCards, this);
+      await GameDatabaseService().updateContinueState(this.gameId);
+    } catch (e) {
+  print("ERROR getAgainstComputer $e");
+  }
   }
 
   void initializePlayersScore() async {

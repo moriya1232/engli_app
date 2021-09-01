@@ -226,14 +226,23 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
 
   void getAllSeriesNames() async {
     String userId = FirebaseAuth.instance.currentUser.uid;
-    List<String> l = await GameDatabaseService().getSubjectsList(userId);
-    this._subjectsList.add(l);
+    try {
+      List<String> l = await GameDatabaseService().getSubjectsList(userId);
+      this._subjectsList.add(l);
+    } catch (e) {
+      print("ERROR getSubjectsList $e");
+    }
+
   }
 
   void getGenericSeriesNames() async {
-    List<String> l =
-        await GameDatabaseService().getSubjectsList("generic_subjects");
-    this._subjectsList.add(l);
+    try {
+      List<String> l =
+      await GameDatabaseService().getSubjectsList("generic_subjects");
+      this._subjectsList.add(l);
+    } catch (e) {
+      print("ERROR getSubjectsList $e");
+    }
   }
 
   Widget _buildSubjectsList(StreamController sc) {
@@ -272,16 +281,24 @@ class _OpenMemoryRoomState extends State<OpenMemoryRoom> {
     List<Subject> subjects = [];
     if (this.widget._generic) {
       for (String s in strSub) {
-        Subject sub = await GameDatabaseService()
-            .createSubjectFromDatabase("generic_subjects", s);
-        subjects.add(sub);
+        try {
+          Subject sub = await GameDatabaseService()
+              .createSubjectFromDatabase("generic_subjects", s);
+          subjects.add(sub);
+        } catch (e) {
+          print("ERROR createSubjectFromDatabase $e");
+        }
       }
     } else {
       for (String s in strSub) {
         String playerId = FirebaseAuth.instance.currentUser.uid;
-        Subject sub =
-            await GameDatabaseService().createSubjectFromDatabase(playerId, s);
-        subjects.add(sub);
+        try {
+          Subject sub =
+          await GameDatabaseService().createSubjectFromDatabase(playerId, s);
+          subjects.add(sub);
+        } catch (e) {
+          print("ERROR createSubjectFromDatabase $e");
+        }
       }
     }
     return Future.value(subjects);

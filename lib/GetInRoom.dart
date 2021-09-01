@@ -134,18 +134,21 @@ class _GetInRoomState extends State<GetInRoom> {
     // 1- if success
     // 2- if too much players.
     // 3 - if no exist this code.
-    int succ =
-        await GameDatabaseService().addPlayerToDataBase(gameId, name, user.uid);
-
-    if (succ == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Loading(gameId, false)),
-      );
-    } else if (succ == 2) {
-      this._error.add("לא יכול להתחבר, יש יותר מדי שחקנים");
-    } else if (succ == 3) {
-      this._error.add("קוד משחק לא נכון");
+    try {
+      int succ =
+      await GameDatabaseService().addPlayerToDataBase(gameId, name, user.uid);
+      if (succ == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Loading(gameId, false)),
+        );
+      } else if (succ == 2) {
+        this._error.add("לא יכול להתחבר, יש יותר מדי שחקנים");
+      } else if (succ == 3) {
+        this._error.add("קוד משחק לא נכון");
+      }
+    } catch (e) {
+      print("ERROR addPlayerToDataBase $e");
     }
   }
 
